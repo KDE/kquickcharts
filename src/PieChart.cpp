@@ -62,7 +62,7 @@ void PieChart::setFrom(qreal from)
         return;
 
     d->from = from;
-    update();
+    updateData();
     emit fromChanged();
 }
 
@@ -72,7 +72,7 @@ void PieChart::setTo(qreal to)
         return;
 
     d->to = to;
-    update();
+    updateData();
     emit toChanged();
 }
 
@@ -99,7 +99,7 @@ void PieChart::setValueSource(DataSource* value)
     if(d->valueSource)
         connect(d->valueSource, & DataSource::dataChanged, this, &PieChart::updateData);
 
-    update();
+    updateData();
     emit valueSourceChanged();
 }
 
@@ -116,7 +116,7 @@ void PieChart::setColorSource(DataSource* color)
     if(d->colorSource)
         connect(d->colorSource, & DataSource::dataChanged, this, &PieChart::updateData);
 
-    update();
+    updateData();
     emit colorSourceChanged();
 }
 
