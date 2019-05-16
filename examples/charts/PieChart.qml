@@ -10,6 +10,11 @@ import org.kde.quickcharts 1.0 as Charts
 Kirigami.Page {
     title: "Pie Chart"
 
+    ListModel {
+        id: pieModel;
+        dynamicRoles: true;
+    }
+
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: Kirigami.Units.largeSpacing
@@ -26,11 +31,10 @@ Kirigami.Page {
                 anchors.fill: parent
                 anchors.margins: Kirigami.Units.smallSpacing;
 
-                model: ListModel { id: pieModel; dynamicRoles: true }
-
-                dataRole: "data"
-                colorRole: "color"
                 innerDiameter: 250
+
+                valueSource: Charts.ModelRole { name: "data"; model: pieModel }
+                colorSource: Charts.ModelRole { name: "color"; model: pieModel }
             }
         }
 

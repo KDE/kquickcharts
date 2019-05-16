@@ -5,13 +5,15 @@
 
 #include "PieChartNode_p.h"
 
+#include "ModelRole.h"
+
 class PieChart::Private
 {
 public:
-    QAbstractItemModel* model = nullptr;
-    QString dataRole;
-    QString colorRole;
     qreal innerDiameter = 0.0;
+
+    DataSource* valueSource = nullptr;
+    DataSource* colorSource = nullptr;
 
     QVector<qreal> sections;
     QVector<QColor> colors;
@@ -27,10 +29,6 @@ PieChart::~PieChart()
 {
 }
 
-QAbstractItemModel* PieChart::model() const
-{
-    return d->model;
-}
 
 QString PieChart::dataRole() const
 {
@@ -47,48 +45,14 @@ qreal PieChart::innerDiameter() const
     return d->innerDiameter;
 }
 
-void PieChart::setModel(QAbstractItemModel* model)
+DataSource * PieChart::valueSource() const
 {
-    if (d->model == model) {
-        return;
-    }
-
-    if(d->model)
-        d->model->disconnect(this);
-
-    d->model = model;
-    if(model) {
-        QObject::connect(model, &QAbstractItemModel::rowsInserted, this, &PieChart::updateData);
-        QObject::connect(model, &QAbstractItemModel::rowsRemoved, this, &PieChart::updateData);
-        QObject::connect(model, &QAbstractItemModel::rowsMoved, this, &PieChart::updateData);
-        QObject::connect(model, &QAbstractItemModel::modelReset, this, &PieChart::updateData);
-        QObject::connect(model, &QAbstractItemModel::dataChanged, this, &PieChart::updateData);
-        QObject::connect(model, &QAbstractItemModel::layoutChanged, this, &PieChart::updateData);
-    }
-
-    updateData();
-    emit modelChanged();
+    return d->valueSource;
 }
 
-void PieChart::setDataRole(const QString& dataRole)
+DataSource * PieChart::colorSource() const
 {
-    if (d->dataRole == dataRole) {
-        return;
-    }
-
-    d->dataRole = dataRole;
-    updateData();
-    emit dataRoleChanged();
-}
-
-void PieChart::setColorRole(const QString& colorRole)
-{
-    if (d->colorRole == colorRole)
-        return;
-
-    d->colorRole = colorRole;
-    updateData();
-    emit colorRoleChanged();
+    return d->colorSource;
 }
 
 void PieChart::setInnerDiameter(qreal diameter)
@@ -100,6 +64,40 @@ void PieChart::setInnerDiameter(qreal diameter)
     d->innerDiameter = diameter;
     update();
     emit innerDiameterChanged();
+}
+
+void PieChart::setValueSource(DataSource* value)
+{
+    if(value == d->valueSource)
+        return;
+
+    if(d->valueSource)
+        disconnect(d->valueSource, &DataSource::dataChanged, this, &PieChart::updateData);
+
+    d->valueSource = value;
+
+    if(d->valueSource)
+        connect(d->valueSource, & DataSource::dataChanged, this, &PieChart::updateData);
+
+    update();
+    emit valueSourceChanged();
+}
+
+void PieChart::setColorSource(DataSource* color)
+{
+    if(color == d->colorSource)
+        return;
+
+    if(d->colorSource)
+        disconnect(d->colorSource, &DataSource::dataChanged, this, &PieChart::updateData);
+
+    d->colorSource = color;
+
+    if(d->colorSource)
+        connect(d->colorSource, & DataSource::dataChanged, this, &PieChart::updateData);
+
+    update();
+    emit colorSourceChanged();
 }
 
 QSGNode *PieChart::updatePaintNode(QSGNode *node, UpdatePaintNodeData *data)
@@ -122,24 +120,19 @@ void PieChart::updateData()
     d->sections.clear();
     d->colors.clear();
 
-    if(!d->model)
+    if(!d->valueSource || !d->colorSource)
         return;
 
-    auto dataRole = d->model->roleNames().key(d->dataRole.toUtf8(), -1);
-    auto colorRole = d->model->roleNames().key(d->colorRole.toUtf8(), -1);
-    if(dataRole == -1 || colorRole == -1) {
-        qWarning() << "Model does not provide the" << d->dataRole << "or" << d->colorRole << "role";
-        return;
-    }
 
     qreal total = 0.0;
     QVector<qreal> data;
-    for(int i = 0; i < d->model->rowCount(); ++i) {
-        auto value = d->model->data(d->model->index(i, 0), dataRole).toReal();
+    for(int i = 0; i < d->valueSource->itemCount(); ++i) {
+        auto value = d->valueSource->item(i).toReal();
         data << value;
         total += value;
 
-        d->colors << d->model->data(d->model->index(i, 0), colorRole).value<QColor>();
+        auto color = d->colorSource->item(i).value<QColor>();
+        d->colors << color;
     }
 
     for(auto value : data) {

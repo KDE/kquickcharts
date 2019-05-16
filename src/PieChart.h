@@ -5,6 +5,7 @@
 #include <QQuickItem>
 
 class QAbstractItemModel;
+class DataSource;
 
 /**
  * @todo write docs
@@ -12,10 +13,15 @@ class QAbstractItemModel;
 class PieChart : public QQuickItem
 {
     Q_OBJECT
-    Q_PROPERTY(QAbstractItemModel* model READ model WRITE setModel NOTIFY modelChanged)
-    Q_PROPERTY(QString dataRole READ dataRole WRITE setDataRole NOTIFY dataRoleChanged)
-    Q_PROPERTY(QString colorRole READ colorRole WRITE setColorRole NOTIFY colorRoleChanged)
     Q_PROPERTY(qreal innerDiameter READ innerDiameter WRITE setInnerDiameter NOTIFY innerDiameterChanged)
+    /**
+     * The source of the PieChart's values.
+     */
+    Q_PROPERTY(DataSource* valueSource READ valueSource WRITE setValueSource NOTIFY valueSourceChanged)
+    /**
+     * The source of the PieChart's colors.
+     */
+    Q_PROPERTY(DataSource* colorSource READ colorSource WRITE setColorSource NOTIFY colorSourceChanged)
 
 public:
     /**
@@ -28,22 +34,19 @@ public:
      */
     ~PieChart();
 
-    QAbstractItemModel* model() const;
-    QString dataRole() const;
-    QString colorRole() const;
     qreal innerDiameter() const;
+    DataSource* valueSource() const;
+    DataSource* colorSource() const;
 
 public Q_SLOTS:
-    void setModel(QAbstractItemModel* model);
-    void setDataRole(const QString& dataRole);
-    void setColorRole(const QString& colorRole);
     void setInnerDiameter(qreal diameter);
+    void setValueSource(DataSource* value);
+    void setColorSource(DataSource* color);
 
 Q_SIGNALS:
-    void modelChanged();
-    void dataRoleChanged();
-    void colorRoleChanged();
     void innerDiameterChanged();
+    void valueSourceChanged();
+    void colorSourceChanged();
 
 protected:
     QSGNode *updatePaintNode(QSGNode *node, UpdatePaintNodeData *data) override;
