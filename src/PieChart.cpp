@@ -10,6 +10,8 @@
 class PieChart::Private
 {
 public:
+    qreal from = 0.0;
+    qreal to = -1.0;
     qreal borderWidth = -1.0;
 
     DataSource* valueSource = nullptr;
@@ -29,15 +31,14 @@ PieChart::~PieChart()
 {
 }
 
-
-QString PieChart::dataRole() const
+qreal PieChart::from() const
 {
-    return d->dataRole;
+    return d->from;
 }
 
-QString PieChart::colorRole() const
+qreal PieChart::to() const
 {
-    return d->colorRole;
+    return d->to;
 }
 
 qreal PieChart::borderWidth() const
@@ -55,10 +56,26 @@ DataSource * PieChart::colorSource() const
     return d->colorSource;
 }
 
+void PieChart::setFrom(qreal from)
 {
+    if(qFuzzyCompare(from, d->from))
         return;
 
+    d->from = from;
     update();
+    emit fromChanged();
+}
+
+void PieChart::setTo(qreal to)
+{
+    if(qFuzzyCompare(to, d->to))
+        return;
+
+    d->to = to;
+    update();
+    emit toChanged();
+}
+
 void PieChart::setBorderWidth(qreal width)
 {
     if(qFuzzyCompare(width, d->borderWidth))
@@ -126,11 +143,10 @@ void PieChart::updateData()
     if(!d->valueSource || !d->colorSource)
         return;
 
-
     qreal total = 0.0;
     QVector<qreal> data;
     for(int i = 0; i < d->valueSource->itemCount(); ++i) {
-        auto value = d->valueSource->item(i).toReal();
+        auto value = d->valueSource->item(i).toReal() - d->from;
         data << value;
         total += value;
 
@@ -138,8 +154,11 @@ void PieChart::updateData()
         d->colors << color;
     }
 
+    if(qFuzzyCompare(total, 0.0))
+        return;
+
     for(auto value : data) {
-        d->sections << (value / total);
+        d->sections << value / (d->to >= 0.0 ? d->to - d->from : total);
     }
 
     update();

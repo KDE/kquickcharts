@@ -44,6 +44,10 @@ Kirigami.Page {
             Button { text: "Remove Item"; onClicked: pieModel.remove(pieModel.count - 1)}
             Label { text: "Border" }
             SpinBox { from: 0; to: chart.width / 2; value: chart.borderWidth; onValueModified: chart.borderWidth = value; }
+            Label { text: "From" }
+            SpinBox { from: 0; to: 10000; value: chart.from; onValueModified: chart.from = value; }
+            Label { text: "To" }
+            SpinBox { from: -1; to: 10000; value: chart.to; onValueModified: chart.to = value; }
         }
 
         Frame {
