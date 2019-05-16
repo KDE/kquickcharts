@@ -98,10 +98,12 @@ void PieChartNode::updateTriangles()
         triangleColors << QVector4D{float(color.redF()), float(color.greenF()), float(color.blueF()), float(color.alphaF())};
 
         current -= angle;
-        if(qFuzzyCompare(current, 0.0)) {
+        while(qFuzzyCompare(current, 0.0)) {
             index++;
             if(index < m_sections.size()) {
                 current = m_sections.at(index) * pi * 2.0;
+            } else {
+                break;
             }
         }
     }
