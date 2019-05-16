@@ -10,7 +10,7 @@
 class PieChart::Private
 {
 public:
-    qreal innerDiameter = 0.0;
+    qreal borderWidth = -1.0;
 
     DataSource* valueSource = nullptr;
     DataSource* colorSource = nullptr;
@@ -40,9 +40,9 @@ QString PieChart::colorRole() const
     return d->colorRole;
 }
 
-qreal PieChart::innerDiameter() const
+qreal PieChart::borderWidth() const
 {
-    return d->innerDiameter;
+    return d->borderWidth;
 }
 
 DataSource * PieChart::valueSource() const
@@ -55,15 +55,18 @@ DataSource * PieChart::colorSource() const
     return d->colorSource;
 }
 
-void PieChart::setInnerDiameter(qreal diameter)
 {
-    if(qFuzzyCompare(d->innerDiameter, diameter)) {
         return;
-    }
 
-    d->innerDiameter = diameter;
     update();
-    emit innerDiameterChanged();
+void PieChart::setBorderWidth(qreal width)
+{
+    if(qFuzzyCompare(width, d->borderWidth))
+        return;
+
+    d->borderWidth = width;
+    update();
+    emit borderWidthChanged();
 }
 
 void PieChart::setValueSource(DataSource* value)
@@ -108,7 +111,7 @@ QSGNode *PieChart::updatePaintNode(QSGNode *node, UpdatePaintNodeData *data)
         n = new PieChartNode();
     }
     n->setRect(boundingRect());
-    n->setInnerDiameter(d->innerDiameter);
+    n->setBorderWidth(d->borderWidth >= 0.0 ? d->borderWidth : qMin(width(), height()) / 2);
     n->setSections(d->sections);
     n->setColors(d->colors);
 

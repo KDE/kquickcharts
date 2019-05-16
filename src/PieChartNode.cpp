@@ -53,17 +53,17 @@ void PieChartNode::setRect(const QRectF& rect)
     aspect.setY(rect.height() / minDimension);
     m_material->setAspectRatio(aspect);
 
-    m_material->setInnerDimension(qMin(m_innerDiameter, minDimension) / minDimension);
+    m_material->setInnerDimension((minDimension / 2 - m_borderWidth) / (minDimension / 2));
 }
 
-void PieChartNode::setInnerDiameter(qreal diameter)
+void PieChartNode::setBorderWidth(qreal width)
 {
-    if(qFuzzyCompare(diameter, m_innerDiameter))
+    if(qFuzzyCompare(width, m_borderWidth))
         return;
 
-    m_innerDiameter = diameter;
-    auto minDimension = qMin(m_rect.height(), m_rect.width());
-    m_material->setInnerDimension(qMin(diameter, minDimension) / minDimension);
+    m_borderWidth = width;
+    auto minDimension = qMin(m_rect.height(), m_rect.width()) / 2;
+    m_material->setInnerDimension((minDimension - m_borderWidth) / minDimension);
 }
 
 void PieChartNode::setColors(QVector<QColor> colors)

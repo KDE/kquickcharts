@@ -25,7 +25,7 @@ public:
     ~PieChartNode();
 
     void setRect(const QRectF &rect);
-    void setInnerDiameter(qreal diameter);
+    void setBorderWidth(qreal width);
     void setSections(QVector<qreal> sections);
     void setColors(QVector<QColor> colors);
 
@@ -33,7 +33,7 @@ private:
     void updateTriangles();
 
     QRectF m_rect;
-    qreal m_innerDiameter;
+    qreal m_borderWidth = 0.0;
 
     QVector<qreal> m_sections;
     QVector<QColor> m_colors;

@@ -28,10 +28,11 @@ Kirigami.Page {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
             Charts.PieChart {
+                id: chart
                 anchors.fill: parent
                 anchors.margins: Kirigami.Units.smallSpacing;
 
-                innerDiameter: 250
+                borderWidth: -1;
 
                 valueSource: Charts.ModelRole { name: "data"; model: pieModel }
                 colorSource: Charts.ModelRole { name: "color"; model: pieModel }
@@ -41,6 +42,8 @@ Kirigami.Page {
         RowLayout {
             Button { text: "Add Item"; onClicked: pieModel.append({data: 50, color: Qt.rgba(1.0, 1.0, 1.0)}) }
             Button { text: "Remove Item"; onClicked: pieModel.remove(pieModel.count - 1)}
+            Label { text: "Border" }
+            SpinBox { from: 0; to: chart.width / 2; value: chart.borderWidth; onValueModified: chart.borderWidth = value; }
         }
 
         Frame {
