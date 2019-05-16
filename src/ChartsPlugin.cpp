@@ -2,6 +2,7 @@
 
 #include "PieChart.h"
 #include "ModelSource.h"
+#include "SingleValueSource.h"
 
 void KQuickControlsAddonsChartsPlugin::registerTypes(const char *uri)
 {
@@ -12,4 +13,5 @@ void KQuickControlsAddonsChartsPlugin::registerTypes(const char *uri)
     qmlRegisterType<PieChart>(uri, 1, 0, "PieChart");
     qmlRegisterUncreatableType<ChartDataSource>(uri, 1, 0, "ChartDataSource", QStringLiteral("Just a base class"));
     qmlRegisterType<ModelSource>(uri, 1, 0, "ModelSource");
+    qmlRegisterType<SingleValueSource>(uri, 1, 0, "SingleValueSource");
 }
