@@ -1,7 +1,7 @@
 #include "ChartsPlugin.h"
 
-#include "ModelRole.h"
 #include "PieChart.h"
+#include "ModelSource.h"
 
 void KQuickControlsAddonsChartsPlugin::registerTypes(const char *uri)
 {
@@ -11,5 +11,5 @@ void KQuickControlsAddonsChartsPlugin::registerTypes(const char *uri)
 
     qmlRegisterType<PieChart>(uri, 1, 0, "PieChart");
     qmlRegisterUncreatableType<DataSource>(uri, 1, 0, "DataSource", QStringLiteral("Just a base class"));
-    qmlRegisterType<ModelRole>(uri, 1, 0, "ModelRole");
+    qmlRegisterType<ModelSource>(uri, 1, 0, "ModelSource");
 }

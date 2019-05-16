@@ -5,7 +5,7 @@
 
 #include "PieChartNode_p.h"
 
-#include "ModelRole.h"
+#include "DataSource.h"
 
 class PieChart::Private
 {

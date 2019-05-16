@@ -5,7 +5,7 @@ set(quickcharts_SRCS
     PieChartNode.cpp
     PieChartMaterial.cpp
     DataSource.cpp
-    ModelRole.cpp
+    ModelSource.cpp
 )
 
 qt5_add_resources(quickcharts_QRC shaders/shaders.qrc)

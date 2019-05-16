@@ -34,8 +34,8 @@ Kirigami.Page {
 
                 borderWidth: -1;
 
-                valueSource: Charts.ModelRole { name: "data"; model: pieModel }
-                colorSource: Charts.ModelRole { name: "color"; model: pieModel }
+                valueSource: Charts.ModelSource { roleName: "data"; model: pieModel }
+                colorSource: Charts.ModelSource { roleName: "color"; model: pieModel }
             }
         }
 
