@@ -5,7 +5,7 @@
 #include <memory>
 
 class QAbstractItemModel;
-class DataSource;
+class ChartDataSource;
 
 /**
  * @todo write docs
@@ -29,11 +29,11 @@ class PieChart : public QQuickItem
     /**
      * The source of the PieChart's values.
      */
-    Q_PROPERTY(DataSource *valueSource READ valueSource WRITE setValueSource NOTIFY valueSourceChanged)
+    Q_PROPERTY(ChartDataSource *valueSource READ valueSource WRITE setValueSource NOTIFY valueSourceChanged)
     /**
      * The source of the PieChart's colors.
      */
-    Q_PROPERTY(DataSource *colorSource READ colorSource WRITE setColorSource NOTIFY colorSourceChanged)
+    Q_PROPERTY(ChartDataSource *colorSource READ colorSource WRITE setColorSource NOTIFY colorSourceChanged)
 
 public:
     /**
@@ -49,15 +49,15 @@ public:
     qreal from() const;
     qreal to() const;
     qreal borderWidth() const;
-    DataSource *valueSource() const;
-    DataSource *colorSource() const;
+    ChartDataSource *valueSource() const;
+    ChartDataSource *colorSource() const;
 
 public Q_SLOTS:
     void setFrom(qreal from);
     void setTo(qreal to);
     void setBorderWidth(qreal width);
-    void setValueSource(DataSource *value);
-    void setColorSource(DataSource *color);
+    void setValueSource(ChartDataSource *value);
+    void setColorSource(ChartDataSource *color);
 
 Q_SIGNALS:
     void fromChanged();

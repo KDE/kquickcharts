@@ -3,13 +3,13 @@
 
 #include <QObject>
 
-class DataSource : public QObject
+class ChartDataSource : public QObject
 {
     Q_OBJECT
 
 public:
-    DataSource(QObject *parent = nullptr);
-    virtual ~DataSource();
+    ChartDataSource(QObject *parent = nullptr);
+    virtual ~ChartDataSource();
 
     virtual int itemCount() const = 0;
     virtual QVariant item(int index) const = 0;

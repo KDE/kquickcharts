@@ -4,7 +4,7 @@ set(quickcharts_SRCS
     PieChart.cpp
     PieChartNode.cpp
     PieChartMaterial.cpp
-    DataSource.cpp
+    ChartDataSource.cpp
     ModelSource.cpp
 )
 

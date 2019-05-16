@@ -5,7 +5,7 @@
 #include <QDebug>
 
 ModelSource::ModelSource(QObject *parent)
-    : DataSource(parent)
+    : ChartDataSource(parent)
 {
     connect(this, &ModelSource::modelChanged, this, &ModelSource::dataChanged);
     connect(this, &ModelSource::columnChanged, this, &ModelSource::dataChanged);
@@ -111,12 +111,12 @@ void ModelSource::setModel(QAbstractItemModel *model)
 
     m_model = model;
     if (m_model) {
-        QObject::connect(m_model, &QAbstractItemModel::rowsInserted, this, &DataSource::dataChanged);
-        QObject::connect(m_model, &QAbstractItemModel::rowsRemoved, this, &DataSource::dataChanged);
-        QObject::connect(m_model, &QAbstractItemModel::rowsMoved, this, &DataSource::dataChanged);
-        QObject::connect(m_model, &QAbstractItemModel::modelReset, this, &DataSource::dataChanged);
-        QObject::connect(m_model, &QAbstractItemModel::dataChanged, this, &DataSource::dataChanged);
-        QObject::connect(m_model, &QAbstractItemModel::layoutChanged, this, &DataSource::dataChanged);
+        connect(m_model, &QAbstractItemModel::rowsInserted, this, &ModelSource::dataChanged);
+        connect(m_model, &QAbstractItemModel::rowsRemoved, this, &ModelSource::dataChanged);
+        connect(m_model, &QAbstractItemModel::rowsMoved, this, &ModelSource::dataChanged);
+        connect(m_model, &QAbstractItemModel::modelReset, this, &ModelSource::dataChanged);
+        connect(m_model, &QAbstractItemModel::dataChanged, this, &ModelSource::dataChanged);
+        connect(m_model, &QAbstractItemModel::layoutChanged, this, &ModelSource::dataChanged);
     }
 
     emit modelChanged();

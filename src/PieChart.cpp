@@ -5,7 +5,7 @@
 
 #include "PieChartNode_p.h"
 
-#include "DataSource.h"
+#include "ChartDataSource.h"
 
 class PieChart::Private
 {
@@ -14,8 +14,8 @@ public:
     qreal to = -1.0;
     qreal borderWidth = -1.0;
 
-    DataSource *valueSource = nullptr;
-    DataSource *colorSource = nullptr;
+    ChartDataSource *valueSource = nullptr;
+    ChartDataSource *colorSource = nullptr;
 
     QVector<qreal> sections;
     QVector<QColor> colors;
@@ -47,12 +47,12 @@ qreal PieChart::borderWidth() const
     return d->borderWidth;
 }
 
-DataSource *PieChart::valueSource() const
+ChartDataSource *PieChart::valueSource() const
 {
     return d->valueSource;
 }
 
-DataSource *PieChart::colorSource() const
+ChartDataSource *PieChart::colorSource() const
 {
     return d->colorSource;
 }
@@ -87,35 +87,35 @@ void PieChart::setBorderWidth(qreal width)
     emit borderWidthChanged();
 }
 
-void PieChart::setValueSource(DataSource *value)
+void PieChart::setValueSource(ChartDataSource *value)
 {
     if (value == d->valueSource)
         return;
 
     if (d->valueSource)
-        disconnect(d->valueSource, &DataSource::dataChanged, this, &PieChart::updateData);
+        disconnect(d->valueSource, &ChartDataSource::dataChanged, this, &PieChart::updateData);
 
     d->valueSource = value;
 
     if (d->valueSource)
-        connect(d->valueSource, &DataSource::dataChanged, this, &PieChart::updateData);
+        connect(d->valueSource, &ChartDataSource::dataChanged, this, &PieChart::updateData);
 
     updateData();
     emit valueSourceChanged();
 }
 
-void PieChart::setColorSource(DataSource *color)
+void PieChart::setColorSource(ChartDataSource *color)
 {
     if (color == d->colorSource)
         return;
 
     if (d->colorSource)
-        disconnect(d->colorSource, &DataSource::dataChanged, this, &PieChart::updateData);
+        disconnect(d->colorSource, &ChartDataSource::dataChanged, this, &PieChart::updateData);
 
     d->colorSource = color;
 
     if (d->colorSource)
-        connect(d->colorSource, &DataSource::dataChanged, this, &PieChart::updateData);
+        connect(d->colorSource, &ChartDataSource::dataChanged, this, &PieChart::updateData);
 
     updateData();
     emit colorSourceChanged();

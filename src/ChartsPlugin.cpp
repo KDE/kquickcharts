@@ -10,6 +10,6 @@ void KQuickControlsAddonsChartsPlugin::registerTypes(const char *uri)
     Q_INIT_RESOURCE(shaders);
 
     qmlRegisterType<PieChart>(uri, 1, 0, "PieChart");
-    qmlRegisterUncreatableType<DataSource>(uri, 1, 0, "DataSource", QStringLiteral("Just a base class"));
+    qmlRegisterUncreatableType<ChartDataSource>(uri, 1, 0, "ChartDataSource", QStringLiteral("Just a base class"));
     qmlRegisterType<ModelSource>(uri, 1, 0, "ModelSource");
 }
