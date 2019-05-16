@@ -38,8 +38,8 @@ private:
     QVector<qreal> m_sections;
     QVector<QColor> m_colors;
 
-    QSGGeometry* m_geometry = nullptr;
-    PieChartMaterial* m_material = nullptr;
+    QSGGeometry *m_geometry = nullptr;
+    PieChartMaterial *m_material = nullptr;
 };
 
 #endif // PIECHARTNODE_H

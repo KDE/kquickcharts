@@ -1,0 +1,54 @@
+---
+BasedOnStyle: WebKit
+
+Language: Cpp
+Standard: Cpp11
+
+# Align pointer to the right.
+PointerAlignment: Right
+
+# As a base rule, the left curly brace goes on the same line as the start of the
+# statement, except function implementations, classes, structs, and namespace
+# declarations.
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterClass: true
+  AfterControlStatement: false
+  AfterEnum: false
+  AfterFunction: true
+  AfterNamespace: true
+  AfterObjCDeclaration: false
+  AfterStruct: true
+  AfterUnion: false
+  AfterExternBlock: false
+  BeforeCatch: false
+  BeforeElse: false
+  IndentBraces: false
+  SplitEmptyFunction: true
+  SplitEmptyRecord: true
+  SplitEmptyNamespace: true
+
+# Macros that should be interpreted as foreach loops instead of as function calls.
+ForEachMacros:
+  - foreach
+  - Q_FOREACH
+  - BOOST_FOREACH
+  - forever
+  - Q_FOREVER
+  - QBENCHMARK
+  - QBENCHMARK_ONCE
+
+# Each include section has to be sorted.
+SortIncludes: true
+
+# Case labels are on the same column as the switch.
+IndentCaseLabels: false
+
+# Don't indent in namespaces.
+NamespaceIndentation: None
+
+# The maximum number of consecutive empty lines to keep.
+MaxEmptyLinesToKeep: 1
+
+# Break before operators that aren’t assignments.
+BreakBeforeBinaryOperators: NonAssignment

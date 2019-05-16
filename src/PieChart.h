@@ -1,8 +1,8 @@
 #ifndef PIECHART_H
 #define PIECHART_H
 
-#include <memory>
 #include <QQuickItem>
+#include <memory>
 
 class QAbstractItemModel;
 class DataSource;
@@ -29,17 +29,17 @@ class PieChart : public QQuickItem
     /**
      * The source of the PieChart's values.
      */
-    Q_PROPERTY(DataSource* valueSource READ valueSource WRITE setValueSource NOTIFY valueSourceChanged)
+    Q_PROPERTY(DataSource *valueSource READ valueSource WRITE setValueSource NOTIFY valueSourceChanged)
     /**
      * The source of the PieChart's colors.
      */
-    Q_PROPERTY(DataSource* colorSource READ colorSource WRITE setColorSource NOTIFY colorSourceChanged)
+    Q_PROPERTY(DataSource *colorSource READ colorSource WRITE setColorSource NOTIFY colorSourceChanged)
 
 public:
     /**
      * Default constructor
      */
-    PieChart(QQuickItem* parent = nullptr);
+    PieChart(QQuickItem *parent = nullptr);
 
     /**
      * Destructor
@@ -49,15 +49,15 @@ public:
     qreal from() const;
     qreal to() const;
     qreal borderWidth() const;
-    DataSource* valueSource() const;
-    DataSource* colorSource() const;
+    DataSource *valueSource() const;
+    DataSource *colorSource() const;
 
 public Q_SLOTS:
     void setFrom(qreal from);
     void setTo(qreal to);
     void setBorderWidth(qreal width);
-    void setValueSource(DataSource* value);
-    void setColorSource(DataSource* color);
+    void setValueSource(DataSource *value);
+    void setColorSource(DataSource *color);
 
 Q_SIGNALS:
     void fromChanged();

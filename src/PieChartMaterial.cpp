@@ -9,13 +9,13 @@ PieChartMaterial::~PieChartMaterial()
 {
 }
 
-QSGMaterialType * PieChartMaterial::type() const
+QSGMaterialType *PieChartMaterial::type() const
 {
     static QSGMaterialType type;
     return &type;
 }
 
-QSGMaterialShader * PieChartMaterial::createShader() const
+QSGMaterialShader *PieChartMaterial::createShader() const
 {
     return new PieChartShader();
 }
@@ -50,12 +50,12 @@ void PieChartMaterial::setInnerDimension(float dimension)
     m_innerDimension = dimension;
 }
 
-void PieChartMaterial::setTriangles(const QVector<QVector2D>& triangles)
+void PieChartMaterial::setTriangles(const QVector<QVector2D> &triangles)
 {
     m_triangles = triangles;
 }
 
-void PieChartMaterial::setColors(const QVector<QVector4D>& colors)
+void PieChartMaterial::setColors(const QVector<QVector4D> &colors)
 {
     m_colors = colors;
 }
@@ -70,7 +70,7 @@ PieChartShader::~PieChartShader()
 {
 }
 
-const char *const * PieChartShader::attributeNames() const
+const char *const *PieChartShader::attributeNames() const
 {
     static char const *const names[] = { "in_vertex", "in_uv", "\0" };
     return names;
@@ -88,15 +88,15 @@ void PieChartShader::initialize()
     m_triangleCountLocation = program()->uniformLocation("triangleCount");
 }
 
-void PieChartShader::updateState(const QSGMaterialShader::RenderState& state, QSGMaterial* newMaterial, QSGMaterial* oldMaterial)
+void PieChartShader::updateState(const QSGMaterialShader::RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial)
 {
-    if(state.isMatrixDirty())
+    if (state.isMatrixDirty())
         program()->setUniformValue(m_matrixLocation, state.combinedMatrix());
-    if(state.isOpacityDirty())
+    if (state.isOpacityDirty())
         program()->setUniformValue(m_opacityLocation, state.opacity());
 
-    if(!oldMaterial || newMaterial->compare(oldMaterial) != 0) {
-        PieChartMaterial* material = static_cast<PieChartMaterial*>(newMaterial);
+    if (!oldMaterial || newMaterial->compare(oldMaterial) != 0) {
+        PieChartMaterial *material = static_cast<PieChartMaterial *>(newMaterial);
         program()->setUniformValue(m_innerDimensionLocation, material->innerDimension());
         program()->setUniformValue(m_aspectLocation, material->aspectRatio());
         program()->setUniformValueArray(m_trianglesLocation, material->triangles().constData(), material->triangles().size());

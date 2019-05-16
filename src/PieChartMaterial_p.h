@@ -40,7 +40,7 @@ public:
     char const *const *attributeNames() const override;
 
     void initialize() override;
-    void updateState(const RenderState& state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial) override;
+    void updateState(const RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial) override;
 
 private:
     int m_matrixLocation = 0;

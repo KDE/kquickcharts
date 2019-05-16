@@ -1,7 +1,7 @@
 #include "ChartsPlugin.h"
 
-#include "PieChart.h"
 #include "ModelRole.h"
+#include "PieChart.h"
 
 void KQuickControlsAddonsChartsPlugin::registerTypes(const char *uri)
 {
