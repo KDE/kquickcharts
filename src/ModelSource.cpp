@@ -10,6 +10,7 @@ ModelSource::ModelSource(QObject *parent)
     connect(this, &ModelSource::modelChanged, this, &ModelSource::dataChanged);
     connect(this, &ModelSource::columnChanged, this, &ModelSource::dataChanged);
     connect(this, &ModelSource::roleChanged, this, &ModelSource::dataChanged);
+    connect(this, &ModelSource::indexColumnsChanged, this, &ModelSource::dataChanged);
 }
 
 ModelSource::~ModelSource()
@@ -36,9 +37,17 @@ QAbstractItemModel *ModelSource::model() const
     return m_model;
 }
 
+bool ModelSource::indexColumns() const
+{
+    return m_indexColumns;
+}
+
 int ModelSource::itemCount() const
 {
-    return m_model ? m_model->rowCount() : 0;
+    if(!m_model)
+        return 0;
+
+    return m_indexColumns ? m_model->columnCount() : m_model->rowCount();
 }
 
 QVariant ModelSource::item(int index) const
@@ -57,12 +66,13 @@ QVariant ModelSource::item(int index) const
         return QVariant {};
     }
 
-    if(m_column < 0 || m_column > m_model->columnCount()) {
+    if(!m_indexColumns && (m_column < 0 || m_column > m_model->columnCount())) {
         qWarning() << "ModelSource: Invalid column" << m_column;
         return QVariant {};
     }
 
-    return m_model->data(m_model->index(index, m_column), m_role);
+    auto modelIndex = m_indexColumns ? m_model->index(0, index) : m_model->index(index, m_column);
+    return m_model->data(modelIndex, m_role);
 }
 
 void ModelSource::setRole(int role)
@@ -98,6 +108,15 @@ void ModelSource::setColumn(int column)
 
     m_column = column;
     emit columnChanged();
+}
+
+void ModelSource::setIndexColumns(bool index)
+{
+    if(index == m_indexColumns)
+        return;
+
+    m_indexColumns = index;
+    emit indexColumnsChanged();
 }
 
 void ModelSource::setModel(QAbstractItemModel *model)
