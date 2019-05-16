@@ -43,7 +43,7 @@ float triangle(in vec2 point, in vec2 p0, in vec2 p1, in vec2 p2)
 
 void main()
 {
-    vec2 point = (-1.0 + 2.0 * uv) * aspect;
+    vec2 point = (-1.0 + 2.0 * uv) * 1.002 * aspect;
 
     float thickness = (1.0 - innerDimension) / 2.0;
     float d = donut(point, innerDimension + thickness, thickness);
@@ -53,7 +53,7 @@ void main()
     {
         float dist = max(d, triangle(point, origin, triangles[i], triangles[i+1]));
         float g = fwidth(dist);
-        col = mix(col, colors[i], colors[i].a * (1.0 - smoothstep(0.001 - g, 0.001 + g, dist)));
+        col = mix(col, colors[i], colors[i].a * (1.0 - smoothstep(0.002 - g, 0.002 + g, dist)));
     }
 
     gl_FragColor = col * opacity;
