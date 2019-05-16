@@ -143,22 +143,35 @@ void PieChart::updateData()
     if(!d->valueSource || !d->colorSource)
         return;
 
+    if(d->to >= 0.0 && d->from >= d->to)
+        return;
+
+    qreal threshold = d->from;
     qreal total = 0.0;
     QVector<qreal> data;
     for(int i = 0; i < d->valueSource->itemCount(); ++i) {
-        auto value = d->valueSource->item(i).toReal() - d->from;
-        data << value;
-        total += value;
+        auto value = d->valueSource->item(i).toReal();
+        auto limited = value - threshold;
+        if(limited > 0.0)
+        {
+            data << limited;
+            total += limited;
 
-        auto color = d->colorSource->item(i).value<QColor>();
-        d->colors << color;
+            auto color = d->colorSource->item(i).value<QColor>();
+            d->colors << color;
+        }
+        threshold = qMax(0.0, threshold - value);
     }
 
     if(qFuzzyCompare(total, 0.0))
         return;
 
+    if(d->to >= 0.0) {
+        total = qMax(total, d->to - d->from);
+    }
+
     for(auto value : data) {
-        d->sections << value / (d->to >= 0.0 ? d->to - d->from : total);
+        d->sections << value / total;
     }
 
     update();
