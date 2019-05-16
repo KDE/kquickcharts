@@ -110,4 +110,6 @@ void PieChartNode::updateTriangles()
 
     m_material->setTriangles(trianglePoints);
     m_material->setColors(triangleColors);
+
+    markDirty(QSGNode::DirtyMaterial);
 }
