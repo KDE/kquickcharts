@@ -21,11 +21,6 @@ QString ModelRole::name() const
     return m_name;
 }
 
-// int ModelRole::toRole(QAbstractItemModel* model)
-// {
-//     return model->roleNames().key(m_name.toUtf8(), -1);
-// }
-
 int ModelRole::itemCount() const
 {
     return m_model ? m_model->rowCount() : 0;
