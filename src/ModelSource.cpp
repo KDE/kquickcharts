@@ -72,7 +72,10 @@ QVariant ModelSource::item(int index) const
     }
 
     auto modelIndex = m_indexColumns ? m_model->index(0, index) : m_model->index(index, m_column);
-    return m_model->data(modelIndex, m_role);
+    if(modelIndex.isValid())
+        return m_model->data(modelIndex, m_role);
+
+    return QVariant{};
 }
 
 void ModelSource::setRole(int role)
