@@ -6,12 +6,12 @@
 #include "scenegraph/PieChartNode_p.h"
 
 #include "ChartDataSource.h"
+#include "RangeGroup.h"
 
 class PieChart::Private
 {
 public:
-    qreal from = 0.0;
-    qreal to = -1.0;
+    RangeGroup *range = nullptr;
     qreal borderWidth = -1.0;
 
     ChartDataSource *valueSource = nullptr;
@@ -26,20 +26,17 @@ PieChart::PieChart(QQuickItem *parent)
     , d(new Private)
 {
     setFlag(QQuickItem::ItemHasContents, true);
+    d->range = new RangeGroup{this};
+    connect(d->range, &RangeGroup::rangeChanged, this, &PieChart::updateData);
 }
 
 PieChart::~PieChart()
 {
 }
 
-qreal PieChart::from() const
+RangeGroup *PieChart::range() const
 {
-    return d->from;
-}
-
-qreal PieChart::to() const
-{
-    return d->to;
+    return d->range;
 }
 
 qreal PieChart::borderWidth() const
@@ -55,26 +52,6 @@ ChartDataSource *PieChart::valueSource() const
 ChartDataSource *PieChart::colorSource() const
 {
     return d->colorSource;
-}
-
-void PieChart::setFrom(qreal from)
-{
-    if (qFuzzyCompare(from, d->from))
-        return;
-
-    d->from = from;
-    updateData();
-    emit fromChanged();
-}
-
-void PieChart::setTo(qreal to)
-{
-    if (qFuzzyCompare(to, d->to))
-        return;
-
-    d->to = to;
-    updateData();
-    emit toChanged();
 }
 
 void PieChart::setBorderWidth(qreal width)
@@ -144,10 +121,10 @@ void PieChart::updateData()
     if (!d->valueSource || !d->colorSource)
         return;
 
-    if (d->to >= 0.0 && d->from >= d->to)
+    if (!d->range->isValid())
         return;
 
-    qreal threshold = d->from;
+    qreal threshold = !d->range->automatic() ? d->range->from() : 0.0;
     qreal total = 0.0;
     QVector<qreal> data;
     for (int i = 0; i < d->valueSource->itemCount(); ++i) {
@@ -166,8 +143,8 @@ void PieChart::updateData()
     if (qFuzzyCompare(total, 0.0))
         return;
 
-    if (d->to >= 0.0) {
-        total = qMax(total, d->to - d->from);
+    if (!d->range->automatic() && d->range->distance() >= total) {
+        total = d->range->distance();
     }
 
     for (auto value : data) {

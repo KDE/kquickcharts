@@ -6,6 +6,7 @@
 
 class QAbstractItemModel;
 class ChartDataSource;
+class RangeGroup;
 
 /**
  * @todo write docs
@@ -15,13 +16,10 @@ class PieChart : public QQuickItem
     Q_OBJECT
 
     /**
-     * The value at which this PieChart will start counting.
+     * The range of values to display in this PieChart. When set to "automatic", the values will be divide across the
+     * entire chart. .
      */
-    Q_PROPERTY(qreal from READ from WRITE setFrom NOTIFY fromChanged)
-    /**
-     * The value at which this PieChart is considered "full". If this is -1, the PieChart will ensure
-     */
-    Q_PROPERTY(qreal to READ to WRITE setTo NOTIFY toChanged)
+    Q_PROPERTY(RangeGroup *range READ range CONSTANT)
     /**
      * The width of the PieChart in border rendering mode. If this is -1, the PieChart will use a completely filled circle.
      */
@@ -46,22 +44,17 @@ public:
      */
     ~PieChart();
 
-    qreal from() const;
-    qreal to() const;
+    RangeGroup *range() const;
     qreal borderWidth() const;
     ChartDataSource *valueSource() const;
     ChartDataSource *colorSource() const;
 
 public Q_SLOTS:
-    void setFrom(qreal from);
-    void setTo(qreal to);
     void setBorderWidth(qreal width);
     void setValueSource(ChartDataSource *value);
     void setColorSource(ChartDataSource *color);
 
 Q_SIGNALS:
-    void fromChanged();
-    void toChanged();
     void borderWidthChanged();
     void valueSourceChanged();
     void colorSourceChanged();
