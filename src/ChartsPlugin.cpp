@@ -15,6 +15,7 @@ void KQuickControlsAddonsChartsPlugin::registerTypes(const char *uri)
     qmlRegisterUncreatableType<ChartDataSource>(uri, 1, 0, "ChartDataSource", QStringLiteral("Just a base class"));
     qmlRegisterType<ModelSource>(uri, 1, 0, "ModelSource");
     qmlRegisterType<SingleValueSource>(uri, 1, 0, "SingleValueSource");
+    qmlRegisterType<ArraySource>(uri, 1, 0, "ArraySource");
 
     qmlRegisterUncreatableType<RangeGroup>(uri, 1, 0, "Range", QStringLiteral("Used as a grouped property"));
 }

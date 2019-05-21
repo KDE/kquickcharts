@@ -5,6 +5,7 @@ set(quickcharts_SRCS
     ChartDataSource.cpp
     ModelSource.cpp
     SingleValueSource.cpp
+    ArraySource.cpp
 
     RangeGroup.cpp
     scenegraph/PieChartMaterial.cpp
