@@ -13,6 +13,12 @@ Kirigami.Page {
     ListModel {
         id: pieModel;
         dynamicRoles: true;
+
+        Component.onCompleted: {
+            append({ data: 50, color: "red" })
+            append({ data: 50, color: "green" })
+            append({ data: 50, color: "blue" })
+        }
     }
 
     ColumnLayout {
@@ -32,7 +38,7 @@ Kirigami.Page {
                 anchors.fill: parent
                 anchors.margins: Kirigami.Units.smallSpacing;
 
-                borderWidth: -1;
+                borderWidth: 20;
                 range.to: 150
 
                 valueSource: Charts.ModelSource { roleName: "data"; model: pieModel }
