@@ -3,7 +3,7 @@
 #include <QAbstractItemModel>
 #include <QDebug>
 
-#include "PieChartNode_p.h"
+#include "scenegraph/PieChartNode_p.h"
 
 #include "ChartDataSource.h"
 

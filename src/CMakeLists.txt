@@ -2,11 +2,11 @@
 set(quickcharts_SRCS
     ChartsPlugin.cpp
     PieChart.cpp
-    PieChartNode.cpp
-    PieChartMaterial.cpp
     ChartDataSource.cpp
     ModelSource.cpp
     SingleValueSource.cpp
+    scenegraph/PieChartMaterial.cpp
+    scenegraph/PieChartNode.cpp
 )
 
 qt5_add_resources(quickcharts_QRC shaders/shaders.qrc)
