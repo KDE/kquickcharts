@@ -5,6 +5,7 @@
 #include "RangeGroup.h"
 
 #include "scenegraph/LineGridNode.h"
+#include "scenegraph/LineChartNode.h"
 
 class LineChart::Private
 {
@@ -130,6 +131,21 @@ QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
     n->setYSpacing((d->yAxis->stepSize() / d->yAxis->range()->distance()) * height());
 
     n->update();
+
+    LineChartNode *cn = static_cast<LineChartNode*>(node->childAtIndex(1));
+    auto lineColor = d->lineColorSource->item(0).value<QColor>();
+    cn->setRect(boundingRect());
+    cn->setLineColor(lineColor);
+    lineColor.setAlphaF(0.5);
+    cn->setFillColor(lineColor);
+    cn->setLineWidth(2.0);
+
+    QVector<qreal> values;
+    auto valueSource = d->valueSources.at(0);
+    for(int i = 0; i < valueSource->itemCount(); i++) {
+        values << (valueSource->item(i).toReal() - d->yAxis->range()->from()) / d->yAxis->range()->distance();
+    }
+    cn->setValues(values);
 
     return node;
 }

@@ -3,5 +3,6 @@
     <qresource prefix="/org.kde.quickcharts">
         <file>uv.vert</file>
         <file>piechart.frag</file>
+        <file>linechart.frag</file>
     </qresource>
 </RCC>
