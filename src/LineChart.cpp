@@ -51,7 +51,7 @@ ChartDataSource * LineChart::lineColorSource() const
 QQmlListProperty<ChartDataSource> LineChart::valueSources()
 {
     return QQmlListProperty<ChartDataSource>(this,
-                                             d.get(),
+                                             this,
                                              &Private::appendSource,
                                              &Private::sourceCount,
                                              &Private::source,
@@ -74,6 +74,7 @@ void LineChart::setXAxis(Axis* axis)
         return;
 
     d->xAxis = axis;
+    update();
     emit xAxisChanged();
 }
 
@@ -83,6 +84,7 @@ void LineChart::setYAxis(Axis* axis)
         return;
 
     d->yAxis = axis;
+    update();
     emit yAxisChanged();
 }
 
@@ -92,6 +94,7 @@ void LineChart::setLineColorSource(ChartDataSource* source)
         return;
 
     d->lineColorSource = source;
+    update();
     emit lineColorSourceChanged();
 }
 
@@ -102,6 +105,7 @@ void LineChart::setStacked(bool stacked)
     }
 
     d->stacked = stacked;
+    update();
     emit stackedChanged();
 }
 
@@ -111,6 +115,7 @@ void LineChart::setSmooth(bool smooth)
         return;
 
     d->smooth = smooth;
+    update();
     emit smoothChanged();
 }
 
@@ -121,6 +126,8 @@ QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
     if(!node) {
         node = new QSGNode();
         node->appendChildNode(new LineGridNode());
+
+        node->appendChildNode(new LineChartNode{});
     }
 
     LineGridNode *n = static_cast<LineGridNode *>(node->childAtIndex(0));
@@ -152,20 +159,28 @@ QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
 
 void LineChart::Private::appendSource(LineChart::DataSourcesProperty *list, ChartDataSource* source)
 {
-    reinterpret_cast<LineChart::Private*>(list->data)->valueSources.append(source);
+    auto chart = reinterpret_cast<LineChart*>(list->data);
+    chart->d->valueSources.append(source);
+    QObject::connect(source, &ChartDataSource::dataChanged, chart, &LineChart::update);
+    chart->update();
 }
 
 int LineChart::Private::sourceCount(LineChart::DataSourcesProperty *list)
 {
-    return reinterpret_cast<LineChart::Private*>(list->data)->valueSources.count();
+    return reinterpret_cast<LineChart*>(list->data)->d->valueSources.count();
 }
 
 ChartDataSource * LineChart::Private::source(LineChart::DataSourcesProperty* list, int index)
 {
-    return reinterpret_cast<LineChart::Private*>(list->data)->valueSources.at(index);
+    return reinterpret_cast<LineChart*>(list->data)->d->valueSources.at(index);
 }
 
 void LineChart::Private::clearSources(LineChart::DataSourcesProperty* list)
 {
-    reinterpret_cast<LineChart::Private*>(list->data)->valueSources.clear();
+    auto chart = reinterpret_cast<LineChart*>(list->data);
+    std::for_each(chart->d->valueSources.begin(), chart->d->valueSources.end(), [chart](ChartDataSource* source) {
+        source->disconnect(chart);
+    });
+    chart->d->valueSources.clear();
+    chart->update();
 }
