@@ -1,6 +1,12 @@
 
 #define VERSION 120
-#define MAX_TRIANGLE_POINTS 32
+// The maximum number of points we can support for a single pie.
+// This is based on OpenGL's MAX_FRAGMENT_UNIFORM_COMPONENTS.
+// MAX_FRAGMENT_UNIFORM_COMPONENTS is required to be at least 1024.
+// The formula used is:
+//  MAX_COMP / 4 (for vec4) / 2 (one for triangles, one for colors)
+// This should leave plenty of space for other uniforms
+#define MAX_TRIANGLE_POINTS 128
 
 uniform lowp float opacity;
 uniform mediump float innerDimension;
