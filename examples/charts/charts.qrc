@@ -2,6 +2,7 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>PieChart.qml</file>
+        <file>LineChart.qml</file>
         <file>Plotter.qml</file>
     </qresource>
 </RCC>

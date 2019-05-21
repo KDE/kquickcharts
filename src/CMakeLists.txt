@@ -1,15 +1,21 @@
 
 set(quickcharts_SRCS
     ChartsPlugin.cpp
+
     PieChart.cpp
+    LineChart.cpp
+
     ChartDataSource.cpp
     ModelSource.cpp
     SingleValueSource.cpp
     ArraySource.cpp
 
     RangeGroup.cpp
+    Axis.cpp
+
     scenegraph/PieChartMaterial.cpp
     scenegraph/PieChartNode.cpp
+    scenegraph/LineGridNode.cpp
 )
 
 qt5_add_resources(quickcharts_QRC shaders/shaders.qrc)

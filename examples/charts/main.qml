@@ -13,7 +13,7 @@ Kirigami.ApplicationWindow {
 
             model: ListModel {
                 ListElement { label: "Pie Chart"; file: "qrc:/PieChart.qml" }
-                ListElement { label: "Plotter"; file: "qrc:/Plotter.qml" }
+                ListElement { label: "Line Chart"; file: "qrc:/LineChart.qml" }
             }
 
             delegate: Kirigami.BasicListItem {
