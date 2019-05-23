@@ -72,7 +72,7 @@ PieChartShader::~PieChartShader()
 
 const char *const *PieChartShader::attributeNames() const
 {
-    static char const *const names[] = { "in_vertex", "in_uv", "\0" };
+    static char const *const names[] = { "in_vertex", "in_uv", nullptr };
     return names;
 }
 
