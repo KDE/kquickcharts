@@ -127,7 +127,18 @@ QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
         node = new QSGNode();
         node->appendChildNode(new LineGridNode());
 
-        node->appendChildNode(new LineChartNode{});
+        auto opacityNode = new QSGOpacityNode{};
+        for(int i = 0; i < d->valueSources.size(); ++i) {
+            opacityNode->appendChildNode(new LineChartNode{});
+        }
+
+        node->appendChildNode(opacityNode);
+
+        auto lineNode = new QSGNode{};
+        for(int i = 0; i < d->valueSources.size(); ++i) {
+            lineNode->appendChildNode(new LineChartNode{});
+        }
+        node->appendChildNode(lineNode);
     }
 
     LineGridNode *n = static_cast<LineGridNode *>(node->childAtIndex(0));
@@ -136,23 +147,42 @@ QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
     n->setDrawY(d->yAxis->drawLines());
     n->setXSpacing((d->xAxis->stepSize() / d->xAxis->range()->distance()) * width());
     n->setYSpacing((d->yAxis->stepSize() / d->yAxis->range()->distance()) * height());
-
     n->update();
 
-    LineChartNode *cn = static_cast<LineChartNode*>(node->childAtIndex(1));
-    auto lineColor = d->lineColorSource->item(0).value<QColor>();
-    cn->setRect(boundingRect());
-    cn->setLineColor(lineColor);
-    lineColor.setAlphaF(0.5);
-    cn->setFillColor(lineColor);
-    cn->setLineWidth(2.0);
+    auto opacityNode = static_cast<QSGOpacityNode*>(node->childAtIndex(1));
+    opacityNode->setOpacity(0.2);
+    for(int i = 0; i < d->valueSources.size(); ++i) {
+        LineChartNode *cn = static_cast<LineChartNode*>(opacityNode->childAtIndex(i));
+        auto lineColor = d->lineColorSource->item(i).value<QColor>();
+        cn->setRect(boundingRect());
+        cn->setLineColor(QColor(0, 0, 0, 0));
+        cn->setFillColor(lineColor);
+        cn->setLineWidth(0.0);
 
-    QVector<qreal> values;
-    auto valueSource = d->valueSources.at(0);
-    for(int i = 0; i < valueSource->itemCount(); i++) {
-        values << (valueSource->item(i).toReal() - d->yAxis->range()->from()) / d->yAxis->range()->distance();
+        QVector<qreal> values;
+        auto valueSource = d->valueSources.at(i);
+        for(int i = 0; i < valueSource->itemCount(); i++) {
+            values << (valueSource->item(i).toReal() - d->yAxis->range()->from()) / d->yAxis->range()->distance();
+        }
+        cn->setValues(values);
     }
-    cn->setValues(values);
+
+    auto lineNode = node->childAtIndex(2);
+    for(int i = 0; i < d->valueSources.size(); ++i) {
+        LineChartNode *cn = static_cast<LineChartNode*>(lineNode->childAtIndex(i));
+        auto lineColor = d->lineColorSource->item(i).value<QColor>();
+        cn->setRect(boundingRect());
+        cn->setLineColor(lineColor);
+        cn->setFillColor(QColor(0, 0, 0, 0));
+        cn->setLineWidth(2.0);
+
+        QVector<qreal> values;
+        auto valueSource = d->valueSources.at(i);
+        for(int i = 0; i < valueSource->itemCount(); i++) {
+            values << (valueSource->item(i).toReal() - d->yAxis->range()->from()) / d->yAxis->range()->distance();
+        }
+        cn->setValues(values);
+    }
 
     return node;
 }
