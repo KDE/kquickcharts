@@ -22,6 +22,7 @@ public:
     bool stacked = false;
     bool smooth = false;
     qreal lineWidth = 1.0;
+    qreal fillOpacity = 0.0;
 };
 
 LineChart::LineChart(QQuickItem* parent)
@@ -74,6 +75,10 @@ qreal LineChart::lineWidth() const
     return d->lineWidth;
 }
 
+qreal LineChart::fillOpacity() const
+{
+    return d->fillOpacity;
+}
 
 void LineChart::setXAxis(Axis* axis) {
     if(axis == d->xAxis)
@@ -133,6 +138,16 @@ void LineChart::setLineWidth(qreal width)
     d->lineWidth = width;
     update();
     emit lineWidthChanged();
+}
+
+void LineChart::setFillOpacity(qreal opacity)
+{
+    if (qFuzzyCompare(d->fillOpacity, opacity))
+        return;
+
+    d->fillOpacity = opacity;
+    update();
+    emit fillOpacityChanged();
 }
 
 QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *data)
