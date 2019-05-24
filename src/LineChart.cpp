@@ -21,6 +21,7 @@ public:
     ChartDataSource *lineColorSource = nullptr;
     bool stacked = false;
     bool smooth = false;
+    qreal lineWidth = 1.0;
 };
 
 LineChart::LineChart(QQuickItem* parent)
@@ -68,8 +69,13 @@ bool LineChart::smooth() const
     return d->smooth;
 }
 
-void LineChart::setXAxis(Axis* axis)
+qreal LineChart::lineWidth() const
 {
+    return d->lineWidth;
+}
+
+
+void LineChart::setXAxis(Axis* axis) {
     if(axis == d->xAxis)
         return;
 
@@ -117,6 +123,16 @@ void LineChart::setSmooth(bool smooth)
     d->smooth = smooth;
     update();
     emit smoothChanged();
+}
+
+void LineChart::setLineWidth(qreal width)
+{
+    if(qFuzzyCompare(d->lineWidth, width))
+        return;
+
+    d->lineWidth = width;
+    update();
+    emit lineWidthChanged();
 }
 
 QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *data)

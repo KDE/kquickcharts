@@ -20,6 +20,7 @@ class LineChart : public QQuickItem
     Q_PROPERTY(ChartDataSource* lineColorSource READ lineColorSource WRITE setLineColorSource NOTIFY lineColorSourceChanged)
     Q_PROPERTY(bool stacked READ stacked WRITE setStacked NOTIFY stackedChanged)
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
+    Q_PROPERTY(qreal lineWidth READ lineWidth WRITE setLineWidth NOTIFY lineWidthChanged)
 
 public:
     using DataSourcesProperty = QQmlListProperty<ChartDataSource>;
@@ -40,6 +41,7 @@ public:
     ChartDataSource *lineColorSource() const;
     bool stacked() const;
     bool smooth() const;
+    qreal lineWidth() const;
 
 public Q_SLOTS:
     void setXAxis(Axis *axis);
@@ -47,6 +49,7 @@ public Q_SLOTS:
     void setLineColorSource(ChartDataSource *source);
     void setStacked(bool stacked);
     void setSmooth(bool smooth);
+    void setLineWidth(qreal width);
 
 Q_SIGNALS:
     void xAxisChanged();
@@ -54,6 +57,7 @@ Q_SIGNALS:
     void lineColorSourceChanged();
     void stackedChanged();
     void smoothChanged();
+    void lineWidthChanged();
 
 protected:
     QSGNode *updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *data) override;
