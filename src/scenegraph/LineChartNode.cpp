@@ -94,7 +94,7 @@ void LineChartNode::updatePoints()
         currentX += valueStep;
     }
 
-    points.last().setX(1.01);
+    points << QVector2D(1.01, points.last().y());
     points << QVector2D{1.01, -0.01};
 
     m_material->setPoints(points);
