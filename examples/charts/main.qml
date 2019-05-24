@@ -14,6 +14,7 @@ Kirigami.ApplicationWindow {
             model: ListModel {
                 ListElement { label: "Pie Chart"; file: "qrc:/PieChart.qml" }
                 ListElement { label: "Line Chart"; file: "qrc:/LineChart.qml" }
+                ListElement { label: "Continuous Line Chart"; file: "qrc:/ContinuousLineChart.qml" }
             }
 
             delegate: Kirigami.BasicListItem {
