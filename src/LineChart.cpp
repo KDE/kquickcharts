@@ -15,8 +15,8 @@ public:
     static ChartDataSource* source(DataSourcesProperty *list, int index);
     static void clearSources(DataSourcesProperty *list);
 
-    Axis *xAxis = nullptr;
-    Axis *yAxis = nullptr;
+    RangeGroup *xRange = nullptr;
+    RangeGroup *yRange = nullptr;
     QVector<ChartDataSource*> valueSources;
     ChartDataSource *lineColorSource = nullptr;
     bool stacked = false;
@@ -29,20 +29,25 @@ LineChart::LineChart(QQuickItem* parent)
     : QQuickItem(parent), d(new Private)
 {
     setFlag(ItemHasContents, true);
+
+    d->xRange = new RangeGroup{this};
+    connect(d->xRange, &RangeGroup::rangeChanged, this, &LineChart::update);
+    d->yRange = new RangeGroup{this};
+    connect(d->yRange, &RangeGroup::rangeChanged, this, &LineChart::update);
 }
 
 LineChart::~LineChart()
 {
 }
 
-Axis * LineChart::xAxis() const
+RangeGroup * LineChart::xRange() const
 {
-    return d->xAxis;
+    return d->xRange;
 }
 
-Axis * LineChart::yAxis() const
+RangeGroup * LineChart::yRange() const
 {
-    return d->yAxis;
+    return d->yRange;
 }
 
 ChartDataSource * LineChart::lineColorSource() const
@@ -78,25 +83,6 @@ qreal LineChart::lineWidth() const
 qreal LineChart::fillOpacity() const
 {
     return d->fillOpacity;
-}
-
-void LineChart::setXAxis(Axis* axis) {
-    if(axis == d->xAxis)
-        return;
-
-    d->xAxis = axis;
-    update();
-    emit xAxisChanged();
-}
-
-void LineChart::setYAxis(Axis* axis)
-{
-    if(axis == d->yAxis)
-        return;
-
-    d->yAxis = axis;
-    update();
-    emit yAxisChanged();
 }
 
 void LineChart::setLineColorSource(ChartDataSource* source)
@@ -174,10 +160,6 @@ QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
 
     LineGridNode *n = static_cast<LineGridNode *>(node->childAtIndex(0));
     n->setRect(boundingRect());
-    n->setDrawX(d->xAxis->drawLines());
-    n->setDrawY(d->yAxis->drawLines());
-    n->setXSpacing((d->xAxis->stepSize() / d->xAxis->range()->distance()) * width());
-    n->setYSpacing((d->yAxis->stepSize() / d->yAxis->range()->distance()) * height());
     n->update();
 
     auto opacityNode = static_cast<QSGOpacityNode*>(node->childAtIndex(1));
@@ -193,7 +175,7 @@ QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
         QVector<qreal> values;
         auto valueSource = d->valueSources.at(i);
         for(int i = 0; i < valueSource->itemCount(); i++) {
-            values << (valueSource->item(i).toReal() - d->yAxis->range()->from()) / d->yAxis->range()->distance();
+            values << (valueSource->item(i).toReal() - d->yRange->from()) / d->yRange->distance();
         }
         cn->setValues(values);
     }
@@ -210,7 +192,7 @@ QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
         QVector<qreal> values;
         auto valueSource = d->valueSources.at(i);
         for(int i = 0; i < valueSource->itemCount(); i++) {
-            values << (valueSource->item(i).toReal() - d->yAxis->range()->from()) / d->yAxis->range()->distance();
+            values << (valueSource->item(i).toReal() - d->yRange->from()) / d->yRange->distance();
         }
         cn->setValues(values);
     }
