@@ -68,11 +68,11 @@ Kirigami.Page {
         RowLayout {
             Button { text: "Add Item"; onClicked: lineModel.append({label: "New", value1: 0, value2: 0, value3: 0}) }
             Button { text: "Remove Item"; onClicked: lineModel.remove(lineModel.count - 1)}
-//             Label { text: "Border" }
-//             SpinBox { from: 0; to: chart.width / 2; value: chart.borderWidth; onValueModified: chart.borderWidth = value; }
+            Label { text: "Line Width" }
+            SpinBox { from: 0; to: 1000; value: chart.lineWidth; onValueModified: chart.lineWidth = value; }
 //             CheckBox { checked: chart.range.automatic; text: "Automatic"; onToggled: chart.range.automatic = checked }
-//             Label { text: "From" }
-//             SpinBox { from: 0; to: 10000; value: chart.range.from; onValueModified: chart.range.from = value; }
+            Label { text: "Fill Opacity" }
+            SpinBox { from: 0; to: 100; value: chart.fillOpacity * 100; onValueModified: chart.fillOpacity = value / 100; }
 //             Label { text: "To" }
 //             SpinBox { from: -1; to: 10000; value: chart.range.to; onValueModified: chart.range.to = value; }
         }
