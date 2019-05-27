@@ -22,6 +22,16 @@ QVariant ArraySource::item(int index) const
     return m_array.at(index);
 }
 
+QVariant ArraySource::minimum() const
+{
+    return *std::min_element(m_array.begin(), m_array.end());
+}
+
+QVariant ArraySource::maximum() const
+{
+    return *std::max_element(m_array.begin(), m_array.end());
+}
+
 QVariantList ArraySource::array() const
 {
     return m_array;

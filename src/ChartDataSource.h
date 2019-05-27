@@ -13,6 +13,8 @@ public:
 
     virtual int itemCount() const = 0;
     virtual QVariant item(int index) const = 0;
+    virtual QVariant minimum() const = 0;
+    virtual QVariant maximum() const = 0;
 
     Q_SIGNAL void dataChanged();
 };

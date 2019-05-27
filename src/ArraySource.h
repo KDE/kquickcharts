@@ -28,6 +28,8 @@ public:
 
     virtual int itemCount() const override;
     virtual QVariant item(int index) const override;
+    QVariant minimum() const override;
+    QVariant maximum() const override;
 
     QVariantList array() const;
 

@@ -21,6 +21,16 @@ int SingleValueSource::itemCount() const
     return 1;
 }
 
+QVariant SingleValueSource::minimum() const
+{
+    return m_value;
+}
+
+QVariant SingleValueSource::maximum() const
+{
+    return m_value;
+}
+
 QVariant SingleValueSource::value() const
 {
     return m_value;

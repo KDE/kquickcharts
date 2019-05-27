@@ -31,6 +31,8 @@ public:
 
     int itemCount() const override;
     QVariant item(int index) const override;
+    QVariant minimum() const override;
+    QVariant maximum() const override;
 
 public Q_SLOTS:
     void setRole(int role);

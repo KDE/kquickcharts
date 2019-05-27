@@ -78,6 +78,24 @@ QVariant ModelSource::item(int index) const
     return QVariant{};
 }
 
+QVariant ModelSource::minimum() const
+{
+    QVariant result;
+    for(int i = 0; i < itemCount(); ++i) {
+        result = qMin(result, item(i));
+    }
+    return result;
+}
+
+QVariant ModelSource::maximum() const
+{
+    QVariant result;
+    for(int i = 0; i < itemCount(); ++i) {
+        result = qMax(result, item(i));
+    }
+    return result;
+}
+
 void ModelSource::setRole(int role)
 {
     if(role == m_role)
