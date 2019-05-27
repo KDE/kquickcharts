@@ -6,7 +6,6 @@
 #include "RangeGroup.h"
 #include "LineChart.h"
 #include "ArraySource.h"
-#include "Axis.h"
 
 void KQuickControlsAddonsChartsPlugin::registerTypes(const char *uri)
 {

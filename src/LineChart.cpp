@@ -3,7 +3,6 @@
 #include <numeric>
 
 #include "ChartDataSource.h"
-#include "Axis.h"
 #include "RangeGroup.h"
 
 #include "scenegraph/LineGridNode.h"
