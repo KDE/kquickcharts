@@ -94,7 +94,7 @@ Kirigami.Page {
                             Label { text: "Value 1" }
                             SpinBox {
                                 Layout.preferredWidth: 75
-                                from: 0; to: 10000;
+                                from: -10000; to: 10000;
                                 stepSize: 1;
                                 value: model.value1;
                                 onValueModified: lineModel.setProperty(index, "value1", value)
@@ -102,7 +102,7 @@ Kirigami.Page {
                             Label { text: "Value 2" }
                             SpinBox {
                                 Layout.preferredWidth: 75
-                                from: 0; to: 10000;
+                                from: -10000; to: 10000;
                                 stepSize: 1;
                                 value: model.value2;
                                 onValueModified: lineModel.setProperty(index, "value2", value)
@@ -110,7 +110,7 @@ Kirigami.Page {
                             Label { text: "Value 3" }
                             SpinBox {
                                 Layout.preferredWidth: 75
-                                from: 0; to: 10000;
+                                from: -10000; to: 10000;
                                 stepSize: 1;
                                 value: model.value3;
                                 onValueModified: lineModel.setProperty(index, "value3", value)
