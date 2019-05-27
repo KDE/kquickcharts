@@ -4,6 +4,7 @@
         <file>PieChart.qml</file>
         <file>LineChart.qml</file>
         <file>ContinuousLineChart.qml</file>
+        <file>RangeEditor.qml</file>
     </qresource>
 </RCC>
 

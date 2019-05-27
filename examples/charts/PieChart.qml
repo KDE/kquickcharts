@@ -51,11 +51,7 @@ Kirigami.Page {
             Button { text: "Remove Item"; onClicked: pieModel.remove(pieModel.count - 1)}
             Label { text: "Border" }
             SpinBox { from: 0; to: chart.width / 2; value: chart.borderWidth; onValueModified: chart.borderWidth = value; }
-            CheckBox { checked: chart.range.automatic; text: "Automatic"; onToggled: chart.range.automatic = checked }
-            Label { text: "From" }
-            SpinBox { from: 0; to: 10000; value: chart.range.from; onValueModified: chart.range.from = value; }
-            Label { text: "To" }
-            SpinBox { from: -1; to: 10000; value: chart.range.to; onValueModified: chart.range.to = value; }
+            RangeEditor { label: "Range"; range: chart.range }
         }
 
         Frame {

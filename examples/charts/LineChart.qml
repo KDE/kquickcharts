@@ -60,19 +60,9 @@ Kirigami.Page {
         }
 
         RowLayout {
-            Label { text: "X Axis" }
-            CheckBox { checked: chart.xRange.automatic; text: "Automatic"; onToggled: chart.xRange.automatic = checked }
-            Label { text: "From" }
-            SpinBox { from: 0; to: 10000; value: chart.xRange.from; onValueModified: chart.xRange.from = value; }
-            Label { text: "To" }
-            SpinBox { from: 0; to: 10000; value: chart.xRange.to; onValueModified: chart.xRange.to = value; }
+            RangeEditor { label: "X Axis"; range: chart.xRange }
             Item { Layout.fillWidth: true }
-            Label { text: "Y Axis" }
-            CheckBox { checked: chart.yRange.automatic; text: "Automatic"; onToggled: chart.yRange.automatic = checked }
-            Label { text: "From" }
-            SpinBox { from: 0; to: 10000; value: chart.yRange.from; onValueModified: chart.yRange.from = value; }
-            Label { text: "To" }
-            SpinBox { from: 0; to: 10000; value: chart.yRange.to; onValueModified: chart.yRange.to = value; }
+            RangeEditor { label: "Y Axis"; range: chart.yRange }
         }
 
         RowLayout {
