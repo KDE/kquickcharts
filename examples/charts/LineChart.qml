@@ -89,8 +89,6 @@ Kirigami.Page {
                         width: ListView.view.width
                         height: Kirigami.Units.gridUnit * 2 + Kirigami.Units.smallSpacing
                         contentItem: RowLayout {
-                            Label { text: "Label" }
-                            TextField { text: model.label; onEditingFinished: lineModel.setProperty(index, "label", text) }
                             Label { text: "Value 1" }
                             SpinBox {
                                 Layout.preferredWidth: 75
