@@ -1,5 +1,5 @@
-#ifndef PIECHARTNODE_H
-#define PIECHARTNODE_H
+#ifndef LINECHARTNODE_H
+#define LINECHARTNODE_H
 
 #include <QSGGeometryNode>
 #include <QColor>
@@ -41,4 +41,4 @@ private:
     LineChartMaterial *m_material = nullptr;
 };
 
-#endif // PIECHARTNODE_H
+#endif // LINECHARTNODE_H

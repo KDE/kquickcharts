@@ -1,5 +1,5 @@
-#ifndef PIECHARTMATERIAL_H
-#define PIECHARTMATERIAL_H
+#ifndef LINECHARTMATERIAL_H
+#define LINECHARTMATERIAL_H
 
 #include <QSGMaterial>
 #include <QSGMaterialShader>
@@ -52,4 +52,4 @@ private:
     int m_pointCountLocation = 0;
 };
 
-#endif // PIECHARTMATERIAL_H
+#endif // LINECHARTMATERIAL_H
