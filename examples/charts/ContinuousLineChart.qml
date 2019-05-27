@@ -18,7 +18,7 @@ Kirigami.Page {
     Timer {
         running: true
         repeat: true
-        interval: 17
+        interval: 16
         property real lastValue: 0.0
         onTriggered: {
             var value = Math.max(0.0, Math.min(1.0, lastValue + (-0.05 + Math.random() / 10)))
@@ -55,6 +55,7 @@ Kirigami.Page {
 
                 valueSources: Charts.ModelSource { roleName: "value"; model: lineModel }
 
+                lineWidth: 2
                 lineColorSource: Charts.SingleValueSource { value: "darkRed" }
                 fillOpacity: 0.2
             }
