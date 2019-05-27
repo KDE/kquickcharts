@@ -33,6 +33,11 @@ class PieChart : public QQuickItem
      */
     Q_PROPERTY(ChartDataSource *colorSource READ colorSource WRITE setColorSource NOTIFY colorSourceChanged)
 
+    /**
+     * Sets a colour to use to fill remaining space on the arc.
+     */
+    Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
+
 public:
     /**
      * Default constructor
@@ -49,6 +54,9 @@ public:
     ChartDataSource *valueSource() const;
     ChartDataSource *colorSource() const;
 
+    QColor backgroundColor() const;
+    void setBackgroundColor(const QColor &color);
+
 public Q_SLOTS:
     void setBorderWidth(qreal width);
     void setValueSource(ChartDataSource *value);
@@ -58,6 +66,7 @@ Q_SIGNALS:
     void borderWidthChanged();
     void valueSourceChanged();
     void colorSourceChanged();
+    void backgroundColorChanged();
 
 protected:
     QSGNode *updatePaintNode(QSGNode *node, UpdatePaintNodeData *data) override;
