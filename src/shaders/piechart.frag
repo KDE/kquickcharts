@@ -49,7 +49,7 @@ float triangle(in vec2 point, in vec2 p0, in vec2 p1, in vec2 p2)
 
 void main()
 {
-    vec2 point = (-1.0 + 2.0 * uv) * 1.002 * aspect;
+    vec2 point = uv * 1.002 * aspect;
 
     float thickness = (1.0 - innerDimension) / 2.0;
     float d = donut(point, innerDimension + thickness, thickness);

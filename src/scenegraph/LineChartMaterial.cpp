@@ -62,7 +62,7 @@ void LineChartMaterial::setPoints(const QVector<QVector2D>& points)
 
 LineChartShader::LineChartShader()
 {
-    setShaderSourceFile(QOpenGLShader::Vertex, QStringLiteral(":/org.kde.quickcharts/uv.vert"));
+    setShaderSourceFile(QOpenGLShader::Vertex, QStringLiteral(":/org.kde.quickcharts/linechart.vert"));
     setShaderSourceFile(QOpenGLShader::Fragment, QStringLiteral(":/org.kde.quickcharts/linechart.frag"));
 }
 
