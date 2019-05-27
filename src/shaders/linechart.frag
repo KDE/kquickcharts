@@ -38,7 +38,7 @@ void main()
 
     float d = sdPolygon(points, pointCount, point);
     float g = fwidth(d);
-    col = mix(col, fillColor, fillColor.a * (smoothstep(g, g, d)));
+    col = mix(col, fillColor, fillColor.a * (1.0 - smoothstep(g, g, d)));
 
     float halfLW = lineWidth / 2.0;
     col = mix(col, lineColor, lineColor.a * (1.0 - smoothstep(halfLW - g, halfLW + g, abs(d))));

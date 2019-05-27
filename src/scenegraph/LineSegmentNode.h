@@ -1,25 +1,29 @@
-#ifndef LINECHARTNODE_H
-#define LINECHARTNODE_H
+#ifndef LINESEGMENTNODE_H
+#define LINESEGMENTNODE_H
 
-#include <QSGNode>
+#include <QSGGeometryNode>
 #include <QColor>
 
 class QRectF;
 class LineChartMaterial;
-class LineSegmentNode;
 
 /**
  * @todo write docs
  */
-class LineChartNode : public QSGNode
+class LineSegmentNode : public QSGGeometryNode
 {
 public:
-    LineChartNode();
+    LineSegmentNode();
+
+    /**
+     * Default constructor
+     */
+    explicit LineSegmentNode(const QRectF &rect);
 
     /**
      * Destructor
      */
-    ~LineChartNode();
+    ~LineSegmentNode();
 
     void setRect(const QRectF &rect);
     void setLineWidth(float width);
@@ -32,10 +36,9 @@ private:
 
     QRectF m_rect;
     float m_lineWidth = 0.0;
-    QColor m_lineColor;
-    QColor m_fillColor;
     QVector<qreal> m_values;
-    QVector<LineSegmentNode*> m_segments;
+    QSGGeometry *m_geometry = nullptr;
+    LineChartMaterial *m_material = nullptr;
 };
 
-#endif // LINECHARTNODE_H
+#endif // LINESEGMENTNODE_H

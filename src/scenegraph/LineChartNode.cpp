@@ -1,26 +1,15 @@
 #include "LineChartNode.h"
 
 #include <QColor>
-#include <QSGGeometry>
-#include <cmath>
+#include <QtMath>
 
 #include "LineChartMaterial.h"
+#include "LineSegmentNode.h"
+
+static const int MaxPointsInSegment = 100;
 
 LineChartNode::LineChartNode()
-    : LineChartNode(QRectF {})
 {
-}
-
-LineChartNode::LineChartNode(const QRectF &rect)
-{
-    m_geometry = new QSGGeometry { QSGGeometry::defaultAttributes_TexturedPoint2D(), 4 };
-    QSGGeometry::updateTexturedRectGeometry(m_geometry, rect, QRectF { 0, 0, 1, 1 });
-    setGeometry(m_geometry);
-
-    m_material = new LineChartMaterial {};
-    setMaterial(m_material);
-
-    setFlags(QSGNode::OwnsGeometry | QSGNode::OwnsMaterial);
 }
 
 LineChartNode::~LineChartNode()
@@ -33,12 +22,6 @@ void LineChartNode::setRect(const QRectF &rect)
         return;
 
     m_rect = rect;
-    QSGGeometry::updateTexturedRectGeometry(m_geometry, m_rect, QRectF { 0, 0, 1, 1 });
-    markDirty(QSGNode::DirtyGeometry);
-
-    m_material->setLineWidth(m_lineWidth / m_rect.height());
-    markDirty(QSGNode::DirtyMaterial);
-
     updatePoints();
 }
 
@@ -48,26 +31,25 @@ void LineChartNode::setLineWidth(float width)
         return;
 
     m_lineWidth = width;
-    m_material->setLineWidth(width / m_rect.height());
-    markDirty(QSGNode::DirtyMaterial);
+    std::for_each(m_segments.begin(), m_segments.end(), [this](LineSegmentNode* node) { node->setLineWidth(m_lineWidth / m_rect.width()); });
 }
 
 void LineChartNode::setLineColor(const QColor& color)
 {
-    if(m_material->lineColor() == color)
+    if(m_lineColor == color)
         return;
 
-    m_material->setLineColor(color);
-    markDirty(QSGNode::DirtyMaterial);
+    m_lineColor = color;
+    std::for_each(m_segments.begin(), m_segments.end(), [color](LineSegmentNode* node) { node->setLineColor(color); });
 }
 
 void LineChartNode::setFillColor(const QColor& color)
 {
-    if(m_material->fillColor() == color)
+    if(m_fillColor == color)
         return;
 
-    m_material->setFillColor(color);
-    markDirty(QSGNode::DirtyMaterial);
+    m_fillColor = color;
+    std::for_each(m_segments.begin(), m_segments.end(), [color](LineSegmentNode* node) { node->setFillColor(color); });
 }
 
 void LineChartNode::setValues(const QVector<qreal>& values)
@@ -81,22 +63,31 @@ void LineChartNode::updatePoints()
     if(m_values.isEmpty())
         return;
 
-    qreal valueStep = 1.0 / (m_values.count() - 1);
+    auto segmentCount = qCeil(qreal(m_values.count()) / MaxPointsInSegment);
+    if(segmentCount != m_segments.count()) {
+        removeAllChildNodes();
+        m_segments.clear();
 
-    QVector<QVector2D> points;
-    qreal currentX = 0.0;
-
-    points << QVector2D{-0.01, -0.01};
-    points << QVector2D(-0.01, 1.0 - m_values[0]);
-
-    for(auto value : qAsConst(m_values)) {
-        points << QVector2D(currentX, 1.0 - value);
-        currentX += valueStep;
+        for(int i = 0; i < segmentCount; ++i) {
+            auto node = new LineSegmentNode{};
+            m_segments << node;
+            appendChildNode(node);
+        }
     }
 
-    points << QVector2D(1.01, points.last().y());
-    points << QVector2D{1.01, -0.01};
+    auto segmentWidth = m_rect.width() / segmentCount;
+    auto currentX = m_rect.left();
+    auto pointStart = 0;
+    auto pointsPerSegment = m_values.count() / m_segments.count();
 
-    m_material->setPoints(points);
-    markDirty(QSGNode::DirtyMaterial);
+    for(auto segment : qAsConst(m_segments)) {
+        auto rect = QRectF(currentX, m_rect.top(), segmentWidth, m_rect.height());
+        currentX += segmentWidth;
+        segment->setRect(rect);
+        segment->setLineWidth(m_lineWidth / m_rect.width());
+        segment->setLineColor(m_lineColor);
+        segment->setFillColor(m_fillColor);
+        segment->setValues(m_values.mid(pointStart, pointsPerSegment));
+        pointStart += pointsPerSegment;
+    }
 }
