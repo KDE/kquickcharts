@@ -11,7 +11,6 @@ set(quickcharts_SRCS
     ArraySource.cpp
 
     RangeGroup.cpp
-    Axis.cpp
 
     scenegraph/PieChartMaterial.cpp
     scenegraph/PieChartNode.cpp

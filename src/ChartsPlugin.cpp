@@ -23,6 +23,4 @@ void KQuickControlsAddonsChartsPlugin::registerTypes(const char *uri)
     qmlRegisterType<ArraySource>(uri, 1, 0, "ArraySource");
 
     qmlRegisterUncreatableType<RangeGroup>(uri, 1, 0, "Range", QStringLiteral("Used as a grouped property"));
-    qmlRegisterType<Axis>(uri, 1, 0, "Axis");
-
 }
