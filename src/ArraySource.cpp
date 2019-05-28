@@ -16,10 +16,10 @@ int ArraySource::itemCount() const
 
 QVariant ArraySource::item(int index) const
 {
-    if(index < 0 || index > m_array.count() - 1)
+    if(!m_wrap && (index < 0 || index > m_array.count() - 1))
         return QVariant{};
 
-    return m_array.at(index);
+    return m_array.at(index % m_array.count());
 }
 
 QVariant ArraySource::minimum() const
@@ -37,6 +37,11 @@ QVariantList ArraySource::array() const
     return m_array;
 }
 
+bool ArraySource::wrap() const
+{
+    return m_wrap;
+}
+
 void ArraySource::setArray(QVariantList array)
 {
     if (m_array == array) {
@@ -44,5 +49,15 @@ void ArraySource::setArray(QVariantList array)
     }
 
     m_array = array;
+    emit dataChanged();
+}
+
+void ArraySource::setWrap(bool wrap)
+{
+    if (m_wrap == wrap) {
+        return;
+    }
+
+    m_wrap = wrap;
     emit dataChanged();
 }
