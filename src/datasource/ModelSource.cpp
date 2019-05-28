@@ -19,6 +19,9 @@ ModelSource::~ModelSource()
 
 int ModelSource::role() const
 {
+    if (m_role < 0 && !m_roleName.isEmpty())
+        m_role = m_model->roleNames().key(m_roleName.toLatin1(), -1);
+
     return m_role;
 }
 

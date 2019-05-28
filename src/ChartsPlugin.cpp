@@ -6,6 +6,7 @@
 #include "datasource/ModelSource.h"
 #include "datasource/SingleValueSource.h"
 #include "datasource/ArraySource.h"
+#include "datasource/ModelHistorySource.h"
 
 void KQuickControlsAddonsChartsPlugin::registerTypes(const char *uri)
 {
@@ -20,6 +21,7 @@ void KQuickControlsAddonsChartsPlugin::registerTypes(const char *uri)
     qmlRegisterType<ModelSource>(uri, 1, 0, "ModelSource");
     qmlRegisterType<SingleValueSource>(uri, 1, 0, "SingleValueSource");
     qmlRegisterType<ArraySource>(uri, 1, 0, "ArraySource");
+    qmlRegisterType<ModelHistorySource>(uri, 1, 0, "ModelHistorySource");
 
     qmlRegisterUncreatableType<RangeGroup>(uri, 1, 0, "Range", QStringLiteral("Used as a grouped property"));
 }
