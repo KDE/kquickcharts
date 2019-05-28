@@ -1,11 +1,11 @@
 #include "ChartsPlugin.h"
 
 #include "PieChart.h"
-#include "ModelSource.h"
-#include "SingleValueSource.h"
-#include "RangeGroup.h"
 #include "LineChart.h"
-#include "ArraySource.h"
+#include "RangeGroup.h"
+#include "datasource/ModelSource.h"
+#include "datasource/SingleValueSource.h"
+#include "datasource/ArraySource.h"
 
 void KQuickControlsAddonsChartsPlugin::registerTypes(const char *uri)
 {

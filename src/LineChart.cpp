@@ -2,9 +2,8 @@
 
 #include <numeric>
 
-#include "ChartDataSource.h"
 #include "RangeGroup.h"
-
+#include "datasource/ChartDataSource.h"
 #include "scenegraph/LineGridNode.h"
 #include "scenegraph/LineChartNode.h"
 

@@ -4,8 +4,7 @@
 #include <QDebug>
 
 #include "scenegraph/PieChartNode_p.h"
-
-#include "ChartDataSource.h"
+#include "datasource/ChartDataSource.h"
 #include "RangeGroup.h"
 
 class PieChart::Private
