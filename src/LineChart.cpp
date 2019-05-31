@@ -1,6 +1,8 @@
 #include "LineChart.h"
 
 #include <numeric>
+#include <QPainterPath>
+#include <QPainter>
 
 #include "RangeGroup.h"
 #include "datasource/ChartDataSource.h"
@@ -27,6 +29,7 @@ public:
 
     void updateRange();
     void updateLineNode(LineChartNode* node, const QColor& lineColor, ChartDataSource* valueSource);
+    QVector<qreal> interpolate(const QVector<qreal>& points, qreal start, qreal end, qreal height);
 
     LineChart* q;
 
@@ -250,7 +253,54 @@ void LineChart::Private::updateLineNode(LineChartNode* node, const QColor& lineC
     }
 
     for(auto& value : values) {
-        value = (value - computedRange.startY) / computedRange.distance;
+        value = ((value - computedRange.startY) / computedRange.distance);
     }
+
+    if(smooth)
+        values = interpolate(values, 0.0, q->width(), q->height());
+
     node->setValues(values);
+}
+
+QVector<qreal> LineChart::Private::interpolate(const QVector<qreal> &points, qreal start, qreal end, qreal height)
+{
+    QPainterPath path;
+    if(points.size() < 4)
+        return QVector<qreal>{};
+
+    const QMatrix4x4 matrix( 0,    1,    0,     0,
+                            -1/6., 1,    1/6.,  0,
+                             0,    1/6., 1,    -1/6.,
+                             0,    0,    1,     0);
+
+    const qreal xDelta = (end - start) / (points.count() - 3);
+    qreal x = start - xDelta;
+
+    path.moveTo(start, points[0] * height);
+
+    for (int i = 1; i < points.count() - 2; i++) {
+        const QMatrix4x4 p(x,              points[i-1] * height, 0, 0,
+                           x + xDelta * 1, points[i+0] * height, 0, 0,
+                           x + xDelta * 2, points[i+1] * height, 0, 0,
+                           x + xDelta * 3, points[i+2] * height, 0, 0);
+
+        const QMatrix4x4 res = matrix * p;
+
+        path.cubicTo(res(1, 0), res(1, 1),
+                     res(2, 0), res(2, 1),
+                     res(3, 0), res(3, 1));
+
+        x += xDelta;
+    }
+
+    QVector<qreal> result;
+
+    const auto polygons = path.toSubpathPolygons();
+    for(const auto polygon : polygons) {
+        for(auto point : polygon) {
+            result.append(point.y() / q->height());
+        }
+    }
+
+    return result;
 }
