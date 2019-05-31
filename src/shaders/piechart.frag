@@ -3,17 +3,16 @@
 // The maximum number of points we can support for a single pie.
 // This is based on OpenGL's MAX_FRAGMENT_UNIFORM_COMPONENTS.
 // MAX_FRAGMENT_UNIFORM_COMPONENTS is required to be at least 1024.
-// The formula used is:
-//  MAX_COMP / 4 (for vec4) / 2 (one for triangles, one for colors)
-// This should leave plenty of space for other uniforms
-#define MAX_TRIANGLE_POINTS 128
+// Each triangle needs 2 (size of a vec2) * 2 (number of points) + 4 (size of vec4)
+// components. We also need to leave some room for the other uniforms.
+#define MAX_TRIANGLE_POINTS 200
 
 uniform lowp float opacity;
 uniform mediump float innerDimension;
 uniform mediump vec2 aspect;
 
 uniform mediump vec2 triangles[MAX_TRIANGLE_POINTS];
-uniform mediump vec4 colors[MAX_TRIANGLE_POINTS];
+uniform mediump vec4 colors[MAX_TRIANGLE_POINTS / 2];
 uniform int triangleCount;
 
 varying mediump vec2 uv;
@@ -49,17 +48,17 @@ float triangle(in vec2 point, in vec2 p0, in vec2 p1, in vec2 p2)
 
 void main()
 {
-    vec2 point = uv * 1.002 * aspect;
+    vec2 point = uv * 1.003 * aspect;
 
     float thickness = (1.0 - innerDimension) / 2.0;
     float d = donut(point, innerDimension + thickness, thickness);
 
     vec4 col = vec4(0.0);
-    for(int i = 0; i < triangleCount - 1; i++)
+    for(int i = 0; i < triangleCount; i+=2)
     {
         float dist = max(d, triangle(point, origin, triangles[i], triangles[i+1]));
         float g = fwidth(dist);
-        col = mix(col, colors[i], colors[i].a * (1.0 - smoothstep(0.002 - g, 0.002 + g, dist)));
+        col = mix(col, colors[i / 2], colors[i / 2].a * (1.0 - smoothstep(0.001 - g, 0.001 + g, dist)));
     }
 
     gl_FragColor = col * opacity;

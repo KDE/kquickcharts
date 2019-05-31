@@ -84,20 +84,27 @@ void PieChartNode::updateTriangles()
         return;
 
     QVector<QVector4D> triangleColors;
-    QVector<QVector2D> trianglePoints { QVector2D { 0.0, -2.0 } };
+    QVector<QVector2D> trianglePoints;
 
-    QVector2D point = trianglePoints.at(0);
+    auto total = std::accumulate(m_sections.begin(), m_sections.end(), 0.0);
+    static const float overlap = 0.01;
+
+    QVector2D point = total < 1.0 ? QVector2D{ 0.0, -2.0 } : rotated(QVector2D{ 0.0, -2.0 }, -overlap);
     auto index = 0;
-    auto current = m_sections.at(0) * pi * 2.0;
+    auto current = m_sections.at(0) * pi * 2.0 + (total < 1.0 ? 0.0 : overlap);
 
     while (index < m_sections.size()) {
-        auto angle = current - sectionSize > 0.0 ? sectionSize : current;
-        point = rotated(point, angle);
-        trianglePoints << point;
-        auto color = m_colors.at(index);
-        triangleColors << QVector4D { float(color.redF()), float(color.greenF()), float(color.blueF()), float(color.alphaF()) };
+        auto angle = (current - sectionSize > 0.0) ? sectionSize : current;
 
+        trianglePoints << point;
+        trianglePoints << rotated(point, index >= m_sections.size() - 1 ? angle : angle + overlap);
+
+        auto color = QVector4D { float(m_colors.at(index).redF()), float(m_colors.at(index).greenF()), float(m_colors.at(index).blueF()), float(m_colors.at(index).alphaF()) };
+        triangleColors << color;
+
+        point = rotated(point, angle);
         current -= angle;
+
         while (qFuzzyCompare(current, 0.0)) {
             index++;
             if (index < m_sections.size()) {
