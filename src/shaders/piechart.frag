@@ -18,6 +18,7 @@ uniform int triangleCount;
 varying mediump vec2 uv;
 
 const vec2 origin = vec2(0.0, 0.0);
+const float lineSmooth = 0.002;
 
 float donut(in vec2 point, in float radius, in float thickness)
 {
@@ -48,7 +49,7 @@ float triangle(in vec2 point, in vec2 p0, in vec2 p1, in vec2 p2)
 
 void main()
 {
-    vec2 point = uv * 1.003 * aspect;
+    vec2 point = uv * (1.0 + lineSmooth * 2.0) * aspect;
 
     float thickness = (1.0 - innerDimension) / 2.0;
     float d = donut(point, innerDimension + thickness, thickness);
@@ -56,9 +57,9 @@ void main()
     vec4 col = vec4(0.0);
     for(int i = 0; i < triangleCount; i+=2)
     {
-        float dist = max(d, triangle(point, origin, triangles[i], triangles[i+1]));
+        float dist = max(d, triangle(point, origin, triangles[i], triangles[i+1]) - lineSmooth);
         float g = fwidth(dist);
-        col = mix(col, colors[i / 2], colors[i / 2].a * (1.0 - smoothstep(0.001 - g, 0.001 + g, dist)));
+        col = mix(col, colors[i / 2], colors[i / 2].a * (1.0 - smoothstep(lineSmooth - g, lineSmooth + g, dist)));
     }
 
     gl_FragColor = col * opacity;
