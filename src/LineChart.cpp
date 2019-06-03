@@ -12,9 +12,10 @@
 struct ChartRange {
     int startX = 0;
     int endX = 0;
+    int distanceX = 0;
     qreal startY = 0.0;
     qreal endY = 0.0;
-    qreal distance = 0.0;
+    qreal distanceY = 0.0;
 };
 
 class LineChart::Private
@@ -41,6 +42,7 @@ public:
     bool smooth = false;
     qreal lineWidth = 1.0;
     qreal fillOpacity = 0.0;
+    LineChart::Direction direction = Direction::ZeroAtStart;
 
     ChartRange computedRange;
 };
@@ -105,6 +107,11 @@ qreal LineChart::fillOpacity() const
     return d->fillOpacity;
 }
 
+LineChart::Direction LineChart::direction() const
+{
+    return d->direction;
+}
+
 void LineChart::setLineColorSource(ChartDataSource* source)
 {
     if(source == d->lineColorSource)
@@ -154,6 +161,16 @@ void LineChart::setFillOpacity(qreal opacity)
     d->fillOpacity = opacity;
     update();
     emit fillOpacityChanged();
+}
+
+void LineChart::setDirection(LineChart::Direction dir)
+{
+    if(d->direction == dir)
+        return;
+
+    d->direction = dir;
+    update();
+    emit directionChanged();
 }
 
 QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *data)
@@ -219,6 +236,7 @@ void LineChart::Private::updateRange()
         computedRange.startX = xRange->from();
         computedRange.endX = xRange->to();
     }
+    computedRange.distanceX = computedRange.endX - computedRange.startX;
 
     if(yRange->automatic()) {
         qreal minY = std::numeric_limits<qreal>::max();
@@ -234,7 +252,7 @@ void LineChart::Private::updateRange()
         computedRange.startY = yRange->from();
         computedRange.endY = yRange->to();
     }
-    computedRange.distance = computedRange.endY - computedRange.startY;
+    computedRange.distanceY = computedRange.endY - computedRange.startY;
 }
 
 void LineChart::Private::updateLineNode(LineChartNode* node, const QColor& lineColor, ChartDataSource* valueSource)
@@ -247,16 +265,18 @@ void LineChart::Private::updateLineNode(LineChartNode* node, const QColor& lineC
     node->setFillColor(fillColor);
     node->setLineWidth(lineWidth);
 
-    QVector<qreal> values;
-    for(int i = computedRange.startX; i < computedRange.endX; i++) {
-        values << valueSource->item(i).toReal();
+    QVector<qreal> values(computedRange.distanceX);
+    auto generator = [&, i = computedRange.startX]() mutable -> qreal {
+        return (valueSource->item(i++).toReal() - computedRange.startY) / computedRange.distanceY;
+    };
+
+    if(direction == Direction::ZeroAtStart) {
+        std::generate_n(values.begin(), computedRange.distanceX, generator);
+    } else {
+        std::generate_n(values.rbegin(), computedRange.distanceX, generator);
     }
 
-    for(auto& value : values) {
-        value = ((value - computedRange.startY) / computedRange.distance);
-    }
-
-    if(smooth)
+    if (smooth) {
         values = interpolate(values, 0.0, q->width(), q->height());
 
     node->setValues(values);

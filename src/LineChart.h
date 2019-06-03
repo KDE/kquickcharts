@@ -23,9 +23,16 @@ class LineChart : public QQuickItem
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
     Q_PROPERTY(qreal lineWidth READ lineWidth WRITE setLineWidth NOTIFY lineWidthChanged)
     Q_PROPERTY(qreal fillOpacity READ fillOpacity WRITE setFillOpacity NOTIFY fillOpacityChanged)
+    Q_PROPERTY(Direction direction READ direction WRITE setDirection NOTIFY directionChanged)
 
 public:
     using DataSourcesProperty = QQmlListProperty<ChartDataSource>;
+
+    enum class Direction {
+        ZeroAtStart,
+        ZeroAtEnd
+    };
+    Q_ENUMS(Direction)
 
     /**
      * Default constructor
@@ -45,6 +52,7 @@ public:
     bool smooth() const;
     qreal lineWidth() const;
     qreal fillOpacity() const;
+    Direction direction() const;
 
 public Q_SLOTS:
     void setLineColorSource(ChartDataSource *source);
@@ -52,6 +60,7 @@ public Q_SLOTS:
     void setSmooth(bool smooth);
     void setLineWidth(qreal width);
     void setFillOpacity(qreal opacity);
+    void setDirection(Direction dir);
 
 Q_SIGNALS:
     void lineColorSourceChanged();
@@ -59,6 +68,7 @@ Q_SIGNALS:
     void smoothChanged();
     void lineWidthChanged();
     void fillOpacityChanged();
+    void directionChanged();
 
 protected:
     QSGNode *updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *data) override;
