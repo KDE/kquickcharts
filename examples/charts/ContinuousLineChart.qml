@@ -25,6 +25,12 @@ Kirigami.Page {
             var value = Math.max(0.0, Math.min(1.0, lastValue + (-0.05 + Math.random() / 10)))
             lastValue = value;
             lineModel.insert(0, {"value": value})
+
+            var distance = chart.xRange.to - chart.xRange.from
+            if(!chart.xRange.automatic && lineModel.count > distance) {
+                var toRemove = lineModel.count - distance;
+                lineModel.remove(lineModel.count - toRemove, toRemove)
+            }
         }
     }
 
