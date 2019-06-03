@@ -16,6 +16,7 @@ Kirigami.Page {
     }
 
     Timer {
+        id: updateTimer
         running: true
         repeat: true
         interval: 16
@@ -64,63 +65,10 @@ Kirigami.Page {
         RowLayout {
             RangeEditor { label: "X Axis"; range: chart.xRange }
             Item { Layout.fillWidth: true }
+            Button { icon.name: "media-playback-start"; enabled: !updateTimer.running; onClicked: updateTimer.start() }
+            Button { icon.name: "media-playback-stop"; enabled: updateTimer.running; onClicked: updateTimer.stop() }
+            Item { Layout.fillWidth: true }
             RangeEditor { label: "Y Axis"; range: chart.yRange }
         }
-
-       /* RowLayout {
-            Button { text: "Add Item"; onClicked: lineModel.append({label: "New", value1: 0, value2: 0, value3: 0}) }
-            Button { text: "Remove Item"; onClicked: lineModel.remove(lineModel.count - 1)}
-//             Label { text: "Border" }
-//             SpinBox { from: 0; to: chart.width / 2; value: chart.borderWidth; onValueModified: chart.borderWidth = value; }
-//             CheckBox { checked: chart.range.automatic; text: "Automatic"; onToggled: chart.range.automatic = checked }
-//             Label { text: "From" }
-//             SpinBox { from: 0; to: 10000; value: chart.range.from; onValueModified: chart.range.from = value; }
-//             Label { text: "To" }
-//             SpinBox { from: -1; to: 10000; value: chart.range.to; onValueModified: chart.range.to = value; }
-        }
-
-        Frame {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-
-            ScrollView {
-                anchors.fill: parent
-                ListView {
-                    model: lineModel;
-                    delegate: Kirigami.BasicListItem {
-                        width: ListView.view.width
-                        height: Kirigami.Units.gridUnit * 2 + Kirigami.Units.smallSpacing
-                        contentItem: RowLayout {
-                            Label { text: "Label" }
-                            TextField { text: model.label; onEditingFinished: lineModel.setProperty(index, "label", text) }
-                            Label { text: "Value 1" }
-                            SpinBox {
-                                Layout.preferredWidth: 75
-                                from: 0; to: 10000;
-                                stepSize: 1;
-                                value: model.value1;
-                                onValueModified: lineModel.setProperty(index, "value1", value)
-                            }
-                            Label { text: "Value 2" }
-                            SpinBox {
-                                Layout.preferredWidth: 75
-                                from: 0; to: 10000;
-                                stepSize: 1;
-                                value: model.value2;
-                                onValueModified: lineModel.setProperty(index, "value2", value)
-                            }
-                            Label { text: "Value 3" }
-                            SpinBox {
-                                Layout.preferredWidth: 75
-                                from: 0; to: 10000;
-                                stepSize: 1;
-                                value: model.value3;
-                                onValueModified: lineModel.setProperty(index, "value3", value)
-                            }
-                        }
-                    }
-                }
-            }
-        }*/
     }
 }
