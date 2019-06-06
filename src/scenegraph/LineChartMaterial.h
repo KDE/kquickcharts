@@ -17,17 +17,20 @@ public:
     QColor lineColor() const;
     QColor fillColor() const;
     float lineWidth() const;
+    float aspect() const;
     QVector<QVector2D> points() const;
 
     void setLineColor(const QColor &color);
     void setFillColor(const QColor &color);
     void setLineWidth(float width);
     void setPoints(const QVector<QVector2D> &points);
+    void setAspect(float aspect);
 
 private:
     QColor m_lineColor;
     QColor m_fillColor;
     float m_lineWidth = 0.0;
+    float m_aspect = 1.0;
     QVector<QVector2D> m_points;
 };
 
@@ -50,6 +53,7 @@ private:
     int m_lineWidthLocation = 0;
     int m_pointsLocation = 0;
     int m_pointCountLocation = 0;
+    int m_aspectLocation = 0;
 };
 
 #endif // LINECHARTMATERIAL_H

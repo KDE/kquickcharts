@@ -36,7 +36,8 @@ void LineSegmentNode::setRect(const QRectF &rect)
     QSGGeometry::updateTexturedRectGeometry(m_geometry, m_rect, QRectF { 0, 0, 1, 1 });
     markDirty(QSGNode::DirtyGeometry);
 
-    m_material->setLineWidth(m_lineWidth / m_rect.height());
+    m_aspect = m_rect.height() / m_rect.width();
+    m_material->setAspect(m_aspect);
     markDirty(QSGNode::DirtyMaterial);
 
     updatePoints();
@@ -88,10 +89,10 @@ void LineSegmentNode::updatePoints()
 
     points << QVector2D{0.0, 0.0};
     points << QVector2D{-0.01, 0.0};
-    points << QVector2D(-0.01, m_values[0]);
+    points << QVector2D(-0.01, m_values[0] * m_aspect);
 
     for(auto value : qAsConst(m_values)) {
-        points << QVector2D(currentX, value);
+        points << QVector2D(currentX, value * m_aspect);
         currentX += valueStep;
     }
 

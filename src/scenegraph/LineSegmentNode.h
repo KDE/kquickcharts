@@ -36,6 +36,7 @@ private:
 
     QRectF m_rect;
     float m_lineWidth = 0.0;
+    float m_aspect = 1.0;
     QVector<qreal> m_values;
     QSGGeometry *m_geometry = nullptr;
     LineChartMaterial *m_material = nullptr;
