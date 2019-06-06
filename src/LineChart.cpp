@@ -278,6 +278,7 @@ void LineChart::Private::updateLineNode(LineChartNode* node, const QColor& lineC
 
     if (smooth) {
         values = interpolate(values, 0.0, q->width(), q->height());
+    }
 
     node->setValues(values);
 }
