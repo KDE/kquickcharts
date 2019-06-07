@@ -18,7 +18,7 @@ uniform int triangleCount;
 varying mediump vec2 uv;
 
 const vec2 origin = vec2(0.0, 0.0);
-const float lineSmooth = 0.002;
+const float lineSmooth = 0.01;
 
 float donut(in vec2 point, in float radius, in float thickness)
 {
