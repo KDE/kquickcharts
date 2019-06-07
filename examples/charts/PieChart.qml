@@ -43,6 +43,8 @@ Kirigami.Page {
 
                 valueSource: Charts.ModelSource { roleName: "data"; model: pieModel }
                 colorSource: Charts.ModelSource { roleName: "color"; model: pieModel }
+
+                backgroundColor: "gray"
             }
         }
 
