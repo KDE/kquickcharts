@@ -63,7 +63,10 @@ void PieChartMaterial::setColors(const QVector<QVector4D> &colors)
 PieChartShader::PieChartShader()
 {
     setShaderSourceFile(QOpenGLShader::Vertex, QStringLiteral(":/org.kde.quickcharts/piechart.vert"));
-    setShaderSourceFile(QOpenGLShader::Fragment, QStringLiteral(":/org.kde.quickcharts/piechart.frag"));
+    setShaderSourceFiles(QOpenGLShader::Fragment, {
+        QStringLiteral(":/org.kde.quickcharts/sdf.frag"),
+        QStringLiteral(":/org.kde.quickcharts/piechart.frag")
+    });
 }
 
 PieChartShader::~PieChartShader()

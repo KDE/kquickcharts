@@ -1,6 +1,7 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
     <qresource prefix="/org.kde.quickcharts">
+        <file>sdf.frag</file>
         <file>uv.vert</file>
         <file>piechart.frag</file>
         <file>piechart.vert</file>
