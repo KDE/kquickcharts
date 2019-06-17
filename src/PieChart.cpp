@@ -19,7 +19,7 @@ public:
     QVector<qreal> sections;
     QVector<QColor> colors;
 
-    QColor backgroundColor;
+    QColor backgroundColor = Qt::transparent;
 };
 
 PieChart::PieChart(QQuickItem *parent)
@@ -124,6 +124,7 @@ QSGNode *PieChart::updatePaintNode(QSGNode *node, UpdatePaintNodeData *data)
     n->setRect(boundingRect());
     n->setBorderWidth(d->borderWidth >= 0.0 ? d->borderWidth : qMin(width(), height()) / 2);
     n->setSections(d->sections);
+    n->setBackgroundColor(d->backgroundColor);
     n->setColors(d->colors);
 
     return n;
@@ -167,11 +168,6 @@ void PieChart::updateData()
 
     for (auto value : data) {
         d->sections << value / max;
-    }
-
-    if (!qFuzzyCompare(max, total) && d->backgroundColor.isValid()) {
-        d->sections << (max - total) / max;
-        d->colors << d->backgroundColor;
     }
 
     update();

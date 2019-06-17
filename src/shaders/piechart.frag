@@ -44,5 +44,9 @@ void main()
         color = sdf_render(sdf_intersect(donut, segment), color, colors[i], lineSmooth);
     }
 
+    // Finally, render an end segment with the background color.
+    float segment = sdf_subtract(totalSegments, sdf_round(donut, lineSmooth));
+    color = sdf_render(segment, color, backgroundColor, lineSmooth);
+
     gl_FragColor = color * opacity;
 }

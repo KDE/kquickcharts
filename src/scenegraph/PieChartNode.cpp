@@ -1,5 +1,7 @@
 #include "PieChartNode_p.h"
 
+#include <algorithm>
+
 #include <QColor>
 #include <QSGGeometry>
 #include <cmath>
@@ -54,6 +56,7 @@ void PieChartNode::setRect(const QRectF &rect)
     m_material->setAspectRatio(aspect);
 
     m_material->setInnerDimension((minDimension / 2 - m_borderWidth) / (minDimension / 2));
+    markDirty(QSGNode::DirtyMaterial);
 }
 
 void PieChartNode::setBorderWidth(qreal width)
@@ -64,6 +67,7 @@ void PieChartNode::setBorderWidth(qreal width)
     m_borderWidth = width;
     auto minDimension = qMin(m_rect.height(), m_rect.width()) / 2;
     m_material->setInnerDimension((minDimension - m_borderWidth) / minDimension);
+    markDirty(QSGNode::DirtyMaterial);
 }
 
 void PieChartNode::setColors(const QVector<QColor> &colors)
@@ -76,6 +80,16 @@ void PieChartNode::setSections(const QVector<qreal> &sections)
 {
     m_sections = sections;
     updateTriangles();
+}
+
+void PieChartNode::setBackgroundColor(const QColor& color)
+{
+    if (color == m_backgroundColor)
+        return;
+
+    m_backgroundColor = color;
+    m_material->setBackgroundColor(color);
+    markDirty(QSGNode::DirtyMaterial);
 }
 
 void PieChartNode::updateTriangles()

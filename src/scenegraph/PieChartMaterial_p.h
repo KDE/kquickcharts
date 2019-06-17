@@ -3,6 +3,7 @@
 
 #include <QSGMaterial>
 #include <QSGMaterialShader>
+#include <QColor>
 
 class PieChartMaterial : public QSGMaterial
 {
@@ -15,6 +16,7 @@ public:
 
     QVector2D aspectRatio() const;
     float innerDimension() const;
+    QColor backgroundColor() const;
 
     QVector<QVector2D> triangles() const;
     QVector<QVector4D> colors() const;
@@ -22,6 +24,8 @@ public:
 
     void setAspectRatio(const QVector2D &ratio);
     void setInnerDimension(float dimension);
+    void setBackgroundColor(const QColor &color);
+
     void setTriangles(const QVector<QVector2D> &triangles);
     void setColors(const QVector<QVector4D> &colors);
     void setSegments(const QVector<int> &segments);
@@ -29,6 +33,8 @@ public:
 private:
     QVector2D m_aspectRatio;
     float m_innerDimension = 0.0f;
+    QColor m_backgroundColor;
+
     QVector<QVector2D> m_triangles;
     QVector<QVector4D> m_colors;
     QVector<int> m_segments;
@@ -50,6 +56,7 @@ private:
     int m_opacityLocation = 0;
     int m_innerDimensionLocation = 0;
     int m_aspectLocation = 0;
+    int m_backgroundColorLocation = 0;
     int m_trianglesLocation = 0;
     int m_colorsLocation = 0;
     int m_segmentsLocation = 0;

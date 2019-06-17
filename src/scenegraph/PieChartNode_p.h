@@ -2,6 +2,7 @@
 #define PIECHARTNODE_H
 
 #include <QSGGeometryNode>
+#include <QColor>
 
 class QRectF;
 class PieChartMaterial;
@@ -28,12 +29,14 @@ public:
     void setBorderWidth(qreal width);
     void setSections(const QVector<qreal> &sections);
     void setColors(const QVector<QColor> &colors);
+    void setBackgroundColor(const QColor &color);
 
 private:
     void updateTriangles();
 
     QRectF m_rect;
     qreal m_borderWidth = 0.0;
+    QColor m_backgroundColor;
 
     QVector<qreal> m_sections;
     QVector<QColor> m_colors;

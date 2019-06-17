@@ -30,6 +30,11 @@ float PieChartMaterial::innerDimension() const
     return m_innerDimension;
 }
 
+QColor PieChartMaterial::backgroundColor() const
+{
+    return m_backgroundColor;
+}
+
 QVector<QVector2D> PieChartMaterial::triangles() const
 {
     return m_triangles;
@@ -38,6 +43,11 @@ QVector<QVector2D> PieChartMaterial::triangles() const
 QVector<QVector4D> PieChartMaterial::colors() const
 {
     return m_colors;
+}
+
+QVector<int> PieChartMaterial::segments() const
+{
+    return m_segments;
 }
 
 void PieChartMaterial::setAspectRatio(const QVector2D &aspect)
@@ -50,6 +60,11 @@ void PieChartMaterial::setInnerDimension(float dimension)
     m_innerDimension = dimension;
 }
 
+void PieChartMaterial::setBackgroundColor(const QColor& color)
+{
+    m_backgroundColor = color;
+}
+
 void PieChartMaterial::setTriangles(const QVector<QVector2D> &triangles)
 {
     m_triangles = triangles;
@@ -58,6 +73,11 @@ void PieChartMaterial::setTriangles(const QVector<QVector2D> &triangles)
 void PieChartMaterial::setColors(const QVector<QVector4D> &colors)
 {
     m_colors = colors;
+}
+
+void PieChartMaterial::setSegments(const QVector<int>& segments)
+{
+    m_segments = segments;
 }
 
 PieChartShader::PieChartShader()
@@ -86,9 +106,11 @@ void PieChartShader::initialize()
     m_opacityLocation = program()->uniformLocation("opacity");
     m_innerDimensionLocation = program()->uniformLocation("innerDimension");
     m_aspectLocation = program()->uniformLocation("aspect");
+    m_backgroundColorLocation = program()->uniformLocation("backgroundColor");
     m_trianglesLocation = program()->uniformLocation("triangles");
     m_colorsLocation = program()->uniformLocation("colors");
-    m_triangleCountLocation = program()->uniformLocation("triangleCount");
+    m_segmentsLocation = program()->uniformLocation("segments");
+    m_segmentCountLocation = program()->uniformLocation("segmentCount");
 }
 
 void PieChartShader::updateState(const QSGMaterialShader::RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial)
@@ -102,8 +124,10 @@ void PieChartShader::updateState(const QSGMaterialShader::RenderState &state, QS
         PieChartMaterial *material = static_cast<PieChartMaterial *>(newMaterial);
         program()->setUniformValue(m_innerDimensionLocation, material->innerDimension());
         program()->setUniformValue(m_aspectLocation, material->aspectRatio());
+        program()->setUniformValue(m_backgroundColorLocation, material->backgroundColor());
         program()->setUniformValueArray(m_trianglesLocation, material->triangles().constData(), material->triangles().size());
         program()->setUniformValueArray(m_colorsLocation, material->colors().constData(), material->colors().size());
-        program()->setUniformValue(m_triangleCountLocation, material->triangles().size());
+        program()->setUniformValueArray(m_segmentsLocation, material->segments().constData(), material->segments().size());
+        program()->setUniformValue(m_segmentCountLocation, material->segments().size());
     }
 }
