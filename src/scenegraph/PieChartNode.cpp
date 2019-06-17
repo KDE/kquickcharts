@@ -66,13 +66,13 @@ void PieChartNode::setBorderWidth(qreal width)
     m_material->setInnerDimension((minDimension - m_borderWidth) / minDimension);
 }
 
-void PieChartNode::setColors(QVector<QColor> colors)
+void PieChartNode::setColors(const QVector<QColor> &colors)
 {
     m_colors = colors;
     updateTriangles();
 }
 
-void PieChartNode::setSections(QVector<qreal> sections)
+void PieChartNode::setSections(const QVector<qreal> &sections)
 {
     m_sections = sections;
     updateTriangles();

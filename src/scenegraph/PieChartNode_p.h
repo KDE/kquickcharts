@@ -26,8 +26,8 @@ public:
 
     void setRect(const QRectF &rect);
     void setBorderWidth(qreal width);
-    void setSections(QVector<qreal> sections);
-    void setColors(QVector<QColor> colors);
+    void setSections(const QVector<qreal> &sections);
+    void setColors(const QVector<QColor> &colors);
 
 private:
     void updateTriangles();
