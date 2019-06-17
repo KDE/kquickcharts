@@ -17,7 +17,7 @@ class LineChart : public QQuickItem
 
     Q_PROPERTY(RangeGroup* xRange READ xRange CONSTANT)
     Q_PROPERTY(RangeGroup* yRange READ yRange CONSTANT)
-    Q_PROPERTY(QQmlListProperty<ChartDataSource> valueSources READ valueSources)
+    Q_PROPERTY(QQmlListProperty<ChartDataSource> valueSources READ valueSources NOTIFY valueSourcesChanged)
     Q_PROPERTY(ChartDataSource* lineColorSource READ lineColorSource WRITE setLineColorSource NOTIFY lineColorSourceChanged)
     Q_PROPERTY(bool stacked READ stacked WRITE setStacked NOTIFY stackedChanged)
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
@@ -61,8 +61,11 @@ public Q_SLOTS:
     void setLineWidth(qreal width);
     void setFillOpacity(qreal opacity);
     void setDirection(Direction dir);
+    void insertValueSource(int position, ChartDataSource *source);
+    void removeValueSource(ChartDataSource *source);
 
 Q_SIGNALS:
+    void valueSourcesChanged();
     void lineColorSourceChanged();
     void stackedChanged();
     void smoothChanged();

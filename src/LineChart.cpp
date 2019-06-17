@@ -173,6 +173,21 @@ void LineChart::setDirection(LineChart::Direction dir)
     emit directionChanged();
 }
 
+void LineChart::insertValueSource(int position, ChartDataSource *source)
+{
+    d->valueSources.insert(position, source);
+    connect(source, &QObject::destroyed, this, [this, source]() {
+        removeValueSource(source);
+    });
+    emit valueSourcesChanged();
+}
+
+void LineChart::removeValueSource(ChartDataSource *source)
+{
+    d->valueSources.removeAll(source);
+    emit valueSourcesChanged();
+}
+
 QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *data)
 {
     Q_UNUSED(data);
