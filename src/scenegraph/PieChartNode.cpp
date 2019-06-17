@@ -83,30 +83,35 @@ void PieChartNode::updateTriangles()
     if (m_sections.isEmpty() || m_sections.size() != m_colors.size())
         return;
 
-    QVector<QVector4D> triangleColors;
     QVector<QVector2D> trianglePoints;
+    QVector<QVector4D> colors;
+    QVector<int> segments;
 
-    auto total = std::accumulate(m_sections.begin(), m_sections.end(), 0.0);
-    static const float overlap = 0.01;
+    static const qreal overlap = 0.1;
 
-    QVector2D point = total < 1.0 ? QVector2D{ 0.0, -2.0 } : rotated(QVector2D{ 0.0, -2.0 }, -overlap);
+    QVector2D point = QVector2D{ 0.0, -2.0 };
     auto index = 0;
-    auto current = m_sections.at(0) * pi * 2.0 + (total < 1.0 ? 0.0 : overlap);
+    auto current = m_sections.at(0) * pi * 2.0;
+    auto sectionCount = 0;
 
     while (index < m_sections.size()) {
-        auto angle = (current - sectionSize > 0.0) ? sectionSize : current;
+        auto currentSection = std::max(current - sectionSize, 0.0);
+        auto angle = (currentSection > 0.0) ? sectionSize : current;
 
         trianglePoints << point;
-        trianglePoints << rotated(point, index >= m_sections.size() - 1 ? angle : angle + overlap);
-
-        auto color = QVector4D { float(m_colors.at(index).redF()), float(m_colors.at(index).greenF()), float(m_colors.at(index).blueF()), float(m_colors.at(index).alphaF()) };
-        triangleColors << color;
+        trianglePoints << rotated(point, index >= m_sections.size() ? angle : angle + std::min(currentSection, overlap));
 
         point = rotated(point, angle);
         current -= angle;
+        sectionCount++;
 
         while (qFuzzyCompare(current, 0.0)) {
+            auto color = QVector4D { float(m_colors.at(index).redF()), float(m_colors.at(index).greenF()), float(m_colors.at(index).blueF()), float(m_colors.at(index).alphaF()) };
+            colors << color;
+            segments << sectionCount;
+            sectionCount = 0;
             index++;
+
             if (index < m_sections.size()) {
                 current = m_sections.at(index) * pi * 2.0;
             } else {
@@ -116,7 +121,8 @@ void PieChartNode::updateTriangles()
     }
 
     m_material->setTriangles(trianglePoints);
-    m_material->setColors(triangleColors);
+    m_material->setColors(colors);
+    m_material->setSegments(segments);
 
     markDirty(QSGNode::DirtyMaterial);
 }

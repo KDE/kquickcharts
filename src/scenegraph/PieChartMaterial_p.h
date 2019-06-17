@@ -18,17 +18,20 @@ public:
 
     QVector<QVector2D> triangles() const;
     QVector<QVector4D> colors() const;
+    QVector<int> segments() const;
 
     void setAspectRatio(const QVector2D &ratio);
     void setInnerDimension(float dimension);
     void setTriangles(const QVector<QVector2D> &triangles);
     void setColors(const QVector<QVector4D> &colors);
+    void setSegments(const QVector<int> &segments);
 
 private:
     QVector2D m_aspectRatio;
     float m_innerDimension = 0.0f;
     QVector<QVector2D> m_triangles;
     QVector<QVector4D> m_colors;
+    QVector<int> m_segments;
 };
 
 class PieChartShader : public QSGMaterialShader
@@ -47,9 +50,10 @@ private:
     int m_opacityLocation = 0;
     int m_innerDimensionLocation = 0;
     int m_aspectLocation = 0;
-    int m_colorsLocation = 0;
     int m_trianglesLocation = 0;
-    int m_triangleCountLocation = 0;
+    int m_colorsLocation = 0;
+    int m_segmentsLocation = 0;
+    int m_segmentCountLocation = 0;
 };
 
 #endif // PIECHARTMATERIAL_H
