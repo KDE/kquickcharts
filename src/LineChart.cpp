@@ -173,6 +173,35 @@ void LineChart::setDirection(LineChart::Direction dir)
     emit directionChanged();
 }
 
+void LineChart::insertValueSource(int position, ChartDataSource *source)
+{
+    // Avoid duplicates
+    if (d->valueSources.contains(source)) {
+        return;
+    }
+
+    d->valueSources.insert(position, source);
+    connect(source, &QObject::destroyed, this, [this, source]() {
+        removeValueSource(source);
+    });
+    QObject::connect(source, &ChartDataSource::dataChanged, this, &LineChart::update);
+    update();
+    emit valueSourcesChanged();
+}
+
+void LineChart::removeValueSource(ChartDataSource *source)
+{
+    int i = d->valueSources.indexOf(source);
+
+    if (i < 0) {
+        return;
+    }
+
+    d->valueSources.removeAll(source);
+    
+    emit valueSourcesChanged();
+}
+
 QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *data)
 {
     Q_UNUSED(data);
@@ -190,6 +219,10 @@ QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
         auto lineNode = static_cast<LineChartNode*>(node->childAtIndex(i));
         auto color = d->lineColorSource->item(i).value<QColor>();
         d->updateLineNode(lineNode, color, d->valueSources.at(i));
+    }
+
+    while (node->childCount() > d->valueSources.size()) {
+        node->removeChildNode(node->childAtIndex(node->childCount() - 1));
     }
 
     return node;
