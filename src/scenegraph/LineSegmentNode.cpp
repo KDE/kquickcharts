@@ -93,15 +93,15 @@ void LineSegmentNode::updatePoints()
     QVector<QVector2D> points;
 
     points << QVector2D{0.0, 0.0};
-    points << QVector2D{-0.01, 0.0};
-    points << QVector2D(-0.01, m_values[0].y() * m_aspect);
+    points << QVector2D{-0.5, 0.0};
+    points << QVector2D(-0.5, m_values[0].y() * m_aspect);
 
     for(auto value : qAsConst(m_values)) {
         points << QVector2D((value.x() - m_rect.left()) / m_rect.width(), value.y() * m_aspect);
     }
 
-    points << QVector2D(1.01, points.last().y());
-    points << QVector2D{1.01, 0.0};
+    points << QVector2D(1.5, points.last().y());
+    points << QVector2D{1.5, 0.0};
     points << QVector2D{0.0, 0.0};
 
     m_material->setPoints(points);
