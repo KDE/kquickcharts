@@ -52,7 +52,7 @@ void LineChartNode::setFillColor(const QColor& color)
     std::for_each(m_segments.begin(), m_segments.end(), [color](LineSegmentNode* node) { node->setFillColor(color); });
 }
 
-void LineChartNode::setValues(const QVector<qreal>& values)
+void LineChartNode::setValues(const QVector<QVector2D> &values)
 {
     m_values = values;
     updatePoints();

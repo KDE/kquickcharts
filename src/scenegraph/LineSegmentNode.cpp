@@ -71,7 +71,7 @@ void LineSegmentNode::setFillColor(const QColor& color)
     markDirty(QSGNode::DirtyMaterial);
 }
 
-void LineSegmentNode::setValues(const QVector<qreal>& values)
+void LineSegmentNode::setValues(const QVector<QVector2D>& values)
 {
     m_values = values;
     updatePoints();
@@ -82,18 +82,14 @@ void LineSegmentNode::updatePoints()
     if(m_values.isEmpty())
         return;
 
-    qreal valueStep = (1.0 - m_lineWidth * 2) / (m_values.count() - 1);
-
     QVector<QVector2D> points;
-    qreal currentX = m_lineWidth;
 
     points << QVector2D{0.0, 0.0};
     points << QVector2D{-0.01, 0.0};
-    points << QVector2D(-0.01, m_values[0] * m_aspect);
+    points << QVector2D(-0.01, m_values[0].y() * m_aspect);
 
     for(auto value : qAsConst(m_values)) {
-        points << QVector2D(currentX, value * m_aspect);
-        currentX += valueStep;
+        points << QVector2D((value.x() - m_rect.left()) / m_rect.width(), value.y() * m_aspect);
     }
 
     points << QVector2D(1.01, points.last().y());

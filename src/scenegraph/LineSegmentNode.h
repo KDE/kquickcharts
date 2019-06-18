@@ -29,7 +29,7 @@ public:
     void setLineWidth(float width);
     void setLineColor(const QColor& color);
     void setFillColor(const QColor& color);
-    void setValues(const QVector<qreal>& values);
+    void setValues(const QVector<QVector2D>& values);
 
 private:
     void updatePoints();
@@ -37,7 +37,7 @@ private:
     QRectF m_rect;
     float m_lineWidth = 0.0;
     float m_aspect = 1.0;
-    QVector<qreal> m_values;
+    QVector<QVector2D> m_values;
     QSGGeometry *m_geometry = nullptr;
     LineChartMaterial *m_material = nullptr;
 };

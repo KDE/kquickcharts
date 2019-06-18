@@ -13,9 +13,9 @@ struct ChartRange {
     int startX = 0;
     int endX = 0;
     int distanceX = 0;
-    qreal startY = 0.0;
-    qreal endY = 0.0;
-    qreal distanceY = 0.0;
+    float startY = 0.0;
+    float endY = 0.0;
+    float distanceY = 0.0;
 };
 
 class LineChart::Private
@@ -30,7 +30,7 @@ public:
 
     void updateRange();
     void updateLineNode(LineChartNode* node, const QColor& lineColor, ChartDataSource* valueSource);
-    QVector<qreal> interpolate(const QVector<qreal>& points, qreal start, qreal end, qreal height);
+    QVector<QVector2D> interpolate(const QVector<QVector2D> &points, qreal start, qreal end, qreal height);
 
     LineChart* q;
 
@@ -272,12 +272,12 @@ void LineChart::Private::updateRange()
     computedRange.distanceX = computedRange.endX - computedRange.startX;
 
     if(yRange->automatic()) {
-        qreal minY = std::numeric_limits<qreal>::max();
-        qreal maxY = std::numeric_limits<qreal>::min();
+        auto minY = std::numeric_limits<float>::max();
+        auto maxY = std::numeric_limits<float>::min();
 
         for(auto valueSource : valueSources) {
-            minY = qMin(minY, valueSource->minimum().toReal());
-            maxY = qMax(maxY, valueSource->maximum().toReal());
+            minY = qMin(minY, valueSource->minimum().toFloat());
+            maxY = qMax(maxY, valueSource->maximum().toFloat());
         }
         computedRange.startY = minY;
         computedRange.endY = maxY;
@@ -298,9 +298,10 @@ void LineChart::Private::updateLineNode(LineChartNode* node, const QColor& lineC
     node->setFillColor(fillColor);
     node->setLineWidth(lineWidth);
 
-    QVector<qreal> values(computedRange.distanceX);
-    auto generator = [&, i = computedRange.startX]() mutable -> qreal {
-        return (valueSource->item(i++).toReal() - computedRange.startY) / computedRange.distanceY;
+    float stepSize = q->width() / (computedRange.distanceX - 1);
+    QVector<QVector2D> values(computedRange.distanceX);
+    auto generator = [&, i = computedRange.startX]() mutable -> QVector2D {
+        return QVector2D{i * stepSize, (valueSource->item(i++).toFloat() - computedRange.startY) / computedRange.distanceY};
     };
 
     if(direction == Direction::ZeroAtStart) {
@@ -316,11 +317,11 @@ void LineChart::Private::updateLineNode(LineChartNode* node, const QColor& lineC
     node->setValues(values);
 }
 
-QVector<qreal> LineChart::Private::interpolate(const QVector<qreal> &points, qreal start, qreal end, qreal height)
+QVector<QVector2D> LineChart::Private::interpolate(const QVector<QVector2D> &points, qreal start, qreal end, qreal height)
 {
     QPainterPath path;
     if(points.size() < 4)
-        return QVector<qreal>{};
+        return points;
 
     const QMatrix4x4 matrix( 0,    1,    0,     0,
                             -1/6., 1,    1/6.,  0,
@@ -330,13 +331,13 @@ QVector<qreal> LineChart::Private::interpolate(const QVector<qreal> &points, qre
     const qreal xDelta = (end - start) / (points.count() - 3);
     qreal x = start - xDelta;
 
-    path.moveTo(start, points[0] * height);
+    path.moveTo(start, points[0].y() * height);
 
     for (int i = 1; i < points.count() - 2; i++) {
-        const QMatrix4x4 p(x,              points[i-1] * height, 0, 0,
-                           x + xDelta * 1, points[i+0] * height, 0, 0,
-                           x + xDelta * 2, points[i+1] * height, 0, 0,
-                           x + xDelta * 3, points[i+2] * height, 0, 0);
+        const QMatrix4x4 p(x,              points[i-1].y() * height, 0, 0,
+                           x + xDelta * 1, points[i+0].y() * height, 0, 0,
+                           x + xDelta * 2, points[i+1].y() * height, 0, 0,
+                           x + xDelta * 3, points[i+2].y() * height, 0, 0);
 
         const QMatrix4x4 res = matrix * p;
 
@@ -347,12 +348,12 @@ QVector<qreal> LineChart::Private::interpolate(const QVector<qreal> &points, qre
         x += xDelta;
     }
 
-    QVector<qreal> result;
+    QVector<QVector2D> result;
 
     const auto polygons = path.toSubpathPolygons();
     for(const auto polygon : polygons) {
         for(auto point : polygon) {
-            result.append(point.y() / q->height());
+            result.append(QVector2D{float(point.x()), point.y() / float(q->height())});
         }
     }
 
