@@ -26,6 +26,7 @@ public:
     ~LineSegmentNode();
 
     void setRect(const QRectF &rect);
+    void setAspect(float aspect);
     void setLineWidth(float width);
     void setLineColor(const QColor& color);
     void setFillColor(const QColor& color);

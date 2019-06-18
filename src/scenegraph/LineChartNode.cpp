@@ -22,6 +22,8 @@ void LineChartNode::setRect(const QRectF &rect)
         return;
 
     m_rect = rect;
+    m_aspect = m_rect.height() / m_rect.width();
+    std::for_each(m_segments.begin(), m_segments.end(), [this](LineSegmentNode* node) { node->setAspect(m_aspect); } );
     updatePoints();
 }
 

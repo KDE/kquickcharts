@@ -36,7 +36,15 @@ void LineSegmentNode::setRect(const QRectF &rect)
     QSGGeometry::updateTexturedRectGeometry(m_geometry, m_rect, QRectF { 0, 0, 1, 1 });
     markDirty(QSGNode::DirtyGeometry);
 
-    m_aspect = m_rect.height() / m_rect.width();
+    updatePoints();
+}
+
+void LineSegmentNode::setAspect(float aspect)
+{
+    if(qFuzzyCompare(aspect, m_aspect))
+        return;
+
+    m_aspect = aspect;
     m_material->setAspect(m_aspect);
     markDirty(QSGNode::DirtyMaterial);
 

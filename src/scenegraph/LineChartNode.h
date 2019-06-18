@@ -32,6 +32,7 @@ private:
 
     QRectF m_rect;
     float m_lineWidth = 0.0;
+    float m_aspect = 1.0;
     QColor m_lineColor;
     QColor m_fillColor;
     QVector<QVector2D> m_values;
