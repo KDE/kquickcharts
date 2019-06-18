@@ -100,9 +100,15 @@ float sdf_union(in float sdf1, in float sdf2)
     return min(sdf1, sdf2);
 }
 
+// Subtract two sdf shapes.
+//
+// \param sdf1 The first sdf shape.
+// \param sdf2 The second sdf shape.
+//
+// \return sdf1 with sdf2 subtracted from it.
 float sdf_subtract(in float sdf1, in float sdf2)
 {
-    return max(-sdf1, sdf2);
+    return max(sdf1, -sdf2);
 }
 
 // Intersect two sdf shapes.
