@@ -77,19 +77,27 @@ void LineChartNode::updatePoints()
         }
     }
 
-    auto segmentWidth = m_rect.width() / segmentCount;
     auto currentX = m_rect.left();
     auto pointStart = 0;
     auto pointsPerSegment = m_values.count() / m_segments.count();
 
     for(auto segment : qAsConst(m_segments)) {
+        auto segmentPoints = m_values.mid(pointStart, pointsPerSegment);
+        pointStart += pointsPerSegment;
+
+        if (pointStart < m_values.count()) {
+            segmentPoints.append(m_values[pointStart]);
+        }
+
+        auto segmentWidth = segmentPoints.last().x() - currentX;
         auto rect = QRectF(currentX, m_rect.top(), segmentWidth, m_rect.height());
+
         currentX += segmentWidth;
         segment->setRect(rect);
+        segment->setAspect(m_aspect);
         segment->setLineWidth(m_lineWidth / m_rect.width());
         segment->setLineColor(m_lineColor);
         segment->setFillColor(m_fillColor);
-        segment->setValues(m_values.mid(pointStart, pointsPerSegment));
-        pointStart += pointsPerSegment;
+        segment->setValues(segmentPoints);
     }
 }
