@@ -32,11 +32,11 @@ void main()
     float donut = sdf_annular(sdf_circle(point, innerDimension + thickness), thickness);
 
     vec4 color = vec4(0.0);
-    float totalSegments = 99999.0;
+    float totalSegments = sdf_null;
     int index = 0;
 
     for (int i = 0; i < segmentCount && i < MAX_SEGMENTS; ++i) {
-        float segment = 99999.0;
+        float segment = sdf_null;
         for(int j = 0; j < segments[i] && j < MAX_SEGMENTS; j++) {
             segment = sdf_union(segment, sdf_round(sdf_triangle(point, origin, triangles[index++], triangles[index++]), lineSmooth));
         }

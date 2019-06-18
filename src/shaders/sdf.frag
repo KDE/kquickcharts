@@ -150,6 +150,12 @@ float sdf_outline(in float sdf)
     Convenience
 ********************/
 
+// A constant to represent a "null" value of an sdf.
+// Since 0 is a point exactly on the outline of an sdf shape, and negative
+// values are inside the shape, this uses a very large positive constant to
+// indicate a value that is really far away from the actual sdf shape.
+const float sdf_null = 99999.0;
+
 // Render an sdf shape.
 //
 // This will render the sdf shape on top of whatever source color is input,
