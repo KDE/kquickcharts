@@ -43,6 +43,7 @@ public:
     qreal lineWidth = 1.0;
     qreal fillOpacity = 0.0;
     LineChart::Direction direction = Direction::ZeroAtStart;
+    QVector<QVector2D> previousValues;
 
     ChartRange computedRange;
 };
@@ -212,6 +213,9 @@ QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
 
     d->updateRange();
 
+    if (d->stacked)
+        d->previousValues.clear();
+
     for (int i = 0; i < d->valueSources.size(); ++i) {
         if(i >= node->childCount())
             node->appendChildNode(new LineChartNode{});
@@ -275,9 +279,18 @@ void LineChart::Private::updateRange()
         auto minY = std::numeric_limits<float>::max();
         auto maxY = std::numeric_limits<float>::min();
 
-        for(auto valueSource : valueSources) {
-            minY = qMin(minY, valueSource->minimum().toFloat());
-            maxY = qMax(maxY, valueSource->maximum().toFloat());
+        if (!stacked) {
+            for (auto valueSource : qAsConst(valueSources)) {
+                minY = qMin(minY, valueSource->minimum().toFloat());
+                maxY = qMax(maxY, valueSource->maximum().toFloat());
+            }
+        } else {
+            auto yDistance = 0.0;
+            for (auto valueSource : qAsConst(valueSources)) {
+                minY = qMin(minY, valueSource->minimum().toFloat());
+                yDistance += valueSource->maximum().toFloat();
+            }
+            maxY = minY + yDistance;
         }
         computedRange.startY = minY;
         computedRange.endY = maxY;
@@ -309,6 +322,17 @@ void LineChart::Private::updateLineNode(LineChartNode* node, const QColor& lineC
     } else {
         std::generate_n(values.rbegin(), computedRange.distanceX, generator);
     }
+
+    if (stacked && !previousValues.isEmpty()) {
+        if (values.size() != previousValues.size()) {
+            qWarning() << "Value source" << valueSource->objectName() << "has a different number of elements from the previuous source. This will cause rendering issues.";
+        }
+
+        std::for_each(values.begin(), values.end(), [this, i = 0](QVector2D &point) mutable {
+            point.setY(point.y() + previousValues.at(i++).y());
+        });
+    }
+    previousValues = values;
 
     if (smooth) {
         values = interpolate(values, 0.0, q->width(), q->height());
@@ -353,7 +377,7 @@ QVector<QVector2D> LineChart::Private::interpolate(const QVector<QVector2D> &poi
     const auto polygons = path.toSubpathPolygons();
     for(const auto polygon : polygons) {
         for(auto point : polygon) {
-            result.append(QVector2D{float(point.x()), point.y() / float(q->height())});
+            result.append(QVector2D{float(point.x()), float(point.y() / q->height())});
         }
     }
 
