@@ -325,12 +325,12 @@ void LineChart::Private::updateLineNode(LineChartNode* node, const QColor& lineC
 
     if (stacked && !previousValues.isEmpty()) {
         if (values.size() != previousValues.size()) {
-            qWarning() << "Value source" << valueSource->objectName() << "has a different number of elements from the previuous source. This will cause rendering issues.";
+            qWarning() << "Value source" << valueSource->objectName() << "has a different number of elements from the previuous source. Ignoring stacking for this source.";
+        } else {
+            std::for_each(values.begin(), values.end(), [this, i = 0](QVector2D &point) mutable {
+                point.setY(point.y() + previousValues.at(i++).y());
+            });
         }
-
-        std::for_each(values.begin(), values.end(), [this, i = 0](QVector2D &point) mutable {
-            point.setY(point.y() + previousValues.at(i++).y());
-        });
     }
     previousValues = values;
 
