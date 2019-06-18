@@ -24,6 +24,13 @@
 
 #version 120
 
+// A maximum point count to be used for sdf_polygon input arrays.
+// Unfortunately even function inputs require a fixed size at declaration time
+// for arrays, unless we were to use OpenGL 4.5.
+// Since the polygon is most likely to be defined in a uniform, this should be
+// at least less than MAX_FRAGMENT_UNIFORM_COMPONENTS / 2 (since we need vec2).
+#define SDF_POLYGON_MAX_POINT_COUNT 400
+
 /*********************************
     Shapes
 *********************************/
@@ -71,6 +78,36 @@ float sdf_triangle(in vec2 point, in vec2 p0, in vec2 p1, in vec2 p2)
                      vec2(dot(pq2,pq2), s*(v2.x*e2.y-v2.y*e2.x)));
 
     return -sqrt(d.x)*sign(d.y);
+}
+
+// Distance field for an arbitrary polygon.
+//
+// \param point A point on the distance field.
+// \param vertices An array of points that make up the polygon.
+// \param count The amount of points to use for the polygon.
+//
+// \note points should be an array of vec2 of size SDF_POLYGON_MAX_POINT_COUNT.
+//       Use count to indicate how many items of that array should be used.
+//
+// \return The signed distance from point to triangle. If negative, point is
+//         inside the triangle.
+
+float sdf_polygon(in vec2 point, in vec2[SDF_POLYGON_MAX_POINT_COUNT] vertices, in int count)
+{
+    float d = dot(point - vertices[0], point - vertices[0]);
+    float s = 1.0;
+    for (int i = 0, j = count - 1; i < count && i < SDF_POLYGON_MAX_POINT_COUNT; j = i, i++)
+    {
+        vec2 e = vertices[j] - vertices[i];
+        vec2 w = point - vertices[i];
+        float h = clamp( dot(w, e) / dot(e, e), 0.0, 1.0 );
+        vec2 b = w - e * h;
+        d = min(d, dot(b, b));
+
+        bvec3 c = bvec3(point.y >= vertices[i].y, point.y < vertices[j].y, e.x * w.y > e.y * w.x);
+        if(all(c) || all(not(c))) s *= -1.0;
+    }
+    return s * sqrt(d);
 }
 
 /*********************

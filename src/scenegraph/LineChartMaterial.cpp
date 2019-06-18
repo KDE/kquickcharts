@@ -73,7 +73,10 @@ void LineChartMaterial::setAspect(float aspect)
 LineChartShader::LineChartShader()
 {
     setShaderSourceFile(QOpenGLShader::Vertex, QStringLiteral(":/org.kde.quickcharts/linechart.vert"));
-    setShaderSourceFile(QOpenGLShader::Fragment, QStringLiteral(":/org.kde.quickcharts/linechart.frag"));
+    setShaderSourceFiles(QOpenGLShader::Fragment, {
+        QStringLiteral(":/org.kde.quickcharts/sdf.frag"),
+        QStringLiteral(":/org.kde.quickcharts/linechart.frag")
+    });
 }
 
 LineChartShader::~LineChartShader()
