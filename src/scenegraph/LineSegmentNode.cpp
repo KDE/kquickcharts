@@ -36,7 +36,15 @@ void LineSegmentNode::setRect(const QRectF &rect)
     QSGGeometry::updateTexturedRectGeometry(m_geometry, m_rect, QRectF { 0, 0, 1, 1 });
     markDirty(QSGNode::DirtyGeometry);
 
-    m_aspect = m_rect.height() / m_rect.width();
+    updatePoints();
+}
+
+void LineSegmentNode::setAspect(float aspect)
+{
+    if(qFuzzyCompare(aspect, m_aspect))
+        return;
+
+    m_aspect = aspect;
     m_material->setAspect(m_aspect);
     markDirty(QSGNode::DirtyMaterial);
 
@@ -71,7 +79,7 @@ void LineSegmentNode::setFillColor(const QColor& color)
     markDirty(QSGNode::DirtyMaterial);
 }
 
-void LineSegmentNode::setValues(const QVector<qreal>& values)
+void LineSegmentNode::setValues(const QVector<QVector2D>& values)
 {
     m_values = values;
     updatePoints();
@@ -82,24 +90,21 @@ void LineSegmentNode::updatePoints()
     if(m_values.isEmpty())
         return;
 
-    qreal valueStep = (1.0 - m_lineWidth * 2) / (m_values.count() - 1);
-
     QVector<QVector2D> points;
     points.reserve(m_values.size() + 6);
 
     qreal currentX = m_lineWidth;
 
     points << QVector2D{0.0, 0.0};
-    points << QVector2D{-0.01, 0.0};
-    points << QVector2D(-0.01, m_values[0] * m_aspect);
+    points << QVector2D{-0.5, 0.0};
+    points << QVector2D(-0.5, m_values[0].y() * m_aspect);
 
     for(auto value : qAsConst(m_values)) {
-        points << QVector2D(currentX, value * m_aspect);
-        currentX += valueStep;
+        points << QVector2D((value.x() - m_rect.left()) / m_rect.width(), value.y() * m_aspect);
     }
 
-    points << QVector2D(1.01, points.last().y());
-    points << QVector2D{1.01, 0.0};
+    points << QVector2D(1.5, points.last().y());
+    points << QVector2D{1.5, 0.0};
     points << QVector2D{0.0, 0.0};
 
     m_material->setPoints(points);
