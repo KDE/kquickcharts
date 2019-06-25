@@ -33,6 +33,20 @@ Kirigami.Page {
             Layout.preferredHeight: 400
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
+            Charts.GridLines {
+                anchors.fill: parent
+
+                spacing: width / (lineModel.count - 1);
+
+                major.frequency: 2
+                major.lineWidth: 4
+                major.color: "red"
+
+                minor.frequency: 1
+                minor.lineWidth: 2
+                minor.color: "blue"
+            }
+
             Charts.LineChart {
                 id: chart
                 anchors.fill: parent

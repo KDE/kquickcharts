@@ -3,6 +3,8 @@
 #include "PieChart.h"
 #include "LineChart.h"
 #include "RangeGroup.h"
+#include "GridLines.h"
+
 #include "datasource/ModelSource.h"
 #include "datasource/SingleValueSource.h"
 #include "datasource/ArraySource.h"
@@ -29,4 +31,7 @@ void QuickChartsPlugin::registerTypes(const char *uri)
     qmlRegisterType<ModelHistorySource>(uri, 1, 0, "ModelHistorySource");
 
     qmlRegisterUncreatableType<RangeGroup>(uri, 1, 0, "Range", QStringLiteral("Used as a grouped property"));
+
+    qmlRegisterType<GridLines>(uri, 1, 0, "GridLines");
+    qmlRegisterUncreatableType<LinePropertiesGroup>(uri, 1, 0, "LinePropertiesGroup", QStringLiteral("Used as a grouped property"));
 }

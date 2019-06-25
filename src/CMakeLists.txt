@@ -7,6 +7,8 @@ set(quickcharts_SRCS
 
     RangeGroup.cpp
 
+    GridLines.cpp
+
     datasource/ChartDataSource.cpp
     datasource/ModelSource.cpp
     datasource/SingleValueSource.cpp
