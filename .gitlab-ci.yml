@@ -16,17 +16,14 @@ stages:
 
 linux-gcc-qt512:
   stage: build
-  before_script:
-  - git clone https://anongit.kde.org/extra-cmake-modules
-  - cd extra-cmake-modules
-  - cmake . -DCMAKE_INSTALL_PREFIX=../inst
-  - make install
   script:
+  - [ -e ecm ] || ./.install_ecm.sh
   - mkdir build
   - cd build
-  - cmake .. -DCMAKE_INSTALL_PREFIX=../inst
+  - cmake .. -DCMAKE_INSTALL_PREFIX=../inst -DECM_DIR=$PWD/../ecm/share/ECM/cmake/
   - make
   - make install
   cache:
     paths:
     - build
+    - ecm
