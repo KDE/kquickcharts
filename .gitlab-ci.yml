@@ -17,7 +17,7 @@ stages:
 linux-gcc-qt512:
   stage: build
   script:
-  - [ -e ecm ] || ./.install_ecm.sh
+  - "[ -e ecm ] || ./.install_ecm.sh"
   - mkdir build
   - cd build
   - cmake .. -DCMAKE_INSTALL_PREFIX=../inst -DECM_DIR=$PWD/../ecm/share/ECM/cmake/
