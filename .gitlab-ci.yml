@@ -1,3 +1,28 @@
-include:
-  - https://invent.kde.org/sysadmin/ci-tooling/raw/master/invent/ci-before.yml
-  - https://invent.kde.org/sysadmin/ci-tooling/raw/master/invent/ci-frameworks-linux.yml
+image: kdeorg/ci-suse-qt512
+
+stages:
+- check
+- build
+- test
+
+clazy:
+  stage: check
+  script:
+  - zypper -qn install clazy
+  - mkdir clazy
+  - cd clazy
+  - cmake .. -DCMAKE_CXX_COMPILER=clazy
+  - make
+
+linux-gcc-qt512:
+  stage: build
+  script:
+  - zypper -qn install extra-cmake-modules
+  - mkdir build
+  - cd build
+  - cmake .. -DCMAKE_INSTALL_PREFIX=../inst
+  - make
+  - make install
+  cache:
+    paths:
+    - build
