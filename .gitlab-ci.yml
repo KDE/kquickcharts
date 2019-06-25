@@ -16,8 +16,12 @@ stages:
 
 linux-gcc-qt512:
   stage: build
+  before_script:
+  - git clone https://anongit.kde.org/extra-cmake-modules
+  - cd extra-cmake-modules
+  - cmake . -DCMAKE_INSTALL_PREFIX=../inst
+  - make install
   script:
-  - zypper -qn install extra-cmake-modules
   - mkdir build
   - cd build
   - cmake .. -DCMAKE_INSTALL_PREFIX=../inst
