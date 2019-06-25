@@ -120,7 +120,7 @@ void LineChart::setLineColorSource(ChartDataSource* source)
 
     d->lineColorSource = source;
     update();
-    emit lineColorSourceChanged();
+    Q_EMIT lineColorSourceChanged();
 }
 
 void LineChart::setStacked(bool stacked)
@@ -131,7 +131,7 @@ void LineChart::setStacked(bool stacked)
 
     d->stacked = stacked;
     update();
-    emit stackedChanged();
+    Q_EMIT stackedChanged();
 }
 
 void LineChart::setSmooth(bool smooth)
@@ -141,7 +141,7 @@ void LineChart::setSmooth(bool smooth)
 
     d->smooth = smooth;
     update();
-    emit smoothChanged();
+    Q_EMIT smoothChanged();
 }
 
 void LineChart::setLineWidth(qreal width)
@@ -151,7 +151,7 @@ void LineChart::setLineWidth(qreal width)
 
     d->lineWidth = width;
     update();
-    emit lineWidthChanged();
+    Q_EMIT lineWidthChanged();
 }
 
 void LineChart::setFillOpacity(qreal opacity)
@@ -161,7 +161,7 @@ void LineChart::setFillOpacity(qreal opacity)
 
     d->fillOpacity = opacity;
     update();
-    emit fillOpacityChanged();
+    Q_EMIT fillOpacityChanged();
 }
 
 void LineChart::setDirection(LineChart::Direction dir)
@@ -171,7 +171,7 @@ void LineChart::setDirection(LineChart::Direction dir)
 
     d->direction = dir;
     update();
-    emit directionChanged();
+    Q_EMIT directionChanged();
 }
 
 void LineChart::insertValueSource(int position, ChartDataSource *source)
@@ -187,7 +187,7 @@ void LineChart::insertValueSource(int position, ChartDataSource *source)
     });
     QObject::connect(source, &ChartDataSource::dataChanged, this, &LineChart::update);
     update();
-    emit valueSourcesChanged();
+    Q_EMIT valueSourcesChanged();
 }
 
 void LineChart::removeValueSource(ChartDataSource *source)
@@ -200,7 +200,7 @@ void LineChart::removeValueSource(ChartDataSource *source)
 
     d->valueSources.removeAll(source);
     
-    emit valueSourcesChanged();
+    Q_EMIT valueSourcesChanged();
 }
 
 QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *data)
@@ -253,7 +253,7 @@ ChartDataSource * LineChart::Private::source(LineChart::DataSourcesProperty* lis
 void LineChart::Private::clearSources(LineChart::DataSourcesProperty* list)
 {
     auto chart = reinterpret_cast<LineChart*>(list->data);
-    std::for_each(chart->d->valueSources.begin(), chart->d->valueSources.end(), [chart](ChartDataSource* source) {
+    std::for_each(chart->d->valueSources.cbegin(), chart->d->valueSources.cend(), [chart](ChartDataSource* source) {
         source->disconnect(chart);
     });
     chart->d->valueSources.clear();
@@ -265,7 +265,7 @@ void LineChart::Private::updateRange()
     if(xRange->automatic()) {
         computedRange.startX = 0;
         int maxX = -1;
-        for(auto valueSource : valueSources) {
+        for(auto valueSource : qAsConst(valueSources)) {
             maxX = qMax(maxX, valueSource->itemCount());
         }
         computedRange.endX = maxX;
@@ -375,7 +375,7 @@ QVector<QVector2D> LineChart::Private::interpolate(const QVector<QVector2D> &poi
     QVector<QVector2D> result;
 
     const auto polygons = path.toSubpathPolygons();
-    for(const auto polygon : polygons) {
+    for(const auto &polygon : polygons) {
         for(auto point : polygon) {
             result.append(QVector2D{float(point.x()), float(point.y() / q->height())});
         }

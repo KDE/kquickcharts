@@ -1,0 +1,29 @@
+image: kdeorg/ci-suse-qt512
+
+stages:
+- check
+- build
+- test
+
+.clazy:
+  stage: check
+  script:
+  - zypper -qn install clazy
+  - mkdir clazy
+  - cd clazy
+  - cmake .. -DCMAKE_CXX_COMPILER=clazy
+  - make
+
+linux-gcc-qt512:
+  stage: build
+  script:
+  - "[ -e ecm ] || bash .install_ecm.sh"
+  - mkdir -p build
+  - cd build
+  - cmake .. -DCMAKE_INSTALL_PREFIX=../inst -DECM_DIR=$PWD/../ecm/share/ECM/cmake/
+  - make
+  - make install
+  cache:
+    paths:
+    - build
+    - ecm

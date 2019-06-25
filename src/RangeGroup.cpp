@@ -44,7 +44,7 @@ void RangeGroup::setFrom(qreal from)
     }
 
     m_from = from;
-    emit fromChanged();
+    Q_EMIT fromChanged();
 }
 
 void RangeGroup::setTo(qreal to)
@@ -54,7 +54,7 @@ void RangeGroup::setTo(qreal to)
     }
 
     m_to = to;
-    emit toChanged();
+    Q_EMIT toChanged();
 }
 
 void RangeGroup::setAutomatic(bool automatic)
@@ -64,5 +64,5 @@ void RangeGroup::setAutomatic(bool automatic)
     }
 
     m_automatic = automatic;
-    emit automaticChanged();
+    Q_EMIT automaticChanged();
 }

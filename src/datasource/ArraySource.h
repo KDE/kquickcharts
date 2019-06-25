@@ -36,7 +36,7 @@ public:
     bool wrap() const;
 
 public Q_SLOTS:
-    void setArray(QVariantList array);
+    void setArray(const QVariantList &array);
     void setWrap(bool wrap);
 
 private:

@@ -8,7 +8,12 @@
 #include "datasource/ArraySource.h"
 #include "datasource/ModelHistorySource.h"
 
-void KQuickControlsAddonsChartsPlugin::registerTypes(const char *uri)
+QuickChartsPlugin::QuickChartsPlugin(QObject* parent)
+    : QQmlExtensionPlugin(parent)
+{
+}
+
+void QuickChartsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(QString::fromLatin1(uri) == QLatin1String("org.kde.quickcharts"));
 

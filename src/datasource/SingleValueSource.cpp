@@ -43,5 +43,5 @@ void SingleValueSource::setValue ( const QVariant& value )
     }
 
     m_value = value;
-    emit dataChanged();
+    Q_EMIT dataChanged();
 }

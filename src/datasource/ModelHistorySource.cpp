@@ -55,7 +55,7 @@ void ModelHistorySource::setRow(int row)
     }
 
     m_row = row;
-    emit rowChanged();
+    Q_EMIT rowChanged();
 }
 
 int ModelHistorySource::maximumHistory() const
@@ -70,7 +70,7 @@ void ModelHistorySource::setMaximumHistory(int maximumHistory)
     }
 
     m_maximumHistory = maximumHistory;
-    emit maximumHistoryChanged();
+    Q_EMIT maximumHistoryChanged();
 }
 
 void ModelHistorySource::onModelChanged()
@@ -98,5 +98,5 @@ void ModelHistorySource::onDataChanged(const QModelIndex& topLeft, const QModelI
     while(m_history.size() > m_maximumHistory)
         m_history.pop_back();
 
-    emit dataChanged();
+    Q_EMIT dataChanged();
 }

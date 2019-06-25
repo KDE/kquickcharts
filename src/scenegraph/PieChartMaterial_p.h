@@ -22,7 +22,7 @@ public:
     QVector<QVector4D> colors() const;
     QVector<int> segments() const;
 
-    void setAspectRatio(const QVector2D &ratio);
+    void setAspectRatio(const QVector2D &aspect);
     void setInnerDimension(float dimension);
     void setBackgroundColor(const QColor &color);
 
