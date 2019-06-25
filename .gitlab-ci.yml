@@ -1,0 +1,18 @@
+image: kdeorg/ci-suse-qt512
+
+stages:
+- check
+- build
+- test
+
+build:
+  stage: build
+  script:
+  - mkdir build
+  - cd build
+  - cmake .. -DCMAKE_INSTALL_PREFIX=../inst
+  - make
+  - make install
+  cache:
+    paths:
+    - build
