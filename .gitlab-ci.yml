@@ -5,7 +5,7 @@ stages:
 - build
 - test
 
-clazy:
+.clazy:
   stage: check
   script:
   - zypper -qn install clazy
