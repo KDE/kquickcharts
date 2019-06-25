@@ -107,9 +107,9 @@ void ModelSource::setRole(int role)
     m_role = role;
     if(m_model) {
         m_roleName = QString::fromLatin1(m_model->roleNames().value(role));
-        emit roleNameChanged();
+        Q_EMIT roleNameChanged();
     }
-    emit roleChanged();
+    Q_EMIT roleChanged();
 }
 
 void ModelSource::setRoleName(const QString& name)
@@ -120,9 +120,9 @@ void ModelSource::setRoleName(const QString& name)
     m_roleName = name;
     if(m_model) {
         m_role = m_model->roleNames().key(m_roleName.toLatin1(), -1);
-        emit roleChanged();
+        Q_EMIT roleChanged();
     }
-    emit roleNameChanged();
+    Q_EMIT roleNameChanged();
 }
 
 void ModelSource::setColumn(int column)
@@ -131,7 +131,7 @@ void ModelSource::setColumn(int column)
         return;
 
     m_column = column;
-    emit columnChanged();
+    Q_EMIT columnChanged();
 }
 
 void ModelSource::setIndexColumns(bool index)
@@ -140,7 +140,7 @@ void ModelSource::setIndexColumns(bool index)
         return;
 
     m_indexColumns = index;
-    emit indexColumnsChanged();
+    Q_EMIT indexColumnsChanged();
 }
 
 void ModelSource::setModel(QAbstractItemModel *model)
@@ -162,5 +162,5 @@ void ModelSource::setModel(QAbstractItemModel *model)
         connect(m_model, &QAbstractItemModel::layoutChanged, this, &ModelSource::dataChanged);
     }
 
-    emit modelChanged();
+    Q_EMIT modelChanged();
 }

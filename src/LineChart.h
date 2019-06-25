@@ -32,7 +32,7 @@ public:
         ZeroAtStart,
         ZeroAtEnd
     };
-    Q_ENUMS(Direction)
+    Q_ENUM(Direction)
 
     /**
      * Default constructor
@@ -60,7 +60,7 @@ public Q_SLOTS:
     void setSmooth(bool smooth);
     void setLineWidth(qreal width);
     void setFillOpacity(qreal opacity);
-    void setDirection(Direction dir);
+    void setDirection(LineChart::Direction dir);
     void insertValueSource(int position, ChartDataSource *source);
     void removeValueSource(ChartDataSource *source);
 

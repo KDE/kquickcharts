@@ -62,7 +62,7 @@ void PieChart::setBorderWidth(qreal width)
 
     d->borderWidth = width;
     update();
-    emit borderWidthChanged();
+    Q_EMIT borderWidthChanged();
 }
 
 void PieChart::setValueSource(ChartDataSource *value)
@@ -79,7 +79,7 @@ void PieChart::setValueSource(ChartDataSource *value)
         connect(d->valueSource, &ChartDataSource::dataChanged, this, &PieChart::updateData);
 
     updateData();
-    emit valueSourceChanged();
+    Q_EMIT valueSourceChanged();
 }
 
 void PieChart::setColorSource(ChartDataSource *color)
@@ -96,7 +96,7 @@ void PieChart::setColorSource(ChartDataSource *color)
         connect(d->colorSource, &ChartDataSource::dataChanged, this, &PieChart::updateData);
 
     updateData();
-    emit colorSourceChanged();
+    Q_EMIT colorSourceChanged();
 }
 
 QColor PieChart::backgroundColor() const
@@ -111,7 +111,7 @@ void PieChart::setBackgroundColor(const QColor &color)
     }
     d->backgroundColor = color;
     update();
-    emit backgroundColorChanged();
+    Q_EMIT backgroundColorChanged();
 }
 
 QSGNode *PieChart::updatePaintNode(QSGNode *node, UpdatePaintNodeData *data)
@@ -166,7 +166,7 @@ void PieChart::updateData()
         max = d->range->distance();
     }
 
-    for (auto value : data) {
+    for (auto value : qAsConst(data)) {
         d->sections << value / max;
     }
 

@@ -85,6 +85,8 @@ void LineSegmentNode::updatePoints()
     qreal valueStep = (1.0 - m_lineWidth * 2) / (m_values.count() - 1);
 
     QVector<QVector2D> points;
+    points.reserve(m_values.size() + 6);
+
     qreal currentX = m_lineWidth;
 
     points << QVector2D{0.0, 0.0};

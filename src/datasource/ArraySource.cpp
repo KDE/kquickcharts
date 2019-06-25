@@ -42,14 +42,14 @@ bool ArraySource::wrap() const
     return m_wrap;
 }
 
-void ArraySource::setArray(QVariantList array)
+void ArraySource::setArray(const QVariantList &array)
 {
     if (m_array == array) {
         return;
     }
 
     m_array = array;
-    emit dataChanged();
+    Q_EMIT dataChanged();
 }
 
 void ArraySource::setWrap(bool wrap)
@@ -59,5 +59,5 @@ void ArraySource::setWrap(bool wrap)
     }
 
     m_wrap = wrap;
-    emit dataChanged();
+    Q_EMIT dataChanged();
 }
