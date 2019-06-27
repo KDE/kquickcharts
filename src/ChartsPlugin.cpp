@@ -1,6 +1,7 @@
 #include "ChartsPlugin.h"
 
 #include "PieChart.h"
+#include "XYChart.h"
 #include "LineChart.h"
 #include "RangeGroup.h"
 #include "GridLines.h"
@@ -25,6 +26,7 @@ void QuickChartsPlugin::registerTypes(const char *uri)
 
     qmlRegisterType<PieChart>(uri, 1, 0, "PieChart");
     qmlRegisterType<LineChart>(uri, 1, 0, "LineChart");
+    qmlRegisterUncreatableType<XYChart>(uri, 1, 0, "XYChart", QStringLiteral("Just a base class"));
 
     qmlRegisterUncreatableType<ChartDataSource>(uri, 1, 0, "ChartDataSource", QStringLiteral("Just a base class"));
     qmlRegisterType<ModelSource>(uri, 1, 0, "ModelSource");

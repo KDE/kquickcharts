@@ -9,15 +9,6 @@
 #include "scenegraph/LineGridNode.h"
 #include "scenegraph/LineChartNode.h"
 
-struct ChartRange {
-    int startX = 0;
-    int endX = 0;
-    int distanceX = 0;
-    float startY = 0.0;
-    float endY = 0.0;
-    float distanceY = 0.0;
-};
-
 class LineChart::Private
 {
 public:
@@ -28,14 +19,11 @@ public:
     static ChartDataSource* source(DataSourcesProperty *list, int index);
     static void clearSources(DataSourcesProperty *list);
 
-    void updateRange();
     void updateLineNode(LineChartNode* node, const QColor& lineColor, ChartDataSource* valueSource);
     QVector<QVector2D> interpolate(const QVector<QVector2D> &points, qreal start, qreal end, qreal height);
 
     LineChart* q;
 
-    RangeGroup *xRange = nullptr;
-    RangeGroup *yRange = nullptr;
     QVector<ChartDataSource*> valueSources;
     ChartDataSource *lineColorSource = nullptr;
     bool stacked = false;
@@ -45,32 +33,17 @@ public:
     LineChart::Direction direction = Direction::ZeroAtStart;
     QVector<QVector2D> previousValues;
 
-    ChartRange computedRange;
+    bool rangeInvalid = true;
 };
 
 LineChart::LineChart(QQuickItem* parent)
-    : QQuickItem(parent), d(new Private{this})
+    : XYChart(parent), d(new Private{this})
 {
     setFlag(ItemHasContents, true);
-
-    d->xRange = new RangeGroup{this};
-    connect(d->xRange, &RangeGroup::rangeChanged, this, &LineChart::update);
-    d->yRange = new RangeGroup{this};
-    connect(d->yRange, &RangeGroup::rangeChanged, this, &LineChart::update);
 }
 
 LineChart::~LineChart()
 {
-}
-
-RangeGroup * LineChart::xRange() const
-{
-    return d->xRange;
-}
-
-RangeGroup * LineChart::yRange() const
-{
-    return d->yRange;
 }
 
 ChartDataSource * LineChart::lineColorSource() const
@@ -108,11 +81,6 @@ qreal LineChart::fillOpacity() const
     return d->fillOpacity;
 }
 
-LineChart::Direction LineChart::direction() const
-{
-    return d->direction;
-}
-
 void LineChart::setLineColorSource(ChartDataSource* source)
 {
     if(source == d->lineColorSource)
@@ -130,6 +98,7 @@ void LineChart::setStacked(bool stacked)
     }
 
     d->stacked = stacked;
+    d->rangeInvalid = true;
     update();
     Q_EMIT stackedChanged();
 }
@@ -164,16 +133,6 @@ void LineChart::setFillOpacity(qreal opacity)
     Q_EMIT fillOpacityChanged();
 }
 
-void LineChart::setDirection(LineChart::Direction dir)
-{
-    if(d->direction == dir)
-        return;
-
-    d->direction = dir;
-    update();
-    Q_EMIT directionChanged();
-}
-
 void LineChart::insertValueSource(int position, ChartDataSource *source)
 {
     // Avoid duplicates
@@ -185,8 +144,8 @@ void LineChart::insertValueSource(int position, ChartDataSource *source)
     connect(source, &QObject::destroyed, this, [this, source]() {
         removeValueSource(source);
     });
-    QObject::connect(source, &ChartDataSource::dataChanged, this, &LineChart::update);
-    update();
+    QObject::connect(source, &ChartDataSource::dataChanged, this, &LineChart::onSourceDataChanged);
+    onSourceDataChanged();
     Q_EMIT valueSourcesChanged();
 }
 
@@ -197,9 +156,10 @@ void LineChart::removeValueSource(ChartDataSource *source)
     if (i < 0) {
         return;
     }
-
+    source->disconnect(this);
     d->valueSources.removeAll(source);
-    
+
+    onSourceDataChanged();
     Q_EMIT valueSourcesChanged();
 }
 
@@ -211,7 +171,10 @@ QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
         node = new QSGNode();
     }
 
-    d->updateRange();
+    if (d->rangeInvalid) {
+        updateComputedRange();
+        d->rangeInvalid = false;
+    }
 
     if (d->stacked)
         d->previousValues.clear();
@@ -232,12 +195,50 @@ QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
     return node;
 }
 
+void LineChart::updateAutomaticXRange(ComputedRange& range)
+{
+    range.startX = 0;
+    int maxX = -1;
+    for(auto valueSource : qAsConst(d->valueSources)) {
+        maxX = qMax(maxX, valueSource->itemCount());
+    }
+    range.endX = maxX;
+}
+
+void LineChart::updateAutomaticYRange(ComputedRange& range)
+{
+    auto minY = std::numeric_limits<float>::max();
+    auto maxY = std::numeric_limits<float>::min();
+
+    if (!d->stacked) {
+        for (auto valueSource : qAsConst(d->valueSources)) {
+            minY = qMin(minY, valueSource->minimum().toFloat());
+            maxY = qMax(maxY, valueSource->maximum().toFloat());
+        }
+    } else {
+        auto yDistance = 0.0;
+        for (auto valueSource : qAsConst(d->valueSources)) {
+            minY = qMin(minY, valueSource->minimum().toFloat());
+            yDistance += valueSource->maximum().toFloat();
+        }
+        maxY = minY + yDistance;
+    }
+    range.startY = std::min(0.0f, minY);
+    range.endY = std::max(0.0f, maxY);
+}
+
+void LineChart::onSourceDataChanged()
+{
+    d->rangeInvalid = true;
+    update();
+}
+
 void LineChart::Private::appendSource(LineChart::DataSourcesProperty *list, ChartDataSource* source)
 {
     auto chart = reinterpret_cast<LineChart*>(list->data);
     chart->d->valueSources.append(source);
-    QObject::connect(source, &ChartDataSource::dataChanged, chart, &LineChart::update);
-    chart->update();
+    QObject::connect(source, &ChartDataSource::dataChanged, chart, &LineChart::onSourceDataChanged);
+    chart->onSourceDataChanged();
 }
 
 int LineChart::Private::sourceCount(LineChart::DataSourcesProperty *list)
@@ -257,48 +258,7 @@ void LineChart::Private::clearSources(LineChart::DataSourcesProperty* list)
         source->disconnect(chart);
     });
     chart->d->valueSources.clear();
-    chart->update();
-}
-
-void LineChart::Private::updateRange()
-{
-    if(xRange->automatic()) {
-        computedRange.startX = 0;
-        int maxX = -1;
-        for(auto valueSource : qAsConst(valueSources)) {
-            maxX = qMax(maxX, valueSource->itemCount());
-        }
-        computedRange.endX = maxX;
-    } else {
-        computedRange.startX = xRange->from();
-        computedRange.endX = xRange->to();
-    }
-    computedRange.distanceX = computedRange.endX - computedRange.startX;
-
-    if(yRange->automatic()) {
-        auto minY = std::numeric_limits<float>::max();
-        auto maxY = std::numeric_limits<float>::min();
-
-        if (!stacked) {
-            for (auto valueSource : qAsConst(valueSources)) {
-                minY = qMin(minY, valueSource->minimum().toFloat());
-                maxY = qMax(maxY, valueSource->maximum().toFloat());
-            }
-        } else {
-            auto yDistance = 0.0;
-            for (auto valueSource : qAsConst(valueSources)) {
-                minY = qMin(minY, valueSource->minimum().toFloat());
-                yDistance += valueSource->maximum().toFloat();
-            }
-            maxY = minY + yDistance;
-        }
-        computedRange.startY = minY;
-        computedRange.endY = maxY;
-    } else {
-        computedRange.startY = yRange->from();
-        computedRange.endY = yRange->to();
-    }
-    computedRange.distanceY = computedRange.endY - computedRange.startY;
+    chart->onSourceDataChanged();
 }
 
 void LineChart::Private::updateLineNode(LineChartNode* node, const QColor& lineColor, ChartDataSource* valueSource)
@@ -311,21 +271,23 @@ void LineChart::Private::updateLineNode(LineChartNode* node, const QColor& lineC
     node->setFillColor(fillColor);
     node->setLineWidth(lineWidth);
 
-    float stepSize = q->width() / (computedRange.distanceX - 1);
-    QVector<QVector2D> values(computedRange.distanceX);
-    auto generator = [&, i = computedRange.startX]() mutable -> QVector2D {
+    auto range = q->computedRange();
+
+    float stepSize = q->width() / (range.distanceX - 1);
+    QVector<QVector2D> values(range.distanceX);
+    auto generator = [&, i = range.startX]() mutable -> QVector2D {
         auto result = QVector2D{
             direction == Direction::ZeroAtStart ? i * stepSize : float(q->boundingRect().right()) - i * stepSize,
-            (valueSource->item(i).toFloat() - computedRange.startY) / computedRange.distanceY
+            (valueSource->item(i).toFloat() - range.startY) / range.distanceY
         };
         i++;
         return result;
     };
 
     if(direction == Direction::ZeroAtStart) {
-        std::generate_n(values.begin(), computedRange.distanceX, generator);
+        std::generate_n(values.begin(), range.distanceX, generator);
     } else {
-        std::generate_n(values.rbegin(), computedRange.distanceX, generator);
+        std::generate_n(values.rbegin(), range.distanceX, generator);
     }
 
     if (stacked && !previousValues.isEmpty()) {
