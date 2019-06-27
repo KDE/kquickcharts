@@ -216,8 +216,15 @@ void AxisLabels::Private::layout()
         totalHeight += label->height();
     }
 
-    q->setImplicitWidth(isHorizontal() ? totalWidth : maxWidth);
-    q->setImplicitHeight(isHorizontal() ? maxHeight : totalHeight);
+    auto impWidth = isHorizontal() ? totalWidth : maxWidth;
+    auto impHeight = isHorizontal() ? maxHeight : totalHeight;
+
+    if (qFuzzyCompare(impWidth, q->width()) && qFuzzyCompare(impHeight, q->height())) {
+        return;
+    }
+
+    q->setImplicitWidth(impWidth);
+    q->setImplicitHeight(impHeight);
 
     auto spacing = (isHorizontal() ? q->width() : q->height()) / (labels.size() - 1);
     auto i = 0;
