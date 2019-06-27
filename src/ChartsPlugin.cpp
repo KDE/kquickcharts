@@ -10,6 +10,7 @@
 #include "datasource/SingleValueSource.h"
 #include "datasource/ArraySource.h"
 #include "datasource/ModelHistorySource.h"
+#include "datasource/ChartAxisSource.h"
 
 QuickChartsPlugin::QuickChartsPlugin(QObject* parent)
     : QQmlExtensionPlugin(parent)
@@ -30,6 +31,7 @@ void QuickChartsPlugin::registerTypes(const char *uri)
     qmlRegisterType<SingleValueSource>(uri, 1, 0, "SingleValueSource");
     qmlRegisterType<ArraySource>(uri, 1, 0, "ArraySource");
     qmlRegisterType<ModelHistorySource>(uri, 1, 0, "ModelHistorySource");
+    qmlRegisterType<ChartAxisSource>(uri, 1, 0, "ChartAxisSource");
 
     qmlRegisterUncreatableType<RangeGroup>(uri, 1, 0, "Range", QStringLiteral("Used as a grouped property"));
 
