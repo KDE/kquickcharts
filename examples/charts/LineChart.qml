@@ -15,11 +15,11 @@ Kirigami.Page {
         dynamicRoles: true;
 
         Component.onCompleted: {
-            append({label: "1", value1: 10, value2: 15, value3: 20})
-            append({label: "2", value1: 15, value2: 25, value3: 25})
-            append({label: "3", value1: 15, value2: 20, value3: 30})
-            append({label: "4", value1: 10, value2: 10, value3: 35})
-            append({label: "5", value1: 20, value2: 5, value3: 40})
+            append({label: "Item 1", value1: 10, value2: 15, value3: 20})
+            append({label: "Item 2", value1: 15, value2: 25, value3: 25})
+            append({label: "Item 3", value1: 15, value2: 20, value3: 30})
+            append({label: "Item 4", value1: 10, value2: 10, value3: 35})
+            append({label: "Item 5", value1: 20, value2: 5, value3: 40})
         }
     }
 
@@ -34,22 +34,70 @@ Kirigami.Page {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
             Charts.GridLines {
-                anchors.fill: parent
+                anchors.fill: lineChart
 
                 spacing: width / (lineModel.count - 1);
 
                 major.frequency: 2
-                major.lineWidth: 4
-                major.color: "red"
+                major.lineWidth: 2
+                major.color: Qt.rgba(0.8, 0.8, 0.8, 1.0)
 
                 minor.frequency: 1
-                minor.lineWidth: 2
-                minor.color: "blue"
+                minor.lineWidth: 1
+                minor.color: Qt.rgba(0.8, 0.8, 0.8, 1.0)
+            }
+
+            Charts.GridLines {
+                anchors.fill: lineChart
+
+                spacing: height / (yAxisLabels.source.itemCount - 1);
+
+                direction: Charts.GridLines.Vertical;
+
+                major.frequency: 2
+                major.lineWidth: 2
+                major.color: Qt.rgba(0.8, 0.8, 0.8, 1.0)
+
+                minor.frequency: 1
+                minor.lineWidth: 1
+                minor.color: Qt.rgba(0.8, 0.8, 0.8, 1.0)
+            }
+
+            Charts.AxisLabels {
+                id: yAxisLabels
+
+                anchors {
+                    left: parent.left
+                    top: parent.top
+                    bottom: xAxisLabels.top
+                }
+
+                direction: Charts.AxisLabels.VerticalBottomTop
+                delegate: Label { text: Charts.AxisLabels.label }
+                source: Charts.ChartAxisSource { chart: lineChart; axis: Charts.ChartAxisSource.YAxis; itemCount: 5 }
+            }
+
+            Charts.AxisLabels {
+                id: xAxisLabels
+
+                anchors {
+                    left: yAxisLabels.right
+                    right: parent.right
+                    bottom: parent.bottom
+                }
+
+                delegate: Label { text: Charts.AxisLabels.label }
+                source: Charts.ModelSource { model: lineModel; roleName: "label" }
             }
 
             Charts.LineChart {
-                id: chart
-                anchors.fill: parent
+                id: lineChart
+                anchors {
+                    top: parent.top
+                    left: yAxisLabels.right
+                    right: parent.right
+                    bottom: xAxisLabels.top
+                }
 
                 xRange {
                     from: 0
@@ -74,21 +122,18 @@ Kirigami.Page {
         }
 
         RowLayout {
-            RangeEditor { label: "X Axis"; range: chart.xRange }
+            RangeEditor { label: "X Axis"; range: lineChart.xRange }
             Item { Layout.fillWidth: true }
-            RangeEditor { label: "Y Axis"; range: chart.yRange }
+            RangeEditor { label: "Y Axis"; range: lineChart.yRange }
         }
 
         RowLayout {
             Button { text: "Add Item"; onClicked: lineModel.append({label: "New", value1: 0, value2: 0, value3: 0}) }
             Button { text: "Remove Item"; onClicked: lineModel.remove(lineModel.count - 1)}
             Label { text: "Line Width" }
-            SpinBox { from: 0; to: 1000; value: chart.lineWidth; onValueModified: chart.lineWidth = value; }
-//             CheckBox { checked: chart.range.automatic; text: "Automatic"; onToggled: chart.range.automatic = checked }
+            SpinBox { from: 0; to: 1000; value: lineChart.lineWidth; onValueModified: lineChart.lineWidth = value; }
             Label { text: "Fill Opacity" }
-            SpinBox { from: 0; to: 100; value: chart.fillOpacity * 100; onValueModified: chart.fillOpacity = value / 100; }
-//             Label { text: "To" }
-//             SpinBox { from: -1; to: 10000; value: chart.range.to; onValueModified: chart.range.to = value; }
+            SpinBox { from: 0; to: 100; value: lineChart.fillOpacity * 100; onValueModified: lineChart.fillOpacity = value / 100; }
         }
 
         Frame {
@@ -103,6 +148,12 @@ Kirigami.Page {
                         width: ListView.view.width
                         height: Kirigami.Units.gridUnit * 2 + Kirigami.Units.smallSpacing
                         contentItem: RowLayout {
+                            Label { text: "Label" }
+                            TextField {
+                                Layout.preferredWidth: 75
+                                text: model.label;
+                                onEditingFinished: lineModel.setProperty(index, "label", text)
+                            }
                             Label { text: "Value 1" }
                             SpinBox {
                                 Layout.preferredWidth: 75
