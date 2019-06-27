@@ -1,6 +1,9 @@
 #include "ChartAxisSource.h"
 
 #include <QVariant>
+#include <QDebug>
+
+#include "XYChart.h"
 
 ChartAxisSource::ChartAxisSource(QObject* parent)
     : ChartDataSource(parent)
@@ -16,34 +19,60 @@ ChartAxisSource::~ChartAxisSource()
 
 QVariant ChartAxisSource::item(int index) const
 {
-    if (index < 0 || index > m_itemCount)
+    if (!m_chart || index < 0 || index > m_itemCount)
         return QVariant{};
 
-    return index;
+    auto range = m_chart->computedRange();
+    if (m_axis == Axis::XAxis) {
+        return range.startX + (range.distanceX / (m_itemCount - 1)) * index;
+    } else {
+        return range.startY + (range.distanceY / (m_itemCount - 1)) * index;
+    }
 }
 
 QVariant ChartAxisSource::minimum() const
 {
-    return QVariant{};
+    if (!m_chart)
+        return QVariant{};
+
+    if (m_axis == Axis::XAxis) {
+        return m_chart->computedRange().startX;
+    } else {
+        return m_chart->computedRange().startY;
+    }
 }
 
 QVariant ChartAxisSource::maximum() const
 {
-    return QVariant{};
+    if (!m_chart)
+        return QVariant{};
+
+    if (m_axis == Axis::XAxis) {
+        return m_chart->computedRange().endX;
+    } else {
+        return m_chart->computedRange().endY;
+    }
 }
 
-QQuickItem * ChartAxisSource::chart() const
+XYChart *ChartAxisSource::chart() const
 {
     return m_chart;
 }
 
-void ChartAxisSource::setChart(QQuickItem * newChart)
+void ChartAxisSource::setChart(XYChart *newChart)
 {
     if (newChart == m_chart) {
         return;
     }
 
+    if (m_chart) {
+        disconnect(m_chart, &XYChart::computedRangeChanged, this, &ChartAxisSource::dataChanged);
+    }
+
     m_chart = newChart;
+    if (m_chart) {
+        connect(m_chart, &XYChart::computedRangeChanged, this, &ChartAxisSource::dataChanged);
+    }
     Q_EMIT chartChanged();
 }
 

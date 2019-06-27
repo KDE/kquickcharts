@@ -3,7 +3,7 @@
 
 #include "ChartDataSource.h"
 
-class QQuickItem;
+class XYChart;
 
 /**
  * @todo write docs
@@ -11,7 +11,7 @@ class QQuickItem;
 class ChartAxisSource : public ChartDataSource
 {
     Q_OBJECT
-    Q_PROPERTY(QQuickItem *chart READ chart WRITE setChart NOTIFY chartChanged)
+    Q_PROPERTY(XYChart *chart READ chart WRITE setChart NOTIFY chartChanged)
     Q_PROPERTY(ChartAxisSource::Axis axis READ axis WRITE setAxis NOTIFY axisChanged)
     Q_PROPERTY(int itemCount READ itemCount WRITE setItemCount NOTIFY itemCountChanged)
 
@@ -39,8 +39,8 @@ public:
     QVariant minimum() const override;
     QVariant maximum() const override;
 
-    QQuickItem *chart() const;
-    Q_SLOT void setChart(QQuickItem *newChart);
+    XYChart *chart() const;
+    Q_SLOT void setChart(XYChart *newChart);
     Q_SIGNAL void chartChanged();
 
     ChartAxisSource::Axis axis() const;
@@ -52,7 +52,7 @@ public:
     Q_SIGNAL void itemCountChanged();
 
 private:
-    QQuickItem *m_chart = nullptr;
+    XYChart *m_chart = nullptr;
     Axis m_axis = Axis::XAxis;
     int m_itemCount = 2;
 };
