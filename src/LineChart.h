@@ -17,6 +17,7 @@ class LineChart : public XYChart
 
     Q_PROPERTY(QQmlListProperty<ChartDataSource> valueSources READ valueSources NOTIFY valueSourcesChanged)
     Q_PROPERTY(ChartDataSource* lineColorSource READ lineColorSource WRITE setLineColorSource NOTIFY lineColorSourceChanged)
+    Q_PROPERTY(ChartDataSource* lineNameSource READ lineNameSource WRITE setLineNameSource NOTIFY lineNameSourceChanged)
     Q_PROPERTY(bool stacked READ stacked WRITE setStacked NOTIFY stackedChanged)
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
     Q_PROPERTY(qreal lineWidth READ lineWidth WRITE setLineWidth NOTIFY lineWidthChanged)
@@ -38,6 +39,7 @@ public:
 
     DataSourcesProperty valueSources();
     ChartDataSource *lineColorSource() const;
+    ChartDataSource *lineNameSource() const;
     bool stacked() const;
     bool smooth() const;
     qreal lineWidth() const;
@@ -45,6 +47,7 @@ public:
 
 public Q_SLOTS:
     void setLineColorSource(ChartDataSource *source);
+    void setLineNameSource(ChartDataSource *source);
     void setStacked(bool stacked);
     void setSmooth(bool smooth);
     void setLineWidth(qreal width);
@@ -55,6 +58,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void valueSourcesChanged();
     void lineColorSourceChanged();
+    void lineNameSourceChanged();
     void stackedChanged();
     void smoothChanged();
     void lineWidthChanged();

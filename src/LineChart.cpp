@@ -26,6 +26,7 @@ public:
 
     QVector<ChartDataSource*> valueSources;
     ChartDataSource *lineColorSource = nullptr;
+    ChartDataSource *lineNameSource = nullptr;
     bool stacked = false;
     bool smooth = false;
     qreal lineWidth = 1.0;
@@ -49,6 +50,11 @@ LineChart::~LineChart()
 ChartDataSource * LineChart::lineColorSource() const
 {
     return d->lineColorSource;
+}
+
+ChartDataSource * LineChart::lineNameSource() const
+{
+    return d->lineNameSource;
 }
 
 QQmlListProperty<ChartDataSource> LineChart::valueSources()
@@ -89,6 +95,15 @@ void LineChart::setLineColorSource(ChartDataSource* source)
     d->lineColorSource = source;
     update();
     Q_EMIT lineColorSourceChanged();
+}
+
+void LineChart::setLineNameSource(ChartDataSource* source)
+{
+    if (source == d->lineNameSource)
+        return;
+
+    d->lineNameSource = source;
+    Q_EMIT lineNameSourceChanged();
 }
 
 void LineChart::setStacked(bool stacked)
