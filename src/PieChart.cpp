@@ -15,6 +15,7 @@ public:
 
     ChartDataSource *valueSource = nullptr;
     ChartDataSource *colorSource = nullptr;
+    ChartDataSource *nameSource = nullptr;
 
     QVector<qreal> sections;
     QVector<QColor> colors;
@@ -53,6 +54,11 @@ ChartDataSource *PieChart::valueSource() const
 ChartDataSource *PieChart::colorSource() const
 {
     return d->colorSource;
+}
+
+ChartDataSource * PieChart::nameSource() const
+{
+    return d->nameSource;
 }
 
 void PieChart::setBorderWidth(qreal width)
@@ -97,6 +103,15 @@ void PieChart::setColorSource(ChartDataSource *color)
 
     updateData();
     Q_EMIT colorSourceChanged();
+}
+
+void PieChart::setNameSource(ChartDataSource* source)
+{
+    if (source == d->nameSource)
+        return;
+
+    d->nameSource = source;
+    Q_EMIT nameSourceChanged();
 }
 
 QColor PieChart::backgroundColor() const

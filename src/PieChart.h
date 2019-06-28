@@ -32,7 +32,10 @@ class PieChart : public QQuickItem
      * The source of the PieChart's colors.
      */
     Q_PROPERTY(ChartDataSource *colorSource READ colorSource WRITE setColorSource NOTIFY colorSourceChanged)
-
+    /**
+     * The source of the PieChart's section names.
+     */
+    Q_PROPERTY(ChartDataSource *nameSource READ nameSource WRITE setNameSource NOTIFY nameSourceChanged)
     /**
      * Sets a colour to use to fill remaining space on the arc.
      */
@@ -53,6 +56,7 @@ public:
     qreal borderWidth() const;
     ChartDataSource *valueSource() const;
     ChartDataSource *colorSource() const;
+    ChartDataSource *nameSource() const;
 
     QColor backgroundColor() const;
     void setBackgroundColor(const QColor &color);
@@ -61,11 +65,13 @@ public Q_SLOTS:
     void setBorderWidth(qreal width);
     void setValueSource(ChartDataSource *value);
     void setColorSource(ChartDataSource *color);
+    void setNameSource(ChartDataSource *source);
 
 Q_SIGNALS:
     void borderWidthChanged();
     void valueSourceChanged();
     void colorSourceChanged();
+    void nameSourceChanged();
     void backgroundColorChanged();
 
 protected:

@@ -3,15 +3,21 @@ set(quickcharts_SRCS
     ChartsPlugin.cpp
 
     PieChart.cpp
+    XYChart.cpp
     LineChart.cpp
 
     RangeGroup.cpp
+
+    GridLines.cpp
+    AxisLabels.cpp
+    LegendModel.cpp
 
     datasource/ChartDataSource.cpp
     datasource/ModelSource.cpp
     datasource/SingleValueSource.cpp
     datasource/ArraySource.cpp
     datasource/ModelHistorySource.cpp
+    datasource/ChartAxisSource.cpp
 
     scenegraph/PieChartMaterial.cpp
     scenegraph/PieChartNode.cpp

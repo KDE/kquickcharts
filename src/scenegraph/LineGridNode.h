@@ -4,6 +4,8 @@
 #include <QSGGeometryNode>
 #include <QColor>
 
+class QSGFlatColorMaterial;
+
 /**
  * @todo write docs
  */
@@ -13,28 +15,27 @@ public:
     LineGridNode();
     ~LineGridNode();
 
-    void setRect(const QRectF& rect);
-    void setDrawX(bool drawX);
-    void setDrawY(bool drawY);
-    void setXSpacing(qreal xSpacing);
-    void setYSpacing(qreal ySpacing);
-    void setXColor(const QColor& xColor);
-    void setYColor(const QColor& yColor);
-    void update();
+    void setVisible(bool visible);
+    void setVertical(bool vertical);
+    void setRect(const QRectF &rect);
+    void setColor(const QColor &color);
+    void setSpacing(float spacing);
+    void setLineWidth(float lineWidth);
 
+    bool isSubtreeBlocked() const override;
+
+    void update();
 private:
-    void line(QSGGeometry::ColoredPoint2D *vertices, quint16 *indices, int &index, qreal fromX, qreal fromY, qreal toX, qreal toY, const QColor& color);
+    void line(QSGGeometry::Point2D *vertices, quint16 *indices, int &index, qreal fromX, qreal fromY, qreal toX, qreal toY);
 
     QSGGeometry *m_geometry = nullptr;
+    QSGFlatColorMaterial *m_material = nullptr;
+
+    bool m_visible = true;
+    bool m_vertical = false;
     QRectF m_rect;
-    bool m_drawBorder = true;
-    bool m_drawX = true;
-    bool m_drawY = true;
-    qreal m_xSpacing = 1.0;
-    qreal m_ySpacing = 1.0;
-    QColor m_xColor;
-    QColor m_yColor;
-    QColor m_borderColor;
+    float m_spacing = 1.0;
+    float m_lineWidth = 1.0;
 };
 
 #endif // LINEGRIDNODE_H

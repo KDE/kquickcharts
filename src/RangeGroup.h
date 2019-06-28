@@ -12,6 +12,7 @@ class RangeGroup : public QObject
     Q_PROPERTY(qreal from READ from WRITE setFrom NOTIFY fromChanged)
     Q_PROPERTY(qreal to READ to WRITE setTo NOTIFY toChanged)
     Q_PROPERTY(bool automatic READ automatic WRITE setAutomatic NOTIFY automaticChanged)
+    Q_PROPERTY(qreal distance READ distance NOTIFY rangeChanged)
 
 public:
     RangeGroup(QObject* parent = nullptr);
@@ -34,6 +35,7 @@ Q_SIGNALS:
     void toChanged();
     void automaticChanged();
     void rangeChanged();
+    void distanceChanged();
 
 private:
     qreal m_from = 0.0;
