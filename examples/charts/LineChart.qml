@@ -36,7 +36,7 @@ Kirigami.Page {
             Charts.GridLines {
                 anchors.fill: lineChart
 
-                spacing: width / (lineModel.count - 1);
+                chart: lineChart
 
                 major.frequency: 2
                 major.lineWidth: 2
@@ -50,15 +50,15 @@ Kirigami.Page {
             Charts.GridLines {
                 anchors.fill: lineChart
 
-                spacing: height / (yAxisLabels.source.itemCount - 1);
+                chart: lineChart
 
                 direction: Charts.GridLines.Vertical;
 
-                major.frequency: 2
+                major.count: 1
                 major.lineWidth: 2
                 major.color: Qt.rgba(0.8, 0.8, 0.8, 1.0)
 
-                minor.frequency: 1
+                minor.count: 3
                 minor.lineWidth: 1
                 minor.color: Qt.rgba(0.8, 0.8, 0.8, 1.0)
             }
@@ -83,11 +83,35 @@ Kirigami.Page {
                 anchors {
                     left: yAxisLabels.right
                     right: parent.right
-                    bottom: parent.bottom
+                    bottom: legendView.top
                 }
 
                 delegate: Label { text: Charts.AxisLabels.label }
                 source: Charts.ModelSource { model: lineModel; roleName: "label" }
+            }
+
+            ListView {
+                id: legendView
+
+                anchors {
+                    left: yAxisLabels.right
+                    right: parent.right
+                    bottom: parent.bottom
+                    bottomMargin: Kirigami.Units.smallSpacing
+                }
+                height: currentItem.height
+
+                model: Charts.LegendModel { chart: lineChart }
+
+                orientation: Qt.Horizontal;
+                boundsBehavior: ListView.StopAtBounds
+                spacing: Kirigami.Units.largeSpacing
+
+                delegate: Row {
+                    spacing: Kirigami.Units.smallSpacing
+                    Rectangle { color: model.color; height: parent.height; width: height }
+                    Label { text: model.name }
+                }
             }
 
             Charts.LineChart {
@@ -118,6 +142,7 @@ Kirigami.Page {
                 ]
 
                 lineColorSource: Charts.ArraySource { array: ["red", "green", "blue"] }
+                lineNameSource: Charts.ArraySource { array: ["Example 1", "Example 2", "Example 3"] }
             }
         }
 
