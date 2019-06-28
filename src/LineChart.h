@@ -45,6 +45,8 @@ public:
     qreal lineWidth() const;
     qreal fillOpacity() const;
 
+    int valueSourceCount() const;
+
 public Q_SLOTS:
     void setLineColorSource(ChartDataSource *source);
     void setLineNameSource(ChartDataSource *source);

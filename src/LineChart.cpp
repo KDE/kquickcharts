@@ -87,6 +87,11 @@ qreal LineChart::fillOpacity() const
     return d->fillOpacity;
 }
 
+int LineChart::valueSourceCount() const
+{
+    return d->valueSources.size();
+}
+
 void LineChart::setLineColorSource(ChartDataSource* source)
 {
     if(source == d->lineColorSource)
