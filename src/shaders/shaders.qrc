@@ -2,10 +2,15 @@
 <RCC version="1.0">
     <qresource prefix="/org.kde.quickcharts">
         <file>sdf.frag</file>
+        <file>sdf_core.frag</file>
         <file>uv.vert</file>
         <file>piechart.frag</file>
+        <file>piechart_core.frag</file>
         <file>piechart.vert</file>
+        <file>piechart_core.vert</file>
         <file>linechart.frag</file>
+        <file>linechart_core.frag</file>
         <file>linechart.vert</file>
+        <file>linechart_core.vert</file>
     </qresource>
 </RCC>

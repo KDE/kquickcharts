@@ -8,34 +8,36 @@
 // components. We also need to leave some room for the other uniforms.
 #define MAX_SEGMENTS 100
 
-uniform lowp float opacity;
-uniform lowp float innerDimension;
-uniform lowp vec2 aspect;
-uniform lowp vec4 backgroundColor;
+uniform float opacity;
+uniform float innerDimension;
+uniform vec2 aspect;
+uniform vec4 backgroundColor;
 
-uniform lowp vec2 triangles[MAX_SEGMENTS * 2];
-uniform lowp vec4 colors[MAX_SEGMENTS];
+uniform vec2 triangles[MAX_SEGMENTS * 2];
+uniform vec4 colors[MAX_SEGMENTS];
 uniform int segments[MAX_SEGMENTS];
 uniform int segmentCount;
 
-varying lowp vec2 uv;
+in vec2 uv;
 
-const lowp vec2 origin = vec2(0.0, 0.0);
-const lowp float lineSmooth = 0.001;
+out vec4 out_color;
+
+const vec2 origin = vec2(0.0, 0.0);
+const float lineSmooth = 0.001;
 
 void main()
 {
-    lowp vec2 point = uv * (1.0 + lineSmooth * 2.0) * aspect;
+    vec2 point = uv * (1.0 + lineSmooth * 2.0) * aspect;
 
-    lowp float thickness = (1.0 - innerDimension) / 2.0;
-    lowp float donut = sdf_annular(sdf_circle(point, innerDimension + thickness), thickness);
+    float thickness = (1.0 - innerDimension) / 2.0;
+    float donut = sdf_annular(sdf_circle(point, innerDimension + thickness), thickness);
 
-    lowp vec4 color = vec4(0.0);
-    lowp float totalSegments = sdf_null;
+    vec4 color = vec4(0.0);
+    float totalSegments = sdf_null;
     int index = 0;
 
     for (int i = 0; i < segmentCount && i < MAX_SEGMENTS; ++i) {
-        lowp float segment = sdf_null;
+        float segment = sdf_null;
         for(int j = 0; j < segments[i] && j < MAX_SEGMENTS; j++) {
             segment = sdf_union(segment, sdf_round(sdf_triangle(point, origin, triangles[index++], triangles[index++]), lineSmooth));
         }
@@ -44,8 +46,8 @@ void main()
     }
 
     // Finally, render an end segment with the background color.
-    lowp float segment = sdf_subtract(sdf_round(donut, lineSmooth), totalSegments);
+    float segment = sdf_subtract(sdf_round(donut, lineSmooth), totalSegments);
     color = sdf_render(segment, color, backgroundColor, lineSmooth);
 
-    gl_FragColor = color * opacity;
+    out_color = color * opacity;
 }
