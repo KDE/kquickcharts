@@ -1,5 +1,6 @@
 #include "GridLines.h"
 
+#include "XYChart.h"
 #include "scenegraph/LineGridNode.h"
 
 LinePropertiesGroup::LinePropertiesGroup(GridLines* parent)
@@ -66,6 +67,21 @@ void LinePropertiesGroup::setFrequency(int newFrequency)
     }
 
     m_frequency = newFrequency;
+    Q_EMIT propertiesChanged();
+}
+
+int LinePropertiesGroup::count() const
+{
+    return m_count;
+}
+
+void LinePropertiesGroup::setCount(int newCount)
+{
+    if (newCount == m_count) {
+        return;
+    }
+
+    m_count = newCount;
     Q_EMIT propertiesChanged();
 }
 
@@ -192,6 +208,10 @@ void GridLines::updateLines(LineGridNode *node, LinePropertiesGroup *properties)
     node->setVertical(d->direction == Direction::Vertical);
     node->setColor(properties->color());
     node->setLineWidth(properties->lineWidth());
+    if (properties->count() > 0) {
+        node->setSpacing(d->direction == Direction::Horizontal ? width() / (properties->count() + 1) : height() / (properties->count() + 1));
+    } else {
         node->setSpacing(d->spacing * properties->frequency());
+    }
     node->update();
 }

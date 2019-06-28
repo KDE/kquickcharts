@@ -16,6 +16,8 @@ class LinePropertiesGroup : public QObject
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY propertiesChanged)
     Q_PROPERTY(float lineWidth READ lineWidth WRITE setLineWidth NOTIFY propertiesChanged)
     Q_PROPERTY(int frequency READ frequency WRITE setFrequency NOTIFY propertiesChanged)
+    Q_PROPERTY(int count READ count WRITE setCount NOTIFY propertiesChanged)
+
 public:
     LinePropertiesGroup( GridLines *parent);
 
@@ -31,6 +33,9 @@ public:
     int frequency() const;
     void setFrequency(int newFrequency);
 
+    int count() const;
+    void setCount(int newCount);
+
     Q_SIGNAL void propertiesChanged();
 
 private:
@@ -39,6 +44,7 @@ private:
     QColor m_color = Qt::black;
     float m_lineWidth = 1.0;
     int m_frequency = 2;
+    int m_count = -1;
 };
 
 /**
