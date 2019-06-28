@@ -6,6 +6,7 @@
 #include "RangeGroup.h"
 #include "GridLines.h"
 #include "AxisLabels.h"
+#include "LegendModel.h"
 
 #include "datasource/ModelSource.h"
 #include "datasource/SingleValueSource.h"
@@ -41,4 +42,5 @@ void QuickChartsPlugin::registerTypes(const char *uri)
     qmlRegisterUncreatableType<LinePropertiesGroup>(uri, 1, 0, "LinePropertiesGroup", QStringLiteral("Used as a grouped property"));
     qmlRegisterType<AxisLabels>(uri, 1, 0, "AxisLabels");
     qmlRegisterUncreatableType<AxisLabelsAttached>(uri, 1, 0, "AxisLabelsAttached", QStringLiteral("Attached property"));
+    qmlRegisterType<LegendModel>(uri, 1, 0, "LegendModel");
 }

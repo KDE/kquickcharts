@@ -10,6 +10,7 @@ set(quickcharts_SRCS
 
     GridLines.cpp
     AxisLabels.cpp
+    LegendModel.cpp
 
     datasource/ChartDataSource.cpp
     datasource/ModelSource.cpp
