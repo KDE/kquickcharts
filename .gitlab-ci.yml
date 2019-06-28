@@ -20,7 +20,7 @@ linux-gcc-qt512:
   - "[ -e ecm ] || bash .install_ecm.sh"
   - mkdir -p build
   - cd build
-  - cmake .. -DCMAKE_INSTALL_PREFIX=../inst -DECM_DIR=$PWD/../ecm/share/ECM/cmake/
+  - cmake .. -DCMAKE_INSTALL_PREFIX=../inst -DBUILD_EXAMPLES=ON -DECM_DIR=$PWD/../ecm/share/ECM/cmake/
   - make
   - make install
   cache:
