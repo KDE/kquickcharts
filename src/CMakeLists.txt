@@ -25,6 +25,7 @@ set(quickcharts_SRCS
     scenegraph/LineChartNode.cpp
     scenegraph/LineChartMaterial.cpp
     scenegraph/LineSegmentNode.cpp
+    scenegraph/SDFShader.cpp
 )
 
 qt5_add_resources(quickcharts_QRC shaders/shaders.qrc)
