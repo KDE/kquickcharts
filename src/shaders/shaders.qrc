@@ -1,6 +1,9 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
     <qresource prefix="/org.kde.quickcharts">
+        <file>desktop_header.glsl</file>
+        <file>desktop_header_core.glsl</file>
+        <file>es_header.glsl</file>
         <file>sdf.frag</file>
         <file>sdf_core.frag</file>
         <file>uv.vert</file>

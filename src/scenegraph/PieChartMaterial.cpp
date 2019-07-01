@@ -82,11 +82,7 @@ void PieChartMaterial::setSegments(const QVector<int>& segments)
 
 PieChartShader::PieChartShader()
 {
-    setShaderSourceFile(QOpenGLShader::Vertex, QStringLiteral(":/org.kde.quickcharts/piechart.vert"));
-    setShaderSourceFiles(QOpenGLShader::Fragment, {
-        QStringLiteral(":/org.kde.quickcharts/sdf.frag"),
-        QStringLiteral(":/org.kde.quickcharts/piechart.frag")
-    });
+    setShaders(QStringLiteral("piechart.vert"), QStringLiteral("piechart.frag"));
 }
 
 PieChartShader::~PieChartShader()

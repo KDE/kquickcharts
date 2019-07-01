@@ -1,5 +1,3 @@
-#version 450
-
 uniform mat4 matrix;
 uniform float lineWidth;
 uniform float aspect;

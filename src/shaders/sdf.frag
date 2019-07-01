@@ -22,11 +22,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef GL_ES
-    #version 120
-#else
-    #extension GL_OES_standard_derivatives : enable
-#endif
+//if not GLES
+// include "desktop_header.glsl"
+//else
+// include "es_header.glsl"
 
 // A maximum point count to be used for sdf_polygon input arrays.
 // Unfortunately even function inputs require a fixed size at declaration time
@@ -96,6 +95,9 @@ lowp float sdf_triangle(in lowp vec2 point, in lowp vec2 p0, in lowp vec2 p1, in
 // \return The signed distance from point to triangle. If negative, point is
 //         inside the triangle.
 
+// Strictly speaking, GLES 2.0 doesn't support function array arguments (apparently), so our validation fails here.
+// But at least Mesa GLES 2.0 accepts it, so skip validation here instead.
+#if !defined(GL_ES) || !defined(VALIDATING)
 lowp float sdf_polygon(in lowp vec2 point, in lowp vec2[SDF_POLYGON_MAX_POINT_COUNT] vertices, in lowp int count)
 {
     lowp float d = dot(point - vertices[0], point - vertices[0]);
@@ -113,6 +115,7 @@ lowp float sdf_polygon(in lowp vec2 point, in lowp vec2[SDF_POLYGON_MAX_POINT_CO
     }
     return s * sqrt(d);
 }
+#endif
 
 /*********************
     Operators

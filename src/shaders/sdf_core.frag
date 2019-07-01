@@ -22,7 +22,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#version 450
+//include "desktop_header_core.glsl"
 
 // A maximum point count to be used for sdf_polygon input arrays.
 // Unfortunately even function inputs require a fixed size at declaration time
