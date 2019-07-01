@@ -5,6 +5,8 @@
 #include <QSGMaterialShader>
 #include <QColor>
 
+#include "SDFShader.h"
+
 class PieChartMaterial : public QSGMaterial
 {
 public:
@@ -40,7 +42,7 @@ private:
     QVector<int> m_segments;
 };
 
-class PieChartShader : public QSGMaterialShader
+class PieChartShader : public SDFShader
 {
 public:
     PieChartShader();

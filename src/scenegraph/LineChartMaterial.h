@@ -5,6 +5,8 @@
 #include <QSGMaterialShader>
 #include <QColor>
 
+#include "SDFShader.h"
+
 class LineChartMaterial : public QSGMaterial
 {
 public:
@@ -34,7 +36,7 @@ private:
     QVector<QVector2D> m_points;
 };
 
-class LineChartShader : public QSGMaterialShader
+class LineChartShader : public SDFShader
 {
 public:
     LineChartShader();
