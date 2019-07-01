@@ -1,5 +1,3 @@
-#version 450
-
 uniform highp mat4 matrix;
 
 in vec4 in_vertex;

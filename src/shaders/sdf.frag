@@ -22,11 +22,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef GL_ES
-    #version 120
-#else
-    #extension GL_OES_standard_derivatives : enable
-#endif
+//if not GLES
+// include "desktop_header.glsl"
+//else
+// include "es_header.glsl"
 
 // A maximum point count to be used for sdf_polygon input arrays.
 // Unfortunately even function inputs require a fixed size at declaration time
