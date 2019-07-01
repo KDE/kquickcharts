@@ -1,4 +1,4 @@
-#include "PieChartNode_p.h"
+#include "PieChartNode.h"
 
 #include <algorithm>
 
@@ -6,7 +6,7 @@
 #include <QSGGeometry>
 #include <cmath>
 
-#include "PieChartMaterial_p.h"
+#include "PieChartMaterial.h"
 
 static const qreal pi = std::acos(-1.0);
 static const qreal sectionSize = pi * 0.5;

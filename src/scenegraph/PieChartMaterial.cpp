@@ -1,4 +1,4 @@
-#include "PieChartMaterial_p.h"
+#include "PieChartMaterial.h"
 
 PieChartMaterial::PieChartMaterial()
 {
