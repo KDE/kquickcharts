@@ -16,7 +16,12 @@ void main()
 
     lowp vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
 
+#if !defined(GL_ES) || !defined(VALIDATING)
+// See sdf.frag line 98
     lowp float polygon = sdf_polygon(point, points, pointCount);
+#else
+    lowp float polygon = 0.0;
+#endif
 
     color = sdf_render(polygon, color, fillColor, 0.001);
 

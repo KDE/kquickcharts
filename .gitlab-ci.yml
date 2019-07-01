@@ -14,16 +14,24 @@ stages:
   - cmake .. -DCMAKE_CXX_COMPILER=clazy
   - make
 
+validate_shaders:
+    stage: check
+    script:
+    - bash scripts/validate_shaders.sh src/shaders
+    cache:
+        paths:
+        - glslang
+
 linux-gcc-qt512:
-  stage: build
-  script:
-  - "[ -e ecm ] || bash .install_ecm.sh"
-  - mkdir -p build
-  - cd build
-  - cmake .. -DCMAKE_INSTALL_PREFIX=../inst -DECM_DIR=$PWD/../ecm/share/ECM/cmake/
-  - make
-  - make install
-  cache:
-    paths:
-    - build
-    - ecm
+    stage: build
+    script:
+    - "[ -e ecm ] || bash .install_ecm.sh"
+    - mkdir -p build
+    - cd build
+    - cmake .. -DCMAKE_INSTALL_PREFIX=../inst -DECM_DIR=$PWD/../ecm/share/ECM/cmake/
+    - make
+    - make install
+    cache:
+        paths:
+        - build
+        - ecm
