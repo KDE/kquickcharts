@@ -4,9 +4,10 @@
 #include "XYChart.h"
 #include "LineChart.h"
 #include "RangeGroup.h"
-#include "GridLines.h"
-#include "AxisLabels.h"
-#include "LegendModel.h"
+
+#include "decorations/GridLines.h"
+#include "decorations/AxisLabels.h"
+#include "decorations/LegendModel.h"
 
 #include "datasource/ModelSource.h"
 #include "datasource/SingleValueSource.h"

@@ -8,9 +8,9 @@ set(quickcharts_SRCS
 
     RangeGroup.cpp
 
-    GridLines.cpp
-    AxisLabels.cpp
-    LegendModel.cpp
+    decorations/GridLines.cpp
+    decorations/AxisLabels.cpp
+    decorations/LegendModel.cpp
 
     datasource/ChartDataSource.cpp
     datasource/ModelSource.cpp
