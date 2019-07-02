@@ -14,19 +14,11 @@ class LineChart::Private
 public:
     Private(LineChart* qq) : q(qq) { }
 
-    static void appendSource(DataSourcesProperty *list, ChartDataSource *source);
-    static int sourceCount(DataSourcesProperty *list);
-    static ChartDataSource* source(DataSourcesProperty *list, int index);
-    static void clearSources(DataSourcesProperty *list);
-
     void updateLineNode(LineChartNode* node, const QColor& lineColor, ChartDataSource* valueSource);
     QVector<QVector2D> interpolate(const QVector<QVector2D> &points, qreal start, qreal end, qreal height);
 
     LineChart* q;
 
-    QVector<ChartDataSource*> valueSources;
-    ChartDataSource *lineColorSource = nullptr;
-    ChartDataSource *lineNameSource = nullptr;
     bool stacked = false;
     bool smooth = false;
     qreal lineWidth = 1.0;
@@ -40,31 +32,10 @@ public:
 LineChart::LineChart(QQuickItem* parent)
     : XYChart(parent), d(new Private{this})
 {
-    setFlag(ItemHasContents, true);
 }
 
 LineChart::~LineChart()
 {
-}
-
-ChartDataSource * LineChart::lineColorSource() const
-{
-    return d->lineColorSource;
-}
-
-ChartDataSource * LineChart::lineNameSource() const
-{
-    return d->lineNameSource;
-}
-
-QQmlListProperty<ChartDataSource> LineChart::valueSources()
-{
-    return QQmlListProperty<ChartDataSource>(this,
-                                             this,
-                                             &Private::appendSource,
-                                             &Private::sourceCount,
-                                             &Private::source,
-                                             &Private::clearSources);
 }
 
 bool LineChart::stacked() const
@@ -85,30 +56,6 @@ qreal LineChart::lineWidth() const
 qreal LineChart::fillOpacity() const
 {
     return d->fillOpacity;
-}
-
-int LineChart::valueSourceCount() const
-{
-    return d->valueSources.size();
-}
-
-void LineChart::setLineColorSource(ChartDataSource* source)
-{
-    if(source == d->lineColorSource)
-        return;
-
-    d->lineColorSource = source;
-    update();
-    Q_EMIT lineColorSourceChanged();
-}
-
-void LineChart::setLineNameSource(ChartDataSource* source)
-{
-    if (source == d->lineNameSource)
-        return;
-
-    d->lineNameSource = source;
-    Q_EMIT lineNameSourceChanged();
 }
 
 void LineChart::setStacked(bool stacked)
@@ -153,36 +100,6 @@ void LineChart::setFillOpacity(qreal opacity)
     Q_EMIT fillOpacityChanged();
 }
 
-void LineChart::insertValueSource(int position, ChartDataSource *source)
-{
-    // Avoid duplicates
-    if (d->valueSources.contains(source)) {
-        return;
-    }
-
-    d->valueSources.insert(position, source);
-    connect(source, &QObject::destroyed, this, [this, source]() {
-        removeValueSource(source);
-    });
-    QObject::connect(source, &ChartDataSource::dataChanged, this, &LineChart::onSourceDataChanged);
-    onSourceDataChanged();
-    Q_EMIT valueSourcesChanged();
-}
-
-void LineChart::removeValueSource(ChartDataSource *source)
-{
-    int i = d->valueSources.indexOf(source);
-
-    if (i < 0) {
-        return;
-    }
-    source->disconnect(this);
-    d->valueSources.removeAll(source);
-
-    onSourceDataChanged();
-    Q_EMIT valueSourcesChanged();
-}
-
 QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *data)
 {
     Q_UNUSED(data);
@@ -199,27 +116,35 @@ QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
     if (d->stacked)
         d->previousValues.clear();
 
-    for (int i = 0; i < d->valueSources.size(); ++i) {
+    const auto sources = valueSources();
+    for (int i = 0; i < sources.size(); ++i) {
         if(i >= node->childCount())
             node->appendChildNode(new LineChartNode{});
 
         auto lineNode = static_cast<LineChartNode*>(node->childAtIndex(i));
-        auto color = d->lineColorSource->item(i).value<QColor>();
-        d->updateLineNode(lineNode, color, d->valueSources.at(i));
+        auto color = colorSource()->item(i).value<QColor>();
+        d->updateLineNode(lineNode, color, sources.at(i));
     }
 
-    while (node->childCount() > d->valueSources.size()) {
+    while (node->childCount() > sources.size()) {
         node->removeChildNode(node->childAtIndex(node->childCount() - 1));
     }
 
     return node;
 }
 
+void LineChart::onDataChanged()
+{
+    d->rangeInvalid = true;
+    update();
+}
+
 void LineChart::updateAutomaticXRange(ComputedRange& range)
 {
     range.startX = 0;
     int maxX = -1;
-    for(auto valueSource : qAsConst(d->valueSources)) {
+    const auto sources = valueSources();
+    for(auto valueSource : sources) {
         maxX = qMax(maxX, valueSource->itemCount());
     }
     range.endX = maxX;
@@ -230,14 +155,15 @@ void LineChart::updateAutomaticYRange(ComputedRange& range)
     auto minY = std::numeric_limits<float>::max();
     auto maxY = std::numeric_limits<float>::min();
 
+    const auto sources = valueSources();
     if (!d->stacked) {
-        for (auto valueSource : qAsConst(d->valueSources)) {
+        for (auto valueSource : sources) {
             minY = qMin(minY, valueSource->minimum().toFloat());
             maxY = qMax(maxY, valueSource->maximum().toFloat());
         }
     } else {
         auto yDistance = 0.0;
-        for (auto valueSource : qAsConst(d->valueSources)) {
+        for (auto valueSource : sources) {
             minY = qMin(minY, valueSource->minimum().toFloat());
             yDistance += valueSource->maximum().toFloat();
         }
@@ -245,40 +171,6 @@ void LineChart::updateAutomaticYRange(ComputedRange& range)
     }
     range.startY = std::min(0.0f, minY);
     range.endY = std::max(0.0f, maxY);
-}
-
-void LineChart::onSourceDataChanged()
-{
-    d->rangeInvalid = true;
-    update();
-}
-
-void LineChart::Private::appendSource(LineChart::DataSourcesProperty *list, ChartDataSource* source)
-{
-    auto chart = reinterpret_cast<LineChart*>(list->data);
-    chart->d->valueSources.append(source);
-    QObject::connect(source, &ChartDataSource::dataChanged, chart, &LineChart::onSourceDataChanged);
-    chart->onSourceDataChanged();
-}
-
-int LineChart::Private::sourceCount(LineChart::DataSourcesProperty *list)
-{
-    return reinterpret_cast<LineChart*>(list->data)->d->valueSources.count();
-}
-
-ChartDataSource * LineChart::Private::source(LineChart::DataSourcesProperty* list, int index)
-{
-    return reinterpret_cast<LineChart*>(list->data)->d->valueSources.at(index);
-}
-
-void LineChart::Private::clearSources(LineChart::DataSourcesProperty* list)
-{
-    auto chart = reinterpret_cast<LineChart*>(list->data);
-    std::for_each(chart->d->valueSources.cbegin(), chart->d->valueSources.cend(), [chart](ChartDataSource* source) {
-        source->disconnect(chart);
-    });
-    chart->d->valueSources.clear();
-    chart->onSourceDataChanged();
 }
 
 void LineChart::Private::updateLineNode(LineChartNode* node, const QColor& lineColor, ChartDataSource* valueSource)
