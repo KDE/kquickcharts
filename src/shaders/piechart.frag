@@ -9,8 +9,8 @@
 #define MAX_SEGMENTS 100
 
 uniform lowp float opacity;
-uniform lowp float innerDimension;
-uniform lowp vec2 aspect;
+uniform lowp float innerRadius;
+uniform lowp float outerRadius;
 uniform lowp vec4 backgroundColor;
 
 uniform lowp vec2 triangles[MAX_SEGMENTS * 2];
@@ -25,10 +25,10 @@ const lowp float lineSmooth = 0.001;
 
 void main()
 {
-    lowp vec2 point = uv * (1.0 + lineSmooth * 2.0) * aspect;
+    lowp vec2 point = uv * (1.0 + lineSmooth * 2.0);
 
-    lowp float thickness = (1.0 - innerDimension) / 2.0;
-    lowp float donut = sdf_annular(sdf_circle(point, innerDimension + thickness), thickness);
+    lowp float thickness = outerRadius - innerRadius;
+    lowp float donut = sdf_annular(sdf_circle(point, innerRadius), thickness);
 
     lowp vec4 color = vec4(0.0);
     lowp float totalSegments = sdf_null;
