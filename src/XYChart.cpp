@@ -87,3 +87,37 @@ void XYChart::updateComputedRange()
     m_computedRange = result;
     Q_EMIT computedRangeChanged();
 }
+
+void XYChart::updateAutomaticXRange(ComputedRange& range)
+{
+    range.startX = 0;
+    int maxX = -1;
+    const auto sources = valueSources();
+    for(auto valueSource : sources) {
+        maxX = std::max(maxX, valueSource->itemCount());
+    }
+    range.endX = maxX;
+}
+
+void XYChart::updateAutomaticYRange(ComputedRange& range)
+{
+    auto minY = std::numeric_limits<float>::max();
+    auto maxY = std::numeric_limits<float>::min();
+
+    const auto sources = valueSources();
+    if (!m_stacked) {
+        for (auto valueSource : sources) {
+            minY = std::min(minY, valueSource->minimum().toFloat());
+            maxY = std::max(maxY, valueSource->maximum().toFloat());
+        }
+    } else {
+        auto yDistance = 0.0;
+        for (auto valueSource : sources) {
+            minY = std::min(minY, valueSource->minimum().toFloat());
+            yDistance += valueSource->maximum().toFloat();
+        }
+        maxY = minY + yDistance;
+    }
+    range.startY = std::min(0.0f, minY);
+    range.endY = std::max(0.0f, maxY);
+}

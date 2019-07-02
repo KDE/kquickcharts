@@ -55,8 +55,6 @@ Q_SIGNALS:
 protected:
     QSGNode *updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *data) override;
     void onDataChanged() override;
-    void updateAutomaticXRange(ComputedRange &range) override;
-    void updateAutomaticYRange(ComputedRange &range) override;
 
 private:
 

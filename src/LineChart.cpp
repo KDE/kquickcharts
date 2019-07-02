@@ -139,40 +139,6 @@ void LineChart::onDataChanged()
     update();
 }
 
-void LineChart::updateAutomaticXRange(ComputedRange& range)
-{
-    range.startX = 0;
-    int maxX = -1;
-    const auto sources = valueSources();
-    for(auto valueSource : sources) {
-        maxX = qMax(maxX, valueSource->itemCount());
-    }
-    range.endX = maxX;
-}
-
-void LineChart::updateAutomaticYRange(ComputedRange& range)
-{
-    auto minY = std::numeric_limits<float>::max();
-    auto maxY = std::numeric_limits<float>::min();
-
-    const auto sources = valueSources();
-    if (!d->stacked) {
-        for (auto valueSource : sources) {
-            minY = qMin(minY, valueSource->minimum().toFloat());
-            maxY = qMax(maxY, valueSource->maximum().toFloat());
-        }
-    } else {
-        auto yDistance = 0.0;
-        for (auto valueSource : sources) {
-            minY = qMin(minY, valueSource->minimum().toFloat());
-            yDistance += valueSource->maximum().toFloat();
-        }
-        maxY = minY + yDistance;
-    }
-    range.startY = std::min(0.0f, minY);
-    range.endY = std::max(0.0f, maxY);
-}
-
 void LineChart::Private::updateLineNode(LineChartNode* node, const QColor& lineColor, ChartDataSource* valueSource)
 {
     auto fillColor = lineColor;

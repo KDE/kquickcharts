@@ -60,8 +60,8 @@ public:
 
 protected:
     virtual void updateComputedRange();
-    virtual void updateAutomaticXRange(ComputedRange &range) = 0;
-    virtual void updateAutomaticYRange(ComputedRange &range) = 0;
+    virtual void updateAutomaticXRange(ComputedRange &range);
+    virtual void updateAutomaticYRange(ComputedRange &range);
 
 private:
     RangeGroup* m_xRange = nullptr;
