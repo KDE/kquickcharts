@@ -5,8 +5,7 @@
 
 #include "XYChart.h"
 
-class RangeGroup;
-class ChartDataSource;
+class LineChartNode;
 
 /**
  * @todo write docs
@@ -15,39 +14,24 @@ class LineChart : public XYChart
 {
     Q_OBJECT
 
-    Q_PROPERTY(bool stacked READ stacked WRITE setStacked NOTIFY stackedChanged)
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
     Q_PROPERTY(qreal lineWidth READ lineWidth WRITE setLineWidth NOTIFY lineWidthChanged)
     Q_PROPERTY(qreal fillOpacity READ fillOpacity WRITE setFillOpacity NOTIFY fillOpacityChanged)
 
 public:
-
-
-
-    /**
-     * Default constructor
-     */
     LineChart(QQuickItem *parent = nullptr);
-
-    /**
-     * Destructor
-     */
     ~LineChart();
 
-    bool stacked() const;
     bool smooth() const;
     qreal lineWidth() const;
     qreal fillOpacity() const;
 
-
 public Q_SLOTS:
-    void setStacked(bool stacked);
     void setSmooth(bool smooth);
     void setLineWidth(qreal width);
     void setFillOpacity(qreal opacity);
 
 Q_SIGNALS:
-    void stackedChanged();
     void smoothChanged();
     void lineWidthChanged();
     void fillOpacityChanged();
@@ -57,9 +41,13 @@ protected:
     void onDataChanged() override;
 
 private:
+    void updateLineNode(LineChartNode *node, const QColor& lineColor, ChartDataSource *valueSource);
 
-    class Private;
-    const std::unique_ptr<Private> d;
+    bool m_smooth = false;
+    qreal m_lineWidth = 1.0;
+    qreal m_fillOpacity = 0.0;
+    bool m_rangeInvalid = true;
+    QVector<QVector2D> m_previousValues;
 };
 
 #endif // LINECHART_H
