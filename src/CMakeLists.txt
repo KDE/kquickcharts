@@ -2,8 +2,9 @@
 set(quickcharts_SRCS
     ChartsPlugin.cpp
 
-    PieChart.cpp
+    Chart.cpp
     XYChart.cpp
+    PieChart.cpp
     LineChart.cpp
 
     RangeGroup.cpp
