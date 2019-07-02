@@ -23,6 +23,7 @@ class XYChart : public Chart
     Q_PROPERTY(RangeGroup* xRange READ xRange CONSTANT)
     Q_PROPERTY(RangeGroup* yRange READ yRange CONSTANT)
     Q_PROPERTY(Direction direction READ direction WRITE setDirection NOTIFY directionChanged)
+    Q_PROPERTY(bool stacked READ stacked WRITE setStacked NOTIFY stackedChanged)
 
 public:
     enum class Direction {
@@ -45,9 +46,14 @@ public:
 
     virtual RangeGroup *xRange() const;
     virtual RangeGroup *yRange() const;
+
     virtual XYChart::Direction direction() const;
     Q_SLOT virtual void setDirection(XYChart::Direction newDirection);
     Q_SIGNAL void directionChanged();
+
+    bool stacked() const;
+    Q_SLOT void setStacked(bool newStacked);
+    Q_SIGNAL void stackedChanged();
 
     const ComputedRange computedRange() const;
     Q_SIGNAL void computedRangeChanged();
@@ -61,6 +67,7 @@ private:
     RangeGroup* m_xRange = nullptr;
     RangeGroup* m_yRange = nullptr;
     Direction m_direction = Direction::ZeroAtStart;
+    bool m_stacked = false;
     ComputedRange m_computedRange;
 };
 

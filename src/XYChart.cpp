@@ -1,6 +1,7 @@
 #include "XYChart.h"
 
 #include "RangeGroup.h"
+#include "datasource/ChartDataSource.h"
 
 XYChart::XYChart(QQuickItem* parent)
     : Chart(parent)
@@ -37,8 +38,26 @@ void XYChart::setDirection(XYChart::Direction newDirection)
     }
 
     m_direction = newDirection;
+    onDataChanged();
     Q_EMIT directionChanged();
 }
+
+bool XYChart::stacked() const
+{
+    return m_stacked;
+}
+
+void XYChart::setStacked(bool newStacked)
+{
+    if (newStacked == m_stacked) {
+        return;
+    }
+
+    m_stacked = newStacked;
+    onDataChanged();
+    Q_EMIT stackedChanged();
+}
+
 
 const ComputedRange XYChart::computedRange() const
 {
