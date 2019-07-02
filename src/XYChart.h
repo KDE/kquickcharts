@@ -1,7 +1,7 @@
 #ifndef XYCHART_H
 #define XYCHART_H
 
-#include <QQuickItem>
+#include "Chart.h"
 
 class RangeGroup;
 
@@ -17,7 +17,7 @@ struct ComputedRange {
 /**
  * @todo write docs
  */
-class XYChart : public QQuickItem
+class XYChart : public Chart
 {
     Q_OBJECT
     Q_PROPERTY(RangeGroup* xRange READ xRange CONSTANT)

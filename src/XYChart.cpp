@@ -3,7 +3,7 @@
 #include "RangeGroup.h"
 
 XYChart::XYChart(QQuickItem* parent)
-    : QQuickItem(parent)
+    : Chart(parent)
 {
     m_xRange = new RangeGroup{this};
     connect(m_xRange, &RangeGroup::rangeChanged, this, &XYChart::updateComputedRange);
