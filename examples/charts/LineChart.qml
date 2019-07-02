@@ -141,8 +141,8 @@ Kirigami.Page {
                     Charts.ModelSource { roleName: "value3"; model: lineModel }
                 ]
 
-                lineColorSource: Charts.ArraySource { array: ["red", "green", "blue"] }
-                lineNameSource: Charts.ArraySource { array: ["Example 1", "Example 2", "Example 3"] }
+                colorSource: Charts.ArraySource { array: ["red", "green", "blue"] }
+                nameSource: Charts.ArraySource { array: ["Example 1", "Example 2", "Example 3"] }
             }
         }
 
