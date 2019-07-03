@@ -59,6 +59,7 @@ public:
 
 protected:
     Q_SLOT virtual void onDataChanged() = 0;
+    void componentComplete() override;
 
 private:
     static void appendSource(DataSourcesProperty *list, ChartDataSource *source);

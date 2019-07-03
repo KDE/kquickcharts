@@ -111,6 +111,12 @@ void Chart::removeValueSource(QObject* source)
     removeValueSource(m_valueSources.indexOf(qobject_cast<ChartDataSource *>(source)));
 }
 
+void Chart::componentComplete()
+{
+    QQuickItem::componentComplete();
+    onDataChanged();
+}
+
 void Chart::appendSource(Chart::DataSourcesProperty* list, ChartDataSource* source)
 {
     auto chart = reinterpret_cast<Chart*>(list->data);
