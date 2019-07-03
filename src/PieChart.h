@@ -80,7 +80,7 @@ protected:
 
 private:
     std::unique_ptr<RangeGroup> m_range;
-    bool m_filled = true;
+    bool m_filled = false;
     qreal m_thickness = 10.0;
     qreal m_spacing = 0.0;
     QColor m_backgroundColor = Qt::transparent;
@@ -88,11 +88,6 @@ private:
 
     QVector<QVector<qreal>> m_sections;
     QVector<QVector<QColor>> m_colors;
-
-//     void updateData();
-
-//     class Private;
-//     const std::unique_ptr<Private> d;
 };
 
 #endif // PIECHART_H
