@@ -153,6 +153,12 @@ void PieChartNode::updateTriangles()
         }
     }
 
+    if (m_sections.size() == 1 && qFuzzyCompare(m_sections.at(0), 0.0)) {
+        trianglePoints.clear();
+        colors.clear();
+        segments.clear();
+    }
+
     m_material->setTriangles(trianglePoints);
     m_material->setColors(colors);
     m_material->setSegments(segments);

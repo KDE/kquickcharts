@@ -160,11 +160,11 @@ void PieChart::onDataChanged()
     m_colors.clear();
 
     const auto sources = valueSources();
+    const auto colors = colorSource();
 
-    if (!colorSource() || sources.isEmpty() || !m_range->isValid())
+    if (!colors || sources.isEmpty() || !m_range->isValid())
         return;
 
-    const auto colors = colorSource();
     auto colorIndex = 0;
 
     for(auto source : sources) {
@@ -188,8 +188,10 @@ void PieChart::onDataChanged()
             colorIndex++;
         }
 
-        if (qFuzzyCompare(total, 0.0))
-            continue;
+        if (qFuzzyCompare(total, 0.0)) {
+            m_sections << QVector<qreal>{ 0.0 };
+            m_colors << QVector<QColor>{ colors->item(colorIndex++).value<QColor>() };
+        }
 
         qreal max = total;
 
@@ -198,7 +200,7 @@ void PieChart::onDataChanged()
         }
 
         for (auto& value : sections) {
-            value = value / max;
+            value = value / (qFuzzyCompare(max, 0.0) ? 1.0 : max);
         }
 
         m_sections << sections;
