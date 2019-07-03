@@ -106,8 +106,8 @@ void LegendModel::update()
     ChartDataSource *colorSource = m_chart->colorSource();
     ChartDataSource *nameSource = m_chart->nameSource();
 
-    m_connections.push_back(connect(m_chart, &PieChart::colorSourceChanged, this, &LegendModel::queueUpdate, Qt::UniqueConnection));
-    m_connections.push_back(connect(m_chart, &PieChart::nameSourceChanged, this, &LegendModel::queueUpdate, Qt::UniqueConnection));
+    m_connections.push_back(connect(m_chart, &Chart::colorSourceChanged, this, &LegendModel::queueUpdate, Qt::UniqueConnection));
+    m_connections.push_back(connect(m_chart, &Chart::nameSourceChanged, this, &LegendModel::queueUpdate, Qt::UniqueConnection));
 
     int itemCount = m_chart->valueSources().count();
     if (m_sourceIndex > 0) {
