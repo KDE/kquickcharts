@@ -93,8 +93,6 @@ void LineSegmentNode::updatePoints()
     QVector<QVector2D> points;
     points.reserve(m_values.size() + 6);
 
-    qreal currentX = m_lineWidth;
-
     points << QVector2D{0.0, 0.0};
     points << QVector2D{-0.5, 0.0};
     points << QVector2D(-0.5, m_values[0].y() * m_aspect);
