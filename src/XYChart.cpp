@@ -3,6 +3,23 @@
 #include "RangeGroup.h"
 #include "datasource/ChartDataSource.h"
 
+void calculateStackedYRange(XYChart *chart, ComputedRange &range, float &minY, float &maxY)
+{
+    auto sources = chart->valueSources();
+
+    for (auto source : sources) {
+        minY = std::min(minY, source->minimum().toFloat());
+    }
+
+    for (int i = range.startX; i < range.endX; ++i) {
+        float yDistance = 0.0;
+        for (auto source : sources) {
+            yDistance += source->item(i).toFloat();
+        }
+        maxY = std::max(maxY, minY + yDistance);
+    }
+}
+
 XYChart::XYChart(QQuickItem* parent)
     : Chart(parent)
 {
@@ -111,13 +128,14 @@ void XYChart::updateAutomaticYRange(ComputedRange& range)
             maxY = std::max(maxY, valueSource->maximum().toFloat());
         }
     } else {
-        auto yDistance = 0.0;
-        for (auto valueSource : sources) {
-            minY = std::min(minY, valueSource->minimum().toFloat());
-            yDistance += valueSource->maximum().toFloat();
-        }
-        maxY = minY + yDistance;
+        calculateStackedYRange(this, range, minY, maxY);
     }
     range.startY = std::min(0.0f, minY);
     range.endY = std::max(0.0f, maxY);
+}
+
+QDebug operator<<(QDebug debug, const ComputedRange& range)
+{
+    debug << "Range: startX" << range.startX << "endX" << range.endX << "distance" << range.distanceX << "startY" << range.startY << "endY" << range.endY << "distance" << range.distanceY;
+    return debug;
 }

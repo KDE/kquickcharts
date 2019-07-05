@@ -71,4 +71,6 @@ private:
     ComputedRange m_computedRange;
 };
 
+QDebug operator<<(QDebug debug, const ComputedRange &range);
+
 #endif // XYCHART_H
