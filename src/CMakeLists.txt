@@ -6,6 +6,7 @@ set(quickcharts_SRCS
     XYChart.cpp
     PieChart.cpp
     LineChart.cpp
+    BarChart.cpp
 
     RangeGroup.cpp
 
@@ -27,6 +28,7 @@ set(quickcharts_SRCS
     scenegraph/LineChartMaterial.cpp
     scenegraph/LineSegmentNode.cpp
     scenegraph/SDFShader.cpp
+    scenegraph/BarChartNode.cpp
 )
 
 qt5_add_resources(quickcharts_QRC shaders/shaders.qrc)
