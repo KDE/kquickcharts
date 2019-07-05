@@ -8,10 +8,10 @@ import org.kde.kquickcontrols 2.0
 import org.kde.quickcharts 1.0 as Charts
 
 Kirigami.Page {
-    title: "Line Chart"
+    title: "Bar Chart"
 
     ListModel {
-        id: lineModel;
+        id: barModel;
         dynamicRoles: true;
 
         Component.onCompleted: {
@@ -87,7 +87,7 @@ Kirigami.Page {
                 }
 
                 delegate: Label { text: Charts.AxisLabels.label }
-                source: Charts.ModelSource { model: lineModel; roleName: "label" }
+                source: Charts.ModelSource { model: barModel; roleName: "label" }
             }
 
             ListView {
@@ -136,9 +136,9 @@ Kirigami.Page {
                 }
 
                 valueSources: [
-                    Charts.ModelSource { roleName: "value1"; model: lineModel },
-                    Charts.ModelSource { roleName: "value2"; model: lineModel },
-                    Charts.ModelSource { roleName: "value3"; model: lineModel }
+                    Charts.ModelSource { roleName: "value1"; model: barModel },
+                    Charts.ModelSource { roleName: "value2"; model: barModel },
+                    Charts.ModelSource { roleName: "value3"; model: barModel }
                 ]
 
                 barWidth: 10
@@ -156,8 +156,8 @@ Kirigami.Page {
         }
 
         RowLayout {
-            Button { text: "Add Item"; onClicked: lineModel.append({label: "New", value1: 0, value2: 0, value3: 0}) }
-            Button { text: "Remove Item"; onClicked: lineModel.remove(lineModel.count - 1)}
+            Button { text: "Add Item"; onClicked: barModel.append({label: "New", value1: 0, value2: 0, value3: 0}) }
+            Button { text: "Remove Item"; onClicked: barModel.remove(barModel.count - 1)}
             Label { text: "Bar Width" }
             SpinBox { from: 0; to: 1000; value: barChart.barWidth; onValueModified: barChart.barWidth = value; }
             Label { text: "Bar Spacing" }
@@ -172,7 +172,7 @@ Kirigami.Page {
             ScrollView {
                 anchors.fill: parent
                 ListView {
-                    model: lineModel;
+                    model: barModel;
                     delegate: Kirigami.BasicListItem {
                         width: ListView.view.width
                         height: Kirigami.Units.gridUnit * 2 + Kirigami.Units.smallSpacing
@@ -181,7 +181,7 @@ Kirigami.Page {
                             TextField {
                                 Layout.preferredWidth: 75
                                 text: model.label;
-                                onEditingFinished: lineModel.setProperty(index, "label", text)
+                                onEditingFinished: barModel.setProperty(index, "label", text)
                             }
                             Label { text: "Value 1" }
                             SpinBox {
@@ -189,7 +189,7 @@ Kirigami.Page {
                                 from: -10000; to: 10000;
                                 stepSize: 1;
                                 value: model.value1;
-                                onValueModified: lineModel.setProperty(index, "value1", value)
+                                onValueModified: barModel.setProperty(index, "value1", value)
                             }
                             Label { text: "Value 2" }
                             SpinBox {
@@ -197,7 +197,7 @@ Kirigami.Page {
                                 from: -10000; to: 10000;
                                 stepSize: 1;
                                 value: model.value2;
-                                onValueModified: lineModel.setProperty(index, "value2", value)
+                                onValueModified: barModel.setProperty(index, "value2", value)
                             }
                             Label { text: "Value 3" }
                             SpinBox {
@@ -205,7 +205,7 @@ Kirigami.Page {
                                 from: -10000; to: 10000;
                                 stepSize: 1;
                                 value: model.value3;
-                                onValueModified: lineModel.setProperty(index, "value3", value)
+                                onValueModified: barModel.setProperty(index, "value3", value)
                             }
                         }
                     }
