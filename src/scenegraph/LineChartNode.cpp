@@ -23,7 +23,6 @@ void LineChartNode::setRect(const QRectF &rect)
 
     m_rect = rect;
     m_aspect = m_rect.height() / m_rect.width();
-    std::for_each(m_segments.begin(), m_segments.end(), [this](LineSegmentNode* node) { node->setAspect(m_aspect); } );
     updatePoints();
 }
 
@@ -33,7 +32,9 @@ void LineChartNode::setLineWidth(float width)
         return;
 
     m_lineWidth = width;
-    std::for_each(m_segments.cbegin(), m_segments.cend(), [this](LineSegmentNode* node) { node->setLineWidth(m_lineWidth / m_rect.width()); });
+    std::for_each(m_segments.cbegin(), m_segments.cend(), [this](LineSegmentNode* node) {
+        node->setLineWidth((m_lineWidth - 2.0) / (std::min(m_rect.width(), m_rect.height()) * 4.0));
+    });
 }
 
 void LineChartNode::setLineColor(const QColor& color)
@@ -92,12 +93,16 @@ void LineChartNode::updatePoints()
         auto segmentWidth = segmentPoints.last().x() - currentX;
         auto rect = QRectF(currentX, m_rect.top(), segmentWidth, m_rect.height());
 
-        currentX += segmentWidth;
         segment->setRect(rect);
-        segment->setAspect(m_aspect);
-        segment->setLineWidth(m_lineWidth / m_rect.width());
+        segment->setAspect(segmentWidth / m_rect.width(), m_aspect);
+        segment->setLineWidth((m_lineWidth - 2.0) / (std::min(m_rect.width(), m_rect.height()) * 4.0));
         segment->setLineColor(m_lineColor);
         segment->setFillColor(m_fillColor);
         segment->setValues(segmentPoints);
+        segment->setFarLeft(m_values.at(std::max(0, pointStart - pointsPerSegment - 1)));
+        segment->setFarRight(m_values.at(std::min(m_values.count() - 1, pointStart + 1)));
+        segment->updatePoints();
+
+        currentX += segmentWidth;
     }
 }

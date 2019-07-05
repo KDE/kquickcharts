@@ -33,22 +33,25 @@ void LineSegmentNode::setRect(const QRectF &rect)
         return;
 
     m_rect = rect;
-    QSGGeometry::updateTexturedRectGeometry(m_geometry, m_rect, QRectF { 0, 0, 1, 1 });
+    QSGGeometry::updateTexturedRectGeometry(m_geometry, m_rect, QRectF { 0.0, 0, m_xAspect, 1 });
     markDirty(QSGNode::DirtyGeometry);
 
     updatePoints();
 }
 
-void LineSegmentNode::setAspect(float aspect)
+
+void LineSegmentNode::setAspect(float xAspect, float yAspect)
 {
-    if(qFuzzyCompare(aspect, m_aspect))
+    if(qFuzzyCompare(xAspect, m_xAspect) && qFuzzyCompare(yAspect, m_yAspect))
         return;
 
-    m_aspect = aspect;
-    m_material->setAspect(m_aspect);
+    m_yAspect = yAspect;
+    m_material->setAspect(m_yAspect);
     markDirty(QSGNode::DirtyMaterial);
 
-    updatePoints();
+    m_xAspect = xAspect;
+    QSGGeometry::updateTexturedRectGeometry(m_geometry, m_rect, QRectF { 0.0, 0, m_xAspect, 1 });
+    markDirty(QSGNode::DirtyGeometry);
 }
 
 void LineSegmentNode::setLineWidth(float width)
@@ -82,7 +85,16 @@ void LineSegmentNode::setFillColor(const QColor& color)
 void LineSegmentNode::setValues(const QVector<QVector2D>& values)
 {
     m_values = values;
-    updatePoints();
+}
+
+void LineSegmentNode::setFarLeft(const QVector2D& value)
+{
+    m_farLeft = value;
+}
+
+void LineSegmentNode::setFarRight(const QVector2D& value)
+{
+    m_farRight = value;
 }
 
 void LineSegmentNode::updatePoints()
@@ -93,17 +105,30 @@ void LineSegmentNode::updatePoints()
     QVector<QVector2D> points;
     points.reserve(m_values.size() + 6);
 
-    points << QVector2D{0.0, 0.0};
-    points << QVector2D{-0.5, 0.0};
-    points << QVector2D(-0.5, m_values[0].y() * m_aspect);
+    points << QVector2D{0.0,  -0.5};
+    points << QVector2D{-0.5, -0.5};
 
-    for(auto value : qAsConst(m_values)) {
-        points << QVector2D((value.x() - m_rect.left()) / m_rect.width(), value.y() * m_aspect);
+    if (!m_farLeft.isNull()) {
+        points << QVector2D(-0.5, m_farLeft.y() * m_yAspect);
+        points << QVector2D(((m_farLeft.x() - m_rect.left()) / m_rect.width()) * m_xAspect, m_farLeft.y() * m_yAspect);
+    } else {
+        points << QVector2D(-0.5, m_values[0].y() * m_yAspect);
     }
 
-    points << QVector2D(1.5, points.last().y());
-    points << QVector2D{1.5, 0.0};
-    points << QVector2D{0.0, 0.0};
+    for(auto value : qAsConst(m_values)) {
+        auto x = ((value.x() - m_rect.left()) / m_rect.width()) * m_xAspect;
+        points << QVector2D(x, value.y() * m_yAspect);
+    }
+
+    if (!m_farRight.isNull()) {
+        points << QVector2D(((m_farRight.x() - m_rect.left()) / m_rect.width()) * m_xAspect, m_farRight.y() * m_yAspect);
+        points << QVector2D(1.5, m_farRight.y() * m_yAspect);
+    } else {
+        points << QVector2D(1.5, points.last().y());
+    }
+
+    points << QVector2D{1.5, -0.5};
+    points << QVector2D{0.0, -0.5};
 
     m_material->setPoints(points);
     markDirty(QSGNode::DirtyMaterial);
