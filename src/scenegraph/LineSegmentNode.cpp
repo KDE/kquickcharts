@@ -2,7 +2,6 @@
 
 #include <QColor>
 #include <QSGGeometry>
-#include <cmath>
 
 #include "LineChartMaterial.h"
 
@@ -56,11 +55,13 @@ void LineSegmentNode::setAspect(float xAspect, float yAspect)
 
 void LineSegmentNode::setLineWidth(float width)
 {
+    width = std::max(width, 0.001f);
+
     if(qFuzzyCompare(width, m_lineWidth))
         return;
 
     m_lineWidth = width;
-    m_material->setLineWidth(width);
+    m_material->setLineWidth(m_lineWidth);
     markDirty(QSGNode::DirtyMaterial);
 }
 
