@@ -67,8 +67,8 @@ private:
     static ChartDataSource *source(DataSourcesProperty *list, int index);
     static void clearSources(DataSourcesProperty *list);
 
-    ChartDataSource *m_nameSource;
-    ChartDataSource *m_colorSource;
+    ChartDataSource *m_nameSource = nullptr;
+    ChartDataSource *m_colorSource = nullptr;
     QVector<ChartDataSource *> m_valueSources;
 };
 
