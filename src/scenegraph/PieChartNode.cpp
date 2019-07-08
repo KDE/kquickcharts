@@ -55,18 +55,37 @@ void PieChartNode::setRect(const QRectF &rect)
     aspect.setY(rect.height() / minDimension);
     m_material->setAspectRatio(aspect);
 
-    m_material->setInnerDimension((minDimension / 2 - m_borderWidth) / (minDimension / 2));
+    m_material->setInnerRadius(m_innerRadius / minDimension);
+    m_material->setOuterRadius(m_outerRadius / minDimension);
+
     markDirty(QSGNode::DirtyMaterial);
 }
 
-void PieChartNode::setBorderWidth(qreal width)
+void PieChartNode::setInnerRadius(qreal radius)
 {
-    if (qFuzzyCompare(width, m_borderWidth))
+    if (qFuzzyCompare(radius, m_innerRadius)) {
         return;
+    }
 
-    m_borderWidth = width;
-    auto minDimension = qMin(m_rect.height(), m_rect.width()) / 2;
-    m_material->setInnerDimension((minDimension - m_borderWidth) / minDimension);
+    m_innerRadius = radius;
+
+    auto minDimension = qMin(m_rect.width(), m_rect.height());
+    m_material->setInnerRadius(m_innerRadius / minDimension);
+
+    markDirty(QSGNode::DirtyMaterial);
+}
+
+void PieChartNode::setOuterRadius(qreal radius)
+{
+    if (qFuzzyCompare(radius, m_outerRadius)) {
+        return;
+    }
+
+    m_outerRadius = radius;
+
+    auto minDimension = qMin(m_rect.width(), m_rect.height());
+    m_material->setOuterRadius(m_outerRadius / minDimension);
+
     markDirty(QSGNode::DirtyMaterial);
 }
 
@@ -132,6 +151,12 @@ void PieChartNode::updateTriangles()
                 break;
             }
         }
+    }
+
+    if (m_sections.size() == 1 && qFuzzyCompare(m_sections.at(0), 0.0)) {
+        trianglePoints.clear();
+        colors.clear();
+        segments.clear();
     }
 
     m_material->setTriangles(trianglePoints);

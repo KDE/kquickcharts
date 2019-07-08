@@ -3,6 +3,7 @@
 
 #include <QSGGeometryNode>
 #include <QColor>
+#include <QVector2D>
 
 class QRectF;
 class LineChartMaterial;
@@ -26,18 +27,23 @@ public:
     ~LineSegmentNode();
 
     void setRect(const QRectF &rect);
-    void setAspect(float aspect);
+    void setAspect(float xAspect, float yAspect);
     void setLineWidth(float width);
     void setLineColor(const QColor& color);
     void setFillColor(const QColor& color);
     void setValues(const QVector<QVector2D>& values);
+    void setFarLeft(const QVector2D &value);
+    void setFarRight(const QVector2D &value);
 
-private:
     void updatePoints();
 
+private:
     QRectF m_rect;
     float m_lineWidth = 0.0;
-    float m_aspect = 1.0;
+    float m_xAspect = 1.0;
+    float m_yAspect = 1.0;
+    QVector2D m_farLeft;
+    QVector2D m_farRight;
     QVector<QVector2D> m_values;
     QSGGeometry *m_geometry = nullptr;
     LineChartMaterial *m_material = nullptr;

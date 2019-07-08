@@ -17,7 +17,8 @@ public:
     QSGMaterialShader *createShader() const override;
 
     QVector2D aspectRatio() const;
-    float innerDimension() const;
+    float innerRadius() const;
+    float outerRadius() const;
     QColor backgroundColor() const;
 
     QVector<QVector2D> triangles() const;
@@ -25,7 +26,8 @@ public:
     QVector<int> segments() const;
 
     void setAspectRatio(const QVector2D &aspect);
-    void setInnerDimension(float dimension);
+    void setInnerRadius(float radius);
+    void setOuterRadius(float radius);
     void setBackgroundColor(const QColor &color);
 
     void setTriangles(const QVector<QVector2D> &triangles);
@@ -34,7 +36,8 @@ public:
 
 private:
     QVector2D m_aspectRatio;
-    float m_innerDimension = 0.0f;
+    float m_innerRadius = 0.0f;
+    float m_outerRadius = 0.0f;
     QColor m_backgroundColor;
 
     QVector<QVector2D> m_triangles;
@@ -56,7 +59,8 @@ public:
 private:
     int m_matrixLocation = 0;
     int m_opacityLocation = 0;
-    int m_innerDimensionLocation = 0;
+    int m_innerRadiusLocation = 0;
+    int m_outerRadiusLocation = 0;
     int m_aspectLocation = 0;
     int m_backgroundColorLocation = 0;
     int m_trianglesLocation = 0;

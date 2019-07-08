@@ -13,7 +13,7 @@ LineGridNode::LineGridNode()
     m_material->setColor(QColor(255,0,0,255));
     setMaterial(m_material);
 
-    setFlags(QSGNode::OwnsGeometry | QSGNode::OwnsMaterial | QSGNode::UsePreprocess);
+    setFlags(QSGNode::OwnsGeometry | QSGNode::OwnsMaterial);
 }
 
 LineGridNode::~LineGridNode()

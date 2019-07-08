@@ -62,8 +62,9 @@ Kirigami.Page {
 
                 valueSources: Charts.ModelSource { roleName: "value"; model: lineModel }
 
+                colorSource: Charts.SingleValueSource { value: "darkRed" }
+
                 lineWidth: 2
-                lineColorSource: Charts.SingleValueSource { value: "darkRed" }
                 fillOpacity: 0.2
             }
         }

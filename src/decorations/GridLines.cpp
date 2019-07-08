@@ -4,7 +4,7 @@
 #include "scenegraph/LineGridNode.h"
 
 LinePropertiesGroup::LinePropertiesGroup(GridLines* parent)
-    : QObject()
+    : QObject(parent)
 {
     m_parent = parent;
 }

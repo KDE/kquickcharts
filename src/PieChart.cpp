@@ -7,29 +7,27 @@
 #include "datasource/ChartDataSource.h"
 #include "RangeGroup.h"
 
-class PieChart::Private
-{
-public:
-    RangeGroup *range = nullptr;
-    qreal borderWidth = -1.0;
-
-    ChartDataSource *valueSource = nullptr;
-    ChartDataSource *colorSource = nullptr;
-    ChartDataSource *nameSource = nullptr;
-
-    QVector<qreal> sections;
-    QVector<QColor> colors;
-
-    QColor backgroundColor = Qt::transparent;
-};
+// class PieChart::Private
+// {
+// public:
+//     RangeGroup *range = nullptr;
+//     qreal borderWidth = -1.0;
+//
+//     ChartDataSource *valueSource = nullptr;
+//     ChartDataSource *colorSource = nullptr;
+//     ChartDataSource *nameSource = nullptr;
+//
+//     QVector<qreal> sections;
+//     QVector<QColor> colors;
+//
+//     QColor backgroundColor = Qt::transparent;
+// };
 
 PieChart::PieChart(QQuickItem *parent)
-    : QQuickItem(parent)
-    , d(new Private)
+    : Chart(parent)
 {
-    setFlag(QQuickItem::ItemHasContents, true);
-    d->range = new RangeGroup{this};
-    connect(d->range, &RangeGroup::rangeChanged, this, &PieChart::updateData);
+    m_range = std::make_unique<RangeGroup>();
+    connect(m_range.get(), &RangeGroup::rangeChanged, this, &PieChart::onDataChanged);
 }
 
 PieChart::~PieChart()
@@ -38,151 +36,178 @@ PieChart::~PieChart()
 
 RangeGroup *PieChart::range() const
 {
-    return d->range;
+    return m_range.get();
 }
 
-qreal PieChart::borderWidth() const
+bool PieChart::filled() const
 {
-    return d->borderWidth;
+    return m_filled;
 }
 
-ChartDataSource *PieChart::valueSource() const
+void PieChart::setFilled(bool newFilled)
 {
-    return d->valueSource;
-}
-
-ChartDataSource *PieChart::colorSource() const
-{
-    return d->colorSource;
-}
-
-ChartDataSource * PieChart::nameSource() const
-{
-    return d->nameSource;
-}
-
-void PieChart::setBorderWidth(qreal width)
-{
-    if (qFuzzyCompare(width, d->borderWidth))
+    if (newFilled == m_filled) {
         return;
+    }
 
-    d->borderWidth = width;
+    m_filled = newFilled;
     update();
-    Q_EMIT borderWidthChanged();
+    Q_EMIT filledChanged();
 }
 
-void PieChart::setValueSource(ChartDataSource *value)
+qreal PieChart::thickness() const
 {
-    if (value == d->valueSource)
-        return;
-
-    if (d->valueSource)
-        disconnect(d->valueSource, &ChartDataSource::dataChanged, this, &PieChart::updateData);
-
-    d->valueSource = value;
-
-    if (d->valueSource)
-        connect(d->valueSource, &ChartDataSource::dataChanged, this, &PieChart::updateData);
-
-    updateData();
-    Q_EMIT valueSourceChanged();
+    return m_thickness;
 }
 
-void PieChart::setColorSource(ChartDataSource *color)
+void PieChart::setThickness(qreal newThickness)
 {
-    if (color == d->colorSource)
+    if (newThickness == m_thickness) {
         return;
+    }
 
-    if (d->colorSource)
-        disconnect(d->colorSource, &ChartDataSource::dataChanged, this, &PieChart::updateData);
-
-    d->colorSource = color;
-
-    if (d->colorSource)
-        connect(d->colorSource, &ChartDataSource::dataChanged, this, &PieChart::updateData);
-
-    updateData();
-    Q_EMIT colorSourceChanged();
+    m_thickness = newThickness;
+    update();
+    Q_EMIT thicknessChanged();
 }
 
-void PieChart::setNameSource(ChartDataSource* source)
+qreal PieChart::spacing() const
 {
-    if (source == d->nameSource)
-        return;
-
-    d->nameSource = source;
-    Q_EMIT nameSourceChanged();
+    return m_spacing;
 }
+
+void PieChart::setSpacing(qreal newSpacing)
+{
+    if (newSpacing == m_spacing) {
+        return;
+    }
+
+    m_spacing = newSpacing;
+    update();
+    Q_EMIT spacingChanged();
+}
+
 
 QColor PieChart::backgroundColor() const
 {
-    return d->backgroundColor;
+    return m_backgroundColor;
 }
 
 void PieChart::setBackgroundColor(const QColor &color)
 {
-    if (color == d->backgroundColor) {
+    if (color == m_backgroundColor) {
         return;
     }
-    d->backgroundColor = color;
+    m_backgroundColor = color;
     update();
     Q_EMIT backgroundColorChanged();
 }
 
+bool PieChart::continueColors() const
+{
+    return m_continueColors;
+}
+
+void PieChart::setContinueColors(bool newContinueColors)
+{
+    if (newContinueColors == m_continueColors) {
+        return;
+    }
+
+    m_continueColors = newContinueColors;
+    onDataChanged();
+    Q_EMIT continueColorsChanged();
+}
+
+
 QSGNode *PieChart::updatePaintNode(QSGNode *node, UpdatePaintNodeData *data)
 {
     Q_UNUSED(data);
-    PieChartNode *n = static_cast<PieChartNode *>(node);
-    if (!n) {
-        n = new PieChartNode();
+    if (!node) {
+        node = new QSGNode{};
     }
-    n->setRect(boundingRect());
-    n->setBorderWidth(d->borderWidth >= 0.0 ? d->borderWidth : qMin(width(), height()) / 2);
-    n->setSections(d->sections);
-    n->setBackgroundColor(d->backgroundColor);
-    n->setColors(d->colors);
 
-    return n;
+    auto sourceCount = valueSources().size();
+
+    auto minDimension = std::min(width(), height());
+
+    float innerRadius = m_filled ? 0.0 : minDimension - (sourceCount - 1) * (m_thickness + m_spacing) - m_thickness;
+    float outerRadius = minDimension - (sourceCount - 1) * (m_thickness + m_spacing);
+    for (int i = 0; i < sourceCount; ++i) {
+        if (node->childCount() <= i)
+            node->appendChildNode(new PieChartNode{});
+
+        auto pieNode = static_cast<PieChartNode*>(node->childAtIndex(i));
+        pieNode->setRect(boundingRect());
+        pieNode->setInnerRadius(innerRadius);
+        pieNode->setOuterRadius(outerRadius);
+        pieNode->setSections(m_sections.at(i));
+        pieNode->setBackgroundColor(m_backgroundColor);
+        pieNode->setColors(m_colors.at(i));
+
+        innerRadius = outerRadius + m_spacing;
+        outerRadius = innerRadius + m_thickness;
+    }
+
+    while (node->childCount() > sourceCount) {
+        node->removeChildNode(node->childAtIndex(node->childCount() - 1));
+    }
+
+    return node;
 }
 
-void PieChart::updateData()
+void PieChart::onDataChanged()
 {
-    d->sections.clear();
-    d->colors.clear();
+    m_sections.clear();
+    m_colors.clear();
 
-    if (!d->valueSource || !d->colorSource)
+    const auto sources = valueSources();
+    const auto colors = colorSource();
+
+    if (!colors || sources.isEmpty() || !m_range->isValid())
         return;
 
-    if (!d->range->isValid())
-        return;
+    auto colorIndex = 0;
 
-    qreal threshold = !d->range->automatic() ? d->range->from() : 0.0;
-    qreal total = 0.0;
-    QVector<qreal> data;
-    for (int i = 0; i < d->valueSource->itemCount(); ++i) {
-        auto value = d->valueSource->item(i).toReal();
-        auto limited = value - threshold;
-        if (limited > 0.0) {
-            data << limited;
-            total += limited;
+    for(auto source : sources) {
+        qreal threshold = !m_range->automatic() ? m_range->from() : 0.0;
+        qreal total = 0.0;
 
-            auto color = d->colorSource->item(i).value<QColor>();
-            d->colors << color;
+        QVector<qreal> sections;
+        QVector<QColor> sectionColors;
+
+        for (int i = 0; i < source->itemCount(); ++i) {
+            auto value = source->item(i).toReal();
+            auto limited = value - threshold;
+            if (limited > 0.0) {
+                sections << limited;
+                total += limited;
+
+                auto color = colors->item(colorIndex).value<QColor>();
+                sectionColors << color;
+            }
+            threshold = qMax(0.0, threshold - value);
+            colorIndex++;
         }
-        threshold = qMax(0.0, threshold - value);
-    }
 
-    if (qFuzzyCompare(total, 0.0))
-        return;
+        if (qFuzzyCompare(total, 0.0)) {
+            m_sections << QVector<qreal>{ 0.0 };
+            m_colors << QVector<QColor>{ colors->item(colorIndex++).value<QColor>() };
+        }
 
-    qreal max = total;
+        qreal max = total;
 
-    if (!d->range->automatic() && d->range->distance() >= total) {
-        max = d->range->distance();
-    }
+        if (!m_range->automatic() && m_range->distance() >= total) {
+            max = m_range->distance();
+        }
 
-    for (auto value : qAsConst(data)) {
-        d->sections << value / max;
+        for (auto& value : sections) {
+            value = value / (qFuzzyCompare(max, 0.0) ? 1.0 : max);
+        }
+
+        m_sections << sections;
+        m_colors << sectionColors;
+        colorIndex = m_continueColors ? colorIndex : 0;
     }
 
     update();

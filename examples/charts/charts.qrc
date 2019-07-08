@@ -5,6 +5,7 @@
         <file>LineChart.qml</file>
         <file>ContinuousLineChart.qml</file>
         <file>RangeEditor.qml</file>
+        <file>BarChart.qml</file>
     </qresource>
 </RCC>
 

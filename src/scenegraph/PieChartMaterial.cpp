@@ -25,9 +25,14 @@ QVector2D PieChartMaterial::aspectRatio() const
     return m_aspectRatio;
 }
 
-float PieChartMaterial::innerDimension() const
+float PieChartMaterial::innerRadius() const
 {
-    return m_innerDimension;
+    return m_innerRadius;
+}
+
+float PieChartMaterial::outerRadius() const
+{
+    return m_outerRadius;
 }
 
 QColor PieChartMaterial::backgroundColor() const
@@ -55,9 +60,14 @@ void PieChartMaterial::setAspectRatio(const QVector2D &aspect)
     m_aspectRatio = aspect;
 }
 
-void PieChartMaterial::setInnerDimension(float dimension)
+void PieChartMaterial::setInnerRadius(float radius)
 {
-    m_innerDimension = dimension;
+    m_innerRadius = radius;
+}
+
+void PieChartMaterial::setOuterRadius(float radius)
+{
+    m_outerRadius = radius;
 }
 
 void PieChartMaterial::setBackgroundColor(const QColor& color)
@@ -100,7 +110,8 @@ void PieChartShader::initialize()
     QSGMaterialShader::initialize();
     m_matrixLocation = program()->uniformLocation("matrix");
     m_opacityLocation = program()->uniformLocation("opacity");
-    m_innerDimensionLocation = program()->uniformLocation("innerDimension");
+    m_innerRadiusLocation = program()->uniformLocation("innerRadius");
+    m_outerRadiusLocation = program()->uniformLocation("outerRadius");
     m_aspectLocation = program()->uniformLocation("aspect");
     m_backgroundColorLocation = program()->uniformLocation("backgroundColor");
     m_trianglesLocation = program()->uniformLocation("triangles");
@@ -118,7 +129,8 @@ void PieChartShader::updateState(const QSGMaterialShader::RenderState &state, QS
 
     if (!oldMaterial || newMaterial->compare(oldMaterial) != 0) {
         PieChartMaterial *material = static_cast<PieChartMaterial *>(newMaterial);
-        program()->setUniformValue(m_innerDimensionLocation, material->innerDimension());
+        program()->setUniformValue(m_innerRadiusLocation, material->innerRadius());
+        program()->setUniformValue(m_outerRadiusLocation, material->outerRadius());
         program()->setUniformValue(m_aspectLocation, material->aspectRatio());
         program()->setUniformValue(m_backgroundColorLocation, material->backgroundColor());
         program()->setUniformValueArray(m_trianglesLocation, material->triangles().constData(), material->triangles().size());

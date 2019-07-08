@@ -8,15 +8,15 @@ import org.kde.kquickcontrols 2.0
 import org.kde.quickcharts 1.0 as Charts
 
 Kirigami.Page {
-    title: "Line Chart"
+    title: "Bar Chart"
 
     ListModel {
-        id: lineModel;
+        id: barModel;
         dynamicRoles: true;
 
         Component.onCompleted: {
-            append({label: "Item 1", value1: 10, value2: 15, value3: 20})
-            append({label: "Item 2", value1: 15, value2: 25, value3: 25})
+            append({label: "Item 1", value1: 0, value2: 15, value3: 20})
+            append({label: "Item 2", value1: 10, value2: 25, value3: 25})
             append({label: "Item 3", value1: 15, value2: 20, value3: 30})
             append({label: "Item 4", value1: 10, value2: 10, value3: 35})
             append({label: "Item 5", value1: 20, value2: 5, value3: 40})
@@ -34,9 +34,9 @@ Kirigami.Page {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
             Charts.GridLines {
-                anchors.fill: lineChart
+                anchors.fill: barChart
 
-                chart: lineChart
+                chart: barChart
 
                 major.frequency: 2
                 major.lineWidth: 2
@@ -48,9 +48,9 @@ Kirigami.Page {
             }
 
             Charts.GridLines {
-                anchors.fill: lineChart
+                anchors.fill: barChart
 
-                chart: lineChart
+                chart: barChart
 
                 direction: Charts.GridLines.Vertical;
 
@@ -74,7 +74,7 @@ Kirigami.Page {
 
                 direction: Charts.AxisLabels.VerticalBottomTop
                 delegate: Label { text: Charts.AxisLabels.label }
-                source: Charts.ChartAxisSource { chart: lineChart; axis: Charts.ChartAxisSource.YAxis; itemCount: 5 }
+                source: Charts.ChartAxisSource { chart: barChart; axis: Charts.ChartAxisSource.YAxis; itemCount: 5 }
             }
 
             Charts.AxisLabels {
@@ -87,7 +87,7 @@ Kirigami.Page {
                 }
 
                 delegate: Label { text: Charts.AxisLabels.label }
-                source: Charts.ModelSource { model: lineModel; roleName: "label" }
+                source: Charts.ModelSource { model: barModel; roleName: "label" }
             }
 
             ListView {
@@ -101,7 +101,7 @@ Kirigami.Page {
                 }
                 height: currentItem.height
 
-                model: Charts.LegendModel { chart: lineChart }
+                model: Charts.LegendModel { chart: barChart }
 
                 orientation: Qt.Horizontal;
                 boundsBehavior: ListView.StopAtBounds
@@ -114,8 +114,8 @@ Kirigami.Page {
                 }
             }
 
-            Charts.LineChart {
-                id: lineChart
+            Charts.BarChart {
+                id: barChart
                 anchors {
                     top: parent.top
                     left: yAxisLabels.right
@@ -131,15 +131,18 @@ Kirigami.Page {
 
                 yRange {
                     from: 0
-                    to: 100
+                    to: 10
                     automatic: true
                 }
 
                 valueSources: [
-                    Charts.ModelSource { roleName: "value1"; model: lineModel },
-                    Charts.ModelSource { roleName: "value2"; model: lineModel },
-                    Charts.ModelSource { roleName: "value3"; model: lineModel }
+                    Charts.ModelSource { roleName: "value1"; model: barModel },
+                    Charts.ModelSource { roleName: "value2"; model: barModel },
+                    Charts.ModelSource { roleName: "value3"; model: barModel }
                 ]
+
+                barWidth: 10
+                spacing: 2
 
                 colorSource: Charts.ArraySource { array: ["red", "green", "blue"] }
                 nameSource: Charts.ArraySource { array: ["Example 1", "Example 2", "Example 3"] }
@@ -147,18 +150,19 @@ Kirigami.Page {
         }
 
         RowLayout {
-            RangeEditor { label: "X Axis"; range: lineChart.xRange }
+            RangeEditor { label: "X Axis"; range: barChart.xRange }
             Item { Layout.fillWidth: true }
-            RangeEditor { label: "Y Axis"; range: lineChart.yRange }
+            RangeEditor { label: "Y Axis"; range: barChart.yRange }
         }
 
         RowLayout {
-            Button { text: "Add Item"; onClicked: lineModel.append({label: "New", value1: 0, value2: 0, value3: 0}) }
-            Button { text: "Remove Item"; onClicked: lineModel.remove(lineModel.count - 1)}
-            Label { text: "Line Width" }
-            SpinBox { from: 0; to: 1000; value: lineChart.lineWidth; onValueModified: lineChart.lineWidth = value; }
-            Label { text: "Fill Opacity" }
-            SpinBox { from: 0; to: 100; value: lineChart.fillOpacity * 100; onValueModified: lineChart.fillOpacity = value / 100; }
+            Button { text: "Add Item"; onClicked: barModel.append({label: "New", value1: 0, value2: 0, value3: 0}) }
+            Button { text: "Remove Item"; onClicked: barModel.remove(barModel.count - 1)}
+            Label { text: "Bar Width" }
+            SpinBox { from: 0; to: 1000; value: barChart.barWidth; onValueModified: barChart.barWidth = value; }
+            Label { text: "Bar Spacing" }
+            SpinBox { from: 0; to: 100; value: barChart.spacing; onValueModified: barChart.spacing = value; }
+            CheckBox { text: "Stacked"; checked: barChart.stacked; onToggled: barChart.stacked = checked }
         }
 
         Frame {
@@ -168,7 +172,7 @@ Kirigami.Page {
             ScrollView {
                 anchors.fill: parent
                 ListView {
-                    model: lineModel;
+                    model: barModel;
                     delegate: Kirigami.BasicListItem {
                         width: ListView.view.width
                         height: Kirigami.Units.gridUnit * 2 + Kirigami.Units.smallSpacing
@@ -177,7 +181,7 @@ Kirigami.Page {
                             TextField {
                                 Layout.preferredWidth: 75
                                 text: model.label;
-                                onEditingFinished: lineModel.setProperty(index, "label", text)
+                                onEditingFinished: barModel.setProperty(index, "label", text)
                             }
                             Label { text: "Value 1" }
                             SpinBox {
@@ -185,7 +189,7 @@ Kirigami.Page {
                                 from: -10000; to: 10000;
                                 stepSize: 1;
                                 value: model.value1;
-                                onValueModified: lineModel.setProperty(index, "value1", value)
+                                onValueModified: barModel.setProperty(index, "value1", value)
                             }
                             Label { text: "Value 2" }
                             SpinBox {
@@ -193,7 +197,7 @@ Kirigami.Page {
                                 from: -10000; to: 10000;
                                 stepSize: 1;
                                 value: model.value2;
-                                onValueModified: lineModel.setProperty(index, "value2", value)
+                                onValueModified: barModel.setProperty(index, "value2", value)
                             }
                             Label { text: "Value 3" }
                             SpinBox {
@@ -201,7 +205,7 @@ Kirigami.Page {
                                 from: -10000; to: 10000;
                                 stepSize: 1;
                                 value: model.value3;
-                                onValueModified: lineModel.setProperty(index, "value3", value)
+                                onValueModified: barModel.setProperty(index, "value3", value)
                             }
                         }
                     }
@@ -210,3 +214,4 @@ Kirigami.Page {
         }
     }
 }
+

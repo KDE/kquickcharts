@@ -15,9 +15,9 @@ Kirigami.Page {
         dynamicRoles: true;
 
         Component.onCompleted: {
-            append({ data: 50, color: "red" })
-            append({ data: 50, color: "green" })
-            append({ data: 50, color: "blue" })
+            append({ data: 50, data2: 30, color: "red" })
+            append({ data: 50, data2: 60, color: "green" })
+            append({ data: 50, data2: 60, color: "blue" })
         }
     }
 
@@ -29,7 +29,7 @@ Kirigami.Page {
         Kirigami.AbstractCard {
             Layout.fillWidth: false
             Layout.fillHeight: false
-            Layout.preferredWidth: 400
+            Layout.preferredWidth: 600
             Layout.preferredHeight: 400
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
@@ -38,12 +38,13 @@ Kirigami.Page {
                 anchors.fill: parent
                 anchors.margins: Kirigami.Units.smallSpacing;
 
-                borderWidth: 20;
                 range.to: 150
 
-                valueSource: Charts.ModelSource { roleName: "data"; model: pieModel }
+                valueSources: Charts.ModelSource { roleName: "data"; model: pieModel }
                 colorSource: Charts.ModelSource { roleName: "color"; model: pieModel }
 
+                thickness: 20;
+                filled: false;
                 backgroundColor: "gray"
             }
         }
@@ -51,8 +52,9 @@ Kirigami.Page {
         RowLayout {
             Button { text: "Add Item"; onClicked: pieModel.append({data: 50, color: Qt.rgba(1.0, 1.0, 1.0)}) }
             Button { text: "Remove Item"; onClicked: pieModel.remove(pieModel.count - 1)}
-            Label { text: "Border" }
-            SpinBox { from: 0; to: chart.width / 2; value: chart.borderWidth; onValueModified: chart.borderWidth = value; }
+            Label { text: "Thickness" }
+            SpinBox { from: 0; to: chart.width / 2; value: chart.thickness; onValueModified: chart.thickness = value; }
+            CheckBox { text: "Filled"; checked: chart.filled; onCheckedChanged: chart.filled = checked }
             RangeEditor { label: "Range"; range: chart.range }
         }
 

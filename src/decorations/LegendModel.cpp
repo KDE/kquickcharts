@@ -1,7 +1,6 @@
 #include "LegendModel.h"
 
-#include "PieChart.h"
-#include "LineChart.h"
+#include "Chart.h"
 #include "datasource/ChartDataSource.h"
 
 LegendModel::LegendModel(QObject* parent)
@@ -47,12 +46,12 @@ QVariant LegendModel::data(const QModelIndex& index, int role) const
     return QVariant{};
 }
 
-QQuickItem * LegendModel::chart() const
+Chart *LegendModel::chart() const
 {
     return m_chart;
 }
 
-void LegendModel::setChart(QQuickItem * newChart)
+void LegendModel::setChart(Chart *newChart)
 {
     if (newChart == m_chart) {
         return;
@@ -66,48 +65,59 @@ void LegendModel::setChart(QQuickItem * newChart)
     }
 
     m_chart = newChart;
-    update();
+    queueUpdate();
     Q_EMIT chartChanged();
+}
+
+int LegendModel::sourceIndex() const
+{
+    return m_sourceIndex;
+}
+
+void LegendModel::setSourceIndex(int index)
+{
+    if (index == m_sourceIndex) {
+        return;
+    }
+
+    m_sourceIndex = index;
+    queueUpdate();
+    Q_EMIT sourceIndexChanged();
+}
+
+void LegendModel::queueUpdate()
+{
+    if (!m_updateQueued) {
+        m_updateQueued = true;
+        QMetaObject::invokeMethod(this, &LegendModel::update);
+    }
 }
 
 void LegendModel::update()
 {
+    m_updateQueued = false;
+
     if (!m_chart)
         return;
 
     beginResetModel();
     m_items.clear();
 
-    ChartDataSource *colorSource = nullptr;
-    ChartDataSource *nameSource = nullptr;
-    int itemCount = 0;
+    ChartDataSource *colorSource = m_chart->colorSource();
+    ChartDataSource *nameSource = m_chart->nameSource();
 
-    auto pie = qobject_cast<PieChart*>(m_chart);
-    if (pie) {
-        if (!pie->valueSource()) {
-            endResetModel();
-            return;
+    m_connections.push_back(connect(m_chart, &Chart::colorSourceChanged, this, &LegendModel::queueUpdate, Qt::UniqueConnection));
+    m_connections.push_back(connect(m_chart, &Chart::nameSourceChanged, this, &LegendModel::queueUpdate, Qt::UniqueConnection));
+
+    int itemCount = m_chart->valueSources().count();
+    if (m_sourceIndex > 0) {
+        auto sources = m_chart->valueSources();
+        if (m_sourceIndex < sources.size()) {
+            itemCount = sources.at(m_sourceIndex)->itemCount();
+            m_connections.push_back(connect(sources.at(m_sourceIndex), &ChartDataSource::dataChanged, this, &LegendModel::queueUpdate, Qt::UniqueConnection));
         }
-
-        m_connections.push_back(connect(pie, &PieChart::colorSourceChanged, this, &LegendModel::update));
-        m_connections.push_back(connect(pie, &PieChart::nameSourceChanged, this, &LegendModel::update));
-        m_connections.push_back(connect(pie->valueSource(), &ChartDataSource::dataChanged, this, &LegendModel::update));
-
-        colorSource = pie->colorSource();
-        nameSource = pie->nameSource();
-        itemCount = pie->valueSource()->itemCount();
     }
-
-    auto line = qobject_cast<LineChart*>(m_chart);
-    if (line) {
-        m_connections.push_back(connect(line, &LineChart::lineColorSourceChanged, this, &LegendModel::update));
-        m_connections.push_back(connect(line, &LineChart::lineNameSourceChanged, this, &LegendModel::update));
-        m_connections.push_back(connect(line, &LineChart::valueSourcesChanged, this, &LegendModel::update));
-
-        colorSource = line->lineColorSource();
-        nameSource = line->lineNameSource();
-        itemCount = line->valueSourceCount();
-    }
+    m_connections.push_back(connect(m_chart, &Chart::valueSourcesChanged, this, &LegendModel::queueUpdate, Qt::UniqueConnection));
 
     if ((!colorSource && !nameSource) || itemCount <= 0) {
         endResetModel();
@@ -115,10 +125,10 @@ void LegendModel::update()
     }
 
     if (colorSource)
-        m_connections.push_back(connect(colorSource, &ChartDataSource::dataChanged, this, &LegendModel::update));
+        m_connections.push_back(connect(colorSource, &ChartDataSource::dataChanged, this, &LegendModel::queueUpdate, Qt::UniqueConnection));
 
     if (nameSource)
-        m_connections.push_back(connect(nameSource, &ChartDataSource::dataChanged, this, &LegendModel::update));
+        m_connections.push_back(connect(nameSource, &ChartDataSource::dataChanged, this, &LegendModel::queueUpdate, Qt::UniqueConnection));
 
     for (int i = 0; i < itemCount; ++i) {
         auto name = nameSource ? nameSource->item(i).toString() : QString();
