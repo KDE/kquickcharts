@@ -81,7 +81,7 @@ QVector<ChartDataSource *> Chart::valueSources() const
 
 void Chart::insertValueSource(int index, ChartDataSource* source)
 {
-    if (index < 0 || index >= m_valueSources.count()) {
+    if (index < 0) {
         return;
     }
 
