@@ -107,6 +107,9 @@ void LineChart::onDataChanged()
 void LineChart::updateLineNode(LineChartNode* node, const QColor& lineColor, ChartDataSource* valueSource)
 {
     auto fillColor = lineColor;
+    fillColor.setRedF(fillColor.redF() * m_fillOpacity);
+    fillColor.setGreenF(fillColor.greenF() * m_fillOpacity);
+    fillColor.setBlueF(fillColor.blueF() * m_fillOpacity);
     fillColor.setAlphaF(m_fillOpacity);
 
     node->setRect(boundingRect());
