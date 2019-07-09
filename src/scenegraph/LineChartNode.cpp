@@ -8,6 +8,12 @@
 
 static const int MaxPointsInSegment = 100;
 
+qreal calculateNormalizedLineWidth(qreal pixelWidth, const QRectF &rect)
+{
+    qreal min = 50.0 / (rect.width() * rect.height());
+    return std::max(min, (pixelWidth - 2.0) / (std::min(rect.width(), rect.height()) * 4.0));
+}
+
 LineChartNode::LineChartNode()
 {
 }
@@ -33,7 +39,7 @@ void LineChartNode::setLineWidth(float width)
 
     m_lineWidth = width;
     std::for_each(m_segments.cbegin(), m_segments.cend(), [this](LineSegmentNode* node) {
-        node->setLineWidth((m_lineWidth - 2.0) / (std::min(m_rect.width(), m_rect.height()) * 4.0));
+        node->setLineWidth(calculateNormalizedLineWidth(m_lineWidth, m_rect));
     });
 }
 
@@ -95,7 +101,7 @@ void LineChartNode::updatePoints()
 
         segment->setRect(rect);
         segment->setAspect(segmentWidth / m_rect.width(), m_aspect);
-        segment->setLineWidth((m_lineWidth - 2.0) / (std::min(m_rect.width(), m_rect.height()) * 4.0));
+        segment->setLineWidth(calculateNormalizedLineWidth(m_lineWidth, m_rect));
         segment->setLineColor(m_lineColor);
         segment->setFillColor(m_fillColor);
         segment->setValues(segmentPoints);

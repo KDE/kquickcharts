@@ -55,8 +55,6 @@ void LineSegmentNode::setAspect(float xAspect, float yAspect)
 
 void LineSegmentNode::setLineWidth(float width)
 {
-    width = std::max(width, 0.001f);
-
     if(qFuzzyCompare(width, m_lineWidth))
         return;
 
