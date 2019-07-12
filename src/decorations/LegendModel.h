@@ -21,7 +21,8 @@ class LegendModel : public QAbstractListModel
 public:
     enum Roles {
         NameRole = Qt::UserRole,
-        ColorRole
+        ColorRole,
+        ValueRole
     };
 
     enum SourceIndex {
@@ -47,12 +48,15 @@ public:
 private:
     void queueUpdate();
     void update();
+    void updateData();
+
+    struct LegendItem;
 
     Chart *m_chart = nullptr;
     int m_sourceIndex = UseSourceCount;
     bool m_updateQueued = false;
     std::vector<QMetaObject::Connection> m_connections;
-    std::vector<std::pair<QString, QColor>> m_items;
+    std::vector<LegendItem> m_items;
 };
 
 #endif // LEGENDMODEL_H
