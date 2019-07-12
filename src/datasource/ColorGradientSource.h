@@ -25,6 +25,7 @@
 #define COLORGRADIENTSOURCE_H
 
 #include <QColor>
+#include <QVector>
 
 #include "ChartDataSource.h"
 
