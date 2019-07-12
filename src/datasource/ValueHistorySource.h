@@ -23,6 +23,7 @@
 #define VALUEHISTORYSOURCE_H
 
 #include <QVariant>
+#include <QVector>
 
 #include "ChartDataSource.h"
 
