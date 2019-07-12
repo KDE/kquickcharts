@@ -21,6 +21,7 @@ set(quickcharts_SRCS
     datasource/ModelHistorySource.cpp
     datasource/ChartAxisSource.cpp
     datasource/ValueHistorySource.cpp
+    datasource/ColorGradientSource.cpp
 
     scenegraph/PieChartMaterial.cpp
     scenegraph/PieChartNode.cpp
