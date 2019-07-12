@@ -29,8 +29,8 @@ void main()
 {
     vec2 point = uv * (1.0 + lineSmooth * 2.0);
 
-    float thickness = outerRadius - innerRadius;
-    float donut = sdf_annular(sdf_circle(point, innerRadius), thickness);
+    float thickness = (outerRadius - innerRadius) / 2.0;
+    float donut = sdf_annular(sdf_circle(point, innerRadius + thickness), thickness);
 
     vec4 color = vec4(0.0);
     float totalSegments = sdf_null;

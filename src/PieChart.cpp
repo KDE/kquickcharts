@@ -131,9 +131,10 @@ QSGNode *PieChart::updatePaintNode(QSGNode *node, UpdatePaintNodeData *data)
 
     auto minDimension = std::min(width(), height());
 
-    float innerRadius = m_filled ? 0.0 : minDimension - (sourceCount - 1) * (m_thickness + m_spacing) - m_thickness;
-    float outerRadius = minDimension - (sourceCount - 1) * (m_thickness + m_spacing);
+    float outerRadius = minDimension;
     for (int i = 0; i < sourceCount; ++i) {
+        float innerRadius = i == sourceCount - 1 && m_filled ? 0.0 : outerRadius - m_thickness;
+
         if (node->childCount() <= i)
             node->appendChildNode(new PieChartNode{});
 
@@ -145,8 +146,7 @@ QSGNode *PieChart::updatePaintNode(QSGNode *node, UpdatePaintNodeData *data)
         pieNode->setBackgroundColor(m_backgroundColor);
         pieNode->setColors(m_colors.at(i));
 
-        innerRadius = outerRadius + m_spacing;
-        outerRadius = innerRadius + m_thickness;
+        outerRadius = outerRadius - m_thickness - m_spacing;
     }
 
     while (node->childCount() > sourceCount) {
