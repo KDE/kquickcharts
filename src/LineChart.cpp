@@ -87,7 +87,7 @@ QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
             node->appendChildNode(new LineChartNode{});
 
         auto lineNode = static_cast<LineChartNode*>(node->childAtIndex(i));
-        auto color = colorSource()->item(i).value<QColor>();
+        auto color = colorSource() ? colorSource()->item(i).value<QColor>() : Qt::black;
         updateLineNode(lineNode, color, sources.at(i));
     }
 
