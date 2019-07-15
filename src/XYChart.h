@@ -14,6 +14,8 @@ struct ComputedRange {
     float distanceY = 0.0;
 };
 
+bool operator==(const ComputedRange &first, const ComputedRange &second);
+
 /**
  * @todo write docs
  */

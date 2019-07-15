@@ -20,6 +20,14 @@ void calculateStackedYRange(XYChart *chart, ComputedRange &range, float &minY, f
     }
 }
 
+bool operator==(const ComputedRange& first, const ComputedRange& second)
+{
+    return first.startX == second.startX
+           && first.endX == second.endX
+           && qFuzzyCompare(first.startY, second.startY)
+           && qFuzzyCompare(first.endY, second.endY);
+}
+
 XYChart::XYChart(QQuickItem* parent)
     : Chart(parent)
 {
@@ -100,6 +108,10 @@ void XYChart::updateComputedRange()
         result.endY = m_yRange->to();
     }
     result.distanceY = result.endY - result.startY;
+
+    if (result == m_computedRange) {
+        return;
+    }
 
     m_computedRange = result;
     Q_EMIT computedRangeChanged();
