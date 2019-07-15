@@ -43,7 +43,7 @@ int ColorGradientSource::itemCount() const
 
 QVariant ColorGradientSource::item(int index) const
 {
-    if (index < 0 || index > m_colors.size()) {
+    if (index < 0 || index >= m_colors.size()) {
         return QVariant{};
     }
 
