@@ -87,6 +87,16 @@ void ColorGradientSource::setItemCount(int newItemCount)
     Q_EMIT itemCountChanged();
 }
 
+QVariantList ColorGradientSource::colors() const
+{
+    QVariantList colorsVariant;
+    colorsVariant.reserve(m_colors.count());
+    for (const QColor &color : qAsConst(m_colors)) {
+        colorsVariant.append(color);
+    }
+    return colorsVariant;
+}
+
 void ColorGradientSource::regenerateColors()
 {
     if (!m_baseColor.isValid() || m_itemCount <= 0) {

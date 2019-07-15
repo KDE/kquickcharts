@@ -37,6 +37,7 @@ class ColorGradientSource : public ChartDataSource
     Q_OBJECT
     Q_PROPERTY(QColor baseColor READ baseColor WRITE setBaseColor NOTIFY baseColorChanged)
     Q_PROPERTY(int itemCount READ itemCount WRITE setItemCount NOTIFY itemCountChanged)
+    Q_PROPERTY(QVariantList colors READ colors NOTIFY dataChanged)
 
 public:
     ColorGradientSource(QObject* parent = nullptr);
@@ -54,6 +55,7 @@ public:
     Q_SLOT void setItemCount(int newItemCount);
     Q_SIGNAL void itemCountChanged();
 
+    QVariantList colors() const;
 private:
     void regenerateColors();
 
