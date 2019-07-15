@@ -183,10 +183,10 @@ void AxisLabels::Private::update()
             continue;
         }
 
-        QObject::connect(item, &QQuickItem::xChanged, q, [this]() { layout(); });
-        QObject::connect(item, &QQuickItem::yChanged, q, [this]() { layout(); });
-        QObject::connect(item, &QQuickItem::widthChanged, q, [this]() { layout(); });
-        QObject::connect(item, &QQuickItem::heightChanged, q, [this]() { layout(); });
+        QObject::connect(item, &QQuickItem::xChanged, q, [this]() { q->scheduleLayout(); });
+        QObject::connect(item, &QQuickItem::yChanged, q, [this]() { q->scheduleLayout(); });
+        QObject::connect(item, &QQuickItem::widthChanged, q, [this]() { q->scheduleLayout(); });
+        QObject::connect(item, &QQuickItem::heightChanged, q, [this]() { q->scheduleLayout(); });
 
         context->setParent(item);
         item->setParentItem(q);
