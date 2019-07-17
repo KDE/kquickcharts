@@ -167,6 +167,19 @@ lowp float sdf_intersect(in lowp float sdf1, in lowp float sdf2)
     return max(sdf1, sdf2);
 }
 
+// Smoothly intersect two sdf shapes.
+//
+// \param sdf1 The first sdf shape.
+// \param sdf2 The second sdf shape.
+// \param smoothing The amount of smoothing to apply.
+//
+// \return A smoothed version of the intersect operation.
+lowp float sdf_intersect_smooth(in lowp float sdf1, in lowp float sdf2, in lowp float smoothing)
+{
+    lowp float h = clamp(0.5 - 0.5 * (sdf1 - sdf2) / smoothing, 0.0, 1.0);
+    return mix(sdf1, sdf2, h) + smoothing * h * (1.0 - h);
+}
+
 // Round an sdf shape.
 //
 // \param sdf The sdf shape to round.
