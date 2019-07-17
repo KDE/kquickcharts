@@ -58,6 +58,10 @@ Kirigami.Page {
             RangeEditor { label: "Range"; range: chart.range }
         }
 
+        RowLayout {
+            CheckBox { text: "Smooth Ends"; checked: chart.smoothEnds; onCheckedChanged: chart.smoothEnds = checked }
+        }
+
         Frame {
             Layout.fillWidth: true
             Layout.fillHeight: true

@@ -41,6 +41,8 @@ class PieChart : public Chart
      */
     Q_PROPERTY(bool continueColors READ continueColors WRITE setContinueColors NOTIFY continueColorsChanged)
 
+    Q_PROPERTY(bool smoothEnds READ smoothEnds WRITE setSmoothEnds NOTIFY smoothEndsChanged)
+
 public:
     /**
      * Default constructor
@@ -74,6 +76,10 @@ public:
     Q_SLOT void setContinueColors(bool newContinueColors);
     Q_SIGNAL void continueColorsChanged();
 
+    bool smoothEnds() const;
+    Q_SLOT void setSmoothEnds(bool newSmoothEnds);
+    Q_SIGNAL void smoothEndsChanged();
+
 protected:
     QSGNode *updatePaintNode(QSGNode *node, UpdatePaintNodeData *data) override;
     void onDataChanged() override;
@@ -85,6 +91,7 @@ private:
     qreal m_spacing = 0.0;
     QColor m_backgroundColor = Qt::transparent;
     bool m_continueColors = false;
+    bool m_smoothEnds = false;
 
     QVector<QVector<qreal>> m_sections;
     QVector<QVector<QColor>> m_colors;

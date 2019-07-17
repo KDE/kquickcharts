@@ -55,6 +55,11 @@ QVector<int> PieChartMaterial::segments() const
     return m_segments;
 }
 
+bool PieChartMaterial::smoothEnds() const
+{
+    return m_smoothEnds;
+}
+
 void PieChartMaterial::setAspectRatio(const QVector2D &aspect)
 {
     m_aspectRatio = aspect;
@@ -90,6 +95,11 @@ void PieChartMaterial::setSegments(const QVector<int>& segments)
     m_segments = segments;
 }
 
+void PieChartMaterial::setSmoothEnds(bool smooth)
+{
+    m_smoothEnds = smooth;
+}
+
 PieChartShader::PieChartShader()
 {
     setShaders(QStringLiteral("piechart.vert"), QStringLiteral("piechart.frag"));
@@ -118,6 +128,7 @@ void PieChartShader::initialize()
     m_colorsLocation = program()->uniformLocation("colors");
     m_segmentsLocation = program()->uniformLocation("segments");
     m_segmentCountLocation = program()->uniformLocation("segmentCount");
+    m_smoothEndsLocation = program()->uniformLocation("smoothEnds");
 }
 
 void PieChartShader::updateState(const QSGMaterialShader::RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial)
@@ -137,5 +148,6 @@ void PieChartShader::updateState(const QSGMaterialShader::RenderState &state, QS
         program()->setUniformValueArray(m_colorsLocation, material->colors().constData(), material->colors().size());
         program()->setUniformValueArray(m_segmentsLocation, material->segments().constData(), material->segments().size());
         program()->setUniformValue(m_segmentCountLocation, material->segments().size());
+        program()->setUniformValue(m_smoothEndsLocation, material->smoothEnds());
     }
 }

@@ -12,6 +12,7 @@ uniform lowp float opacity;
 uniform lowp float innerRadius;
 uniform lowp float outerRadius;
 uniform lowp vec4 backgroundColor;
+uniform bool smoothEnds;
 
 uniform lowp vec2 triangles[MAX_SEGMENTS * 2];
 uniform lowp vec4 colors[MAX_SEGMENTS];
@@ -40,12 +41,22 @@ void main()
             segment = sdf_union(segment, sdf_round(sdf_triangle(point, origin, triangles[index++], triangles[index++]), lineSmooth));
         }
         totalSegments = sdf_union(totalSegments, segment);
-        color = sdf_render(sdf_intersect(donut, segment), color, colors[i], lineSmooth);
+
+        segment = smoothEnds
+                  ? sdf_intersect_smooth(donut, segment, thickness)
+                  : sdf_intersect(donut, segment);
+
+        color = sdf_render(segment, color, colors[i], lineSmooth);
     }
 
     // Finally, render an end segment with the background color.
-    lowp float segment = sdf_subtract(sdf_round(donut, lineSmooth), totalSegments);
-    color = sdf_render(segment, color, backgroundColor, lineSmooth);
+    if (smoothEnds) {
+        lowp vec4 background = sdf_render(donut, vec4(0.0), backgroundColor, lineSmooth);
+        color = mix(background, color, color.a);
+    } else {
+        lowp float segment = sdf_subtract(sdf_round(donut, lineSmooth), totalSegments);
+        color = sdf_render(segment, color, backgroundColor, lineSmooth);
+    }
 
     gl_FragColor = color * opacity;
 }

@@ -31,6 +31,7 @@ public:
     void setSections(const QVector<qreal> &sections);
     void setColors(const QVector<QColor> &colors);
     void setBackgroundColor(const QColor &color);
+    void setSmoothEnds(bool smooth);
 
 private:
     void updateTriangles();
@@ -39,6 +40,7 @@ private:
     qreal m_innerRadius = 0.0;
     qreal m_outerRadius = 0.0;
     QColor m_backgroundColor;
+    bool m_smoothEnds = false;
 
     QVector<qreal> m_sections;
     QVector<QColor> m_colors;

@@ -120,6 +120,23 @@ void PieChart::setContinueColors(bool newContinueColors)
 }
 
 
+bool PieChart::smoothEnds() const
+{
+    return m_smoothEnds;
+}
+
+void PieChart::setSmoothEnds(bool newSmoothEnds)
+{
+    if (newSmoothEnds == m_smoothEnds) {
+        return;
+    }
+
+    m_smoothEnds = newSmoothEnds;
+    update();
+    Q_EMIT smoothEndsChanged();
+}
+
+
 QSGNode *PieChart::updatePaintNode(QSGNode *node, UpdatePaintNodeData *data)
 {
     Q_UNUSED(data);
@@ -145,6 +162,7 @@ QSGNode *PieChart::updatePaintNode(QSGNode *node, UpdatePaintNodeData *data)
         pieNode->setSections(m_sections.at(i));
         pieNode->setBackgroundColor(m_backgroundColor);
         pieNode->setColors(m_colors.at(i));
+        pieNode->setSmoothEnds(m_smoothEnds);
 
         outerRadius = outerRadius - m_thickness - m_spacing;
     }
