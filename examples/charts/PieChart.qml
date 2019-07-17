@@ -60,6 +60,10 @@ Kirigami.Page {
 
         RowLayout {
             CheckBox { text: "Smooth Ends"; checked: chart.smoothEnds; onCheckedChanged: chart.smoothEnds = checked }
+            Label { text: "From Angle" }
+            SpinBox { from: -360; to: 360; value: chart.fromAngle; onValueModified: chart.fromAngle = value; }
+            Label { text: "To Angle" }
+            SpinBox { from: -360; to: 360; value: chart.toAngle; onValueModified: chart.toAngle = value; }
         }
 
         Frame {

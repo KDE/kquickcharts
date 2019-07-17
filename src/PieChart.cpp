@@ -119,6 +119,38 @@ void PieChart::setContinueColors(bool newContinueColors)
     Q_EMIT continueColorsChanged();
 }
 
+qreal PieChart::fromAngle() const
+{
+    return m_fromAngle;
+}
+
+void PieChart::setFromAngle(qreal newFromAngle)
+{
+    if (qFuzzyCompare(newFromAngle, m_fromAngle)) {
+        return;
+    }
+
+    m_fromAngle = newFromAngle;
+    update();
+    Q_EMIT fromAngleChanged();
+}
+
+qreal PieChart::toAngle() const
+{
+    return m_toAngle;
+}
+
+void PieChart::setToAngle(qreal newToAngle)
+{
+    if (qFuzzyCompare(newToAngle, m_toAngle)) {
+        return;
+    }
+
+    m_toAngle = newToAngle;
+    update();
+    Q_EMIT toAngleChanged();
+}
+
 
 bool PieChart::smoothEnds() const
 {
@@ -162,6 +194,8 @@ QSGNode *PieChart::updatePaintNode(QSGNode *node, UpdatePaintNodeData *data)
         pieNode->setSections(m_sections.at(i));
         pieNode->setBackgroundColor(m_backgroundColor);
         pieNode->setColors(m_colors.at(i));
+        pieNode->setFromAngle(m_fromAngle);
+        pieNode->setToAngle(m_toAngle);
         pieNode->setSmoothEnds(m_smoothEnds);
 
         outerRadius = outerRadius - m_thickness - m_spacing;

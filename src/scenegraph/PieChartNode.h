@@ -31,6 +31,8 @@ public:
     void setSections(const QVector<qreal> &sections);
     void setColors(const QVector<QColor> &colors);
     void setBackgroundColor(const QColor &color);
+    void setFromAngle(qreal angle);
+    void setToAngle(qreal angle);
     void setSmoothEnds(bool smooth);
 
 private:
@@ -40,6 +42,8 @@ private:
     qreal m_innerRadius = 0.0;
     qreal m_outerRadius = 0.0;
     QColor m_backgroundColor;
+    qreal m_fromAngle = 0.0;
+    qreal m_toAngle = 360.0;
     bool m_smoothEnds = false;
 
     QVector<qreal> m_sections;

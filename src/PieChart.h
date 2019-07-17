@@ -41,6 +41,10 @@ class PieChart : public Chart
      */
     Q_PROPERTY(bool continueColors READ continueColors WRITE setContinueColors NOTIFY continueColorsChanged)
 
+    Q_PROPERTY(qreal fromAngle READ fromAngle WRITE setFromAngle NOTIFY fromAngleChanged)
+
+    Q_PROPERTY(qreal toAngle READ toAngle WRITE setToAngle NOTIFY toAngleChanged)
+
     Q_PROPERTY(bool smoothEnds READ smoothEnds WRITE setSmoothEnds NOTIFY smoothEndsChanged)
 
 public:
@@ -76,6 +80,14 @@ public:
     Q_SLOT void setContinueColors(bool newContinueColors);
     Q_SIGNAL void continueColorsChanged();
 
+    qreal fromAngle() const;
+    Q_SLOT void setFromAngle(qreal newFromAngle);
+    Q_SIGNAL void fromAngleChanged();
+
+    qreal toAngle() const;
+    Q_SLOT void setToAngle(qreal newToAngle);
+    Q_SIGNAL void toAngleChanged();
+
     bool smoothEnds() const;
     Q_SLOT void setSmoothEnds(bool newSmoothEnds);
     Q_SIGNAL void smoothEndsChanged();
@@ -91,6 +103,8 @@ private:
     qreal m_spacing = 0.0;
     QColor m_backgroundColor = Qt::transparent;
     bool m_continueColors = false;
+    qreal m_fromAngle = 0.0;
+    qreal m_toAngle = 360.0;
     bool m_smoothEnds = false;
 
     QVector<QVector<qreal>> m_sections;
