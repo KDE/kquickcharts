@@ -102,6 +102,8 @@ void BarChartNode::update()
         createBars(currentX, values, vertices, indices, index);
         currentX += itemSpacing;
     }
+
+    markDirty(QSGNode::DirtyGeometry);
 }
 
 void BarChartNode::createBars(qreal x, const QVector<QPair<qreal, QColor> >& values, QSGGeometry::ColoredPoint2D* vertices, quint16* indices, int& index)
