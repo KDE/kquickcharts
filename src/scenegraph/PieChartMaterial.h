@@ -41,7 +41,7 @@ private:
     float m_innerRadius = 0.0f;
     float m_outerRadius = 0.0f;
     QColor m_backgroundColor;
-    bool m_smoothEnds;
+    bool m_smoothEnds = false;
 
     QVector<QVector2D> m_triangles;
     QVector<QVector4D> m_colors;
