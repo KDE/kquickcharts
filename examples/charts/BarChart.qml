@@ -38,11 +38,9 @@ Kirigami.Page {
 
                 chart: barChart
 
-                major.frequency: 2
-                major.lineWidth: 2
-                major.color: Qt.rgba(0.8, 0.8, 0.8, 1.0)
+                major.visible: false
 
-                minor.frequency: 1
+                minor.count: 4
                 minor.lineWidth: 1
                 minor.color: Qt.rgba(0.8, 0.8, 0.8, 1.0)
             }
@@ -159,7 +157,7 @@ Kirigami.Page {
             Button { text: "Add Item"; onClicked: barModel.append({label: "New", value1: 0, value2: 0, value3: 0}) }
             Button { text: "Remove Item"; onClicked: barModel.remove(barModel.count - 1)}
             Label { text: "Bar Width" }
-            SpinBox { from: 0; to: 1000; value: barChart.barWidth; onValueModified: barChart.barWidth = value; }
+            SpinBox { from: -1; to: 1000; value: barChart.barWidth; onValueModified: barChart.barWidth = value; }
             Label { text: "Bar Spacing" }
             SpinBox { from: 0; to: 100; value: barChart.spacing; onValueModified: barChart.spacing = value; }
             CheckBox { text: "Stacked"; checked: barChart.stacked; onToggled: barChart.stacked = checked }
