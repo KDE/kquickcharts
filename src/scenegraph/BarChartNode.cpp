@@ -108,8 +108,7 @@ void BarChartNode::update()
 
 void BarChartNode::createBars(qreal x, const QVector<QPair<qreal, QColor> >& values, QSGGeometry::ColoredPoint2D* vertices, quint16* indices, int& index)
 {
-    auto totalWidth = values.count() * m_spacing;
-    totalWidth = qFuzzyCompare(totalWidth, 0.0) ? m_barWidth : totalWidth;
+    auto totalWidth = m_barWidth * values.count() + m_spacing * (values.count() - 1);
 
     auto left = x - totalWidth / 2;
 
@@ -117,7 +116,7 @@ void BarChartNode::createBars(qreal x, const QVector<QPair<qreal, QColor> >& val
         auto value = values.at(i).first * m_rect.height();
         auto color = values.at(i).second;
 
-        auto rect = QRectF{QPointF{left + i * m_spacing, m_rect.bottom() - value}, QSizeF{m_barWidth, value}};
+        auto rect = QRectF{QPointF{left + i * (m_barWidth + m_spacing), m_rect.bottom() - value}, QSizeF{m_barWidth, value}};
         bar(vertices, indices, index, rect, color);
     }
 }

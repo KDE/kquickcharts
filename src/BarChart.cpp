@@ -81,7 +81,7 @@ QSGNode *BarChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDat
 
     auto w = m_barWidth;
     if (w < 0.0) {
-        w = width() / m_values.size() - m_spacing;
+        w = (width() - m_spacing * (m_values.size() - 1)) / m_values.size();
 
         if (!stacked()) {
             auto valueCount = valueSources().count();
@@ -90,7 +90,7 @@ QSGNode *BarChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDat
     }
 
     barNode->setBarWidth(w);
-    barNode->setSpacing(stacked() ? 0.0 : w + m_spacing);
+    barNode->setSpacing(stacked() ? -w : m_spacing);
 
     barNode->update();
 
