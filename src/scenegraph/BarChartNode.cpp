@@ -54,17 +54,9 @@ void BarChartNode::setRect(const QRectF& rect)
     m_rect = rect;
 }
 
-void BarChartNode::setValues(const QVector<QVector<QPair<qreal, QColor>>>& values)
+void BarChartNode::setValues(const QVector<QPair<QVector2D, QColor>>& values)
 {
     m_values = values;
-}
-
-void BarChartNode::setSpacing(qreal spacing)
-{
-    if (qFuzzyCompare(spacing, m_spacing))
-        return;
-
-    m_spacing = spacing;
 }
 
 void BarChartNode::setBarWidth(qreal width)
@@ -85,40 +77,24 @@ void BarChartNode::update()
     if (itemCount <= 0)
         return;
 
-    int totalVertices = itemCount * m_values.at(0).count() * 6;
+    int totalVertices = itemCount * 6;
     if (totalVertices != m_geometry->vertexCount()) {
         m_geometry->allocate(totalVertices, totalVertices);
     }
-
-    auto itemSpacing = m_rect.width() / itemCount;
-    auto currentX = m_rect.left() + itemSpacing / 2;
 
     auto vertices = m_geometry->vertexDataAsColoredPoint2D();
     auto indices = m_geometry->indexDataAsUShort();
 
     auto index = 0;
-    for (int i = 0; i < itemCount; ++i) {
-        auto values = m_values.at(i);
-        createBars(currentX, values, vertices, indices, index);
-        currentX += itemSpacing;
+    for (auto entry : qAsConst(m_values)) {
+        auto value = entry.first;
+        value.setY(value.y() * m_rect.height());
+        auto color = entry.second;
+        auto rect = QRectF{QPointF{value.x(), m_rect.bottom() - value.y()}, QSizeF{m_barWidth, value.y()}};
+        bar(vertices, indices, index, rect, color);
     }
 
     markDirty(QSGNode::DirtyGeometry);
-}
-
-void BarChartNode::createBars(qreal x, const QVector<QPair<qreal, QColor> >& values, QSGGeometry::ColoredPoint2D* vertices, quint16* indices, int& index)
-{
-    auto totalWidth = m_barWidth * values.count() + m_spacing * (values.count() - 1);
-
-    auto left = x - totalWidth / 2;
-
-    for(int i = values.count() - 1; i >= 0; --i) {
-        auto value = values.at(i).first * m_rect.height();
-        auto color = values.at(i).second;
-
-        auto rect = QRectF{QPointF{left + i * (m_barWidth + m_spacing), m_rect.bottom() - value}, QSizeF{m_barWidth, value}};
-        bar(vertices, indices, index, rect, color);
-    }
 }
 
 void BarChartNode::bar(QSGGeometry::ColoredPoint2D* vertices, quint16* indices, int& index, const QRectF& bar, const QColor& color)

@@ -41,18 +41,15 @@ public:
     ~BarChartNode();
 
     void setRect(const QRectF &rect);
-    void setValues(const QVector<QVector<QPair<qreal, QColor>>> &values);
-    void setSpacing(qreal spacing);
+    void setValues(const QVector<QPair<QVector2D, QColor>> &values);
     void setBarWidth(qreal width);
     void update();
 
 private:
-    void createBars(qreal x, const QVector<QPair<qreal, QColor>> &values, QSGGeometry::ColoredPoint2D *vertices, quint16 *indices, int &index);
     void bar(QSGGeometry::ColoredPoint2D *vertices, quint16 *indices, int &index, const QRectF &bar, const QColor &color);
 
     QRectF m_rect;
-    QVector<QVector<QPair<qreal, QColor>>> m_values;
-    qreal m_spacing = 0.0;
+    QVector<QPair<QVector2D, QColor>> m_values;
     qreal m_barWidth = 0.0;
     QSGGeometry *m_geometry = nullptr;
 };
