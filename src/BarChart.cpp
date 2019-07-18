@@ -78,8 +78,20 @@ QSGNode *BarChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDat
     auto barNode = static_cast<BarChartNode*>(node);
     barNode->setRect(boundingRect());
     barNode->setValues(m_values);
-    barNode->setSpacing(stacked() ? 0.0 : m_barWidth + m_spacing);
-    barNode->setBarWidth(m_barWidth);
+
+    auto w = m_barWidth;
+    if (w < 0.0) {
+        w = width() / m_values.size() - m_spacing;
+
+        if (!stacked()) {
+            auto valueCount = valueSources().count();
+            w = (w - m_spacing * (valueCount - 1))  / valueCount;
+        }
+    }
+
+    barNode->setBarWidth(w);
+    barNode->setSpacing(stacked() ? 0.0 : w + m_spacing);
+
     barNode->update();
 
     return barNode;
@@ -94,7 +106,6 @@ void BarChart::onDataChanged()
     const auto range = computedRange();
     const auto sources = valueSources();
     auto colors = colorSource();
-//     auto colorIndex = 0;
 
     m_values.fill(QVector<QPair<qreal, QColor>>{}, range.distanceX);
 
@@ -122,35 +133,6 @@ void BarChart::onDataChanged()
     } else {
         std::generate_n(m_values.rbegin(), range.distanceX, generator);
     }
-/*
-    m_values = allValues;*/
-
-/*
-    for (int i = range.startX; i < range.endX; ++i) {
-        QVector<QPair<qreal, QColor>> values;
-        for (int j = 0; j < sources.count(); ++j) {
-            values << QPair<qreal, QColor>(sources.at(j)->item(i).toReal(), colors->item(j).value<QColor>());
-        }
-    }
-
-
-    for (auto source : sources) {
-        auto color = colorSource()->item(colorIndex++).value<QColor>();
-        QVector<QPair<qreal, QColor>> values;
-        for (int i = 0; i < source->itemCount(); ++i) {
-            values << QPair<qreal, QColor>(source->item(i).toReal(), color);
-        }
-
-        if (stacked()) {
-            auto previousValue = 0.0;
-            for (auto& value : values) {
-                value.first += previousValue;
-                previousValue = value.first;
-            }
-        }
-
-        m_values << values;
-    }*/
 
     update();
 }

@@ -34,6 +34,9 @@ class BarChart : public XYChart
     Q_PROPERTY(qreal barWidth READ barWidth WRITE setBarWidth NOTIFY barWidthChanged)
 
 public:
+    enum WidthMode { AutoWidth = -2 };
+    Q_ENUM(WidthMode)
+
     BarChart(QQuickItem* parent = nullptr);
     ~BarChart();
 
@@ -51,7 +54,7 @@ protected:
 
 private:
     qreal m_spacing = 0.0;
-    qreal m_barWidth = 1.0;
+    qreal m_barWidth = AutoWidth;
     QVector<QVector<QPair<qreal, QColor>>> m_values;
 };
 
