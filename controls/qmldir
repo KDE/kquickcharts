@@ -1,0 +1,3 @@
+module org.kde.quickcharts.controls
+plugin chartscontrolsplugin
+

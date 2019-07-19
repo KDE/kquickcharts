@@ -38,8 +38,9 @@ ecm_setup_version(
 option(BUILD_EXAMPLES "Build example applications" OFF)
 
 set(REQUIRED_QT_VERSION 5.10.0)
-find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED Qml Quick)
+find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED Qml Quick QuickControls2)
 
+add_subdirectory(controls)
 add_subdirectory(src)
 
 if(BUILD_EXAMPLES)
