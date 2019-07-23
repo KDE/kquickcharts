@@ -94,6 +94,8 @@ void BarChartNode::update()
         bar(vertices, indices, index, rect, color);
     }
 
+    m_geometry->markVertexDataDirty();
+    m_geometry->markIndexDataDirty();
     markDirty(QSGNode::DirtyGeometry);
 }
 
