@@ -7,6 +7,7 @@ void calculateStackedYRange(XYChart *chart, ComputedRange &range, float &minY, f
 {
     auto sources = chart->valueSources();
 
+    minY = 0.0;
     for (auto source : sources) {
         minY = std::min(minY, source->minimum().toFloat());
     }
@@ -16,7 +17,7 @@ void calculateStackedYRange(XYChart *chart, ComputedRange &range, float &minY, f
         for (auto source : sources) {
             yDistance += source->item(i).toFloat();
         }
-        maxY = std::max(maxY, minY + yDistance);
+        maxY = std::max(maxY, std::max(0.0f, minY) + yDistance);
     }
 }
 
