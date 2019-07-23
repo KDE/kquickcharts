@@ -13,6 +13,7 @@ install(TARGETS chartscontrolsplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/q
 install(FILES
     qmldir
     Legend.qml
+    LineChartControl.qml
     DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/quickcharts/controls
 )
 

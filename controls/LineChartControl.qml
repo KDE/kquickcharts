@@ -6,7 +6,27 @@ import org.kde.quickcharts.controls 1.0
 
 Control {
 
+    property alias valueSources: lineChart.valueSources
+    property alias names: nameSource.array
+
+    property alias lineWidth: lineChart.lineWidth
+    property alias fillOpacity: lineChart.fillOpacity
+    property alias stacked: lineChart.stacked
+
+    property alias verticalLinesVisible: verticalLines.visible
+    property alias horizontalLinesVisible: horizontalLines.visible
+
+    property alias xRange: lineChart.xRange
+    property alias yRange: lineChart.yRange
+
+    property alias xAxisSource: xAxisLabels.source
+    property alias yAxisSource: yAxisLabels.source
+
+    background: Rectangle { color: Theme.backgroundColor }
+
     contentItem: Item {
+        anchors.fill: parent;
+
         Charts.GridLines {
             id: horizontalLines
 
@@ -68,14 +88,14 @@ Control {
             source: Charts.ModelSource { model: lineModel; roleName: "label" }
         }
 
-        ChartsControls.Legend {
+        Legend {
             id: legend
 
             anchors {
                 left: yAxisLabels.right
                 right: parent.right
                 bottom: parent.bottom
-                bottomMargin: Kirigami.Units.smallSpacing
+                bottomMargin: Theme.smallSpacing
             }
 
             chart: lineChart
@@ -90,26 +110,11 @@ Control {
                 bottom: xAxisLabels.top
             }
 
-            xRange {
-                from: 0
-                to: 10
-                automatic: true
-            }
+            xRange.automatic: true
+            yRange.automatic: true
 
-            yRange {
-                from: 0
-                to: 100
-                automatic: true
-            }
-
-            valueSources: [
-                Charts.ModelSource { roleName: "value1"; model: lineModel },
-                Charts.ModelSource { roleName: "value2"; model: lineModel },
-                Charts.ModelSource { roleName: "value3"; model: lineModel }
-            ]
-
-            colorSource: Charts.ArraySource { array: ["red", "green", "blue"] }
-            nameSource: Charts.ArraySource { array: ["Example 1", "Example 2", "Example 3"] }
+            colorSource: Charts.ColorGradientSource { baseColor: Theme.highlightColor; itemCount: lineChart.valueSources.length }
+            nameSource: Charts.ArraySource { id: nameSource; array: ["1", "2", "3", "4", "5"] }
         }
     }
 }
