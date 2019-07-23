@@ -83,10 +83,11 @@ QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
 
     const auto sources = valueSources();
     for (int i = 0; i < sources.size(); ++i) {
-        if(i >= node->childCount())
+        int childIndex = sources.size() - 1 - i;
+        while (childIndex >= node->childCount()) {
             node->appendChildNode(new LineChartNode{});
-
-        auto lineNode = static_cast<LineChartNode*>(node->childAtIndex(i));
+        }
+        auto lineNode = static_cast<LineChartNode*>(node->childAtIndex(childIndex));
         auto color = colorSource() ? colorSource()->item(i).value<QColor>() : Qt::black;
         updateLineNode(lineNode, color, sources.at(i));
     }
