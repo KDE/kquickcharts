@@ -1,5 +1,7 @@
 #include "LineGridNode.h"
 
+#include <cmath>
+
 #include <QSGFlatColorMaterial>
 
 LineGridNode::LineGridNode()
@@ -85,9 +87,13 @@ void LineGridNode::update()
 
     int totalVertices = 0;
     if (!m_vertical) {
-        totalVertices = int(m_rect.width() / m_spacing) * 2 + 4;
+        totalVertices = std::floor(m_rect.width() / std::ceil(m_spacing)) * 2 + 4;
     } else {
-        totalVertices = int(m_rect.height() / m_spacing) * 2 + 4;
+        totalVertices = std::floor(m_rect.height() / std::ceil(m_spacing)) * 2 + 4;
+    }
+
+    if (totalVertices < 4) {
+        return;
     }
 
     if (totalVertices != m_geometry->vertexCount()) {
@@ -96,6 +102,10 @@ void LineGridNode::update()
 
     auto vertices = m_geometry->vertexDataAsPoint2D();
     auto indices = m_geometry->indexDataAsUShort();
+
+    if (!vertices || !indices) {
+        return;
+    }
 
     int index = 0;
     if (m_vertical) {
