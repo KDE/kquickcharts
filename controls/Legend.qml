@@ -53,6 +53,12 @@ Control {
                 Layout.preferredWidth: 0
 
                 implicitHeight: Theme.gridUnit
+                implicitWidth: Theme.gridUnit * 5
+
+                property var itemData: modelData !== undefined ? modelData : model
+                property var name: itemData[control.nameRole] !== undefined ? itemData[control.nameRole] : ""
+                property var color: itemData[control.colorRole] !== undefined ? itemData[control.colorRole] : "white"
+                property var value: itemData[control.valueRole] !== undefined ? itemData[control.valueRole] : ""
 
                 Rectangle {
                     id: color
@@ -61,12 +67,13 @@ Control {
                         bottom: parent.bottom
                         left: parent.left
                     }
-                    width: control.colorWidth;
-                    color: model[control.colorRole];
+                    width: control.colorWidth
+                    color: delegate.color
                     visible: ((parent.width - control.valueWidth - Theme.smallSpacing * 2 > 0) || parent.width < control.valueWidth) && control.colorVisible
                 }
 
                 Label {
+                    id: name
                     anchors {
                         top: parent.top
                         bottom: parent.bottom
@@ -76,7 +83,7 @@ Control {
                         rightMargin: Theme.smallSpacing
                     }
 
-                    text: model[control.nameRole];
+                    text: delegate.name
                     font: control.font
                     visible: contentWidth < width
                     verticalAlignment: Qt.AlignVCenter
@@ -92,9 +99,9 @@ Control {
                     }
                     width: control.valueWidth
 
-                    text: control.formatValue(model[control.valueRole]);
+                    text: control.formatValue(delegate.value);
                     font: control.font
-                    color: model[control.colorRole]
+                    color: itemData[control.colorRole] !== undefined ? delegate.color : name.color
                     verticalAlignment: Qt.AlignVCenter
                     horizontalAlignment: Qt.AlignRight
 
