@@ -12,6 +12,7 @@ Control {
     property alias model: legendRepeater.model
     property alias delegate: legendRepeater.delegate
     property alias flow: legend.flow
+    property alias sourceIndex: legendModel.sourceIndex
 
     property real valueWidth: Theme.gridUnit * 2
     property var formatValue: function(input) { return input }
