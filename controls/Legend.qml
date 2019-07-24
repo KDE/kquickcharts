@@ -29,8 +29,8 @@ Control {
     topPadding: 0
     bottomPadding: 0
 
-    implicitWidth: flow == GridLayout.TopToBottom ? Theme.gridUnit * 5 : legend.width
-    implicitHeight: flow == GridLayout.TopToBottom ? legend.height : Theme.gridUnit
+    implicitWidth: flow == GridLayout.TopToBottom ? Theme.gridUnit * 5 : legendRepeater.count * Theme.gridUnit * 5
+    implicitHeight: flow == GridLayout.TopToBottom ? legendRepeater.count * Theme.gridUnit : Theme.gridUnit
 
     contentItem: GridLayout {
         id: legend
