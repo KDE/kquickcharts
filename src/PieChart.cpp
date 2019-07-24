@@ -178,6 +178,10 @@ QSGNode *PieChart::updatePaintNode(QSGNode *node, UpdatePaintNodeData *data)
 
     auto sourceCount = valueSources().size();
 
+    if (m_sections.count() < sourceCount) {
+        return node;
+    }
+
     auto minDimension = std::min(width(), height());
 
     float outerRadius = minDimension;
