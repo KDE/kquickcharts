@@ -86,6 +86,11 @@ QVariant ModelSource::minimum() const
     if (itemCount() <= 0)
         return QVariant{};
 
+    auto minProperty = m_model->property("minimum");
+    if (minProperty.isValid()) {
+        return minProperty;
+    }
+
     QVariant result = std::numeric_limits<float>::max();
     for(int i = 0; i < itemCount(); ++i) {
         result = qMin(result, item(i));
@@ -97,6 +102,11 @@ QVariant ModelSource::maximum() const
 {
     if (itemCount() <= 0)
         return QVariant{};
+
+    auto maxProperty = m_model->property("maximum");
+    if (maxProperty.isValid()) {
+        return maxProperty;
+    }
 
     QVariant result = std::numeric_limits<float>::min();
     for(int i = 0; i < itemCount(); ++i) {
