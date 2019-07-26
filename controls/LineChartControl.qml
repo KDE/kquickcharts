@@ -8,10 +8,16 @@ Control {
 
     property alias valueSources: lineChart.valueSources
     property alias names: nameSource.array
+    property alias color: colorSource.baseColor
 
     property alias lineWidth: lineChart.lineWidth
     property alias fillOpacity: lineChart.fillOpacity
     property alias stacked: lineChart.stacked
+
+    property alias chart: lineChart
+    property alias legend: legend
+    property alias xLabels: xAxisLabels
+    property alias yLabels: yAxisLabels
 
     property alias verticalLinesVisible: verticalLines.visible
     property alias horizontalLinesVisible: horizontalLines.visible
@@ -79,20 +85,20 @@ Control {
             id: xAxisLabels
 
             anchors {
-                left: yAxisLabels.right
+                left: yAxisLabels.visible ? yAxisLabels.right : parent.left
                 right: parent.right
                 bottom: legend.top
             }
 
             delegate: Label { text: Charts.AxisLabels.label }
-            source: Charts.ModelSource { model: lineModel; roleName: "label" }
+            source: Charts.ChartAxisSource { chart: lineChart; axis: Charts.ChartAxisSource.XAxis; itemCount: 5 }
         }
 
         Legend {
             id: legend
 
             anchors {
-                left: yAxisLabels.right
+                left: yAxisLabels.visible ? yAxisLabels.right : parent.left
                 right: parent.right
                 bottom: parent.bottom
                 bottomMargin: Theme.smallSpacing
@@ -105,15 +111,15 @@ Control {
             id: lineChart
             anchors {
                 top: parent.top
-                left: yAxisLabels.right
+                left: yAxisLabels.visible ? yAxisLabels.right : parent.left
                 right: parent.right
-                bottom: xAxisLabels.top
+                bottom: xAxisLabels.visible ? xAxisLabels.top : legend.top
             }
 
             xRange.automatic: true
             yRange.automatic: true
 
-            colorSource: Charts.ColorGradientSource { baseColor: Theme.highlightColor; itemCount: lineChart.valueSources.length }
+            colorSource: Charts.ColorGradientSource { id: colorSource; baseColor: Theme.highlightColor; itemCount: lineChart.valueSources.length }
             nameSource: Charts.ArraySource { id: nameSource; array: ["1", "2", "3", "4", "5"] }
         }
     }
