@@ -111,16 +111,20 @@ void LineGridNode::update()
     if (m_vertical) {
         line(vertices, indices, index, m_rect.left(), m_rect.top(), m_rect.right(), m_rect.top());
 
-        for (auto i = m_spacing; i < m_rect.height(); i += m_spacing) {
-            line(vertices, indices, index, m_rect.left(), i, m_rect.right(), i);
+        auto y = m_spacing;
+        for (auto i = 0; i < (totalVertices - 4) / 2; ++i) {
+            line(vertices, indices, index, m_rect.left(), y, m_rect.right(), y);
+            y += m_spacing;
         }
 
         line(vertices, indices, index, m_rect.left(), m_rect.bottom(), m_rect.right(), m_rect.bottom());
     } else {
         line(vertices, indices, index, m_rect.left(), m_rect.top(), m_rect.left(), m_rect.bottom());
 
-        for (auto i = m_spacing; i < m_rect.width(); i += m_spacing) {
-            line(vertices, indices, index, i, m_rect.top(), i, m_rect.bottom());
+        auto x = m_spacing;
+        for (auto i = 0; i < (totalVertices - 4) / 2; ++i) {
+            line(vertices, indices, index, x, m_rect.top(), x, m_rect.bottom());
+            x += m_spacing;
         }
 
         line(vertices, indices, index, m_rect.right(), m_rect.top(), m_rect.right(), m_rect.bottom());
