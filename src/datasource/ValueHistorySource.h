@@ -54,7 +54,7 @@ public:
 
 private:
     QVariant m_value;
-    int m_maximumHistory;
+    int m_maximumHistory = 10;
     QVector<QVariant> m_history;
 };
 
