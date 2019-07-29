@@ -87,7 +87,8 @@ QVariant ModelSource::minimum() const
         return QVariant{};
 
     auto minProperty = m_model->property("minimum");
-    if (minProperty.isValid()) {
+    auto maxProperty = m_model->property("maximum");
+    if (minProperty.isValid() && minProperty != maxProperty) {
         return minProperty;
     }
 
@@ -103,8 +104,9 @@ QVariant ModelSource::maximum() const
     if (itemCount() <= 0)
         return QVariant{};
 
+    auto minProperty = m_model->property("minimum");
     auto maxProperty = m_model->property("maximum");
-    if (maxProperty.isValid()) {
+    if (maxProperty.isValid() && maxProperty != minProperty) {
         return maxProperty;
     }
 
