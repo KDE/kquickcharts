@@ -47,8 +47,6 @@ RowLayout {
         text: delegate.name
         opacity: contentWidth < width
         verticalAlignment: Qt.AlignVCenter
-
-        background: Rectangle { color: "blue"; opacity: 0.3 }
     }
 
     Label {
@@ -62,8 +60,6 @@ RowLayout {
         color: delegate.color !== undefined ? delegate.color : name.color
         verticalAlignment: Qt.AlignVCenter
         horizontalAlignment: Qt.AlignRight
-
-        background: Rectangle { color: "red"; opacity: 0.3 }
 
         opacity: (parent.width >= width) && delegate.valueVisible
     }
