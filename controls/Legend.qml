@@ -8,22 +8,24 @@ import org.kde.quickcharts.controls 1.0
 Control {
     id: control
 
-    property alias chart: legendModel.chart
+    property Charts.Chart chart
     property alias model: legendRepeater.model
     property alias delegate: legendRepeater.delegate
     property alias flow: legend.flow
-    property alias sourceIndex: legendModel.sourceIndex
+    property int sourceIndex: -1
 
-    property real valueWidth: Theme.gridUnit * 2
     property var formatValue: function(input) { return input }
 
     property bool valueVisible: false
+    property real valueWidth: -1
     property bool colorVisible: true
     property real colorWidth: Theme.smallSpacing
 
     property string nameRole: "name"
     property string colorRole: "color"
     property string valueRole: "value"
+
+    default property alias extraItems: legend.children
 
     leftPadding: 0
     rightPadding: 0
@@ -44,70 +46,20 @@ Control {
 
         Repeater {
             id: legendRepeater
-            model: Charts.LegendModel { id: legendModel; chart: chart }
+            model: Charts.LegendModel { id: legendModel; chart: control.chart; sourceIndex: control.sourceIndex }
 
-            Item {
-                id: delegate
+            delegate: LegendDelegate {
+                property var itemData: typeof modelData !== "undefined" ? modelData : model
+                name: itemData[control.nameRole] !== undefined ? itemData[control.nameRole] : ""
+                color: itemData[control.colorRole] !== undefined ? itemData[control.colorRole] : "white"
+                value: itemData[control.valueRole] !== undefined ? control.formatValue(itemData[control.valueRole]) : ""
 
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.preferredWidth: 0
+                colorVisible: control.colorVisible
+                colorWidth: control.colorWidth
+                valueVisible: control.valueVisible
+                valueWidth: control.valueWidth
 
-                implicitHeight: Theme.gridUnit
-                implicitWidth: Theme.gridUnit * 5
-
-                property var itemData: modelData !== undefined ? modelData : model
-                property var name: itemData[control.nameRole] !== undefined ? itemData[control.nameRole] : ""
-                property var color: itemData[control.colorRole] !== undefined ? itemData[control.colorRole] : "white"
-                property var value: itemData[control.valueRole] !== undefined ? itemData[control.valueRole] : ""
-
-                Rectangle {
-                    id: color
-                    anchors {
-                        top: parent.top
-                        bottom: parent.bottom
-                        left: parent.left
-                    }
-                    width: control.colorWidth
-                    color: delegate.color
-                    visible: ((parent.width - control.valueWidth - Theme.smallSpacing * 2 > 0) || parent.width < control.valueWidth) && control.colorVisible
-                }
-
-                Label {
-                    id: name
-                    anchors {
-                        top: parent.top
-                        bottom: parent.bottom
-                        left: color.right
-                        right: value.left
-                        leftMargin: Theme.smallSpacing
-                        rightMargin: Theme.smallSpacing
-                    }
-
-                    text: delegate.name
-                    font: control.font
-                    visible: contentWidth < width
-                    verticalAlignment: Qt.AlignVCenter
-                }
-
-                Label {
-                    id: value
-                    anchors {
-                        top: parent.top
-                        bottom: parent.bottom
-                        right: parent.right
-                        rightMargin: Theme.smallSpacing
-                    }
-                    width: control.valueWidth
-
-                    text: control.formatValue(delegate.value);
-                    font: control.font
-                    color: itemData[control.colorRole] !== undefined ? delegate.color : name.color
-                    verticalAlignment: Qt.AlignVCenter
-                    horizontalAlignment: Qt.AlignRight
-
-                    visible: (parent.width >= control.valueWidth) && control.valueVisible
-                }
+                font: control.font
             }
         }
     }
