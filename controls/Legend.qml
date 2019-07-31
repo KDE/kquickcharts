@@ -21,6 +21,8 @@ Control {
     property bool colorVisible: true
     property real colorWidth: Theme.smallSpacing
 
+    property alias spacing: legend.rowSpacing
+
     property string nameRole: "name"
     property string colorRole: "color"
     property string valueRole: "value"
@@ -42,7 +44,7 @@ Control {
         rows: flow == GridLayout.TopToBottom ? -1 : 1
 
         rowSpacing: 0
-        columnSpacing: 0
+        columnSpacing: rowSpacing
 
         Repeater {
             id: legendRepeater
