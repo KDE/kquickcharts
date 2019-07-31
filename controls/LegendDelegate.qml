@@ -17,6 +17,7 @@ RowLayout {
     property string name
     property color color
     property string value
+    property color valueColor: name.color
 
     property real colorWidth: Theme.smallSpacing
     property real valueWidth: -1
@@ -57,7 +58,7 @@ RowLayout {
 
         text: delegate.value;
         font: name.font
-        color: delegate.color !== undefined ? delegate.color : name.color
+        color: delegate.valueColor
         verticalAlignment: Qt.AlignVCenter
         horizontalAlignment: Qt.AlignRight
 
