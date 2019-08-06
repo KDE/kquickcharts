@@ -251,7 +251,7 @@ void PieChart::onDataChanged()
             m_colors << QVector<QColor>{ colors->item(colorIndex++).value<QColor>() };
         }
 
-        qreal max = total;
+        qreal max = std::max(total, source->maximum().toReal());
 
         if (!m_range->automatic() && m_range->distance() >= total) {
             max = m_range->distance();
