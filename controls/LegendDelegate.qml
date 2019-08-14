@@ -27,16 +27,19 @@ RowLayout {
 
     property alias font: name.font
 
+    property Component indicator: null
+
     opacity: parent.height >= y + height // This will hide the item if it is out of bounds
 
-    Rectangle {
-        id: color
-
-        Layout.fillHeight: true
+    Loader {
+        Layout.preferredHeight: name.contentHeight
         Layout.preferredWidth: delegate.colorWidth
 
-        color: delegate.color
         opacity: ((parent.width - value.width - Theme.smallSpacing * 2 > 0) || parent.width < value.width) && delegate.colorVisible
+        property color delegateColor: delegate.color
+
+        sourceComponent: delegate.indicator != null ? delegate.indicator : defaultIndicator
+
     }
 
     Label {
@@ -64,4 +67,6 @@ RowLayout {
 
         opacity: (parent.width >= width) && delegate.valueVisible
     }
+
+    Component { id: defaultIndicator; Rectangle { color: delegateColor } }
 }

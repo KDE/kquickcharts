@@ -25,6 +25,8 @@ Control {
     property string colorRole: "color"
     property string valueRole: "value"
 
+    property Component indicator: null
+
     default property alias extraItems: legend.children
 
     leftPadding: 0
@@ -58,6 +60,8 @@ Control {
                 colorWidth: control.colorWidth
                 valueVisible: control.valueVisible
                 valueWidth: control.valueWidth
+
+                indicator: control.indicator
 
                 font: control.font
             }
