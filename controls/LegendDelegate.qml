@@ -42,6 +42,15 @@ RowLayout {
 
         sourceComponent: delegate.indicator != null ? delegate.indicator : defaultIndicator
 
+        MouseArea {
+            id: mouse
+            anchors.fill: parent
+            hoverEnabled: true
+
+            ToolTip.visible: mouse.containsMouse && (!name.visible || !value.visible)
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.text: "%1: %2".arg(delegate.name).arg(delegate.value)
+        }
     }
 
     Label {
