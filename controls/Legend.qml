@@ -51,6 +51,8 @@ Control {
             model: Charts.LegendModel { id: legendModel; chart: control.chart; sourceIndex: control.sourceIndex }
 
             delegate: LegendDelegate {
+                Layout.preferredWidth: implicitWidth
+
                 property var itemData: typeof modelData !== "undefined" ? modelData : model
                 name: itemData[control.nameRole] !== undefined ? itemData[control.nameRole] : ""
                 color: itemData[control.colorRole] !== undefined ? itemData[control.colorRole] : "white"
@@ -64,6 +66,8 @@ Control {
                 indicator: control.indicator
 
                 font: control.font
+
+                layoutWidth: control.Layout.maximumWidth / legendRepeater.count
             }
         }
     }

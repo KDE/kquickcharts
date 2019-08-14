@@ -11,9 +11,6 @@ RowLayout {
     Layout.fillHeight: false
     Layout.preferredWidth: 0
 
-    implicitHeight: Theme.gridUnit
-    implicitWidth: Theme.gridUnit * 5
-
     property string name
     property color color
     property string value
@@ -29,13 +26,18 @@ RowLayout {
 
     property Component indicator: null
 
+    property real layoutWidth: -1
+
+    spacing: Theme.smallSpacing
+
     opacity: parent.height >= y + height // This will hide the item if it is out of bounds
 
     Loader {
         Layout.preferredHeight: name.contentHeight
         Layout.preferredWidth: delegate.colorWidth
 
-        opacity: ((parent.width - value.width - Theme.smallSpacing * 2 > 0) || parent.width < value.width) && delegate.colorVisible
+        visible: delegate.colorVisible
+
         property color delegateColor: delegate.color
 
         sourceComponent: delegate.indicator != null ? delegate.indicator : defaultIndicator
@@ -49,7 +51,13 @@ RowLayout {
         Layout.fillHeight: true
 
         text: delegate.name
-        opacity: contentWidth < width
+        visible: {
+            if (delegate.layoutWidth < 0) {
+                return true;
+            }
+
+            return delegate.layoutWidth - delegate.colorWidth - delegate.spacing * 2 >= contentWidth
+        }
         verticalAlignment: Qt.AlignVCenter
     }
 
@@ -65,7 +73,17 @@ RowLayout {
         verticalAlignment: Qt.AlignVCenter
         horizontalAlignment: Qt.AlignRight
 
-        opacity: (parent.width >= width) && delegate.valueVisible
+        visible: {
+            if (!delegate.valueVisible) {
+                return false;
+            }
+
+            if (delegate.layoutWidth < 0) {
+                return true;
+            }
+
+            return delegate.layoutWidth - delegate.colorWidth - delegate.spacing * 4 - name.contentWidth >= delegate.valueWidth
+        }
     }
 
     Component { id: defaultIndicator; Rectangle { color: delegateColor } }
