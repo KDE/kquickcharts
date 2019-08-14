@@ -1,3 +1,24 @@
+/*
+ * This file is part of Quick Charts.
+ * Copyright 2019 Arjen Hiemstra <ahiemstra@heimr.nl>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License or (at your option) version 3 or any later version
+ * accepted by the membership of KDE e.V. (or its successor approved
+ * by the membership of KDE e.V.), which shall act as a proxy
+ * defined in Section 14 of version 3 of the license.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef AXISLABELS_H
 #define AXISLABELS_H
 
@@ -32,9 +53,7 @@ private:
     QString m_label;
 };
 
-/**
- * @todo write docs
- */
+
 class AxisLabels : public QQuickItem
 {
     Q_OBJECT
@@ -42,6 +61,7 @@ class AxisLabels : public QQuickItem
     Q_PROPERTY(QQmlComponent *delegate READ delegate WRITE setDelegate NOTIFY delegateChanged)
     Q_PROPERTY(ChartDataSource *source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(Qt::Alignment alignment READ alignment WRITE setAlignment NOTIFY alignmentChanged)
+    Q_PROPERTY(bool constrainToBounds READ constrainToBounds WRITE setConstrainToBounds NOTIFY constrainToBoundsChanged)
 
 public:
     enum class Direction
@@ -52,14 +72,8 @@ public:
         VerticalBottomTop
     };
     Q_ENUM(Direction)
-    /**
-     * Default constructor
-     */
-    AxisLabels(QQuickItem *parent = nullptr);
 
-    /**
-     * Destructor
-     */
+    AxisLabels(QQuickItem *parent = nullptr);
     ~AxisLabels();
 
     AxisLabels::Direction direction() const;
@@ -77,6 +91,10 @@ public:
     Qt::Alignment alignment() const;
     Q_SLOT void setAlignment(Qt::Alignment newAlignment);
     Q_SIGNAL void alignmentChanged();
+
+    bool constrainToBounds() const;
+    Q_SLOT void setConstrainToBounds(bool newConstrainToBounds);
+    Q_SIGNAL void constrainToBoundsChanged();
 
     static AxisLabelsAttached *qmlAttachedProperties(QObject *object)
     {
