@@ -25,7 +25,7 @@
 #include "XYChart.h"
 
 /**
- * @todo write docs
+ * A bar chart.
  */
 class BarChart : public XYChart
 {

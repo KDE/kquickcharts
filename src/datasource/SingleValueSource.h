@@ -26,6 +26,11 @@
 
 #include "ChartDataSource.h"
 
+/**
+ * A data source that provides a single value as data.
+ *
+ * \ingroup datasource
+ */
 class SingleValueSource : public ChartDataSource
 {
     Q_OBJECT

@@ -1,4 +1,4 @@
-description: A QtQuick module to render various types of Charts.
+description: A QtQuick module providing high-performance charts.
 fancyname: Quick Charts
 maintainer: ahiemstra
 group: frameworks
@@ -10,3 +10,4 @@ public_lib: true
 public_source_dirs:
 - controls
 - src
+cmakename: KF5QuickCharts

@@ -24,6 +24,9 @@
 
 #include "ModelSource.h"
 
+/**
+ * A data source that watches a model cell and provides the history of that cell as data.
+ */
 class ModelHistorySource : public ModelSource
 {
     Q_OBJECT

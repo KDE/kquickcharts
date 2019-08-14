@@ -24,6 +24,15 @@
 
 #include <QObject>
 
+/**
+ * \defgroup datasource Data Sources
+ */
+
+/**
+ * Abstract base class for data sources.
+ *
+ * \ingroup datasource
+ */
 class ChartDataSource : public QObject
 {
     Q_OBJECT

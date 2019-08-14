@@ -38,29 +38,33 @@ struct ComputedRange {
 bool operator==(const ComputedRange &first, const ComputedRange &second);
 
 /**
- * @todo write docs
+ * Base class for Charts that are based on an X/Y grid.
  */
 class XYChart : public Chart
 {
     Q_OBJECT
+    // The range of values on the X axis.
     Q_PROPERTY(RangeGroup* xRange READ xRange CONSTANT)
+    // The range of values on the Y axis.
     Q_PROPERTY(RangeGroup* yRange READ yRange CONSTANT)
+    // Which direction this chart's X axis runs.
     Q_PROPERTY(Direction direction READ direction WRITE setDirection NOTIFY directionChanged)
+    // Whether the values of each value source shoud be stacked or treated separately.
     Q_PROPERTY(bool stacked READ stacked WRITE setStacked NOTIFY stackedChanged)
 
 public:
     enum class Direction {
-        ZeroAtStart,
-        ZeroAtEnd
+        ZeroAtStart, ///< Zero is at the beginning of the chart, values run from begin to end.
+        ZeroAtEnd ///< Zero is at the end of the chart, values run from end to begin.
     };
     Q_ENUM(Direction)
 
     /**
      * Constructor
      *
-     * @param parent TODO
+     * @param parent The QObject parent.
      */
-    XYChart(QQuickItem *parent = nullptr);
+    explicit XYChart(QQuickItem *parent = nullptr);
 
     /**
      * Destructor

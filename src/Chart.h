@@ -27,19 +27,28 @@
 class ChartDataSource;
 
 /**
- * @todo write docs
+ * Abstract base class for all charts.
  */
 class Chart : public QQuickItem
 {
     Q_OBJECT
+    /**
+     * The data source to use for names of chart items.
+     */
     Q_PROPERTY(ChartDataSource* nameSource READ nameSource WRITE setNameSource NOTIFY nameSourceChanged)
+    /**
+     * The data source to use for colors of chart items.
+     */
     Q_PROPERTY(ChartDataSource* colorSource READ colorSource WRITE setColorSource NOTIFY colorSourceChanged)
+    /**
+     * The data sources providing the data this chart needs to render.
+     */
     Q_PROPERTY(QQmlListProperty<ChartDataSource> valueSources READ valueSourcesProperty NOTIFY valueSourcesChanged)
 
 public:
     using DataSourcesProperty = QQmlListProperty<ChartDataSource>;
 
-    Chart(QQuickItem *parent = nullptr);
+    explicit Chart(QQuickItem *parent = nullptr);
     virtual ~Chart();
 
     ChartDataSource *nameSource() const;
@@ -58,6 +67,14 @@ public:
     Q_SLOT void removeValueSource(QObject *source);
 
 protected:
+    /**
+     * Called when the data of a value source changes.
+     *
+     * This method should be reimplemented by subclasses. It is called whenever
+     * the data of one of the value sources changes. Subclasses should use this
+     * to make sure that they update whatever internal state they use for
+     * rendering, then call update() to schedule rendering the item.
+     */
     Q_SLOT virtual void onDataChanged() = 0;
     void componentComplete() override;
 

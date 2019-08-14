@@ -29,7 +29,7 @@
 class LineChartNode;
 
 /**
- * @todo write docs
+ * A line chart.
  */
 class LineChart : public XYChart
 {

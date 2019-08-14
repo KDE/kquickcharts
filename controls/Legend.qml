@@ -26,10 +26,17 @@ import QtQuick.Controls 2.2
 import org.kde.quickcharts 1.0 as Charts
 import org.kde.quickcharts.controls 1.0
 
+/**
+ * A pre-made legend control that displays a legend for charts.
+ */
 Control {
     id: control
 
+    /**
+     * The chart to display the legend for.
+     */
     property Charts.Chart chart
+
     property alias model: legendRepeater.model
     property alias delegate: legendRepeater.delegate
     property alias flow: legend.flow
