@@ -1,0 +1,12 @@
+description: A QtQuick module to render various types of Charts.
+fancyname: Quick Charts
+maintainer: ahiemstra
+group: frameworks
+subgroup: tier 1
+type: functional
+platforms:
+- name: Linux
+public_lib: true
+public_source_dirs:
+- controls
+- src
