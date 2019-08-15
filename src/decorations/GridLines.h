@@ -44,7 +44,7 @@ class LinePropertiesGroup : public QObject
     Q_PROPERTY(int count READ count WRITE setCount NOTIFY propertiesChanged)
 
 public:
-    LinePropertiesGroup( GridLines *parent);
+    explicit LinePropertiesGroup( GridLines *parent);
 
     bool visible() const;
     void setVisible(bool newVisible);

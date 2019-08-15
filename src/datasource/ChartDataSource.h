@@ -36,7 +36,7 @@ class ChartDataSource : public QObject
     Q_OBJECT
 
 public:
-    ChartDataSource(QObject *parent = nullptr);
+    explicit ChartDataSource(QObject *parent = nullptr);
     virtual ~ChartDataSource();
 
     virtual int itemCount() const = 0;

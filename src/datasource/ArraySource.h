@@ -29,7 +29,7 @@
 BEGIN_NAMESPACE
 
 /**
- * @todo write docs
+ * A data source that provides entries of an array as data.
  */
 class ArraySource : public ChartDataSource
 {
@@ -43,7 +43,7 @@ public:
      *
      * @param parent TODO
      */
-    ArraySource(QObject* parent = nullptr);
+    explicit ArraySource(QObject* parent = nullptr);
 
     /**
      * Destructor

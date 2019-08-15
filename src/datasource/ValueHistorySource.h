@@ -39,7 +39,7 @@ class ValueHistorySource : public ChartDataSource
     Q_PROPERTY(int maximumHistory READ maximumHistory WRITE setMaximumHistory NOTIFY maximumHistoryChanged)
 
 public:
-    ValueHistorySource(QObject *parent = nullptr);
+    explicit ValueHistorySource(QObject *parent = nullptr);
     ~ValueHistorySource();
 
     int itemCount() const override;

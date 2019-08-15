@@ -37,7 +37,7 @@ class SingleValueSource : public ChartDataSource
     Q_PROPERTY ( QVariant value READ value WRITE setValue NOTIFY dataChanged )
 
 public:
-    SingleValueSource ( QObject* parent = nullptr );
+    explicit SingleValueSource ( QObject* parent = nullptr );
     ~SingleValueSource();
 
     virtual int itemCount() const override;

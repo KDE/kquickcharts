@@ -42,7 +42,7 @@ class ColorGradientSource : public ChartDataSource
     Q_PROPERTY(QVariantList colors READ colors NOTIFY dataChanged)
 
 public:
-    ColorGradientSource(QObject* parent = nullptr);
+    explicit ColorGradientSource(QObject* parent = nullptr);
     ~ColorGradientSource();
 
     int itemCount() const override;

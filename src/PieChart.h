@@ -74,12 +74,12 @@ public:
     /**
      * Default constructor
      */
-    PieChart(QQuickItem *parent = nullptr);
 
     /**
      * Destructor
      */
     ~PieChart();
+    explicit PieChart(QQuickItem *parent = nullptr);
 
     RangeGroup *range() const;
 

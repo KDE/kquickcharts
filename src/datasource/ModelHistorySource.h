@@ -36,7 +36,7 @@ class ModelHistorySource : public ModelSource
     Q_PROPERTY(int maximumHistory READ maximumHistory WRITE setMaximumHistory NOTIFY maximumHistoryChanged)
 
 public:
-    ModelHistorySource(QObject* parent = nullptr);
+    explicit ModelHistorySource(QObject* parent = nullptr);
     ~ModelHistorySource();
 
     virtual int itemCount() const override;
