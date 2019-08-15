@@ -39,11 +39,11 @@ class Chart : public QQuickItem
     /**
      * The data source to use for names of chart items.
      */
-    Q_PROPERTY(ChartDataSource* nameSource READ nameSource WRITE setNameSource NOTIFY nameSourceChanged)
+    Q_PROPERTY(ChartDataSource *nameSource READ nameSource WRITE setNameSource NOTIFY nameSourceChanged)
     /**
      * The data source to use for colors of chart items.
      */
-    Q_PROPERTY(ChartDataSource* colorSource READ colorSource WRITE setColorSource NOTIFY colorSourceChanged)
+    Q_PROPERTY(ChartDataSource *colorSource READ colorSource WRITE setColorSource NOTIFY colorSourceChanged)
     /**
      * The data sources providing the data this chart needs to render.
      */

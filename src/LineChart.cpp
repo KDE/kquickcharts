@@ -21,18 +21,18 @@
 
 #include "LineChart.h"
 
-#include <numeric>
-#include <QPainterPath>
 #include <QPainter>
+#include <QPainterPath>
+#include <numeric>
 
 #include "RangeGroup.h"
 #include "datasource/ChartDataSource.h"
-#include "scenegraph/LineGridNode.h"
 #include "scenegraph/LineChartNode.h"
+#include "scenegraph/LineGridNode.h"
 
 QVector<QVector2D> interpolate(const QVector<QVector2D> &points, qreal start, qreal end, qreal height);
 
-LineChart::LineChart(QQuickItem* parent)
+LineChart::LineChart(QQuickItem *parent)
     : XYChart(parent)
 {
 }
@@ -68,7 +68,7 @@ void LineChart::setSmooth(bool smooth)
 
 void LineChart::setLineWidth(qreal width)
 {
-    if(qFuzzyCompare(m_lineWidth, width))
+    if (qFuzzyCompare(m_lineWidth, width))
         return;
 
     m_lineWidth = width;
@@ -90,7 +90,7 @@ QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
 {
     Q_UNUSED(data);
 
-    if(!node) {
+    if (!node) {
         node = new QSGNode();
     }
 
@@ -108,7 +108,7 @@ QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
         while (childIndex >= node->childCount()) {
             node->appendChildNode(new LineChartNode{});
         }
-        auto lineNode = static_cast<LineChartNode*>(node->childAtIndex(childIndex));
+        auto lineNode = static_cast<LineChartNode *>(node->childAtIndex(childIndex));
         auto color = colorSource() ? colorSource()->item(i).value<QColor>() : Qt::black;
         updateLineNode(lineNode, color, sources.at(i));
     }
@@ -126,7 +126,7 @@ void LineChart::onDataChanged()
     update();
 }
 
-void LineChart::updateLineNode(LineChartNode* node, const QColor& lineColor, ChartDataSource* valueSource)
+void LineChart::updateLineNode(LineChartNode *node, const QColor &lineColor, ChartDataSource *valueSource)
 {
     auto fillColor = lineColor;
     fillColor.setRedF(fillColor.redF() * m_fillOpacity);
@@ -144,15 +144,13 @@ void LineChart::updateLineNode(LineChartNode* node, const QColor& lineColor, Cha
     float stepSize = width() / (range.distanceX - 1);
     QVector<QVector2D> values(range.distanceX);
     auto generator = [&, i = range.startX]() mutable -> QVector2D {
-        auto result = QVector2D{
-            direction() == Direction::ZeroAtStart ? i * stepSize : float(boundingRect().right()) - i * stepSize,
-            (valueSource->item(i).toFloat() - range.startY) / range.distanceY
-        };
+        auto result = QVector2D{direction() == Direction::ZeroAtStart ? i * stepSize : float(boundingRect().right()) - i * stepSize,
+                                (valueSource->item(i).toFloat() - range.startY) / range.distanceY};
         i++;
         return result;
     };
 
-    if(direction() == Direction::ZeroAtStart) {
+    if (direction() == Direction::ZeroAtStart) {
         std::generate_n(values.begin(), range.distanceX, generator);
     } else {
         std::generate_n(values.rbegin(), range.distanceX, generator);
@@ -160,11 +158,11 @@ void LineChart::updateLineNode(LineChartNode* node, const QColor& lineColor, Cha
 
     if (stacked() && !m_previousValues.isEmpty()) {
         if (values.size() != m_previousValues.size()) {
-            qWarning() << "Value source" << valueSource->objectName() << "has a different number of elements from the previuous source. Ignoring stacking for this source.";
+            qWarning() << "Value source" << valueSource->objectName()
+                       << "has a different number of elements from the previuous source. Ignoring stacking for this source.";
         } else {
-            std::for_each(values.begin(), values.end(), [this, i = 0](QVector2D &point) mutable {
-                point.setY(point.y() + m_previousValues.at(i++).y());
-            });
+            std::for_each(
+                values.begin(), values.end(), [this, i = 0](QVector2D &point) mutable { point.setY(point.y() + m_previousValues.at(i++).y()); });
         }
     }
     m_previousValues = values;
@@ -179,13 +177,10 @@ void LineChart::updateLineNode(LineChartNode* node, const QColor& lineColor, Cha
 QVector<QVector2D> interpolate(const QVector<QVector2D> &points, qreal start, qreal end, qreal height)
 {
     QPainterPath path;
-    if(points.size() < 4)
+    if (points.size() < 4)
         return points;
 
-    const QMatrix4x4 matrix( 0,    1,    0,     0,
-                            -1/6., 1,    1/6.,  0,
-                             0,    1/6., 1,    -1/6.,
-                             0,    0,    1,     0);
+    const QMatrix4x4 matrix(0, 1, 0, 0, -1 / 6., 1, 1 / 6., 0, 0, 1 / 6., 1, -1 / 6., 0, 0, 1, 0);
 
     const qreal xDelta = (end - start) / (points.count() - 3);
     qreal x = start - xDelta;
@@ -193,16 +188,27 @@ QVector<QVector2D> interpolate(const QVector<QVector2D> &points, qreal start, qr
     path.moveTo(start, points[0].y() * height);
 
     for (int i = 1; i < points.count() - 2; i++) {
-        const QMatrix4x4 p(x,              points[i-1].y() * height, 0, 0,
-                           x + xDelta * 1, points[i+0].y() * height, 0, 0,
-                           x + xDelta * 2, points[i+1].y() * height, 0, 0,
-                           x + xDelta * 3, points[i+2].y() * height, 0, 0);
+        const QMatrix4x4 p(
+            x,
+            points[i - 1].y() * height,
+            0,
+            0,
+            x + xDelta * 1,
+            points[i + 0].y() * height,
+            0,
+            0,
+            x + xDelta * 2,
+            points[i + 1].y() * height,
+            0,
+            0,
+            x + xDelta * 3,
+            points[i + 2].y() * height,
+            0,
+            0);
 
         const QMatrix4x4 res = matrix * p;
 
-        path.cubicTo(res(1, 0), res(1, 1),
-                     res(2, 0), res(2, 1),
-                     res(3, 0), res(3, 1));
+        path.cubicTo(res(1, 0), res(1, 1), res(2, 0), res(2, 1), res(3, 0), res(3, 1));
 
         x += xDelta;
     }
@@ -210,8 +216,8 @@ QVector<QVector2D> interpolate(const QVector<QVector2D> &points, qreal start, qr
     QVector<QVector2D> result;
 
     const auto polygons = path.toSubpathPolygons();
-    for(const auto &polygon : polygons) {
-        for(auto point : polygon) {
+    for (const auto &polygon : polygons) {
+        for (auto point : polygon) {
             result.append(QVector2D{float(point.x()), float(point.y() / height)});
         }
     }

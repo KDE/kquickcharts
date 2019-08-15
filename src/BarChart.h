@@ -39,7 +39,7 @@ public:
     enum WidthMode { AutoWidth = -2 };
     Q_ENUM(WidthMode)
 
-    explicit BarChart(QQuickItem* parent = nullptr);
+    explicit BarChart(QQuickItem *parent = nullptr);
 
     qreal spacing() const;
     Q_SLOT void setSpacing(qreal newSpacing);

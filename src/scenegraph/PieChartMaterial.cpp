@@ -96,7 +96,7 @@ void PieChartMaterial::setOuterRadius(float radius)
     m_outerRadius = radius;
 }
 
-void PieChartMaterial::setBackgroundColor(const QColor& color)
+void PieChartMaterial::setBackgroundColor(const QColor &color)
 {
     m_backgroundColor = color;
 }
@@ -111,7 +111,7 @@ void PieChartMaterial::setColors(const QVector<QVector4D> &colors)
     m_colors = colors;
 }
 
-void PieChartMaterial::setSegments(const QVector<int>& segments)
+void PieChartMaterial::setSegments(const QVector<int> &segments)
 {
     m_segments = segments;
 }
@@ -132,7 +132,7 @@ PieChartShader::~PieChartShader()
 
 const char *const *PieChartShader::attributeNames() const
 {
-    static char const *const names[] = { "in_vertex", "in_uv", nullptr };
+    static char const *const names[] = {"in_vertex", "in_uv", nullptr};
     return names;
 }
 

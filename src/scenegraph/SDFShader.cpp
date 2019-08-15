@@ -27,25 +27,21 @@ static const char shaderRoot[] = ":/org.kde.quickcharts/";
 
 SDFShader::SDFShader()
 {
-
 }
 
 SDFShader::~SDFShader()
 {
 }
 
-void SDFShader::setShaders(const QString& vertex, const QString& fragment)
+void SDFShader::setShaders(const QString &vertex, const QString &fragment)
 {
     auto header = QOpenGLContext::currentContext()->isOpenGLES() ? QStringLiteral("es_header.glsl") : QStringLiteral("desktop_header.glsl");
 
-    setShaderSourceFiles(QOpenGLShader::Vertex, {
-        QString::fromLatin1(shaderRoot) + header,
-        QString::fromLatin1(shaderRoot) + vertex
-    });
+    setShaderSourceFiles(QOpenGLShader::Vertex, {QString::fromLatin1(shaderRoot) + header, QString::fromLatin1(shaderRoot) + vertex});
 
-    setShaderSourceFiles(QOpenGLShader::Fragment, {
-        QString::fromLatin1(shaderRoot) + header,
-        QString::fromLatin1(shaderRoot) + QStringLiteral("sdf.frag"),
-        QString::fromLatin1(shaderRoot) + fragment
-    });
+    setShaderSourceFiles(
+        QOpenGLShader::Fragment,
+        {QString::fromLatin1(shaderRoot) + header,
+         QString::fromLatin1(shaderRoot) + QStringLiteral("sdf.frag"),
+         QString::fromLatin1(shaderRoot) + fragment});
 }

@@ -24,8 +24,8 @@
 
 #include <memory>
 
-#include <Qt>
 #include <QQuickItem>
+#include <Qt>
 
 #include "../namespace.h"
 
@@ -42,7 +42,7 @@ class AxisLabelsAttached : public QObject
     Q_PROPERTY(QString label READ label NOTIFY labelChanged)
 
 public:
-    explicit AxisLabelsAttached(QObject* parent = nullptr);
+    explicit AxisLabelsAttached(QObject *parent = nullptr);
 
     int index() const;
     void setIndex(int newIndex);
@@ -70,13 +70,7 @@ class AxisLabels : public QQuickItem
     Q_PROPERTY(bool constrainToBounds READ constrainToBounds WRITE setConstrainToBounds NOTIFY constrainToBoundsChanged)
 
 public:
-    enum class Direction
-    {
-        HorizontalLeftRight,
-        HorizontalRightLeft,
-        VerticalTopBottom,
-        VerticalBottomTop
-    };
+    enum class Direction { HorizontalLeftRight, HorizontalRightLeft, VerticalTopBottom, VerticalBottomTop };
     Q_ENUM(Direction)
 
     explicit AxisLabels(QQuickItem *parent = nullptr);

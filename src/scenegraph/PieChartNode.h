@@ -22,8 +22,8 @@
 #ifndef PIECHARTNODE_H
 #define PIECHARTNODE_H
 
-#include <QSGGeometryNode>
 #include <QColor>
+#include <QSGGeometryNode>
 
 class QRectF;
 class PieChartMaterial;

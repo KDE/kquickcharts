@@ -52,3 +52,14 @@ MaxEmptyLinesToKeep: 1
 
 # Break before operators that aren’t assignments.
 BreakBeforeBinaryOperators: NonAssignment
+
+# Treat C++11 braced initialization like all other initialization
+Cpp11BracedListStyle: true
+SpaceBeforeCpp11BracedList: false
+
+BreakConstructorInitializers: BeforeComma
+
+AlignAfterOpenBracket: AlwaysBreak
+BinPackArguments: false
+ColumnLimit: 150
+AllowShortFunctionsOnASingleLine: None

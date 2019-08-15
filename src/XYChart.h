@@ -31,7 +31,8 @@ class RangeGroup;
 /**
  *
  */
-struct ComputedRange {
+struct ComputedRange
+{
     int startX = 0;
     int endX = 0;
     int distanceX = 0;
@@ -51,11 +52,11 @@ class XYChart : public Chart
     /**
      * The range of values on the X axis.
      */
-    Q_PROPERTY(RangeGroup* xRange READ xRange CONSTANT)
+    Q_PROPERTY(RangeGroup *xRange READ xRange CONSTANT)
     /**
      * The range of values on the Y axis.
      */
-    Q_PROPERTY(RangeGroup* yRange READ yRange CONSTANT)
+    Q_PROPERTY(RangeGroup *yRange READ yRange CONSTANT)
     /**
      * Which direction this chart's X axis runs.
      */
@@ -107,8 +108,8 @@ protected:
     virtual void updateAutomaticYRange(ComputedRange &range);
 
 private:
-    RangeGroup* m_xRange = nullptr;
-    RangeGroup* m_yRange = nullptr;
+    RangeGroup *m_xRange = nullptr;
+    RangeGroup *m_yRange = nullptr;
     Direction m_direction = Direction::ZeroAtStart;
     bool m_stacked = false;
     ComputedRange m_computedRange;

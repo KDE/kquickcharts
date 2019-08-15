@@ -22,8 +22,8 @@
 #ifndef LINECHARTNODE_H
 #define LINECHARTNODE_H
 
-#include <QSGNode>
 #include <QColor>
+#include <QSGNode>
 
 class QRectF;
 class LineChartMaterial;
@@ -44,9 +44,9 @@ public:
 
     void setRect(const QRectF &rect);
     void setLineWidth(float width);
-    void setLineColor(const QColor& color);
-    void setFillColor(const QColor& color);
-    void setValues(const QVector<QVector2D>& values);
+    void setLineColor(const QColor &color);
+    void setFillColor(const QColor &color);
+    void setValues(const QVector<QVector2D> &values);
 
 private:
     void updatePoints();
@@ -57,7 +57,7 @@ private:
     QColor m_lineColor;
     QColor m_fillColor;
     QVector<QVector2D> m_values;
-    QVector<LineSegmentNode*> m_segments;
+    QVector<LineSegmentNode *> m_segments;
 };
 
 #endif // LINECHARTNODE_H

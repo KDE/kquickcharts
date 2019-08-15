@@ -20,10 +20,10 @@
  */
 
 #include <QApplication>
-#include <QQmlApplicationEngine>
 #include <QCommandLineParser>
-#include <QQmlContext>
 #include <QDebug>
+#include <QQmlApplicationEngine>
+#include <QQmlContext>
 #include <QSurfaceFormat>
 
 #include <KDeclarative/KDeclarative>
@@ -36,12 +36,10 @@ int main(int argc, char **argv)
 
     QCommandLineParser parser;
     parser.addOption({QStringLiteral("page"), QStringLiteral("The page to show."), QStringLiteral("page")});
-    parser.addOption({
-        QStringLiteral("api"),
-        QStringLiteral("The graphics API to use. Can be one of 'default', 'core45', 'compat45', 'compat21' or 'es'."),
-        QStringLiteral("api"),
-        QStringLiteral("default")
-    });
+    parser.addOption({QStringLiteral("api"),
+                      QStringLiteral("The graphics API to use. Can be one of 'default', 'core45', 'compat45', 'compat21' or 'es'."),
+                      QStringLiteral("api"),
+                      QStringLiteral("default")});
     parser.addHelpOption();
     parser.process(app);
 

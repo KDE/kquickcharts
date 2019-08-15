@@ -21,11 +21,11 @@
 
 #include "ModelHistorySource.h"
 
-#include <QVariantList>
 #include <QAbstractItemModel>
 #include <QDebug>
+#include <QVariantList>
 
-ModelHistorySource::ModelHistorySource(QObject* parent)
+ModelHistorySource::ModelHistorySource(QObject *parent)
     : ModelSource(parent)
 {
     connect(this, &ModelHistorySource::modelChanged, this, &ModelHistorySource::onModelChanged);
@@ -38,7 +38,7 @@ int ModelHistorySource::itemCount() const
 
 QVariant ModelHistorySource::item(int index) const
 {
-    if(index < 0 || index >= m_history.size())
+    if (index < 0 || index >= m_history.size())
         return QVariant{};
 
     return m_history.at(index);
@@ -46,7 +46,7 @@ QVariant ModelHistorySource::item(int index) const
 
 QVariant ModelHistorySource::minimum() const
 {
-    if(m_history.isEmpty())
+    if (m_history.isEmpty())
         return QVariant{};
 
     return *std::min_element(m_history.begin(), m_history.end());
@@ -54,7 +54,7 @@ QVariant ModelHistorySource::minimum() const
 
 QVariant ModelHistorySource::maximum() const
 {
-    if(m_history.isEmpty())
+    if (m_history.isEmpty())
         return QVariant{};
 
     return *std::max_element(m_history.begin(), m_history.end());
@@ -92,11 +92,11 @@ void ModelHistorySource::setMaximumHistory(int maximumHistory)
 
 void ModelHistorySource::onModelChanged()
 {
-    if(model())
+    if (model())
         connect(model(), &QAbstractItemModel::dataChanged, this, &ModelHistorySource::onDataChanged);
 }
 
-void ModelHistorySource::onDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>& roles)
+void ModelHistorySource::onDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles)
 {
     if (!roles.isEmpty() && !roles.contains(role()))
         return;
@@ -112,7 +112,7 @@ void ModelHistorySource::onDataChanged(const QModelIndex& topLeft, const QModelI
         return;
 
     m_history.prepend(entry);
-    while(m_history.size() > m_maximumHistory)
+    while (m_history.size() > m_maximumHistory)
         m_history.pop_back();
 
     Q_EMIT dataChanged();

@@ -22,9 +22,9 @@
 #ifndef LINECHARTMATERIAL_H
 #define LINECHARTMATERIAL_H
 
+#include <QColor>
 #include <QSGMaterial>
 #include <QSGMaterialShader>
-#include <QColor>
 
 #include "SDFShader.h"
 

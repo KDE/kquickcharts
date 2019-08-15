@@ -63,7 +63,7 @@ protected:
     void onDataChanged() override;
 
 private:
-    void updateLineNode(LineChartNode *node, const QColor& lineColor, ChartDataSource *valueSource);
+    void updateLineNode(LineChartNode *node, const QColor &lineColor, ChartDataSource *valueSource);
 
     bool m_smooth = false;
     qreal m_lineWidth = 1.0;

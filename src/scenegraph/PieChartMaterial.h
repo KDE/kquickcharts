@@ -22,9 +22,9 @@
 #ifndef PIECHARTMATERIAL_H
 #define PIECHARTMATERIAL_H
 
+#include <QColor>
 #include <QSGMaterial>
 #include <QSGMaterialShader>
-#include <QColor>
 
 #include "SDFShader.h"
 

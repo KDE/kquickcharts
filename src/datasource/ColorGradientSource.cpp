@@ -27,7 +27,7 @@
 
 #include <QDebug>
 
-ColorGradientSource::ColorGradientSource(QObject* parent)
+ColorGradientSource::ColorGradientSource(QObject *parent)
     : ChartDataSource(parent)
 {
 }
@@ -61,7 +61,7 @@ QColor ColorGradientSource::baseColor() const
     return m_baseColor;
 }
 
-void ColorGradientSource::setBaseColor(const QColor & newBaseColor)
+void ColorGradientSource::setBaseColor(const QColor &newBaseColor)
 {
     if (newBaseColor == m_baseColor) {
         return;

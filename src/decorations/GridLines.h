@@ -44,7 +44,7 @@ class LinePropertiesGroup : public QObject
     Q_PROPERTY(int count READ count WRITE setCount NOTIFY propertiesChanged)
 
 public:
-    explicit LinePropertiesGroup( GridLines *parent);
+    explicit LinePropertiesGroup(GridLines *parent);
 
     bool visible() const;
     void setVisible(bool newVisible);
@@ -80,28 +80,25 @@ class GridLines : public QQuickItem
     Q_OBJECT
 
     Q_PROPERTY(GridLines::Direction direction READ direction WRITE setDirection NOTIFY directionChanged)
-    Q_PROPERTY(XYChart * chart READ chart WRITE setChart NOTIFY chartChanged)
+    Q_PROPERTY(XYChart *chart READ chart WRITE setChart NOTIFY chartChanged)
     Q_PROPERTY(float spacing READ spacing WRITE setSpacing NOTIFY spacingChanged)
     Q_PROPERTY(LinePropertiesGroup *major READ major CONSTANT)
     Q_PROPERTY(LinePropertiesGroup *minor READ minor CONSTANT)
 
 public:
-    enum class Direction {
-        Horizontal,
-        Vertical
-    };
+    enum class Direction { Horizontal, Vertical };
     Q_ENUM(Direction)
     /**
      * Default constructor
      */
-    explicit GridLines (QQuickItem *parent = nullptr);
+    explicit GridLines(QQuickItem *parent = nullptr);
 
     Direction direction() const;
     Q_SLOT void setDirection(GridLines::Direction newDirection);
     Q_SIGNAL void directionChanged();
 
-    XYChart * chart() const;
-    Q_SLOT void setChart(XYChart * newChart);
+    XYChart *chart() const;
+    Q_SLOT void setChart(XYChart *newChart);
     Q_SIGNAL void chartChanged();
 
     float spacing() const;

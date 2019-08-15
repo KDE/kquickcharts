@@ -44,22 +44,16 @@ class LegendModel : public QAbstractListModel
     Q_PROPERTY(int sourceIndex READ sourceIndex WRITE setSourceIndex NOTIFY sourceIndexChanged)
 
 public:
-    enum Roles {
-        NameRole = Qt::UserRole,
-        ColorRole,
-        ValueRole
-    };
+    enum Roles { NameRole = Qt::UserRole, ColorRole, ValueRole };
 
-    enum SourceIndex {
-        UseSourceCount = -2
-    };
+    enum SourceIndex { UseSourceCount = -2 };
     Q_ENUM(SourceIndex)
 
-    explicit LegendModel(QObject* parent = nullptr);
+    explicit LegendModel(QObject *parent = nullptr);
 
     QHash<int, QByteArray> roleNames() const override;
-    int rowCount(const QModelIndex& parent) const override;
-    QVariant data(const QModelIndex& index, int role) const override;
+    int rowCount(const QModelIndex &parent) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
 
     Chart *chart() const;
     Q_SLOT void setChart(Chart *newChart);

@@ -21,13 +21,12 @@
 
 #include "SingleValueSource.h"
 
-SingleValueSource::SingleValueSource ( QObject* parent )
+SingleValueSource::SingleValueSource(QObject *parent)
     : ChartDataSource(parent)
 {
-
 }
 
-QVariant SingleValueSource::item ( int index ) const
+QVariant SingleValueSource::item(int index) const
 {
     Q_UNUSED(index);
     return m_value;
@@ -53,9 +52,9 @@ QVariant SingleValueSource::value() const
     return m_value;
 }
 
-void SingleValueSource::setValue ( const QVariant& value )
+void SingleValueSource::setValue(const QVariant &value)
 {
-    if ( m_value == value ) {
+    if (m_value == value) {
         return;
     }
 

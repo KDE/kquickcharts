@@ -24,7 +24,7 @@
 #include "XYChart.h"
 #include "scenegraph/LineGridNode.h"
 
-LinePropertiesGroup::LinePropertiesGroup(GridLines* parent)
+LinePropertiesGroup::LinePropertiesGroup(GridLines *parent)
     : QObject(parent)
 {
     m_parent = parent;
@@ -45,13 +45,12 @@ void LinePropertiesGroup::setVisible(bool newVisible)
     Q_EMIT propertiesChanged();
 }
 
-
 QColor LinePropertiesGroup::color() const
 {
     return m_color;
 }
 
-void LinePropertiesGroup::setColor(const QColor & newColor)
+void LinePropertiesGroup::setColor(const QColor &newColor)
 {
     if (newColor == m_color) {
         return;
@@ -117,8 +116,9 @@ public:
     std::unique_ptr<LinePropertiesGroup> minor;
 };
 
-GridLines::GridLines(QQuickItem* parent)
-    : QQuickItem(parent), d(new Private)
+GridLines::GridLines(QQuickItem *parent)
+    : QQuickItem(parent)
+    , d(new Private)
 {
     setFlag(QQuickItem::ItemHasContents);
 
@@ -144,12 +144,12 @@ void GridLines::setDirection(GridLines::Direction newDirection)
     Q_EMIT directionChanged();
 }
 
-XYChart * GridLines::chart() const
+XYChart *GridLines::chart() const
 {
     return d->chart;
 }
 
-void GridLines::setChart(XYChart * newChart)
+void GridLines::setChart(XYChart *newChart)
 {
     if (newChart == d->chart) {
         return;
@@ -169,7 +169,6 @@ void GridLines::setChart(XYChart * newChart)
     Q_EMIT chartChanged();
 }
 
-
 float GridLines::spacing() const
 {
     return d->spacing;
@@ -186,17 +185,17 @@ void GridLines::setSpacing(float newSpacing)
     Q_EMIT spacingChanged();
 }
 
-LinePropertiesGroup * GridLines::major() const
+LinePropertiesGroup *GridLines::major() const
 {
     return d->major.get();
 }
 
-LinePropertiesGroup * GridLines::minor() const
+LinePropertiesGroup *GridLines::minor() const
 {
     return d->minor.get();
 }
 
-QSGNode * GridLines::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNodeData*)
+QSGNode *GridLines::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *)
 {
     if (!node) {
         node = new QSGNode{};
@@ -212,8 +211,8 @@ QSGNode * GridLines::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNodeD
         }
     }
 
-    updateLines(static_cast<LineGridNode*>(node->childAtIndex(0)), d->minor.get());
-    updateLines(static_cast<LineGridNode*>(node->childAtIndex(1)), d->major.get());
+    updateLines(static_cast<LineGridNode *>(node->childAtIndex(0)), d->minor.get());
+    updateLines(static_cast<LineGridNode *>(node->childAtIndex(1)), d->major.get());
 
     return node;
 }

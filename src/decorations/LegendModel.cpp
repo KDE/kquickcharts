@@ -31,7 +31,7 @@ struct LegendModel::LegendItem
     QVariant value;
 };
 
-LegendModel::LegendModel(QObject* parent)
+LegendModel::LegendModel(QObject *parent)
     : QAbstractListModel(parent)
 {
 }
@@ -39,15 +39,15 @@ LegendModel::LegendModel(QObject* parent)
 QHash<int, QByteArray> LegendModel::roleNames() const
 {
     static QHash<int, QByteArray> names = {
-        { NameRole, "name" },
-        { ColorRole, "color" },
-        { ValueRole, "value" },
+        {NameRole, "name"},
+        {ColorRole, "color"},
+        {ValueRole, "value"},
     };
 
     return names;
 }
 
-int LegendModel::rowCount(const QModelIndex& parent) const
+int LegendModel::rowCount(const QModelIndex &parent) const
 {
     if (parent.isValid()) {
         return 0;
@@ -56,18 +56,18 @@ int LegendModel::rowCount(const QModelIndex& parent) const
     return m_items.size();
 }
 
-QVariant LegendModel::data(const QModelIndex& index, int role) const
+QVariant LegendModel::data(const QModelIndex &index, int role) const
 {
     if (!checkIndex(index, CheckIndexOption::ParentIsInvalid | CheckIndexOption::IndexIsValid))
         return QVariant{};
 
     switch (role) {
-        case NameRole:
-            return m_items.at(index.row()).name;
-        case ColorRole:
-            return m_items.at(index.row()).color;
-        case ValueRole:
-            return m_items.at(index.row()).value;
+    case NameRole:
+        return m_items.at(index.row()).name;
+    case ColorRole:
+        return m_items.at(index.row()).color;
+    case ValueRole:
+        return m_items.at(index.row()).value;
     }
 
     return QVariant{};
@@ -212,5 +212,5 @@ void LegendModel::updateData()
         i++;
     });
 
-    Q_EMIT dataChanged(index(0, 0), index(itemCount - 1, 0), { NameRole, ColorRole, ValueRole });
+    Q_EMIT dataChanged(index(0, 0), index(itemCount - 1, 0), {NameRole, ColorRole, ValueRole});
 }

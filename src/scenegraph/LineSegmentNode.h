@@ -22,8 +22,8 @@
 #ifndef LINESEGMENTNODE_H
 #define LINESEGMENTNODE_H
 
-#include <QSGGeometryNode>
 #include <QColor>
+#include <QSGGeometryNode>
 #include <QVector2D>
 
 class QRectF;
@@ -50,9 +50,9 @@ public:
     void setRect(const QRectF &rect);
     void setAspect(float xAspect, float yAspect);
     void setLineWidth(float width);
-    void setLineColor(const QColor& color);
-    void setFillColor(const QColor& color);
-    void setValues(const QVector<QVector2D>& values);
+    void setLineColor(const QColor &color);
+    void setFillColor(const QColor &color);
+    void setValues(const QVector<QVector2D> &values);
     void setFarLeft(const QVector2D &value);
     void setFarRight(const QVector2D &value);
 

@@ -21,12 +21,12 @@
 
 #include "ChartAxisSource.h"
 
-#include <QVariant>
 #include <QDebug>
+#include <QVariant>
 
 #include "XYChart.h"
 
-ChartAxisSource::ChartAxisSource(QObject* parent)
+ChartAxisSource::ChartAxisSource(QObject *parent)
     : ChartDataSource(parent)
 {
     connect(this, &ChartAxisSource::itemCountChanged, this, &ChartAxisSource::dataChanged);

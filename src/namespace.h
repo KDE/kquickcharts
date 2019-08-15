@@ -34,9 +34,17 @@
 #define BEGIN_NAMESPACE
 #define END_NAMESPACE
 #else
-#define BEGIN_NAMESPACE \
-    namespace org { namespace kde { namespace quickcharts {
-#define END_NAMESPACE } } }
+#define BEGIN_NAMESPACE                                                                                                                              \
+    namespace org                                                                                                                                    \
+    {                                                                                                                                                \
+    namespace kde                                                                                                                                    \
+    {                                                                                                                                                \
+    namespace quickcharts                                                                                                                            \
+    {
+#define END_NAMESPACE                                                                                                                                \
+    }                                                                                                                                                \
+    }                                                                                                                                                \
+    }
 #endif
 
 #endif // NAMESPACE_H

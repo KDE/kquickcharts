@@ -34,12 +34,7 @@ static const qreal sectionSize = pi * 0.5;
 
 inline QVector4D colorToVec4(const QColor &color)
 {
-    return QVector4D{
-          float(color.redF())
-        , float(color.greenF())
-        , float(color.blueF())
-        , float(color.alphaF())
-    };
+    return QVector4D{float(color.redF()), float(color.greenF()), float(color.blueF()), float(color.alphaF())};
 }
 
 inline qreal degToRad(qreal deg)
@@ -55,17 +50,17 @@ inline QVector2D rotated(const QVector2D vector, qreal angle)
 }
 
 PieChartNode::PieChartNode()
-    : PieChartNode(QRectF {})
+    : PieChartNode(QRectF{})
 {
 }
 
 PieChartNode::PieChartNode(const QRectF &rect)
 {
-    m_geometry = new QSGGeometry { QSGGeometry::defaultAttributes_TexturedPoint2D(), 4 };
-    QSGGeometry::updateTexturedRectGeometry(m_geometry, rect, QRectF { 0, 0, 1, 1 });
+    m_geometry = new QSGGeometry{QSGGeometry::defaultAttributes_TexturedPoint2D(), 4};
+    QSGGeometry::updateTexturedRectGeometry(m_geometry, rect, QRectF{0, 0, 1, 1});
     setGeometry(m_geometry);
 
-    m_material = new PieChartMaterial {};
+    m_material = new PieChartMaterial{};
     setMaterial(m_material);
 
     setFlags(QSGNode::OwnsGeometry | QSGNode::OwnsMaterial);
@@ -81,12 +76,12 @@ void PieChartNode::setRect(const QRectF &rect)
         return;
 
     m_rect = rect;
-    QSGGeometry::updateTexturedRectGeometry(m_geometry, m_rect, QRectF { 0, 0, 1, 1 });
+    QSGGeometry::updateTexturedRectGeometry(m_geometry, m_rect, QRectF{0, 0, 1, 1});
     markDirty(QSGNode::DirtyGeometry);
 
     auto minDimension = qMin(m_rect.width(), m_rect.height());
 
-    QVector2D aspect { 1.0, 1.0 };
+    QVector2D aspect{1.0, 1.0};
     aspect.setX(rect.width() / minDimension);
     aspect.setY(rect.height() / minDimension);
     m_material->setAspectRatio(aspect);
@@ -137,7 +132,7 @@ void PieChartNode::setSections(const QVector<qreal> &sections)
     updateTriangles();
 }
 
-void PieChartNode::setBackgroundColor(const QColor& color)
+void PieChartNode::setBackgroundColor(const QColor &color)
 {
     if (color == m_backgroundColor)
         return;
@@ -204,7 +199,7 @@ void PieChartNode::updateTriangles()
     auto sections = m_sections;
     auto colors = m_colors;
 
-    QVector2D point = rotated(QVector2D{ 0.0, -2.0 }, degToRad(m_fromAngle));
+    QVector2D point = rotated(QVector2D{0.0, -2.0}, degToRad(m_fromAngle));
     auto index = 0;
     auto current = sections.at(0) * totalAngle;
     auto sectionCount = 0;

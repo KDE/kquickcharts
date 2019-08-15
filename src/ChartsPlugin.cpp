@@ -21,26 +21,26 @@
 
 #include "ChartsPlugin.h"
 
-#include "Chart.h"
-#include "PieChart.h"
-#include "XYChart.h"
-#include "LineChart.h"
 #include "BarChart.h"
+#include "Chart.h"
+#include "LineChart.h"
+#include "PieChart.h"
 #include "RangeGroup.h"
+#include "XYChart.h"
 
-#include "decorations/GridLines.h"
 #include "decorations/AxisLabels.h"
+#include "decorations/GridLines.h"
 #include "decorations/LegendModel.h"
 
+#include "datasource/ArraySource.h"
+#include "datasource/ChartAxisSource.h"
+#include "datasource/ColorGradientSource.h"
+#include "datasource/ModelHistorySource.h"
 #include "datasource/ModelSource.h"
 #include "datasource/SingleValueSource.h"
-#include "datasource/ArraySource.h"
-#include "datasource/ModelHistorySource.h"
-#include "datasource/ChartAxisSource.h"
 #include "datasource/ValueHistorySource.h"
-#include "datasource/ColorGradientSource.h"
 
-QuickChartsPlugin::QuickChartsPlugin(QObject* parent)
+QuickChartsPlugin::QuickChartsPlugin(QObject *parent)
     : QQmlExtensionPlugin(parent)
 {
 }

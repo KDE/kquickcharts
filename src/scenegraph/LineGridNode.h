@@ -22,8 +22,8 @@
 #ifndef LINEGRIDNODE_H
 #define LINEGRIDNODE_H
 
-#include <QSGGeometryNode>
 #include <QColor>
+#include <QSGGeometryNode>
 
 class QSGFlatColorMaterial;
 
@@ -46,6 +46,7 @@ public:
     bool isSubtreeBlocked() const override;
 
     void update();
+
 private:
     void line(QSGGeometry::Point2D *vertices, quint16 *indices, int &index, qreal fromX, qreal fromY, qreal toX, qreal toY);
 

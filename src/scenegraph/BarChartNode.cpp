@@ -21,9 +21,9 @@
 
 #include "BarChartNode.h"
 
-#include <QSGVertexColorMaterial>
 #include <QColor>
 #include <QDebug>
+#include <QSGVertexColorMaterial>
 
 bool compareCount(const QVector<QPair<qreal, QColor>> &first, const QVector<QPair<qreal, QColor>> &second)
 {
@@ -43,10 +43,9 @@ BarChartNode::BarChartNode()
 
 BarChartNode::~BarChartNode()
 {
-
 }
 
-void BarChartNode::setRect(const QRectF& rect)
+void BarChartNode::setRect(const QRectF &rect)
 {
     if (rect == m_rect)
         return;
@@ -54,7 +53,7 @@ void BarChartNode::setRect(const QRectF& rect)
     m_rect = rect;
 }
 
-void BarChartNode::setValues(const QVector<QPair<QVector2D, QColor>>& values)
+void BarChartNode::setValues(const QVector<QPair<QVector2D, QColor>> &values)
 {
     m_values = values;
 }
@@ -99,7 +98,7 @@ void BarChartNode::update()
     markDirty(QSGNode::DirtyGeometry);
 }
 
-void BarChartNode::bar(QSGGeometry::ColoredPoint2D* vertices, quint16* indices, int& index, const QRectF& bar, const QColor& color)
+void BarChartNode::bar(QSGGeometry::ColoredPoint2D *vertices, quint16 *indices, int &index, const QRectF &bar, const QColor &color)
 {
     indices[index] = index;
     vertices[index++].set(bar.left(), bar.bottom(), color.red(), color.green(), color.blue(), color.alpha());

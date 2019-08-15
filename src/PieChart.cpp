@@ -24,9 +24,9 @@
 #include <QAbstractItemModel>
 #include <QDebug>
 
-#include "scenegraph/PieChartNode.h"
-#include "datasource/ChartDataSource.h"
 #include "RangeGroup.h"
+#include "datasource/ChartDataSource.h"
+#include "scenegraph/PieChartNode.h"
 
 PieChart::PieChart(QQuickItem *parent)
     : Chart(parent)
@@ -87,7 +87,6 @@ void PieChart::setSpacing(qreal newSpacing)
     update();
     Q_EMIT spacingChanged();
 }
-
 
 QColor PieChart::backgroundColor() const
 {
@@ -152,7 +151,6 @@ void PieChart::setToAngle(qreal newToAngle)
     Q_EMIT toAngleChanged();
 }
 
-
 bool PieChart::smoothEnds() const
 {
     return m_smoothEnds;
@@ -168,7 +166,6 @@ void PieChart::setSmoothEnds(bool newSmoothEnds)
     update();
     Q_EMIT smoothEndsChanged();
 }
-
 
 QSGNode *PieChart::updatePaintNode(QSGNode *node, UpdatePaintNodeData *data)
 {
@@ -192,7 +189,7 @@ QSGNode *PieChart::updatePaintNode(QSGNode *node, UpdatePaintNodeData *data)
         if (node->childCount() <= i)
             node->appendChildNode(new PieChartNode{});
 
-        auto pieNode = static_cast<PieChartNode*>(node->childAtIndex(i));
+        auto pieNode = static_cast<PieChartNode *>(node->childAtIndex(i));
         pieNode->setRect(boundingRect());
         pieNode->setInnerRadius(innerRadius);
         pieNode->setOuterRadius(outerRadius);
@@ -226,7 +223,7 @@ void PieChart::onDataChanged()
 
     auto colorIndex = 0;
 
-    for(auto source : sources) {
+    for (auto source : sources) {
         qreal threshold = !m_range->automatic() ? m_range->from() : 0.0;
         qreal total = 0.0;
 
@@ -248,8 +245,8 @@ void PieChart::onDataChanged()
         }
 
         if (qFuzzyCompare(total, 0.0)) {
-            m_sections << QVector<qreal>{ 0.0 };
-            m_colors << QVector<QColor>{ colors->item(colorIndex++).value<QColor>() };
+            m_sections << QVector<qreal>{0.0};
+            m_colors << QVector<QColor>{colors->item(colorIndex++).value<QColor>()};
         }
 
         qreal max = std::max(total, source->maximum().toReal());
@@ -258,7 +255,7 @@ void PieChart::onDataChanged()
             max = m_range->distance();
         }
 
-        for (auto& value : sections) {
+        for (auto &value : sections) {
             value = value / (qFuzzyCompare(max, 0.0) ? 1.0 : max);
         }
 

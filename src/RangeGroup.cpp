@@ -21,7 +21,7 @@
 
 #include "RangeGroup.h"
 
-RangeGroup::RangeGroup(QObject* parent)
+RangeGroup::RangeGroup(QObject *parent)
     : QObject(parent)
 {
     connect(this, &RangeGroup::fromChanged, this, &RangeGroup::rangeChanged);

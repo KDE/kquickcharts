@@ -66,12 +66,12 @@ float LineChartMaterial::aspect() const
     return m_aspect;
 }
 
-void LineChartMaterial::setLineColor(const QColor& color)
+void LineChartMaterial::setLineColor(const QColor &color)
 {
     m_lineColor = color;
 }
 
-void LineChartMaterial::setFillColor(const QColor& color)
+void LineChartMaterial::setFillColor(const QColor &color)
 {
     m_fillColor = color;
 }
@@ -81,7 +81,7 @@ void LineChartMaterial::setLineWidth(float width)
     m_lineWidth = width;
 }
 
-void LineChartMaterial::setPoints(const QVector<QVector2D>& points)
+void LineChartMaterial::setPoints(const QVector<QVector2D> &points)
 {
     m_points = points;
 }
@@ -102,7 +102,7 @@ LineChartShader::~LineChartShader()
 
 const char *const *LineChartShader::attributeNames() const
 {
-    static char const *const names[] = { "in_vertex", "in_uv", nullptr };
+    static char const *const names[] = {"in_vertex", "in_uv", nullptr};
     return names;
 }
 

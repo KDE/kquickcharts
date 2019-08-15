@@ -64,7 +64,7 @@ bool ModelSource::indexColumns() const
 
 int ModelSource::itemCount() const
 {
-    if(!m_model)
+    if (!m_model)
         return 0;
 
     return m_indexColumns ? m_model->columnCount() : m_model->rowCount();
@@ -73,7 +73,7 @@ int ModelSource::itemCount() const
 QVariant ModelSource::item(int index) const
 {
     if (!m_model)
-        return QVariant {};
+        return QVariant{};
 
     // For certain model (QML ListModel for example), the roleNames() are more
     // dynamic and may only be valid when this method gets called. So try and
@@ -83,16 +83,16 @@ QVariant ModelSource::item(int index) const
 
     if (m_role < 0) {
         qWarning() << "ModelSource: Invalid role " << m_role << m_roleName;
-        return QVariant {};
+        return QVariant{};
     }
 
-    if(!m_indexColumns && (m_column < 0 || m_column > m_model->columnCount())) {
+    if (!m_indexColumns && (m_column < 0 || m_column > m_model->columnCount())) {
         qWarning() << "ModelSource: Invalid column" << m_column;
-        return QVariant {};
+        return QVariant{};
     }
 
     auto modelIndex = m_indexColumns ? m_model->index(0, index) : m_model->index(index, m_column);
-    if(modelIndex.isValid())
+    if (modelIndex.isValid())
         return m_model->data(modelIndex, m_role);
 
     return QVariant{};
@@ -110,7 +110,7 @@ QVariant ModelSource::minimum() const
     }
 
     QVariant result = std::numeric_limits<float>::max();
-    for(int i = 0; i < itemCount(); ++i) {
+    for (int i = 0; i < itemCount(); ++i) {
         result = qMin(result, item(i));
     }
     return result;
@@ -128,7 +128,7 @@ QVariant ModelSource::maximum() const
     }
 
     QVariant result = std::numeric_limits<float>::min();
-    for(int i = 0; i < itemCount(); ++i) {
+    for (int i = 0; i < itemCount(); ++i) {
         result = qMax(result, item(i));
     }
     return result;
@@ -136,24 +136,24 @@ QVariant ModelSource::maximum() const
 
 void ModelSource::setRole(int role)
 {
-    if(role == m_role)
+    if (role == m_role)
         return;
 
     m_role = role;
-    if(m_model) {
+    if (m_model) {
         m_roleName = QString::fromLatin1(m_model->roleNames().value(role));
         Q_EMIT roleNameChanged();
     }
     Q_EMIT roleChanged();
 }
 
-void ModelSource::setRoleName(const QString& name)
+void ModelSource::setRoleName(const QString &name)
 {
-    if(name == m_roleName)
+    if (name == m_roleName)
         return;
 
     m_roleName = name;
-    if(m_model) {
+    if (m_model) {
         m_role = m_model->roleNames().key(m_roleName.toLatin1(), -1);
         Q_EMIT roleChanged();
     }
@@ -162,7 +162,7 @@ void ModelSource::setRoleName(const QString& name)
 
 void ModelSource::setColumn(int column)
 {
-    if(column == m_column)
+    if (column == m_column)
         return;
 
     m_column = column;
@@ -171,7 +171,7 @@ void ModelSource::setColumn(int column)
 
 void ModelSource::setIndexColumns(bool index)
 {
-    if(index == m_indexColumns)
+    if (index == m_indexColumns)
         return;
 
     m_indexColumns = index;

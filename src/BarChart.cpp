@@ -21,13 +21,13 @@
 
 #include "BarChart.h"
 
-#include <QSGNode>
 #include <QDebug>
+#include <QSGNode>
 
 #include "datasource/ChartDataSource.h"
 #include "scenegraph/BarChartNode.h"
 
-BarChart::BarChart(QQuickItem* parent)
+BarChart::BarChart(QQuickItem *parent)
     : XYChart(parent)
 {
 }
@@ -64,8 +64,7 @@ void BarChart::setBarWidth(qreal newBarWidth)
     Q_EMIT barWidthChanged();
 }
 
-
-QSGNode *BarChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData*)
+QSGNode *BarChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *)
 {
     if (!node) {
         node = new BarChartNode{};
@@ -132,7 +131,7 @@ QSGNode *BarChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDat
         }
     }
 
-    auto barNode = static_cast<BarChartNode*>(node);
+    auto barNode = static_cast<BarChartNode *>(node);
     barNode->setRect(boundingRect());
     barNode->setValues(values);
     barNode->setBarWidth(w);
@@ -173,7 +172,7 @@ void BarChart::onDataChanged()
         return values;
     };
 
-    if(direction() == Direction::ZeroAtStart) {
+    if (direction() == Direction::ZeroAtStart) {
         std::generate_n(m_values.begin(), range.distanceX, generator);
     } else {
         std::generate_n(m_values.rbegin(), range.distanceX, generator);

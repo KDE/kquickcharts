@@ -36,7 +36,7 @@ class ModelHistorySource : public ModelSource
     Q_PROPERTY(int maximumHistory READ maximumHistory WRITE setMaximumHistory NOTIFY maximumHistoryChanged)
 
 public:
-    explicit ModelHistorySource(QObject* parent = nullptr);
+    explicit ModelHistorySource(QObject *parent = nullptr);
 
     virtual int itemCount() const override;
     virtual QVariant item(int index) const override;
@@ -56,7 +56,7 @@ Q_SIGNALS:
 
 private:
     void onModelChanged();
-    void onDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>& roles);
+    void onDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles);
 
     int m_row;
     int m_maximumHistory;

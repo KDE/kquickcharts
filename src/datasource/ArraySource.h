@@ -43,7 +43,7 @@ public:
      *
      * @param parent TODO
      */
-    explicit ArraySource(QObject* parent = nullptr);
+    explicit ArraySource(QObject *parent = nullptr);
 
     virtual int itemCount() const override;
     virtual QVariant item(int index) const override;

@@ -33,7 +33,7 @@ LineGridNode::LineGridNode()
     setGeometry(m_geometry);
 
     m_material = new QSGFlatColorMaterial{};
-    m_material->setColor(QColor(255,0,0,255));
+    m_material->setColor(QColor(255, 0, 0, 255));
     setMaterial(m_material);
 
     setFlags(QSGNode::OwnsGeometry | QSGNode::OwnsMaterial);
@@ -60,7 +60,7 @@ void LineGridNode::setVertical(bool vertical)
     m_vertical = vertical;
 }
 
-void LineGridNode::setRect(const QRectF& rect)
+void LineGridNode::setRect(const QRectF &rect)
 {
     if (rect == m_rect)
         return;
@@ -68,7 +68,7 @@ void LineGridNode::setRect(const QRectF& rect)
     m_rect = rect;
 }
 
-void LineGridNode::setColor(const QColor& color)
+void LineGridNode::setColor(const QColor &color)
 {
     if (color == m_material->color())
         return;
@@ -103,7 +103,7 @@ bool LineGridNode::isSubtreeBlocked() const
 
 void LineGridNode::update()
 {
-    if(!m_rect.isValid())
+    if (!m_rect.isValid())
         return;
 
     int totalVertices = 0;
@@ -156,7 +156,7 @@ void LineGridNode::update()
     markDirty(QSGNode::DirtyGeometry);
 }
 
-void LineGridNode::line(QSGGeometry::Point2D* vertices, quint16 *indices, int &index, qreal fromX, qreal fromY, qreal toX, qreal toY)
+void LineGridNode::line(QSGGeometry::Point2D *vertices, quint16 *indices, int &index, qreal fromX, qreal fromY, qreal toX, qreal toY)
 {
     indices[index] = index;
     vertices[index++].set(fromX, fromY);

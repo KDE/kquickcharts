@@ -34,20 +34,20 @@ BEGIN_NAMESPACE
 class SingleValueSource : public ChartDataSource
 {
     Q_OBJECT
-    Q_PROPERTY ( QVariant value READ value WRITE setValue NOTIFY dataChanged )
+    Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY dataChanged)
 
 public:
-    explicit SingleValueSource ( QObject* parent = nullptr );
+    explicit SingleValueSource(QObject *parent = nullptr);
 
     virtual int itemCount() const override;
-    virtual QVariant item ( int index ) const override;
+    virtual QVariant item(int index) const override;
     QVariant minimum() const override;
     QVariant maximum() const override;
 
     QVariant value() const;
 
 public Q_SLOTS:
-    void setValue ( const QVariant& value );
+    void setValue(const QVariant &value);
 
 private:
     QVariant m_value;

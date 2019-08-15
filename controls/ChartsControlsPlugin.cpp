@@ -21,13 +21,13 @@
 
 #include "ChartsControlsPlugin.h"
 
+#include <QDebug>
+#include <QFile>
 #include <QQmlEngine>
 #include <QQuickStyle>
 #include <QUrl>
-#include <QFile>
-#include <QDebug>
 
-ChartsControlsPlugin::ChartsControlsPlugin(QObject* parent)
+ChartsControlsPlugin::ChartsControlsPlugin(QObject *parent)
     : QQmlExtensionPlugin(parent)
 {
 }

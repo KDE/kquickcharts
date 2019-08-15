@@ -28,12 +28,12 @@ Chart::Chart(QQuickItem *parent)
     setFlag(ItemHasContents, true);
 }
 
-ChartDataSource* Chart::nameSource() const
+ChartDataSource *Chart::nameSource() const
 {
     return m_nameSource;
 }
 
-void Chart::setNameSource(ChartDataSource* nameSource)
+void Chart::setNameSource(ChartDataSource *nameSource)
 {
     if (m_nameSource == nameSource) {
         return;
@@ -43,12 +43,12 @@ void Chart::setNameSource(ChartDataSource* nameSource)
     Q_EMIT nameSourceChanged();
 }
 
-ChartDataSource* Chart::colorSource() const
+ChartDataSource *Chart::colorSource() const
 {
     return m_colorSource;
 }
 
-void Chart::setColorSource(ChartDataSource* colorSource)
+void Chart::setColorSource(ChartDataSource *colorSource)
 {
     if (m_colorSource == colorSource) {
         return;
@@ -60,14 +60,7 @@ void Chart::setColorSource(ChartDataSource* colorSource)
 
 Chart::DataSourcesProperty Chart::valueSourcesProperty()
 {
-    return DataSourcesProperty{
-        this,
-        this,
-        &Chart::appendSource,
-        &Chart::sourceCount,
-        &Chart::source,
-        &Chart::clearSources
-    };
+    return DataSourcesProperty{this, this, &Chart::appendSource, &Chart::sourceCount, &Chart::source, &Chart::clearSources};
 }
 
 QVector<ChartDataSource *> Chart::valueSources() const
@@ -75,14 +68,14 @@ QVector<ChartDataSource *> Chart::valueSources() const
     return m_valueSources;
 }
 
-void Chart::insertValueSource(int index, ChartDataSource* source)
+void Chart::insertValueSource(int index, ChartDataSource *source)
 {
     if (index < 0) {
         return;
     }
 
     m_valueSources.insert(index, source);
-    connect(source, &QObject::destroyed, this, qOverload<QObject*>(&Chart::removeValueSource));
+    connect(source, &QObject::destroyed, this, qOverload<QObject *>(&Chart::removeValueSource));
     connect(source, &ChartDataSource::dataChanged, this, &Chart::onDataChanged);
 
     onDataChanged();
@@ -102,7 +95,7 @@ void Chart::removeValueSource(int index)
     Q_EMIT valueSourcesChanged();
 }
 
-void Chart::removeValueSource(QObject* source)
+void Chart::removeValueSource(QObject *source)
 {
     removeValueSource(m_valueSources.indexOf(qobject_cast<ChartDataSource *>(source)));
 }
@@ -113,30 +106,28 @@ void Chart::componentComplete()
     onDataChanged();
 }
 
-void Chart::appendSource(Chart::DataSourcesProperty* list, ChartDataSource* source)
+void Chart::appendSource(Chart::DataSourcesProperty *list, ChartDataSource *source)
 {
-    auto chart = reinterpret_cast<Chart*>(list->data);
+    auto chart = reinterpret_cast<Chart *>(list->data);
     chart->m_valueSources.append(source);
     QObject::connect(source, &ChartDataSource::dataChanged, chart, &Chart::onDataChanged);
     chart->onDataChanged();
 }
 
-int Chart::sourceCount(Chart::DataSourcesProperty* list)
+int Chart::sourceCount(Chart::DataSourcesProperty *list)
 {
-    return reinterpret_cast<Chart*>(list->data)->m_valueSources.count();
+    return reinterpret_cast<Chart *>(list->data)->m_valueSources.count();
 }
 
-ChartDataSource * Chart::source(Chart::DataSourcesProperty* list, int index)
+ChartDataSource *Chart::source(Chart::DataSourcesProperty *list, int index)
 {
-    return reinterpret_cast<Chart*>(list->data)->m_valueSources.at(index);
+    return reinterpret_cast<Chart *>(list->data)->m_valueSources.at(index);
 }
 
-void Chart::clearSources(Chart::DataSourcesProperty* list)
+void Chart::clearSources(Chart::DataSourcesProperty *list)
 {
-    auto chart = reinterpret_cast<Chart*>(list->data);
-    std::for_each(chart->m_valueSources.cbegin(), chart->m_valueSources.cend(), [chart](ChartDataSource* source) {
-        source->disconnect(chart);
-    });
+    auto chart = reinterpret_cast<Chart *>(list->data);
+    std::for_each(chart->m_valueSources.cbegin(), chart->m_valueSources.cend(), [chart](ChartDataSource *source) { source->disconnect(chart); });
     chart->m_valueSources.clear();
     chart->onDataChanged();
 }

@@ -39,11 +39,7 @@ class ChartAxisSource : public ChartDataSource
     Q_PROPERTY(int itemCount READ itemCount WRITE setItemCount NOTIFY itemCountChanged)
 
 public:
-    enum class Axis
-    {
-        XAxis,
-        YAxis
-    };
+    enum class Axis { XAxis, YAxis };
     Q_ENUM(Axis)
 
     /**

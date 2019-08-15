@@ -23,7 +23,7 @@
 
 #include <QDebug>
 
-ValueHistorySource::ValueHistorySource(QObject* parent)
+ValueHistorySource::ValueHistorySource(QObject *parent)
     : ChartDataSource(parent)
 {
 }
@@ -65,7 +65,7 @@ QVariant ValueHistorySource::value() const
     return m_value;
 }
 
-void ValueHistorySource::setValue(const QVariant & newValue)
+void ValueHistorySource::setValue(const QVariant &newValue)
 {
     m_value = newValue;
 
@@ -76,7 +76,6 @@ void ValueHistorySource::setValue(const QVariant & newValue)
 
     Q_EMIT dataChanged();
 }
-
 
 int ValueHistorySource::maximumHistory() const
 {

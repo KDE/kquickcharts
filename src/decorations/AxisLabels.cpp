@@ -26,7 +26,7 @@
 #include "datasource/ChartDataSource.h"
 #include <QQmlContext>
 
-AxisLabelsAttached::AxisLabelsAttached(QObject* parent)
+AxisLabelsAttached::AxisLabelsAttached(QObject *parent)
     : QObject(parent)
 {
 }
@@ -51,7 +51,7 @@ QString AxisLabelsAttached::label() const
     return m_label;
 }
 
-void AxisLabelsAttached::setLabel(const QString & newLabel)
+void AxisLabelsAttached::setLabel(const QString &newLabel)
 {
     if (newLabel == m_label) {
         return;
@@ -61,14 +61,18 @@ void AxisLabelsAttached::setLabel(const QString & newLabel)
     Q_EMIT labelChanged();
 }
 
-
-
 class AxisLabels::Private
 {
 public:
-    Private(AxisLabels *qq) : q(qq) { }
+    Private(AxisLabels *qq)
+        : q(qq)
+    {
+    }
 
-    inline bool isHorizontal() { return direction == Direction::HorizontalLeftRight || direction == Direction::HorizontalRightLeft; }
+    inline bool isHorizontal()
+    {
+        return direction == Direction::HorizontalLeftRight || direction == Direction::HorizontalRightLeft;
+    }
 
     void update();
     void layout();
@@ -81,12 +85,13 @@ public:
     Qt::Alignment alignment = Qt::AlignHCenter | Qt::AlignVCenter;
     bool constrainToBounds = true;
 
-    QVector<QQuickItem*> labels;
+    QVector<QQuickItem *> labels;
     bool layoutScheduled = false;
 };
 
-AxisLabels::AxisLabels(QQuickItem* parent)
-    : QQuickItem(parent), d(new Private(this))
+AxisLabels::AxisLabels(QQuickItem *parent)
+    : QQuickItem(parent)
+    , d(new Private(this))
 {
 }
 
@@ -110,7 +115,6 @@ void AxisLabels::setDirection(AxisLabels::Direction newDirection)
     Q_EMIT directionChanged();
 }
 
-
 QQmlComponent *AxisLabels::delegate() const
 {
     return d->delegate;
@@ -127,12 +131,12 @@ void AxisLabels::setDelegate(QQmlComponent *newDelegate)
     Q_EMIT delegateChanged();
 }
 
-ChartDataSource* AxisLabels::source() const
+ChartDataSource *AxisLabels::source() const
 {
     return d->source;
 }
 
-void AxisLabels::setSource(ChartDataSource* newSource)
+void AxisLabels::setSource(ChartDataSource *newSource)
 {
     if (newSource == d->source) {
         return;
@@ -184,8 +188,7 @@ void AxisLabels::setConstrainToBounds(bool newConstrainToBounds)
     Q_EMIT constrainToBoundsChanged();
 }
 
-
-void AxisLabels::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
+void AxisLabels::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
 
@@ -197,7 +200,13 @@ void AxisLabels::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeo
 void AxisLabels::scheduleLayout()
 {
     if (!d->layoutScheduled) {
-        QMetaObject::invokeMethod(this, [this]() { d->layout(); d->layoutScheduled = false; }, Qt::QueuedConnection);
+        QMetaObject::invokeMethod(
+            this,
+            [this]() {
+                d->layout();
+                d->layoutScheduled = false;
+            },
+            Qt::QueuedConnection);
         d->layoutScheduled = true;
     }
 }
@@ -229,7 +238,7 @@ void AxisLabels::Private::update()
         context->setParent(item);
         item->setParentItem(q);
 
-        auto attached = static_cast<AxisLabelsAttached*>(qmlAttachedPropertiesObject<AxisLabels>(item, true));
+        auto attached = static_cast<AxisLabelsAttached *>(qmlAttachedPropertiesObject<AxisLabels>(item, true));
         attached->setIndex(i);
         attached->setLabel(label);
 
@@ -273,19 +282,19 @@ void AxisLabels::Private::layout()
         auto x = 0.0;
         auto y = 0.0;
 
-        switch(direction) {
-            case Direction::HorizontalLeftRight:
-                x = i * spacing;
-                break;
-            case Direction::HorizontalRightLeft:
-                x = q->width() - i * spacing;
-                break;
-            case Direction::VerticalTopBottom:
-                y = i * spacing;
-                break;
-            case Direction::VerticalBottomTop:
-                y = q->height() - i * spacing;
-                break;
+        switch (direction) {
+        case Direction::HorizontalLeftRight:
+            x = i * spacing;
+            break;
+        case Direction::HorizontalRightLeft:
+            x = q->width() - i * spacing;
+            break;
+        case Direction::VerticalTopBottom:
+            y = i * spacing;
+            break;
+        case Direction::VerticalBottomTop:
+            y = q->height() - i * spacing;
+            break;
         }
 
         if (alignment & Qt::AlignHCenter) {
