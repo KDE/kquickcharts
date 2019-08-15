@@ -86,7 +86,7 @@ void BarChartNode::update()
     auto indices = m_geometry->indexDataAsUShort();
 
     auto index = 0;
-    for (auto entry : qAsConst(m_values)) {
+    for (const auto &entry : qAsConst(m_values)) {
         auto value = entry.first;
         value.setY(value.y() * m_rect.height());
         auto color = entry.second;

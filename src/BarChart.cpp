@@ -83,7 +83,7 @@ QSGNode *BarChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDat
             auto x = float(m_spacing / 2);
             auto itemSpacing = w + m_spacing;
 
-            for (const auto items : qAsConst(m_values)) {
+            for (const auto &items : qAsConst(m_values)) {
                 for (int i = items.count() - 1; i >= 0; --i) {
                     auto entry = items.at(i);
                     values << QPair<QVector2D, QColor>{QVector2D{x, float(entry.first)}, entry.second};
@@ -98,8 +98,8 @@ QSGNode *BarChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDat
             auto x = float(m_spacing / 2);
             auto itemSpacing = w + m_spacing;
 
-            for (const auto items : qAsConst(m_values)) {
-                for (auto entry : items) {
+            for (const auto &items : qAsConst(m_values)) {
+                for (const auto &entry : items) {
                     values << QPair<QVector2D, QColor>{QVector2D{x, float(entry.first)}, entry.second};
                     x += itemSpacing;
                 }
@@ -110,7 +110,7 @@ QSGNode *BarChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDat
         if (stacked()) {
             auto x = float(itemSpacing / 2 - m_barWidth / 2);
 
-            for (const auto items : qAsConst(m_values)) {
+            for (const auto &items : qAsConst(m_values)) {
                 for (int i = items.count() - 1; i >= 0; --i) {
                     auto entry = items.at(i);
                     values << QPair<QVector2D, QColor>{QVector2D{x, float(entry.first)}, entry.second};
@@ -122,7 +122,7 @@ QSGNode *BarChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDat
 
             auto x = float(itemSpacing / 2 - totalWidth / 2);
 
-            for (const auto items : qAsConst(m_values)) {
+            for (const auto &items : qAsConst(m_values)) {
                 for (int i = 0; i < items.count(); ++i) {
                     auto entry = items.at(i);
                     values << QPair<QVector2D, QColor>{QVector2D{float(x + i * (m_barWidth + m_spacing)), float(entry.first)}, entry.second};
