@@ -23,7 +23,7 @@
 
 #include <QOpenGLContext>
 
-static const QString shaderRoot = QStringLiteral(":/org.kde.quickcharts/");
+static const char shaderRoot[] = ":/org.kde.quickcharts/";
 
 SDFShader::SDFShader()
 {
@@ -39,13 +39,13 @@ void SDFShader::setShaders(const QString& vertex, const QString& fragment)
     auto header = QOpenGLContext::currentContext()->isOpenGLES() ? QStringLiteral("es_header.glsl") : QStringLiteral("desktop_header.glsl");
 
     setShaderSourceFiles(QOpenGLShader::Vertex, {
-        shaderRoot + header,
-        shaderRoot + vertex
+        QString::fromLatin1(shaderRoot) + header,
+        QString::fromLatin1(shaderRoot) + vertex
     });
 
     setShaderSourceFiles(QOpenGLShader::Fragment, {
-        shaderRoot + header,
-        shaderRoot + QStringLiteral("sdf.frag"),
-        shaderRoot + fragment
+        QString::fromLatin1(shaderRoot) + header,
+        QString::fromLatin1(shaderRoot) + QStringLiteral("sdf.frag"),
+        QString::fromLatin1(shaderRoot) + fragment
     });
 }
