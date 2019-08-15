@@ -25,7 +25,7 @@
 #include <QObject>
 
 /**
- * @todo write docs
+ * An object that can be used as a grouped property to provide a range for charts.
  */
 class RangeGroup : public QObject
 {

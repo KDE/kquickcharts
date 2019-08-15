@@ -28,8 +28,6 @@
 
 /**
  * A data source that provides a single value as data.
- *
- * \ingroup datasource
  */
 class SingleValueSource : public ChartDataSource
 {

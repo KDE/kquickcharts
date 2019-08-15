@@ -25,6 +25,9 @@ import QtQuick.Controls 2.2
 import org.kde.quickcharts 1.0 as Charts
 import org.kde.quickcharts.controls 1.0
 
+/**
+ * A line chart with legend, grid and axis labels.
+ */
 Control {
 
     property alias valueSources: lineChart.valueSources

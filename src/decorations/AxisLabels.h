@@ -53,7 +53,9 @@ private:
     QString m_label;
 };
 
-
+/**
+ * An item that uses a delegate to place axis labels on a chart.
+ */
 class AxisLabels : public QQuickItem
 {
     Q_OBJECT

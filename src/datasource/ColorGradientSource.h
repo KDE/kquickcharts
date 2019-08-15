@@ -30,7 +30,7 @@
 #include "ChartDataSource.h"
 
 /**
- * @todo write docs
+ * A data source that provides a hue-shifted color as data.
  */
 class ColorGradientSource : public ChartDataSource
 {

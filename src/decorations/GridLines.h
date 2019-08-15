@@ -69,7 +69,7 @@ private:
 };
 
 /**
- * @todo write docs
+ * An item that renders a set of lines to make a grid for a chart.
  */
 class GridLines : public QQuickItem
 {

@@ -28,7 +28,7 @@
 #include "ChartDataSource.h"
 
 /**
- * @todo write docs
+ * A data source that provides a history of a single value.
  */
 class ValueHistorySource : public ChartDataSource
 {

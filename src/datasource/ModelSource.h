@@ -27,7 +27,7 @@
 class QAbstractItemModel;
 
 /**
- * ModelSource allows reading data from a QAbstractItemModel.
+ * A data source that reads data from a QAbstractItemModel.
  *
  *
  */

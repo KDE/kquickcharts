@@ -26,6 +26,9 @@ import QtQuick.Controls 2.2
 import org.kde.quickcharts 1.0 as Charts
 import org.kde.quickcharts.controls 1.0
 
+/**
+ * A delegate that can be used as part of a Legend.
+ */
 RowLayout {
     id: delegate
 

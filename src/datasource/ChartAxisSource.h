@@ -27,7 +27,7 @@
 class XYChart;
 
 /**
- * @todo write docs
+ * A data source that provides values from a chart's axis as data.
  */
 class ChartAxisSource : public ChartDataSource
 {

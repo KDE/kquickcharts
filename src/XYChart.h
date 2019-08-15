@@ -26,6 +26,9 @@
 
 class RangeGroup;
 
+/**
+ *
+ */
 struct ComputedRange {
     int startX = 0;
     int endX = 0;

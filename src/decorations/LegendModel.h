@@ -31,7 +31,7 @@ class Chart;
 class ChartDataSource;
 
 /**
- * @todo write docs
+ * A model that extracts information from a chart that can be displayed as a legend.
  */
 class LegendModel : public QAbstractListModel
 {

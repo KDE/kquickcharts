@@ -30,7 +30,7 @@ class ChartDataSource;
 class RangeGroup;
 
 /**
- * A pie Chart.
+ * A pie chart.
  */
 class PieChart : public Chart
 {
