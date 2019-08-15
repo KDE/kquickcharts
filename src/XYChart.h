@@ -48,16 +48,27 @@ bool operator==(const ComputedRange &first, const ComputedRange &second);
 class XYChart : public Chart
 {
     Q_OBJECT
-    // The range of values on the X axis.
+    /**
+     * The range of values on the X axis.
+     */
     Q_PROPERTY(RangeGroup* xRange READ xRange CONSTANT)
-    // The range of values on the Y axis.
+    /**
+     * The range of values on the Y axis.
+     */
     Q_PROPERTY(RangeGroup* yRange READ yRange CONSTANT)
-    // Which direction this chart's X axis runs.
+    /**
+     * Which direction this chart's X axis runs.
+     */
     Q_PROPERTY(Direction direction READ direction WRITE setDirection NOTIFY directionChanged)
-    // Whether the values of each value source shoud be stacked or treated separately.
+    /**
+     * Whether the values of each value source shoud be stacked or treated separately.
+     */
     Q_PROPERTY(bool stacked READ stacked WRITE setStacked NOTIFY stackedChanged)
 
 public:
+    /**
+     * The direction of values on the X axis.
+     */
     enum class Direction {
         ZeroAtStart, ///< Zero is at the beginning of the chart, values run from begin to end.
         ZeroAtEnd ///< Zero is at the end of the chart, values run from end to begin.
