@@ -40,7 +40,6 @@ class RangeGroup : public QObject
     Q_PROPERTY(qreal distance READ distance NOTIFY rangeChanged)
 
 public:
-    ~RangeGroup();
     explicit RangeGroup(QObject* parent = nullptr);
 
     qreal from() const;

@@ -79,8 +79,7 @@ public:
     };
     Q_ENUM(Direction)
 
-    AxisLabels(QQuickItem *parent = nullptr);
-    ~AxisLabels();
+    explicit AxisLabels(QQuickItem *parent = nullptr);
 
     AxisLabels::Direction direction() const;
     Q_SLOT void setDirection(AxisLabels::Direction newDirection);

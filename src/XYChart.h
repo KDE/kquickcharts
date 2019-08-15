@@ -74,7 +74,7 @@ public:
     /**
      * Destructor
      */
-    virtual ~XYChart();
+    ~XYChart() override = default;
 
     virtual RangeGroup *xRange() const;
     virtual RangeGroup *yRange() const;

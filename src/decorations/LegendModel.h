@@ -56,7 +56,6 @@ public:
     Q_ENUM(SourceIndex)
 
     LegendModel(QObject* parent = nullptr);
-    ~LegendModel();
 
     QHash<int, QByteArray> roleNames() const override;
     int rowCount(const QModelIndex& parent) const override;

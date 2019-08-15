@@ -96,11 +96,6 @@ public:
      */
     explicit GridLines (QQuickItem *parent = nullptr);
 
-    /**
-     * Destructor
-     */
-    ~GridLines();
-
     Direction direction() const;
     Q_SLOT void setDirection(GridLines::Direction newDirection);
     Q_SIGNAL void directionChanged();

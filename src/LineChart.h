@@ -42,7 +42,6 @@ class LineChart : public XYChart
     Q_PROPERTY(qreal fillOpacity READ fillOpacity WRITE setFillOpacity NOTIFY fillOpacityChanged)
 
 public:
-    ~LineChart();
     explicit LineChart(QQuickItem *parent = nullptr);
 
     bool smooth() const;

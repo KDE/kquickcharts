@@ -128,10 +128,6 @@ GridLines::GridLines(QQuickItem* parent)
     connect(d->minor.get(), &LinePropertiesGroup::propertiesChanged, this, &GridLines::update);
 }
 
-GridLines::~GridLines()
-{
-}
-
 GridLines::Direction GridLines::direction() const
 {
     return d->direction;

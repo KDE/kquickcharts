@@ -28,10 +28,6 @@ Chart::Chart(QQuickItem *parent)
     setFlag(ItemHasContents, true);
 }
 
-Chart::~Chart()
-{
-}
-
 ChartDataSource* Chart::nameSource() const
 {
     return m_nameSource;

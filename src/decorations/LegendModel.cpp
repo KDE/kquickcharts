@@ -36,10 +36,6 @@ LegendModel::LegendModel(QObject* parent)
 {
 }
 
-LegendModel::~LegendModel()
-{
-}
-
 QHash<int, QByteArray> LegendModel::roleNames() const
 {
     static QHash<int, QByteArray> names = {

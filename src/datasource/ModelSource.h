@@ -43,7 +43,7 @@ class ModelSource : public ChartDataSource
     Q_PROPERTY(bool indexColumns READ indexColumns WRITE setIndexColumns NOTIFY indexColumnsChanged)
 
 public:
-    ModelSource(QObject *parent = nullptr);
+    explicit ModelSource(QObject *parent = nullptr);
     virtual ~ModelSource();
 
     int role() const;

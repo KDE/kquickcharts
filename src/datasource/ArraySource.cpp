@@ -26,10 +26,6 @@ ArraySource::ArraySource(QObject* parent)
 {
 }
 
-ArraySource::~ArraySource()
-{
-}
-
 int ArraySource::itemCount() const
 {
     return m_array.count();

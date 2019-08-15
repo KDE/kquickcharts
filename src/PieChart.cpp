@@ -35,10 +35,6 @@ PieChart::PieChart(QQuickItem *parent)
     connect(m_range.get(), &RangeGroup::rangeChanged, this, &PieChart::onDataChanged);
 }
 
-PieChart::~PieChart()
-{
-}
-
 RangeGroup *PieChart::range() const
 {
     return m_range.get();

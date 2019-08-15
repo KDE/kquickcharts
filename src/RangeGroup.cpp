@@ -29,10 +29,6 @@ RangeGroup::RangeGroup(QObject* parent)
     connect(this, &RangeGroup::automaticChanged, this, &RangeGroup::rangeChanged);
 }
 
-RangeGroup::~RangeGroup()
-{
-}
-
 qreal RangeGroup::from() const
 {
     return m_from;

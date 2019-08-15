@@ -59,10 +59,6 @@ XYChart::XYChart(QQuickItem* parent)
     connect(m_yRange, &RangeGroup::rangeChanged, this, &XYChart::updateComputedRange);
 }
 
-XYChart::~XYChart()
-{
-}
-
 RangeGroup* XYChart::xRange() const
 {
     return m_xRange;

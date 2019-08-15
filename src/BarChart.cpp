@@ -32,10 +32,6 @@ BarChart::BarChart(QQuickItem* parent)
 {
 }
 
-BarChart::~BarChart()
-{
-}
-
 qreal BarChart::spacing() const
 {
     return m_spacing;

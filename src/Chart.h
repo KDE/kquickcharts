@@ -53,7 +53,7 @@ public:
     using DataSourcesProperty = QQmlListProperty<ChartDataSource>;
 
     explicit Chart(QQuickItem *parent = nullptr);
-    virtual ~Chart();
+    ~Chart() override = default;
 
     ChartDataSource *nameSource() const;
     Q_SLOT void setNameSource(ChartDataSource *nameSource);
