@@ -34,6 +34,13 @@ BEGIN_NAMESPACE
 class Chart;
 class ChartDataSource;
 
+struct LegendItem
+{
+    QString name;
+    QColor color;
+    QVariant value;
+};
+
 /**
  * A model that extracts information from a chart that can be displayed as a legend.
  */
@@ -67,8 +74,6 @@ private:
     void queueUpdate();
     void update();
     void updateData();
-
-    struct LegendItem;
 
     Chart *m_chart = nullptr;
     int m_sourceIndex = UseSourceCount;

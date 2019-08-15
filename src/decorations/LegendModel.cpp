@@ -24,13 +24,6 @@
 #include "Chart.h"
 #include "datasource/ChartDataSource.h"
 
-struct LegendModel::LegendItem
-{
-    QString name;
-    QColor color;
-    QVariant value;
-};
-
 LegendModel::LegendModel(QObject *parent)
     : QAbstractListModel(parent)
 {

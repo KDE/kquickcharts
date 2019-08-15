@@ -112,8 +112,12 @@ private:
     QSGNode *updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *) override;
     void updateLines(LineGridNode *node, LinePropertiesGroup *properties);
 
-    class Private;
-    const std::unique_ptr<Private> d;
+    GridLines::Direction m_direction = Direction::Horizontal;
+    XYChart *m_chart = nullptr;
+    float m_spacing = 10.0;
+
+    std::unique_ptr<LinePropertiesGroup> m_major;
+    std::unique_ptr<LinePropertiesGroup> m_minor;
 };
 
 END_NAMESPACE

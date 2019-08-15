@@ -105,64 +105,52 @@ void LinePropertiesGroup::setCount(int newCount)
     Q_EMIT propertiesChanged();
 }
 
-class GridLines::Private
-{
-public:
-    GridLines::Direction direction = Direction::Horizontal;
-    XYChart *chart = nullptr;
-    float spacing = 10.0;
-
-    std::unique_ptr<LinePropertiesGroup> major;
-    std::unique_ptr<LinePropertiesGroup> minor;
-};
-
 GridLines::GridLines(QQuickItem *parent)
     : QQuickItem(parent)
-    , d(new Private)
 {
     setFlag(QQuickItem::ItemHasContents);
 
-    d->major = std::make_unique<LinePropertiesGroup>(this);
-    connect(d->major.get(), &LinePropertiesGroup::propertiesChanged, this, &GridLines::update);
-    d->minor = std::make_unique<LinePropertiesGroup>(this);
-    connect(d->minor.get(), &LinePropertiesGroup::propertiesChanged, this, &GridLines::update);
+    m_major = std::make_unique<LinePropertiesGroup>(this);
+    connect(m_major.get(), &LinePropertiesGroup::propertiesChanged, this, &GridLines::update);
+    m_minor = std::make_unique<LinePropertiesGroup>(this);
+    connect(m_minor.get(), &LinePropertiesGroup::propertiesChanged, this, &GridLines::update);
 }
 
 GridLines::Direction GridLines::direction() const
 {
-    return d->direction;
+    return m_direction;
 }
 
 void GridLines::setDirection(GridLines::Direction newDirection)
 {
-    if (newDirection == d->direction) {
+    if (newDirection == m_direction) {
         return;
     }
 
-    d->direction = newDirection;
+    m_direction = newDirection;
     update();
     Q_EMIT directionChanged();
 }
 
 XYChart *GridLines::chart() const
 {
-    return d->chart;
+    return m_chart;
 }
 
 void GridLines::setChart(XYChart *newChart)
 {
-    if (newChart == d->chart) {
+    if (newChart == m_chart) {
         return;
     }
 
-    if (d->chart) {
-        disconnect(d->chart, &XYChart::computedRangeChanged, this, &GridLines::update);
+    if (m_chart) {
+        disconnect(m_chart, &XYChart::computedRangeChanged, this, &GridLines::update);
     }
 
-    d->chart = newChart;
+    m_chart = newChart;
 
-    if (d->chart) {
-        connect(d->chart, &XYChart::computedRangeChanged, this, &GridLines::update);
+    if (m_chart) {
+        connect(m_chart, &XYChart::computedRangeChanged, this, &GridLines::update);
     }
 
     update();
@@ -171,28 +159,28 @@ void GridLines::setChart(XYChart *newChart)
 
 float GridLines::spacing() const
 {
-    return d->spacing;
+    return m_spacing;
 }
 
 void GridLines::setSpacing(float newSpacing)
 {
-    if (newSpacing == d->spacing || d->chart != nullptr) {
+    if (newSpacing == m_spacing || m_chart != nullptr) {
         return;
     }
 
-    d->spacing = newSpacing;
+    m_spacing = newSpacing;
     update();
     Q_EMIT spacingChanged();
 }
 
 LinePropertiesGroup *GridLines::major() const
 {
-    return d->major.get();
+    return m_major.get();
 }
 
 LinePropertiesGroup *GridLines::minor() const
 {
-    return d->minor.get();
+    return m_minor.get();
 }
 
 QSGNode *GridLines::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *)
@@ -203,16 +191,16 @@ QSGNode *GridLines::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
         node->appendChildNode(new LineGridNode{});
     }
 
-    if (d->chart) {
-        if (d->direction == Direction::Horizontal) {
-            d->spacing = width() / (d->chart->computedRange().distanceX - 1);
+    if (m_chart) {
+        if (m_direction == Direction::Horizontal) {
+            m_spacing = width() / (m_chart->computedRange().distanceX - 1);
         } else {
-            d->spacing = height() / (d->chart->computedRange().distanceY);
+            m_spacing = height() / (m_chart->computedRange().distanceY);
         }
     }
 
-    updateLines(static_cast<LineGridNode *>(node->childAtIndex(0)), d->minor.get());
-    updateLines(static_cast<LineGridNode *>(node->childAtIndex(1)), d->major.get());
+    updateLines(static_cast<LineGridNode *>(node->childAtIndex(0)), m_minor.get());
+    updateLines(static_cast<LineGridNode *>(node->childAtIndex(1)), m_major.get());
 
     return node;
 }
@@ -221,13 +209,13 @@ void GridLines::updateLines(LineGridNode *node, LinePropertiesGroup *properties)
 {
     node->setVisible(properties->visible());
     node->setRect(boundingRect());
-    node->setVertical(d->direction == Direction::Vertical);
+    node->setVertical(m_direction == Direction::Vertical);
     node->setColor(properties->color());
     node->setLineWidth(properties->lineWidth());
     if (properties->count() > 0) {
-        node->setSpacing(d->direction == Direction::Horizontal ? width() / (properties->count() + 1) : height() / (properties->count() + 1));
+        node->setSpacing(m_direction == Direction::Horizontal ? width() / (properties->count() + 1) : height() / (properties->count() + 1));
     } else {
-        node->setSpacing(d->spacing * properties->frequency());
+        node->setSpacing(m_spacing * properties->frequency());
     }
     node->update();
 }

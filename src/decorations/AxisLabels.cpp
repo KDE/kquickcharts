@@ -61,129 +61,96 @@ void AxisLabelsAttached::setLabel(const QString &newLabel)
     Q_EMIT labelChanged();
 }
 
-class AxisLabels::Private
-{
-public:
-    Private(AxisLabels *qq)
-        : q(qq)
-    {
-    }
-
-    inline bool isHorizontal()
-    {
-        return direction == Direction::HorizontalLeftRight || direction == Direction::HorizontalRightLeft;
-    }
-
-    void update();
-    void layout();
-
-    AxisLabels *const q;
-
-    Direction direction = Direction::HorizontalLeftRight;
-    QQmlComponent *delegate = nullptr;
-    ChartDataSource *source = nullptr;
-    Qt::Alignment alignment = Qt::AlignHCenter | Qt::AlignVCenter;
-    bool constrainToBounds = true;
-
-    QVector<QQuickItem *> labels;
-    bool layoutScheduled = false;
-};
-
 AxisLabels::AxisLabels(QQuickItem *parent)
     : QQuickItem(parent)
-    , d(new Private(this))
-{
-}
-
-AxisLabels::~AxisLabels()
 {
 }
 
 AxisLabels::Direction AxisLabels::direction() const
 {
-    return d->direction;
+    return m_direction;
 }
 
 void AxisLabels::setDirection(AxisLabels::Direction newDirection)
 {
-    if (newDirection == d->direction) {
+    if (newDirection == m_direction) {
         return;
     }
 
-    d->direction = newDirection;
+    m_direction = newDirection;
     scheduleLayout();
     Q_EMIT directionChanged();
 }
 
 QQmlComponent *AxisLabels::delegate() const
 {
-    return d->delegate;
+    return m_delegate;
 }
 
 void AxisLabels::setDelegate(QQmlComponent *newDelegate)
 {
-    if (newDelegate == d->delegate) {
+    if (newDelegate == m_delegate) {
         return;
     }
 
-    d->delegate = newDelegate;
-    d->update();
+    m_delegate = newDelegate;
+    updateLabels();
     Q_EMIT delegateChanged();
 }
 
 ChartDataSource *AxisLabels::source() const
 {
-    return d->source;
+    return m_source;
 }
 
 void AxisLabels::setSource(ChartDataSource *newSource)
 {
-    if (newSource == d->source) {
+    if (newSource == m_source) {
         return;
     }
 
-    if (d->source) {
-        d->source->disconnect(this);
+    if (m_source) {
+        m_source->disconnect(this);
     }
 
-    d->source = newSource;
+    m_source = newSource;
 
-    if (d->source) {
-        connect(d->source, &ChartDataSource::dataChanged, this, [this]() { d->update(); });
+    if (m_source) {
+        connect(m_source, &ChartDataSource::dataChanged, this, [this]() { updateLabels(); });
     }
 
-    d->update();
+    updateLabels();
     Q_EMIT sourceChanged();
 }
 
 Qt::Alignment AxisLabels::alignment() const
 {
-    return d->alignment;
+    return m_alignment;
 }
 
 void AxisLabels::setAlignment(Qt::Alignment newAlignment)
 {
-    if (newAlignment == d->alignment) {
+    if (newAlignment == m_alignment) {
         return;
     }
 
-    d->alignment = newAlignment;
+    m_alignment = newAlignment;
     scheduleLayout();
     Q_EMIT alignmentChanged();
 }
 
 bool AxisLabels::constrainToBounds() const
 {
-    return d->constrainToBounds;
+    return m_constrainToBounds;
 }
 
 void AxisLabels::setConstrainToBounds(bool newConstrainToBounds)
 {
-    if (newConstrainToBounds == d->constrainToBounds) {
+    if (newConstrainToBounds == m_constrainToBounds) {
         return;
     }
 
-    d->constrainToBounds = newConstrainToBounds;
+    m_constrainToBounds = newConstrainToBounds;
     scheduleLayout();
     Q_EMIT constrainToBoundsChanged();
 }
@@ -199,64 +166,66 @@ void AxisLabels::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeo
 
 void AxisLabels::scheduleLayout()
 {
-    if (!d->layoutScheduled) {
+    if (!m_layoutScheduled) {
         QMetaObject::invokeMethod(
             this,
-            [this]() {
-                d->layout();
-                d->layoutScheduled = false;
-            },
+            [this]() { layout(); m_layoutScheduled = false; },
             Qt::QueuedConnection);
-        d->layoutScheduled = true;
+        m_layoutScheduled = true;
     }
 }
 
-void AxisLabels::Private::update()
+bool AxisLabels::isHorizontal()
 {
-    qDeleteAll(labels);
-    labels.clear();
+    return m_direction == Direction::HorizontalLeftRight || m_direction == Direction::HorizontalRightLeft;
+}
 
-    if (!delegate || !source) {
+void AxisLabels::updateLabels()
+{
+    qDeleteAll(m_labels);
+    m_labels.clear();
+
+    if (!m_delegate || !m_source) {
         return;
     }
 
-    for (int i = 0; i < source->itemCount(); ++i) {
-        auto label = source->item(i).toString();
+    for (int i = 0; i < m_source->itemCount(); ++i) {
+        auto label = m_source->item(i).toString();
 
-        auto context = new QQmlContext(qmlContext(q));
-        auto item = qobject_cast<QQuickItem *>(delegate->beginCreate(context));
+        auto context = new QQmlContext(qmlContext(this));
+        auto item = qobject_cast<QQuickItem *>(m_delegate->beginCreate(context));
         if (!item) {
             qWarning() << "Failed to create label instance for label" << label;
             continue;
         }
 
-        QObject::connect(item, &QQuickItem::xChanged, q, [this]() { q->scheduleLayout(); });
-        QObject::connect(item, &QQuickItem::yChanged, q, [this]() { q->scheduleLayout(); });
-        QObject::connect(item, &QQuickItem::widthChanged, q, [this]() { q->scheduleLayout(); });
-        QObject::connect(item, &QQuickItem::heightChanged, q, [this]() { q->scheduleLayout(); });
+        QObject::connect(item, &QQuickItem::xChanged, this, [this]() { scheduleLayout(); });
+        QObject::connect(item, &QQuickItem::yChanged, this, [this]() { scheduleLayout(); });
+        QObject::connect(item, &QQuickItem::widthChanged, this, [this]() { scheduleLayout(); });
+        QObject::connect(item, &QQuickItem::heightChanged, this, [this]() { scheduleLayout(); });
 
         context->setParent(item);
-        item->setParentItem(q);
+        item->setParentItem(this);
 
         auto attached = static_cast<AxisLabelsAttached *>(qmlAttachedPropertiesObject<AxisLabels>(item, true));
         attached->setIndex(i);
         attached->setLabel(label);
 
-        delegate->completeCreate();
-        labels << item;
+        m_delegate->completeCreate();
+        m_labels << item;
     }
 
-    q->scheduleLayout();
+    scheduleLayout();
 }
 
-void AxisLabels::Private::layout()
+void AxisLabels::layout()
 {
     auto maxWidth = 0.0;
     auto totalWidth = 0.0;
     auto maxHeight = 0.0;
     auto totalHeight = 0.0;
 
-    for (auto label : qAsConst(labels)) {
+    for (auto label : qAsConst(m_labels)) {
         maxWidth = std::max(maxWidth, label->width());
         maxHeight = std::max(maxHeight, label->height());
         totalWidth += label->width();
@@ -266,54 +235,54 @@ void AxisLabels::Private::layout()
     auto impWidth = isHorizontal() ? totalWidth : maxWidth;
     auto impHeight = isHorizontal() ? maxHeight : totalHeight;
 
-    if (qFuzzyCompare(impWidth, q->width()) && qFuzzyCompare(impHeight, q->height())) {
+    if (qFuzzyCompare(impWidth, width()) && qFuzzyCompare(impHeight, height())) {
         return;
     }
 
-    q->setImplicitWidth(impWidth);
-    q->setImplicitHeight(impHeight);
+    setImplicitWidth(impWidth);
+    setImplicitHeight(impHeight);
 
-    auto spacing = (isHorizontal() ? q->width() : q->height()) / (labels.size() - 1);
+    auto spacing = (isHorizontal() ? width() : height()) / (m_labels.size() - 1);
     auto i = 0;
-    auto layoutWidth = isHorizontal() ? 0.0 : q->width();
-    auto layoutHeight = isHorizontal() ? q->height() : 0.0;
+    auto layoutWidth = isHorizontal() ? 0.0 : width();
+    auto layoutHeight = isHorizontal() ? height() : 0.0;
 
-    for (auto label : qAsConst(labels)) {
+    for (auto label : qAsConst(m_labels)) {
         auto x = 0.0;
         auto y = 0.0;
 
-        switch (direction) {
+        switch (m_direction) {
         case Direction::HorizontalLeftRight:
             x = i * spacing;
             break;
         case Direction::HorizontalRightLeft:
-            x = q->width() - i * spacing;
+            x = width() - i * spacing;
             break;
         case Direction::VerticalTopBottom:
             y = i * spacing;
             break;
         case Direction::VerticalBottomTop:
-            y = q->height() - i * spacing;
+            y = height() - i * spacing;
             break;
         }
 
-        if (alignment & Qt::AlignHCenter) {
+        if (m_alignment & Qt::AlignHCenter) {
             x += (layoutWidth - label->width()) / 2;
-        } else if (alignment & Qt::AlignRight) {
+        } else if (m_alignment & Qt::AlignRight) {
             x += layoutWidth - label->width();
         }
 
-        if (alignment & Qt::AlignVCenter) {
+        if (m_alignment & Qt::AlignVCenter) {
             y += (layoutHeight - label->height()) / 2;
-        } else if (alignment & Qt::AlignBottom) {
+        } else if (m_alignment & Qt::AlignBottom) {
             y += layoutHeight - label->height();
         }
 
-        if (constrainToBounds) {
+        if (m_constrainToBounds) {
             x = std::max(x, 0.0);
-            x = x + label->width() > q->width() ? q->width() - label->width() : x;
+            x = x + label->width() > width() ? width() - label->width() : x;
             y = std::max(y, 0.0);
-            y = y + label->height() > q->height() ? q->height() - label->height() : y;
+            y = y + label->height() > height() ? height() - label->height() : y;
         }
 
         label->setX(x);

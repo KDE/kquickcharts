@@ -37,10 +37,6 @@ LineChart::LineChart(QQuickItem *parent)
 {
 }
 
-LineChart::~LineChart()
-{
-}
-
 bool LineChart::smooth() const
 {
     return m_smooth;

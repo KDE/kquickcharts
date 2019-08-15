@@ -105,9 +105,17 @@ protected:
 
 private:
     void scheduleLayout();
+    bool isHorizontal();
+    void updateLabels();
+    void layout();
 
-    class Private;
-    const std::unique_ptr<Private> d;
+    Direction m_direction = Direction::HorizontalLeftRight;
+    QQmlComponent *m_delegate = nullptr;
+    ChartDataSource *m_source = nullptr;
+    Qt::Alignment m_alignment = Qt::AlignHCenter | Qt::AlignVCenter;
+    bool m_constrainToBounds = true;
+    QVector<QQuickItem *> m_labels;
+    bool m_layoutScheduled = false;
 };
 
 END_NAMESPACE
