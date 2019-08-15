@@ -35,6 +35,8 @@ set(quickcharts_SRCS
 
 qt5_add_resources(quickcharts_QRC shaders/shaders.qrc)
 
+add_definitions(-DQT_NO_KEYWORDS)
+
 add_library(quickchartsplugin SHARED ${quickcharts_SRCS} ${quickcharts_QRC})
 target_link_libraries(quickchartsplugin
     Qt5::Core
