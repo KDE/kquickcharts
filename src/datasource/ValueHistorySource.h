@@ -27,6 +27,8 @@
 
 #include "ChartDataSource.h"
 
+BEGIN_NAMESPACE
+
 /**
  * A data source that provides a history of a single value.
  */
@@ -57,5 +59,7 @@ private:
     int m_maximumHistory = 10;
     QVector<QVariant> m_history;
 };
+
+END_NAMESPACE
 
 #endif // VALUEHISTORYSOURCE_H

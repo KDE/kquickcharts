@@ -26,6 +26,10 @@
 
 #include <QQuickItem>
 
+#include "../namespace.h"
+
+BEGIN_NAMESPACE
+
 class GridLines;
 class LineGridNode;
 class XYChart;
@@ -119,5 +123,7 @@ private:
     class Private;
     const std::unique_ptr<Private> d;
 };
+
+END_NAMESPACE
 
 #endif // GRIDLINES_H

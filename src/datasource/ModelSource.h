@@ -26,6 +26,8 @@
 
 class QAbstractItemModel;
 
+BEGIN_NAMESPACE
+
 /**
  * A data source that reads data from a QAbstractItemModel.
  *
@@ -76,5 +78,7 @@ private:
     bool m_indexColumns = false;
     QAbstractItemModel *m_model = nullptr;
 };
+
+END_NAMESPACE
 
 #endif // MODELSOURCE_H

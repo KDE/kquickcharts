@@ -24,6 +24,8 @@
 
 #include "Chart.h"
 
+BEGIN_NAMESPACE
+
 class RangeGroup;
 
 /**
@@ -100,6 +102,8 @@ private:
     bool m_stacked = false;
     ComputedRange m_computedRange;
 };
+
+END_NAMESPACE
 
 QDebug operator<<(QDebug debug, const ComputedRange &range);
 

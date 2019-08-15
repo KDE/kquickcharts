@@ -29,6 +29,8 @@
 
 #include "ChartDataSource.h"
 
+BEGIN_NAMESPACE
+
 /**
  * A data source that provides a hue-shifted color as data.
  */
@@ -63,5 +65,7 @@ private:
     int m_itemCount = 0;
     QVector<QColor> m_colors;
 };
+
+END_NAMESPACE
 
 #endif // COLORGRADIENTSOURCE_H

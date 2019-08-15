@@ -24,6 +24,8 @@
 
 #include "XYChart.h"
 
+BEGIN_NAMESPACE
+
 /**
  * A bar chart.
  */
@@ -57,5 +59,7 @@ private:
     qreal m_barWidth = AutoWidth;
     QVector<QVector<QPair<qreal, QColor>>> m_values;
 };
+
+END_NAMESPACE
 
 #endif // BARCHART_H

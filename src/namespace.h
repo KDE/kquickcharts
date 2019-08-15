@@ -19,34 +19,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DATASOURCE_H
-#define DATASOURCE_H
+#ifndef NAMESPACE_H
+#define NAMESPACE_H
 
-#include <QObject>
-
-#include "../namespace.h"
-
-BEGIN_NAMESPACE
-
-/**
- * Abstract base class for data sources.
+/*
+ * We only really want to place things in a namespace for Doxygen's sake, since
+ * it will list classes by namespace. For the actual code, we do not really care
+ * about using a namespace as everything is done through QML module loading
+ * anyway. In addition, Qt/moc can be a pain when dealing with namespaced code.
+ * So this macro is defined only when doxygen is running.
  */
-class ChartDataSource : public QObject
-{
-    Q_OBJECT
 
-public:
-    ChartDataSource(QObject *parent = nullptr);
-    virtual ~ChartDataSource();
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+#define BEGIN_NAMESPACE
+#define END_NAMESPACE
+#else
+#define BEGIN_NAMESPACE \
+    namespace org { namespace kde { namespace quickcharts {
+#define END_NAMESPACE } } }
+#endif
 
-    virtual int itemCount() const = 0;
-    virtual QVariant item(int index) const = 0;
-    virtual QVariant minimum() const = 0;
-    virtual QVariant maximum() const = 0;
-
-    Q_SIGNAL void dataChanged();
-};
-
-END_NAMESPACE
-
-#endif // DATASOURCE_H
+#endif // NAMESPACE_H

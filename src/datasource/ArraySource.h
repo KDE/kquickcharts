@@ -26,6 +26,8 @@
 
 #include "ChartDataSource.h"
 
+BEGIN_NAMESPACE
+
 /**
  * @todo write docs
  */
@@ -64,5 +66,7 @@ private:
     QVariantList m_array;
     bool m_wrap = false;
 };
+
+END_NAMESPACE
 
 #endif // ARRAYSOURCE_H

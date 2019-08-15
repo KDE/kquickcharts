@@ -26,6 +26,8 @@
 
 #include "Chart.h"
 
+BEGIN_NAMESPACE
+
 class ChartDataSource;
 class RangeGroup;
 
@@ -131,5 +133,7 @@ private:
     QVector<QVector<qreal>> m_sections;
     QVector<QVector<QColor>> m_colors;
 };
+
+END_NAMESPACE
 
 #endif // PIECHART_H

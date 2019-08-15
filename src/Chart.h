@@ -24,6 +24,10 @@
 
 #include <QQuickItem>
 
+#include "namespace.h"
+
+BEGIN_NAMESPACE
+
 class ChartDataSource;
 
 /**
@@ -88,5 +92,7 @@ private:
     ChartDataSource *m_colorSource = nullptr;
     QVector<ChartDataSource *> m_valueSources;
 };
+
+END_NAMESPACE
 
 #endif // CHART_H

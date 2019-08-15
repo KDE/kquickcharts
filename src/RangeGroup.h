@@ -24,6 +24,10 @@
 
 #include <QObject>
 
+#include "namespace.h"
+
+BEGIN_NAMESPACE
+
 /**
  * An object that can be used as a grouped property to provide a range for charts.
  */
@@ -63,5 +67,7 @@ private:
     qreal m_to = 100.0;
     bool m_automatic = true;
 };
+
+END_NAMESPACE
 
 #endif // RANGEGROUP_H

@@ -27,6 +27,10 @@
 #include <Qt>
 #include <QQuickItem>
 
+#include "../namespace.h"
+
+BEGIN_NAMESPACE
+
 class ChartDataSource;
 
 class AxisLabels;
@@ -112,6 +116,8 @@ private:
     class Private;
     const std::unique_ptr<Private> d;
 };
+
+END_NAMESPACE
 
 QML_DECLARE_TYPEINFO(AxisLabels, QML_HAS_ATTACHED_PROPERTIES)
 

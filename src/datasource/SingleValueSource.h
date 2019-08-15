@@ -26,6 +26,8 @@
 
 #include "ChartDataSource.h"
 
+BEGIN_NAMESPACE
+
 /**
  * A data source that provides a single value as data.
  */
@@ -51,5 +53,7 @@ public Q_SLOTS:
 private:
     QVariant m_value;
 };
+
+END_NAMESPACE
 
 #endif // SINGLEVALUESOURCE_H
