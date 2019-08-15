@@ -44,7 +44,6 @@ class ModelSource : public ChartDataSource
 
 public:
     explicit ModelSource(QObject *parent = nullptr);
-    virtual ~ModelSource();
 
     int role() const;
     QString roleName() const;

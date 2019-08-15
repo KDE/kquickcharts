@@ -34,10 +34,6 @@ ModelSource::ModelSource(QObject *parent)
     connect(this, &ModelSource::indexColumnsChanged, this, &ModelSource::dataChanged);
 }
 
-ModelSource::~ModelSource()
-{
-}
-
 int ModelSource::role() const
 {
     if (m_role < 0 && !m_roleName.isEmpty())

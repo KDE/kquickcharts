@@ -37,7 +37,6 @@ class ModelHistorySource : public ModelSource
 
 public:
     explicit ModelHistorySource(QObject* parent = nullptr);
-    ~ModelHistorySource();
 
     virtual int itemCount() const override;
     virtual QVariant item(int index) const override;

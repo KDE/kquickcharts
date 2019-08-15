@@ -40,7 +40,6 @@ class ValueHistorySource : public ChartDataSource
 
 public:
     explicit ValueHistorySource(QObject *parent = nullptr);
-    ~ValueHistorySource();
 
     int itemCount() const override;
     QVariant item(int index) const override;

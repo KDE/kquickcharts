@@ -53,11 +53,6 @@ public:
      */
     ChartAxisSource(QObject *parent = nullptr);
 
-    /**
-     * Destructor
-     */
-    ~ChartAxisSource();
-
     virtual QVariant item(int index) const override;
     QVariant minimum() const override;
     QVariant maximum() const override;

@@ -34,10 +34,6 @@ ChartAxisSource::ChartAxisSource(QObject* parent)
     connect(this, &ChartAxisSource::axisChanged, this, &ChartAxisSource::dataChanged);
 }
 
-ChartAxisSource::~ChartAxisSource()
-{
-}
-
 QVariant ChartAxisSource::item(int index) const
 {
     if (!m_chart || index < 0 || index > m_itemCount)

@@ -31,10 +31,6 @@ ModelHistorySource::ModelHistorySource(QObject* parent)
     connect(this, &ModelHistorySource::modelChanged, this, &ModelHistorySource::onModelChanged);
 }
 
-ModelHistorySource::~ModelHistorySource()
-{
-}
-
 int ModelHistorySource::itemCount() const
 {
     return m_history.size();

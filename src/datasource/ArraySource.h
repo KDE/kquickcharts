@@ -45,11 +45,6 @@ public:
      */
     explicit ArraySource(QObject* parent = nullptr);
 
-    /**
-     * Destructor
-     */
-    ~ArraySource();
-
     virtual int itemCount() const override;
     virtual QVariant item(int index) const override;
     QVariant minimum() const override;

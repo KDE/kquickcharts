@@ -32,10 +32,6 @@ ColorGradientSource::ColorGradientSource(QObject* parent)
 {
 }
 
-ColorGradientSource::~ColorGradientSource()
-{
-}
-
 int ColorGradientSource::itemCount() const
 {
     return m_itemCount;

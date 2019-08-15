@@ -27,10 +27,6 @@ SingleValueSource::SingleValueSource ( QObject* parent )
 
 }
 
-SingleValueSource::~SingleValueSource()
-{
-}
-
 QVariant SingleValueSource::item ( int index ) const
 {
     Q_UNUSED(index);

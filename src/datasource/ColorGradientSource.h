@@ -43,7 +43,6 @@ class ColorGradientSource : public ChartDataSource
 
 public:
     explicit ColorGradientSource(QObject* parent = nullptr);
-    ~ColorGradientSource();
 
     int itemCount() const override;
     QVariant item(int index) const override;

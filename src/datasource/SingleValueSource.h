@@ -38,7 +38,6 @@ class SingleValueSource : public ChartDataSource
 
 public:
     explicit SingleValueSource ( QObject* parent = nullptr );
-    ~SingleValueSource();
 
     virtual int itemCount() const override;
     virtual QVariant item ( int index ) const override;

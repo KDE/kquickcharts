@@ -28,10 +28,6 @@ ValueHistorySource::ValueHistorySource(QObject* parent)
 {
 }
 
-ValueHistorySource::~ValueHistorySource()
-{
-}
-
 int ValueHistorySource::itemCount() const
 {
     return m_maximumHistory;
