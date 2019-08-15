@@ -98,7 +98,7 @@ public:
     Q_SLOT void setStacked(bool newStacked);
     Q_SIGNAL void stackedChanged();
 
-    const ComputedRange computedRange() const;
+    ComputedRange computedRange() const;
     Q_SIGNAL void computedRangeChanged();
 
 protected:

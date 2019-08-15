@@ -102,7 +102,7 @@ void XYChart::setStacked(bool newStacked)
 }
 
 
-const ComputedRange XYChart::computedRange() const
+ComputedRange XYChart::computedRange() const
 {
     return m_computedRange;
 }
