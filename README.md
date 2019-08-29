@@ -75,3 +75,10 @@ QtQuick Controls items. Some of the controls may use style-specific theming.
 * [LegendDelegate](\ref org::kde::quickcharts::controls::LegendDelegate)
 * [LineChartControl](\ref org::kde::quickcharts::controls::LineChartControl)
 * [PieChartControl](\ref org::kde::quickcharts::controls::PieChartControl)
+
+## Supporting Code
+
+There are a number of classes and other pieces of code that are not considered
+public API and thus not part of the public API documentation. Primarily, these
+are all the QtQuick Scene Graph related classes located in `src/scenegraph/`,
+in addition to the shaders that are used for rendering charts.
