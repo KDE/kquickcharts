@@ -54,8 +54,9 @@ qreal LineChart::fillOpacity() const
 
 void LineChart::setSmooth(bool smooth)
 {
-    if (smooth == m_smooth)
+    if (smooth == m_smooth) {
         return;
+    }
 
     m_smooth = smooth;
     update();
@@ -64,8 +65,9 @@ void LineChart::setSmooth(bool smooth)
 
 void LineChart::setLineWidth(qreal width)
 {
-    if (qFuzzyCompare(m_lineWidth, width))
+    if (qFuzzyCompare(m_lineWidth, width)) {
         return;
+    }
 
     m_lineWidth = width;
     update();
@@ -74,8 +76,9 @@ void LineChart::setLineWidth(qreal width)
 
 void LineChart::setFillOpacity(qreal opacity)
 {
-    if (qFuzzyCompare(m_fillOpacity, opacity))
+    if (qFuzzyCompare(m_fillOpacity, opacity)) {
         return;
+    }
 
     m_fillOpacity = opacity;
     update();
@@ -95,8 +98,9 @@ QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
         m_rangeInvalid = false;
     }
 
-    if (stacked())
+    if (stacked()) {
         m_previousValues.clear();
+    }
 
     const auto sources = valueSources();
     for (int i = 0; i < sources.size(); ++i) {

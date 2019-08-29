@@ -186,8 +186,9 @@ QSGNode *PieChart::updatePaintNode(QSGNode *node, UpdatePaintNodeData *data)
     for (int i = 0; i < sourceCount; ++i) {
         float innerRadius = i == sourceCount - 1 && m_filled ? 0.0 : outerRadius - m_thickness;
 
-        if (node->childCount() <= i)
+        if (node->childCount() <= i) {
             node->appendChildNode(new PieChartNode{});
+        }
 
         auto pieNode = static_cast<PieChartNode *>(node->childAtIndex(i));
         pieNode->setRect(boundingRect());
@@ -218,8 +219,9 @@ void PieChart::onDataChanged()
     const auto sources = valueSources();
     const auto colors = colorSource();
 
-    if (!colors || sources.isEmpty() || !m_range->isValid())
+    if (!colors || sources.isEmpty() || !m_range->isValid()) {
         return;
+    }
 
     auto colorIndex = 0;
 
