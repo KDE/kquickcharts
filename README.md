@@ -11,6 +11,13 @@ The charts use a system called distance fields for their accelerated rendering,
 which provides ways of using the GPU for rendering 2D shapes without loss of
 quality.
 
+### Usage Example
+
+The following piece of code will render a simple line chart containing three
+lines:
+
+\include{lineno} examples/snippets/minimal.qml
+
 ## Concepts
 
 There are three main concepts to consider when using this module: charts, data
