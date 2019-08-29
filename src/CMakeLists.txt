@@ -47,3 +47,15 @@ target_link_libraries(quickchartsplugin
 
 install(TARGETS quickchartsplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/quickcharts)
 install(FILES qmldir DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/quickcharts)
+
+if (BUILD_TESTING)
+    add_custom_command(TARGET QuickCharts POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/bin/org/kde/quickcharts
+    )
+    add_custom_command(TARGET QuickCharts POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/src/qmldir ${CMAKE_BINARY_DIR}/bin/org/kde/quickcharts
+    )
+    add_custom_command(TARGET QuickCharts POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_BINARY_DIR}/bin/libQuickCharts.so ${CMAKE_BINARY_DIR}/bin/org/kde/quickcharts/libQuickCharts.so
+    )
+endif()

@@ -18,7 +18,7 @@ include(KDECMakeSettings)
 
 include(GenerateExportHeader)
 
-include(ECMMarkAsTest)
+include(ECMAddTests)
 include(ECMSetupVersion)
 include(ECMGenerateHeaders)
 include(ECMAddQch)
@@ -47,12 +47,9 @@ if(BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
 
-# if(BUILD_TESTING)
-#     add_subdirectory(autotests)
-#     if (NOT KIOCORE_ONLY)
-#         add_subdirectory(tests)
-#     endif()
-# endif()
+if(BUILD_TESTING)
+    add_subdirectory(autotests)
+endif()
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
