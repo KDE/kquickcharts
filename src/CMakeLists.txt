@@ -37,15 +37,15 @@ qt5_add_resources(quickcharts_QRC shaders/shaders.qrc)
 
 add_definitions(-DQT_NO_KEYWORDS)
 
-add_library(quickchartsplugin SHARED ${quickcharts_SRCS} ${quickcharts_QRC})
-target_link_libraries(quickchartsplugin
+add_library(QuickCharts SHARED ${quickcharts_SRCS} ${quickcharts_QRC})
+target_link_libraries(QuickCharts
     Qt5::Core
     Qt5::Quick
     Qt5::Qml
     Qt5::Gui
 )
 
-install(TARGETS quickchartsplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/quickcharts)
+install(TARGETS QuickCharts EXPORT KF5QuickChartsTargets DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/quickcharts)
 install(FILES qmldir DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/quickcharts)
 
 if (BUILD_TESTING)

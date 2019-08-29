@@ -1,2 +1,2 @@
 module org.kde.quickcharts
-plugin quickchartsplugin
+plugin QuickCharts

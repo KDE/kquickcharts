@@ -20,24 +20,14 @@ include(GenerateExportHeader)
 
 include(ECMAddTests)
 include(ECMSetupVersion)
-include(ECMGenerateHeaders)
-include(ECMAddQch)
-include(ECMMarkNonGuiExecutable)
 include(ECMQtDeclareLoggingCategory)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-ecm_setup_version(
-  PROJECT
-  VARIABLE_PREFIX KF5QuickCharts
-#  VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/src/kio_version.h"
-#   PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5KIOConfigVersion.cmake"
-  SOVERSION 1)
-
 option(BUILD_EXAMPLES "Build example applications" OFF)
 
-set(REQUIRED_QT_VERSION 5.10.0)
+set(REQUIRED_QT_VERSION 5.11.0)
 find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED Qml Quick QuickControls2)
 
 add_subdirectory(controls)
@@ -51,5 +41,32 @@ if(BUILD_TESTING)
     add_subdirectory(autotests)
 endif()
 
-feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
+ecm_setup_version(
+    PROJECT
+    VARIABLE_PREFIX KF5QuickCharts
+    VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/quickcharts_version.h"
+    PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5QuickChartsConfigVersion.cmake"
+    SOVERSION 1
+)
 
+configure_package_config_file(
+    "KF5QuickChartsConfig.cmake.in"
+    "KF5QuickChartsConfig.cmake"
+    INSTALL_DESTINATION ${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5QuickCharts
+    PATH_VARS KF5_INCLUDE_INSTALL_DIR CMAKE_INSTALL_PREFIX
+)
+
+install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/KF5QuickChartsConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/KF5QuickChartsConfigVersion.cmake"
+    DESTINATION ${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5QuickCharts
+    COMPONENT Devel
+)
+
+install(EXPORT KF5QuickChartsTargets
+    DESTINATION ${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5QuickCharts
+    FILE KF5QuickChartsTargets.cmake
+    NAMESPACE KF5::
+)
+
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

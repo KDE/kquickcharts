@@ -10,4 +10,7 @@ public_lib: true
 public_source_dirs:
 - controls
 - src
+libraries:
+ - cmake: KF5::QuickCharts
 cmakename: KF5QuickCharts
+irc: kde-devel
