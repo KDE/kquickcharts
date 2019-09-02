@@ -26,13 +26,9 @@
 #include <QQmlContext>
 #include <QSurfaceFormat>
 
-#include <KDeclarative/KDeclarative>
-
 int main(int argc, char **argv)
 {
     QApplication app(argc, argv);
-
-    KDeclarative::KDeclarative::setupQmlJsDebugger();
 
     QCommandLineParser parser;
     parser.addOption({QStringLiteral("page"), QStringLiteral("The page to show."), QStringLiteral("page")});
@@ -62,10 +58,6 @@ int main(int argc, char **argv)
     QSurfaceFormat::setDefaultFormat(format);
 
     QQmlApplicationEngine engine;
-
-    KDeclarative::KDeclarative kdeclarative;
-    kdeclarative.setDeclarativeEngine(&engine);
-    kdeclarative.setupContext();
 
     if (parser.isSet(QStringLiteral("page"))) {
         engine.rootContext()->setContextProperty(QStringLiteral("__commandLinePage"), parser.value(QStringLiteral("page")));
