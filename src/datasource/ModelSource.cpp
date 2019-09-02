@@ -21,8 +21,6 @@
 
 #include "ModelSource.h"
 
-#include <QAbstractItemModel>
-
 #include <QDebug>
 
 ModelSource::ModelSource(QObject *parent)

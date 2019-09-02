@@ -24,7 +24,7 @@
 
 #include "ChartDataSource.h"
 
-class QAbstractItemModel;
+#include <QAbstractItemModel>
 
 BEGIN_NAMESPACE
 
