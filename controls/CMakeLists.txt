@@ -16,6 +16,7 @@ install(FILES
     LegendDelegate.qml
     LineChartControl.qml
     PieChartControl.qml
+    Theme.qml
     DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/quickcharts/controls
 )
 
