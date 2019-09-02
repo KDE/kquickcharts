@@ -90,8 +90,9 @@ QVariant ModelSource::item(int index) const
     }
 
     auto modelIndex = m_indexColumns ? m_model->index(0, index) : m_model->index(index, m_column);
-    if (modelIndex.isValid())
+    if (modelIndex.isValid()) {
         return m_model->data(modelIndex, m_role);
+    }
 
     return QVariant{};
 }
@@ -134,8 +135,9 @@ QVariant ModelSource::maximum() const
 
 void ModelSource::setRole(int role)
 {
-    if (role == m_role)
+    if (role == m_role) {
         return;
+    }
 
     m_role = role;
     if (m_model) {
@@ -147,8 +149,9 @@ void ModelSource::setRole(int role)
 
 void ModelSource::setRoleName(const QString &name)
 {
-    if (name == m_roleName)
+    if (name == m_roleName) {
         return;
+    }
 
     m_roleName = name;
     if (m_model) {
@@ -160,8 +163,9 @@ void ModelSource::setRoleName(const QString &name)
 
 void ModelSource::setColumn(int column)
 {
-    if (column == m_column)
+    if (column == m_column) {
         return;
+    }
 
     m_column = column;
     Q_EMIT columnChanged();
@@ -169,8 +173,9 @@ void ModelSource::setColumn(int column)
 
 void ModelSource::setIndexColumns(bool index)
 {
-    if (index == m_indexColumns)
+    if (index == m_indexColumns) {
         return;
+    }
 
     m_indexColumns = index;
     Q_EMIT indexColumnsChanged();
@@ -182,8 +187,9 @@ void ModelSource::setModel(QAbstractItemModel *model)
         return;
     }
 
-    if (m_model)
+    if (m_model) {
         m_model->disconnect(this);
+    }
 
     m_model = model;
     if (m_model) {
