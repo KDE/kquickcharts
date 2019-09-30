@@ -188,23 +188,10 @@ QVector<QVector2D> interpolate(const QVector<QVector2D> &points, qreal start, qr
     path.moveTo(start, points[0].y() * height);
 
     for (int i = 1; i < points.count() - 2; i++) {
-        const QMatrix4x4 p(
-            x,
-            points[i - 1].y() * height,
-            0,
-            0,
-            x + xDelta * 1,
-            points[i + 0].y() * height,
-            0,
-            0,
-            x + xDelta * 2,
-            points[i + 1].y() * height,
-            0,
-            0,
-            x + xDelta * 3,
-            points[i + 2].y() * height,
-            0,
-            0);
+        const QMatrix4x4 p(x,              points[i - 1].y() * height, 0, 0,
+                           x + xDelta * 1, points[i + 0].y() * height, 0, 0,
+                           x + xDelta * 2, points[i + 1].y() * height, 0, 0,
+                           x + xDelta * 3, points[i + 2].y() * height, 0, 0);
 
         const QMatrix4x4 res = matrix * p;
 
