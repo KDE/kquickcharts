@@ -114,8 +114,6 @@ void ModelHistorySource::onDataChanged(const QModelIndex &topLeft, const QModelI
         return;
 
     auto entry = model()->data(model()->index(m_row, column()), role());
-    if (!entry.isValid())
-        return;
 
     m_history.prepend(entry);
     while (m_history.size() > m_maximumHistory)
