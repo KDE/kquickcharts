@@ -90,6 +90,12 @@ void ModelHistorySource::setMaximumHistory(int maximumHistory)
     Q_EMIT maximumHistoryChanged();
 }
 
+void ModelHistorySource::clear()
+{
+    m_history.clear();
+    Q_EMIT dataChanged();
+}
+
 void ModelHistorySource::onModelChanged()
 {
     if (model())

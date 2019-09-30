@@ -94,3 +94,9 @@ void ValueHistorySource::setMaximumHistory(int newMaximumHistory)
     }
     Q_EMIT maximumHistoryChanged();
 }
+
+void ValueHistorySource::clear()
+{
+    m_history.clear();
+    Q_EMIT dataChanged();
+}

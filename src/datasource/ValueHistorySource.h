@@ -53,6 +53,8 @@ public:
     Q_SLOT void setMaximumHistory(int maximumHistory);
     Q_SIGNAL void maximumHistoryChanged();
 
+    Q_INVOKABLE void clear();
+
 private:
     QVariant m_value;
     int m_maximumHistory = 10;

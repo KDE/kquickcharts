@@ -44,15 +44,14 @@ public:
     virtual QVariant maximum() const override;
 
     int row() const;
+    Q_SLOT void setRow(int row);
+    Q_SIGNAL void rowChanged();
+
     int maximumHistory() const;
+    Q_SLOT void setMaximumHistory(int maximumHistory);
+    Q_SIGNAL void maximumHistoryChanged();
 
-public Q_SLOTS:
-    void setRow(int row);
-    void setMaximumHistory(int maximumHistory);
-
-Q_SIGNALS:
-    void rowChanged();
-    void maximumHistoryChanged();
+    Q_INVOKABLE void clear();
 
 private:
     void onModelChanged();
