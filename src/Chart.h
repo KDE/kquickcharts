@@ -48,9 +48,23 @@ class Chart : public QQuickItem
      * The data sources providing the data this chart needs to render.
      */
     Q_PROPERTY(QQmlListProperty<ChartDataSource> valueSources READ valueSourcesProperty NOTIFY valueSourcesChanged)
+    /**
+     * The indexing mode used for indexing colors and names.
+     */
+    Q_PROPERTY(IndexingMode indexingMode READ indexingMode WRITE setIndexingMode NOTIFY indexingModeChanged)
 
 public:
     using DataSourcesProperty = QQmlListProperty<ChartDataSource>;
+
+    /**
+     * How to index color and name sources relative to the different value sources.
+     */
+    enum IndexingMode {
+        IndexSourceValues = 1, ///< Index each value, restart indexing for each value source.
+        IndexEachSource, ///< Index each value source, never index individual values.
+        IndexAllValues ///< Index each value, continuing with the index for each value source.
+    };
+    Q_ENUM(IndexingMode)
 
     explicit Chart(QQuickItem *parent = nullptr);
     ~Chart() override = default;
@@ -69,6 +83,10 @@ public:
     Q_SLOT void insertValueSource(int index, ChartDataSource *source);
     Q_SLOT void removeValueSource(int index);
     Q_SLOT void removeValueSource(QObject *source);
+
+    IndexingMode indexingMode() const;
+    void setIndexingMode(IndexingMode newIndexingMode);
+    Q_SIGNAL void indexingModeChanged();
 
 protected:
     /**
@@ -91,6 +109,7 @@ private:
     ChartDataSource *m_nameSource = nullptr;
     ChartDataSource *m_colorSource = nullptr;
     QVector<ChartDataSource *> m_valueSources;
+    IndexingMode m_indexingMode = IndexEachSource;
 };
 
 END_NAMESPACE

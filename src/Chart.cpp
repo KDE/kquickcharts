@@ -100,6 +100,23 @@ void Chart::removeValueSource(QObject *source)
     removeValueSource(m_valueSources.indexOf(qobject_cast<ChartDataSource *>(source)));
 }
 
+Chart::IndexingMode Chart::indexingMode() const
+{
+    return m_indexingMode;
+}
+
+void Chart::setIndexingMode(IndexingMode newIndexingMode)
+{
+    if (newIndexingMode == m_indexingMode) {
+        return;
+    }
+
+    m_indexingMode = newIndexingMode;
+    onDataChanged();
+    Q_EMIT indexingModeChanged();
+}
+
+
 void Chart::componentComplete()
 {
     QQuickItem::componentComplete();
