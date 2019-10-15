@@ -31,6 +31,7 @@
 PieChart::PieChart(QQuickItem *parent)
     : Chart(parent)
 {
+    setIndexingMode(Chart::IndexSourceValues);
     m_range = std::make_unique<RangeGroup>();
     connect(m_range.get(), &RangeGroup::rangeChanged, this, &PieChart::onDataChanged);
 }
@@ -223,6 +224,7 @@ void PieChart::onDataChanged()
         return;
     }
 
+    auto indexMode = indexingMode();
     auto colorIndex = 0;
 
     for (auto source : sources) {
@@ -243,12 +245,15 @@ void PieChart::onDataChanged()
                 sectionColors << color;
             }
             threshold = qMax(0.0, threshold - value);
-            colorIndex++;
+
+            if (indexMode != IndexEachSource) {
+                colorIndex++;
+            }
         }
 
         if (qFuzzyCompare(total, 0.0)) {
             m_sections << QVector<qreal>{0.0};
-            m_colors << QVector<QColor>{colors->item(colorIndex++).value<QColor>()};
+            m_colors << QVector<QColor>{colors->item(colorIndex).value<QColor>()};
         }
 
         qreal max = std::max(total, source->maximum().toReal());
@@ -263,7 +268,12 @@ void PieChart::onDataChanged()
 
         m_sections << sections;
         m_colors << sectionColors;
-        colorIndex = m_continueColors ? colorIndex : 0;
+
+        if (indexMode == IndexEachSource) {
+            colorIndex++;
+        } else if (indexMode == IndexSourceValues) {
+            colorIndex = 0;
+        }
     }
 
     update();
