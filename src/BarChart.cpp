@@ -26,10 +26,13 @@
 
 #include "datasource/ChartDataSource.h"
 #include "scenegraph/BarChartNode.h"
+#include "RangeGroup.h"
 
 BarChart::BarChart(QQuickItem *parent)
     : XYChart(parent)
 {
+    connect(xRange(), &RangeGroup::rangeChanged, this, &BarChart::onDataChanged);
+    connect(yRange(), &RangeGroup::rangeChanged, this, &BarChart::onDataChanged);
 }
 
 qreal BarChart::spacing() const
