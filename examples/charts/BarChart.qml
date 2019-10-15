@@ -27,6 +27,7 @@ import org.kde.kirigami 2.4 as Kirigami
 import org.kde.kquickcontrols 2.0
 
 import org.kde.quickcharts 1.0 as Charts
+import org.kde.quickcharts.controls 1.0 as ChartsControls
 
 Kirigami.Page {
     title: "Bar Chart"
@@ -102,15 +103,15 @@ Kirigami.Page {
                 anchors {
                     left: yAxisLabels.right
                     right: parent.right
-                    bottom: legendView.top
+                    bottom: legend.top
                 }
 
                 delegate: Label { text: Charts.AxisLabels.label }
                 source: Charts.ModelSource { model: barModel; roleName: "label" }
             }
 
-            ListView {
-                id: legendView
+            ChartsControls.Legend {
+                id: legend
 
                 anchors {
                     left: yAxisLabels.right
@@ -118,19 +119,8 @@ Kirigami.Page {
                     bottom: parent.bottom
                     bottomMargin: Kirigami.Units.smallSpacing
                 }
-                height: currentItem.height
 
-                model: Charts.LegendModel { chart: barChart }
-
-                orientation: Qt.Horizontal;
-                boundsBehavior: ListView.StopAtBounds
-                spacing: Kirigami.Units.largeSpacing
-
-                delegate: Row {
-                    spacing: Kirigami.Units.smallSpacing
-                    Rectangle { color: model.color; height: parent.height; width: height }
-                    Label { text: model.name }
-                }
+                chart: barChart
             }
 
             Charts.BarChart {
