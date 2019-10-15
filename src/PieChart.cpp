@@ -104,22 +104,6 @@ void PieChart::setBackgroundColor(const QColor &color)
     Q_EMIT backgroundColorChanged();
 }
 
-bool PieChart::continueColors() const
-{
-    return m_continueColors;
-}
-
-void PieChart::setContinueColors(bool newContinueColors)
-{
-    if (newContinueColors == m_continueColors) {
-        return;
-    }
-
-    m_continueColors = newContinueColors;
-    onDataChanged();
-    Q_EMIT continueColorsChanged();
-}
-
 qreal PieChart::fromAngle() const
 {
     return m_fromAngle;

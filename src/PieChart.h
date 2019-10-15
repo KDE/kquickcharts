@@ -59,10 +59,6 @@ class PieChart : public Chart
      * Sets a colour to use to fill remaining space on the arc.
      */
     Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
-    /**
-     * Whether to continue indexing colors when drawing other pies instead of starting from 0 again.
-     */
-    Q_PROPERTY(bool continueColors READ continueColors WRITE setContinueColors NOTIFY continueColorsChanged)
 
     Q_PROPERTY(qreal fromAngle READ fromAngle WRITE setFromAngle NOTIFY fromAngleChanged)
 
@@ -94,10 +90,6 @@ public:
     Q_SLOT void setBackgroundColor(const QColor &color);
     Q_SIGNAL void backgroundColorChanged();
 
-    bool continueColors() const;
-    Q_SLOT void setContinueColors(bool newContinueColors);
-    Q_SIGNAL void continueColorsChanged();
-
     qreal fromAngle() const;
     Q_SLOT void setFromAngle(qreal newFromAngle);
     Q_SIGNAL void fromAngleChanged();
@@ -120,7 +112,6 @@ private:
     qreal m_thickness = 10.0;
     qreal m_spacing = 0.0;
     QColor m_backgroundColor = Qt::transparent;
-    bool m_continueColors = false;
     qreal m_fromAngle = 0.0;
     qreal m_toAngle = 360.0;
     bool m_smoothEnds = false;
