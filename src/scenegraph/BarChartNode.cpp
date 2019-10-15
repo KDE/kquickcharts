@@ -87,7 +87,7 @@ void BarChartNode::update()
     auto index = 0;
     for (const auto &entry : qAsConst(m_values)) {
         auto value = entry.first;
-        value.setY(value.y() * m_rect.height());
+        value.setY(std::min(value.y() * m_rect.height(), m_rect.height()));
         auto color = entry.second;
         auto rect = QRectF{QPointF{value.x(), m_rect.bottom() - value.y()}, QSizeF{m_barWidth, value.y()}};
         bar(vertices, indices, index, rect, color);
