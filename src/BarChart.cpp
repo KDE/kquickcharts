@@ -150,14 +150,21 @@ void BarChart::onDataChanged()
     const auto range = computedRange();
     const auto sources = valueSources();
     auto colors = colorSource();
+    auto indexMode = indexingMode();
+    auto colorIndex = 0;
 
     m_values.fill(QVector<QPair<qreal, QColor>>{}, range.distanceX);
 
     auto generator = [&, i = range.startX]() mutable -> QVector<QPair<qreal, QColor>> {
         QVector<QPair<qreal, QColor>> values;
+
         for (int j = 0; j < sources.count(); ++j) {
             auto value = (sources.at(j)->item(i).toReal() - range.startY) / range.distanceY;
-            values << QPair<qreal, QColor>(value, colors->item(j).value<QColor>());
+            values << QPair<qreal, QColor>(value, colors->item(colorIndex).value<QColor>());
+
+            if (indexMode != Chart::IndexSourceValues) {
+                colorIndex++;
+            }
         }
 
         if (stacked()) {
@@ -166,6 +173,12 @@ void BarChart::onDataChanged()
                 value.first += previous;
                 previous = value.first;
             }
+        }
+
+        if (indexMode == Chart::IndexSourceValues) {
+            colorIndex++;
+        } else if (indexMode == Chart::IndexEachSource) {
+            colorIndex = 0;
         }
 
         i++;
