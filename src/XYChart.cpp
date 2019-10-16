@@ -24,24 +24,6 @@
 #include "RangeGroup.h"
 #include "datasource/ChartDataSource.h"
 
-void calculateStackedYRange(XYChart *chart, ComputedRange &range, float &minY, float &maxY)
-{
-    auto sources = chart->valueSources();
-
-    minY = 0.0;
-    for (auto source : sources) {
-        minY = std::min(minY, source->minimum().toFloat());
-    }
-
-    for (int i = range.startX; i < range.endX; ++i) {
-        float yDistance = 0.0;
-        for (auto source : sources) {
-            yDistance += source->item(i).toFloat();
-        }
-        maxY = std::max(maxY, std::max(0.0f, minY) + yDistance);
-    }
-}
-
 bool operator==(const ComputedRange &first, const ComputedRange &second)
 {
     return first.startX == second.startX && first.endX == second.endX && qFuzzyCompare(first.startY, second.startY)
@@ -108,21 +90,35 @@ void XYChart::updateComputedRange()
 {
     ComputedRange result;
 
-    if (m_xRange->automatic()) {
-        updateAutomaticXRange(result);
-    } else {
-        result.startX = m_xRange->from();
-        result.endX = m_xRange->to();
-    }
-    result.distanceX = result.endX - result.startX;
+    auto xRange = m_xRange->calculateRange(valueSources(),
+                                           [](ChartDataSource *) { return 0; },
+                                           [](ChartDataSource *source) { return source->itemCount(); });
+    result.startX = xRange.start;
+    result.endX = xRange.end;
+    result.distanceX = xRange.distance;
 
-    if (m_yRange->automatic()) {
-        updateAutomaticYRange(result);
-    } else {
-        result.startY = m_yRange->from();
-        result.endY = m_yRange->to();
-    }
-    result.distanceY = result.endY - result.startY;
+    auto maximumY = [this, xRange](ChartDataSource *source) {
+        if (!m_stacked) {
+            return source->maximum().toDouble();
+        } else {
+            qreal max = std::numeric_limits<qreal>::min();
+            for (int i = xRange.start; i < xRange.end; ++i) {
+                qreal yDistance = 0.0;
+                for (auto source : valueSources()) {
+                    yDistance += source->item(i).toDouble();
+                }
+                max = std::max(max, yDistance);
+            }
+            return max;
+        }
+    };
+
+    auto yRange = m_yRange->calculateRange(valueSources(),
+                                           [](ChartDataSource *source) { return std::min(0.0, source->minimum().toDouble()); },
+                                           maximumY);
+    result.startY = yRange.start;
+    result.endY = yRange.end;
+    result.distanceY = yRange.distance;
 
     if (result == m_computedRange) {
         return;
@@ -130,35 +126,6 @@ void XYChart::updateComputedRange()
 
     m_computedRange = result;
     Q_EMIT computedRangeChanged();
-}
-
-void XYChart::updateAutomaticXRange(ComputedRange &range)
-{
-    range.startX = 0;
-    int maxX = -1;
-    const auto sources = valueSources();
-    for (auto valueSource : sources) {
-        maxX = std::max(maxX, valueSource->itemCount());
-    }
-    range.endX = maxX;
-}
-
-void XYChart::updateAutomaticYRange(ComputedRange &range)
-{
-    auto minY = std::numeric_limits<float>::max();
-    auto maxY = std::numeric_limits<float>::min();
-
-    const auto sources = valueSources();
-    if (!m_stacked) {
-        for (auto valueSource : sources) {
-            minY = std::min(minY, valueSource->minimum().toFloat());
-            maxY = std::max(maxY, valueSource->maximum().toFloat());
-        }
-    } else {
-        calculateStackedYRange(this, range, minY, maxY);
-    }
-    range.startY = std::min(0.0f, minY);
-    range.endY = std::max(0.0f, maxY);
 }
 
 QDebug operator<<(QDebug debug, const ComputedRange &range)

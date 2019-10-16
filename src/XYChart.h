@@ -104,8 +104,6 @@ public:
 
 protected:
     virtual void updateComputedRange();
-    virtual void updateAutomaticXRange(ComputedRange &range);
-    virtual void updateAutomaticYRange(ComputedRange &range);
 
 private:
     RangeGroup *m_xRange = nullptr;

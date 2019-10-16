@@ -208,11 +208,22 @@ void PieChart::onDataChanged()
         return;
     }
 
+    auto maximum = [](ChartDataSource* source) {
+        qreal result = 0.0;
+        for (int i = 0; i < source->itemCount(); ++i) {
+            result += source->item(i).toDouble();
+        }
+        return result;
+    };
+
     auto indexMode = indexingMode();
     auto colorIndex = 0;
+    auto range = m_range->calculateRange(valueSources(),
+                                         [](ChartDataSource*) { return 0.0; },
+                                         maximum);
 
     for (auto source : sources) {
-        qreal threshold = !m_range->automatic() ? m_range->from() : 0.0;
+        qreal threshold = range.start;
         qreal total = 0.0;
 
         QVector<qreal> sections;
@@ -222,13 +233,17 @@ void PieChart::onDataChanged()
             auto value = source->item(i).toReal();
             auto limited = value - threshold;
             if (limited > 0.0) {
+                if (total + limited >= range.end) {
+                    limited = range.end - total;
+                }
+
                 sections << limited;
                 total += limited;
 
                 auto color = colors->item(colorIndex).value<QColor>();
                 sectionColors << color;
             }
-            threshold = qMax(0.0, threshold - value);
+            threshold = std::max(0.0, threshold - value);
 
             if (indexMode != IndexEachSource) {
                 colorIndex++;
@@ -240,14 +255,8 @@ void PieChart::onDataChanged()
             m_colors << QVector<QColor>{colors->item(colorIndex).value<QColor>()};
         }
 
-        qreal max = std::max(total, source->maximum().toReal());
-
-        if (!m_range->automatic() && m_range->distance() >= total) {
-            max = m_range->distance();
-        }
-
         for (auto &value : sections) {
-            value = value / (qFuzzyCompare(max, 0.0) ? 1.0 : max);
+            value = value / range.end;
         }
 
         m_sections << sections;
