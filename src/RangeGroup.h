@@ -38,33 +38,50 @@ class RangeGroup : public QObject
     Q_PROPERTY(qreal to READ to WRITE setTo NOTIFY toChanged)
     Q_PROPERTY(bool automatic READ automatic WRITE setAutomatic NOTIFY automaticChanged)
     Q_PROPERTY(qreal distance READ distance NOTIFY rangeChanged)
+    /**
+     * The minimum size of the range. Mostly relevant when automatic is true.
+     */
+    Q_PROPERTY(qreal minimum READ minimum WRITE setMinimum NOTIFY minimumChanged)
+    /**
+     * The amount with which the range increases. That is, the total range will be limited to a multiple of this value.
+     */
+    Q_PROPERTY(qreal increment READ increment WRITE setIncrement NOTIFY incrementChanged)
 
 public:
     explicit RangeGroup(QObject *parent = nullptr);
 
     qreal from() const;
-    qreal to() const;
-    bool automatic() const;
+    void setFrom(qreal from);
+    Q_SIGNAL void fromChanged();
 
-    bool isValid() const;
+    qreal to() const;
+    void setTo(qreal to);
+    Q_SIGNAL void toChanged();
+
+    bool automatic() const;
+    void setAutomatic(bool newAutomatic);
+    Q_SIGNAL void automaticChanged();
+
     qreal distance() const;
 
-public Q_SLOTS:
-    void setFrom(qreal from);
-    void setTo(qreal to);
-    void setAutomatic(bool automatic);
+    qreal minimum() const;
+    void setMinimum(qreal newMinimum);
+    Q_SIGNAL void minimumChanged();
 
-Q_SIGNALS:
-    void fromChanged();
-    void toChanged();
-    void automaticChanged();
-    void rangeChanged();
-    void distanceChanged();
+    qreal increment() const;
+    void setIncrement(qreal newIncrement);
+    Q_SIGNAL void incrementChanged();
+
+    bool isValid() const;
+
+    Q_SIGNAL void rangeChanged();
 
 private:
     qreal m_from = 0.0;
     qreal m_to = 100.0;
     bool m_automatic = true;
+    qreal m_minimum = std::numeric_limits<qreal>::min();
+    qreal m_increment = 0.0;
 };
 
 END_NAMESPACE
