@@ -21,6 +21,8 @@
 
 #include "RangeGroup.h"
 
+#include <cmath>
+
 RangeGroup::RangeGroup(QObject *parent)
     : QObject(parent)
 {
@@ -116,3 +118,33 @@ bool RangeGroup::isValid() const
     return m_automatic || (m_to > m_from);
 }
 
+RangeGroup::RangeResult RangeGroup::calculateRange(const QVector<ChartDataSource *> &sources,
+                                                   std::function<qreal(ChartDataSource*)> minimumCallback,
+                                                   std::function<qreal(ChartDataSource*)> maximumCallback)
+{
+    RangeResult result;
+
+    auto min = std::numeric_limits<qreal>::max();
+    auto max = std::numeric_limits<qreal>::min();
+
+    if (!m_automatic) {
+        min = m_from;
+        max = m_to;
+    } else {
+        std::for_each(sources.begin(), sources.end(), [&](ChartDataSource *source) {
+            min = std::min(min, minimumCallback(source));
+            max = std::max(max, maximumCallback(source));
+        });
+    }
+
+    max = std::max(max, m_minimum);
+    if (m_increment > 0.0) {
+        max = m_increment * std::ceil(max / m_increment);
+    }
+
+    result.start = min;
+    result.end = max;
+    result.distance = max - min;
+
+    return result;
+}

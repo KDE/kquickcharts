@@ -22,11 +22,15 @@
 #ifndef RANGEGROUP_H
 #define RANGEGROUP_H
 
+#include <functional>
+
 #include <QObject>
 
 #include "namespace.h"
 
 BEGIN_NAMESPACE
+
+class ChartDataSource;
 
 /**
  * An object that can be used as a grouped property to provide a range for charts.
@@ -48,6 +52,12 @@ class RangeGroup : public QObject
     Q_PROPERTY(qreal increment READ increment WRITE setIncrement NOTIFY incrementChanged)
 
 public:
+    struct RangeResult {
+        qreal start = 0.0;
+        qreal end = 0.0;
+        qreal distance = 0.0;
+    };
+
     explicit RangeGroup(QObject *parent = nullptr);
 
     qreal from() const;
@@ -75,6 +85,10 @@ public:
     bool isValid() const;
 
     Q_SIGNAL void rangeChanged();
+
+    RangeResult calculateRange(const QVector<ChartDataSource*> &sources,
+                               std::function<qreal(ChartDataSource*)> minimumCallback,
+                               std::function<qreal(ChartDataSource*)> maximumCallback);
 
 private:
     qreal m_from = 0.0;
