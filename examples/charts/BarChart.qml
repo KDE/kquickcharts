@@ -158,11 +158,8 @@ Kirigami.Page {
             }
         }
 
-        RowLayout {
-            RangeEditor { label: "X Axis"; range: barChart.xRange }
-            Item { Layout.fillWidth: true }
-            RangeEditor { label: "Y Axis"; range: barChart.yRange }
-        }
+        RangeEditor { label: "X Axis"; range: barChart.xRange }
+        RangeEditor { label: "Y Axis"; range: barChart.yRange }
 
         RowLayout {
             Button { text: "Add Item"; onClicked: barModel.append({label: "New", value1: 0, value2: 0, value3: 0}) }

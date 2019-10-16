@@ -70,13 +70,14 @@ Kirigami.Page {
             }
         }
 
+        RangeEditor { label: "Range"; range: chart.range }
+
         RowLayout {
             Button { text: "Add Item"; onClicked: pieModel.append({data: 50, color: Qt.rgba(1.0, 1.0, 1.0)}) }
             Button { text: "Remove Item"; onClicked: pieModel.remove(pieModel.count - 1)}
             Label { text: "Thickness" }
             SpinBox { from: 0; to: chart.width / 2; value: chart.thickness; onValueModified: chart.thickness = value; }
             CheckBox { text: "Filled"; checked: chart.filled; onCheckedChanged: chart.filled = checked }
-            RangeEditor { label: "Range"; range: chart.range }
         }
 
         RowLayout {

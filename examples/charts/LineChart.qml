@@ -70,11 +70,8 @@ Kirigami.Page {
             }
         }
 
-        RowLayout {
-            RangeEditor { label: "X Axis"; range: lineChart.xRange }
-            Item { Layout.fillWidth: true }
-            RangeEditor { label: "Y Axis"; range: lineChart.yRange }
-        }
+        RangeEditor { label: "X Axis"; range: lineChart.xRange }
+        RangeEditor { label: "Y Axis"; range: lineChart.yRange }
 
         RowLayout {
             Button { text: "Add Item"; onClicked: lineModel.append({label: "New", value1: 0, value2: 0, value3: 0}) }
