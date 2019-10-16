@@ -74,6 +74,7 @@ private:
     void queueUpdate();
     void update();
     void updateData();
+    int countItems();
 
     Chart *m_chart = nullptr;
     int m_sourceIndex = UseSourceCount;

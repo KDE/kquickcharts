@@ -131,16 +131,12 @@ void LegendModel::update()
     m_connections.push_back(connect(m_chart, &Chart::nameSourceChanged, this, &LegendModel::queueUpdate, Qt::UniqueConnection));
 
     auto sources = m_chart->valueSources();
-    int itemCount = sources.count();
-    if (m_sourceIndex >= 0 && m_sourceIndex < sources.size()) {
-        valueSource = sources.at(m_sourceIndex);
-        itemCount = valueSource->itemCount();
-        m_connections.push_back(connect(valueSource, &ChartDataSource::dataChanged, this, &LegendModel::updateData, Qt::UniqueConnection));
-    } else {
-        std::transform(sources.cbegin(), sources.cend(), std::back_inserter(m_connections), [this](ChartDataSource *source) {
-            return connect(source, &ChartDataSource::dataChanged, this, &LegendModel::updateData, Qt::UniqueConnection);
-        });
-    }
+    int itemCount = countItems();
+
+    std::transform(sources.cbegin(), sources.cend(), std::back_inserter(m_connections), [this](ChartDataSource *source) {
+        return connect(source, &ChartDataSource::dataChanged, this, &LegendModel::updateData, Qt::UniqueConnection);
+    });
+
     m_connections.push_back(connect(m_chart, &Chart::valueSourcesChanged, this, &LegendModel::queueUpdate, Qt::UniqueConnection));
 
     if ((!colorSource && !nameSource) || itemCount <= 0) {
@@ -177,14 +173,7 @@ void LegendModel::updateData()
     ChartDataSource *nameSource = m_chart->nameSource();
     ChartDataSource *valueSource = nullptr;
 
-    auto itemCount = m_chart->valueSources().count();
-    if (m_sourceIndex >= 0) {
-        auto sources = m_chart->valueSources();
-        if (m_sourceIndex < sources.size()) {
-            valueSource = sources.at(m_sourceIndex);
-            itemCount = valueSource->itemCount();
-        }
-    }
+    auto itemCount = countItems();
 
     if (itemCount != int(m_items.size())) {
         // Number of items changed, so trigger a full update
@@ -206,4 +195,28 @@ void LegendModel::updateData()
     });
 
     Q_EMIT dataChanged(index(0, 0), index(itemCount - 1, 0), {NameRole, ColorRole, ValueRole});
+}
+
+int LegendModel::countItems()
+{
+    auto sources = m_chart->valueSources();
+    int itemCount = 0;
+
+    switch (m_chart->indexingMode()) {
+    case Chart::IndexSourceValues:
+        if (sources.count() > 0) {
+            itemCount = sources.at(0)->itemCount();
+        }
+        break;
+    case Chart::IndexEachSource:
+        itemCount = sources.count();
+        break;
+    case Chart::IndexAllValues:
+        itemCount = std::accumulate(sources.cbegin(), sources.cend(), 0, [](int current, ChartDataSource *source) -> int {
+            return current + source->itemCount();
+        });
+        break;
+    }
+
+    return itemCount;
 }
