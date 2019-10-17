@@ -24,10 +24,6 @@
 
 #include <QQuickItem>
 
-#include "namespace.h"
-
-BEGIN_NAMESPACE
-
 class ChartDataSource;
 
 /**
@@ -111,7 +107,5 @@ private:
     QVector<ChartDataSource *> m_valueSources;
     IndexingMode m_indexingMode = IndexEachSource;
 };
-
-END_NAMESPACE
 
 #endif // CHART_H

@@ -26,8 +26,6 @@
 
 #include "XYChart.h"
 
-BEGIN_NAMESPACE
-
 class LineChartNode;
 
 /**
@@ -71,7 +69,5 @@ private:
     bool m_rangeInvalid = true;
     QVector<QVector2D> m_previousValues;
 };
-
-END_NAMESPACE
 
 #endif // LINECHART_H

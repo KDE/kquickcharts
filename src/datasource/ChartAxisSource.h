@@ -24,8 +24,6 @@
 
 #include "ChartDataSource.h"
 
-BEGIN_NAMESPACE
-
 class XYChart;
 
 /**
@@ -70,7 +68,5 @@ private:
     Axis m_axis = Axis::XAxis;
     int m_itemCount = 2;
 };
-
-END_NAMESPACE
 
 #endif // ARRAYSOURCE_H

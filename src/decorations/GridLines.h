@@ -26,10 +26,6 @@
 
 #include <QQuickItem>
 
-#include "../namespace.h"
-
-BEGIN_NAMESPACE
-
 class GridLines;
 class LineGridNode;
 class XYChart;
@@ -119,7 +115,5 @@ private:
     std::unique_ptr<LinePropertiesGroup> m_major;
     std::unique_ptr<LinePropertiesGroup> m_minor;
 };
-
-END_NAMESPACE
 
 #endif // GRIDLINES_H

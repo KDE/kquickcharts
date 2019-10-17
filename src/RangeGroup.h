@@ -26,10 +26,6 @@
 
 #include <QObject>
 
-#include "namespace.h"
-
-BEGIN_NAMESPACE
-
 class ChartDataSource;
 
 /**
@@ -97,7 +93,5 @@ private:
     qreal m_minimum = std::numeric_limits<qreal>::min();
     qreal m_increment = 0.0;
 };
-
-END_NAMESPACE
 
 #endif // RANGEGROUP_H

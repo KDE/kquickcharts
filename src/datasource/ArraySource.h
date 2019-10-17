@@ -26,8 +26,6 @@
 
 #include "ChartDataSource.h"
 
-BEGIN_NAMESPACE
-
 /**
  * A data source that provides entries of an array as data.
  */
@@ -61,7 +59,5 @@ private:
     QVariantList m_array;
     bool m_wrap = false;
 };
-
-END_NAMESPACE
 
 #endif // ARRAYSOURCE_H

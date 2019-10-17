@@ -27,10 +27,6 @@
 #include <QQuickItem>
 #include <Qt>
 
-#include "../namespace.h"
-
-BEGIN_NAMESPACE
-
 class ChartDataSource;
 
 class AxisLabels;
@@ -117,8 +113,6 @@ private:
     QVector<QQuickItem *> m_labels;
     bool m_layoutScheduled = false;
 };
-
-END_NAMESPACE
 
 QML_DECLARE_TYPEINFO(AxisLabels, QML_HAS_ATTACHED_PROPERTIES)
 

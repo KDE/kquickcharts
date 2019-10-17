@@ -27,10 +27,6 @@
 #include <QAbstractListModel>
 #include <QColor>
 
-#include "../namespace.h"
-
-BEGIN_NAMESPACE
-
 class Chart;
 class ChartDataSource;
 
@@ -82,7 +78,5 @@ private:
     std::vector<QMetaObject::Connection> m_connections;
     std::vector<LegendItem> m_items;
 };
-
-END_NAMESPACE
 
 #endif // LEGENDMODEL_H

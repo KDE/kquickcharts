@@ -24,10 +24,6 @@
 
 #include <QObject>
 
-#include "../namespace.h"
-
-BEGIN_NAMESPACE
-
 /**
  * Abstract base class for data sources.
  */
@@ -46,7 +42,5 @@ public:
 
     Q_SIGNAL void dataChanged();
 };
-
-END_NAMESPACE
 
 #endif // DATASOURCE_H

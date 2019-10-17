@@ -24,8 +24,6 @@
 
 #include "ModelSource.h"
 
-BEGIN_NAMESPACE
-
 /**
  * A data source that watches a QAbstractItemModel cell and provides the history of that cell as data.
  */
@@ -61,7 +59,5 @@ private:
     int m_maximumHistory;
     QVariantList m_history;
 };
-
-END_NAMESPACE
 
 #endif // MODELHISTORYSOURCE_H
