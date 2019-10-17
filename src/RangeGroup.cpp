@@ -23,6 +23,8 @@
 
 #include <cmath>
 
+#include <QVector>
+
 RangeGroup::RangeGroup(QObject *parent)
     : QObject(parent)
 {
