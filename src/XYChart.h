@@ -27,7 +27,7 @@
 class RangeGroup;
 
 /**
- *
+ * A helper containing the calculated X and Y ranges of a chart.
  */
 struct ComputedRange
 {
