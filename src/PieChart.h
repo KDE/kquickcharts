@@ -57,11 +57,17 @@ class PieChart : public Chart
      * Sets a colour to use to fill remaining space on the arc.
      */
     Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
-
+    /**
+     * The starting angle of the arc used for the entire pie.
+     */
     Q_PROPERTY(qreal fromAngle READ fromAngle WRITE setFromAngle NOTIFY fromAngleChanged)
-
+    /**
+     * The end angle of the arc used for the entire pie.
+     */
     Q_PROPERTY(qreal toAngle READ toAngle WRITE setToAngle NOTIFY toAngleChanged)
-
+    /**
+     * Smooth the ends of sections.
+     */
     Q_PROPERTY(bool smoothEnds READ smoothEnds WRITE setSmoothEnds NOTIFY smoothEndsChanged)
 
 public:

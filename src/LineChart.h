@@ -35,8 +35,17 @@ class LineChart : public XYChart
 {
     Q_OBJECT
 
+    /**
+     * Smooth the lines in the chart instead of making hard corners.
+     */
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
+    /**
+     * The width of a line in the chart.
+     */
     Q_PROPERTY(qreal lineWidth READ lineWidth WRITE setLineWidth NOTIFY lineWidthChanged)
+    /**
+     * The opacity of the area below a line.
+     */
     Q_PROPERTY(qreal fillOpacity READ fillOpacity WRITE setFillOpacity NOTIFY fillOpacityChanged)
 
 public:

@@ -60,7 +60,7 @@ class XYChart : public Chart
      */
     Q_PROPERTY(Direction direction READ direction WRITE setDirection NOTIFY directionChanged)
     /**
-     * Whether the values of each value source shoud be stacked or treated separately.
+     * Whether the values of each value source should be stacked or treated separately.
      */
     Q_PROPERTY(bool stacked READ stacked WRITE setStacked NOTIFY stackedChanged)
 

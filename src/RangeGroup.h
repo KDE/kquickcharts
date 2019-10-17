@@ -34,9 +34,24 @@ class ChartDataSource;
 class RangeGroup : public QObject
 {
     Q_OBJECT
+    /**
+     * The start of this range.
+     */
     Q_PROPERTY(qreal from READ from WRITE setFrom NOTIFY fromChanged)
+    /**
+     * The end of this range.
+     */
     Q_PROPERTY(qreal to READ to WRITE setTo NOTIFY toChanged)
+    /**
+     * Whether to determine the range based on values of a chart.
+     *
+     * If true (the default), `from` and `to` are ignored and instead calculated from the minimum and
+     * maximum values of a chart's valueSources.
+     */
     Q_PROPERTY(bool automatic READ automatic WRITE setAutomatic NOTIFY automaticChanged)
+    /**
+     * The distance between from and to.
+     */
     Q_PROPERTY(qreal distance READ distance NOTIFY rangeChanged)
     /**
      * The minimum size of the range. Mostly relevant when automatic is true.

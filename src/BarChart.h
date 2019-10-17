@@ -30,10 +30,25 @@
 class BarChart : public XYChart
 {
     Q_OBJECT
+    /**
+     * The spacing between bars for each value source.
+     *
+     * Note that spacing between each X axis value is determined automatically based on barWidth, spacing and
+     * total chart width.
+     */
     Q_PROPERTY(qreal spacing READ spacing WRITE setSpacing NOTIFY spacingChanged)
+    /**
+     * The width of individual bars in the chart.
+     *
+     * If set to WidthMode::AutoWidth, the width will be calculated automatically based on total chart width and
+     * item count.
+     */
     Q_PROPERTY(qreal barWidth READ barWidth WRITE setBarWidth NOTIFY barWidthChanged)
 
 public:
+    /**
+     * Helper enum to provide an easy way to set barWidth to auto.
+     */
     enum WidthMode { AutoWidth = -2 };
     Q_ENUM(WidthMode)
 
