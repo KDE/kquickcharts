@@ -48,10 +48,10 @@ public:
     QVariant maximum() const override;
 
     QColor baseColor() const;
-    Q_SLOT void setBaseColor(const QColor &newBaseColor);
+    void setBaseColor(const QColor &newBaseColor);
     Q_SIGNAL void baseColorChanged();
 
-    Q_SLOT void setItemCount(int newItemCount);
+    void setItemCount(int newItemCount);
     Q_SIGNAL void itemCountChanged();
 
     QVariantList colors() const;

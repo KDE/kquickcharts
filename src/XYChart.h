@@ -90,11 +90,11 @@ public:
     virtual RangeGroup *yRange() const;
 
     virtual XYChart::Direction direction() const;
-    Q_SLOT virtual void setDirection(XYChart::Direction newDirection);
+    virtual void setDirection(XYChart::Direction newDirection);
     Q_SIGNAL void directionChanged();
 
     bool stacked() const;
-    Q_SLOT void setStacked(bool newStacked);
+    void setStacked(bool newStacked);
     Q_SIGNAL void stackedChanged();
 
     ComputedRange computedRange() const;

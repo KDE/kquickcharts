@@ -43,8 +43,6 @@ public:
     QVariant maximum() const override;
 
     QVariant value() const;
-
-public Q_SLOTS:
     void setValue(const QVariant &value);
 
 private:

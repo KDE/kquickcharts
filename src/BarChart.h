@@ -55,11 +55,11 @@ public:
     explicit BarChart(QQuickItem *parent = nullptr);
 
     qreal spacing() const;
-    Q_SLOT void setSpacing(qreal newSpacing);
+    void setSpacing(qreal newSpacing);
     Q_SIGNAL void spacingChanged();
 
     qreal barWidth() const;
-    Q_SLOT void setBarWidth(qreal newBarWidth);
+    void setBarWidth(qreal newBarWidth);
     Q_SIGNAL void barWidthChanged();
 
 protected:

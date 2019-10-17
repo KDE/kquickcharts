@@ -45,10 +45,10 @@ public:
     QVariant maximum() const override;
 
     QVariant value() const;
-    Q_SLOT void setValue(const QVariant &value);
+    void setValue(const QVariant &value);
 
     int maximumHistory() const;
-    Q_SLOT void setMaximumHistory(int maximumHistory);
+    void setMaximumHistory(int maximumHistory);
     Q_SIGNAL void maximumHistoryChanged();
 
     Q_INVOKABLE void clear();

@@ -66,19 +66,19 @@ public:
     ~Chart() override = default;
 
     ChartDataSource *nameSource() const;
-    Q_SLOT void setNameSource(ChartDataSource *nameSource);
+    void setNameSource(ChartDataSource *nameSource);
     Q_SIGNAL void nameSourceChanged();
 
     ChartDataSource *colorSource() const;
-    Q_SLOT void setColorSource(ChartDataSource *colorSource);
+    void setColorSource(ChartDataSource *colorSource);
     Q_SIGNAL void colorSourceChanged();
 
     DataSourcesProperty valueSourcesProperty();
     QVector<ChartDataSource *> valueSources() const;
     Q_SIGNAL void valueSourcesChanged();
-    Q_SLOT void insertValueSource(int index, ChartDataSource *source);
-    Q_SLOT void removeValueSource(int index);
-    Q_SLOT void removeValueSource(QObject *source);
+    Q_INVOKABLE void insertValueSource(int index, ChartDataSource *source);
+    Q_INVOKABLE void removeValueSource(int index);
+    Q_INVOKABLE void removeValueSource(QObject *source);
 
     IndexingMode indexingMode() const;
     void setIndexingMode(IndexingMode newIndexingMode);
@@ -93,7 +93,7 @@ protected:
      * to make sure that they update whatever internal state they use for
      * rendering, then call update() to schedule rendering the item.
      */
-    Q_SLOT virtual void onDataChanged() = 0;
+    virtual void onDataChanged() = 0;
     void componentComplete() override;
 
 private:

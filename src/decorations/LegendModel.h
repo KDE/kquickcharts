@@ -59,11 +59,11 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
 
     Chart *chart() const;
-    Q_SLOT void setChart(Chart *newChart);
+    void setChart(Chart *newChart);
     Q_SIGNAL void chartChanged();
 
     int sourceIndex() const;
-    Q_SLOT void setSourceIndex(int index);
+    void setSourceIndex(int index);
     Q_SIGNAL void sourceIndexChanged();
 
 private:

@@ -79,31 +79,31 @@ public:
     RangeGroup *range() const;
 
     bool filled() const;
-    Q_SLOT void setFilled(bool newFilled);
+    void setFilled(bool newFilled);
     Q_SIGNAL void filledChanged();
 
     qreal thickness() const;
-    Q_SLOT void setThickness(qreal newThickness);
+    void setThickness(qreal newThickness);
     Q_SIGNAL void thicknessChanged();
 
     qreal spacing() const;
-    Q_SLOT void setSpacing(qreal newSpacing);
+    void setSpacing(qreal newSpacing);
     Q_SIGNAL void spacingChanged();
 
     QColor backgroundColor() const;
-    Q_SLOT void setBackgroundColor(const QColor &color);
+    void setBackgroundColor(const QColor &color);
     Q_SIGNAL void backgroundColorChanged();
 
     qreal fromAngle() const;
-    Q_SLOT void setFromAngle(qreal newFromAngle);
+    void setFromAngle(qreal newFromAngle);
     Q_SIGNAL void fromAngleChanged();
 
     qreal toAngle() const;
-    Q_SLOT void setToAngle(qreal newToAngle);
+    void setToAngle(qreal newToAngle);
     Q_SIGNAL void toAngleChanged();
 
     bool smoothEnds() const;
-    Q_SLOT void setSmoothEnds(bool newSmoothEnds);
+    void setSmoothEnds(bool newSmoothEnds);
     Q_SIGNAL void smoothEndsChanged();
 
 protected:

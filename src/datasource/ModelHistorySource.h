@@ -42,11 +42,11 @@ public:
     virtual QVariant maximum() const override;
 
     int row() const;
-    Q_SLOT void setRow(int row);
+    void setRow(int row);
     Q_SIGNAL void rowChanged();
 
     int maximumHistory() const;
-    Q_SLOT void setMaximumHistory(int maximumHistory);
+    void setMaximumHistory(int maximumHistory);
     Q_SIGNAL void maximumHistoryChanged();
 
     Q_INVOKABLE void clear();

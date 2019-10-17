@@ -90,15 +90,15 @@ public:
     explicit GridLines(QQuickItem *parent = nullptr);
 
     Direction direction() const;
-    Q_SLOT void setDirection(GridLines::Direction newDirection);
+    void setDirection(GridLines::Direction newDirection);
     Q_SIGNAL void directionChanged();
 
     XYChart *chart() const;
-    Q_SLOT void setChart(XYChart *newChart);
+    void setChart(XYChart *newChart);
     Q_SIGNAL void chartChanged();
 
     float spacing() const;
-    Q_SLOT void setSpacing(float newSpacing);
+    void setSpacing(float newSpacing);
     Q_SIGNAL void spacingChanged();
 
     LinePropertiesGroup *major() const;
