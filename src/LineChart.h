@@ -52,18 +52,16 @@ public:
     explicit LineChart(QQuickItem *parent = nullptr);
 
     bool smooth() const;
-    qreal lineWidth() const;
-    qreal fillOpacity() const;
-
-public Q_SLOTS:
     void setSmooth(bool smooth);
-    void setLineWidth(qreal width);
-    void setFillOpacity(qreal opacity);
+    Q_SIGNAL void smoothChanged();
 
-Q_SIGNALS:
-    void smoothChanged();
-    void lineWidthChanged();
-    void fillOpacityChanged();
+    qreal lineWidth() const;
+    void setLineWidth(qreal width);
+    Q_SIGNAL void lineWidthChanged();
+
+    qreal fillOpacity() const;
+    void setFillOpacity(qreal opacity);
+    Q_SIGNAL void fillOpacityChanged();
 
 protected:
     QSGNode *updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *data) override;

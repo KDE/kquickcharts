@@ -49,10 +49,9 @@ public:
     QVariant maximum() const override;
 
     QVariantList array() const;
-    bool wrap() const;
-
-public Q_SLOTS:
     void setArray(const QVariantList &array);
+
+    bool wrap() const;
     void setWrap(bool wrap);
 
 private:

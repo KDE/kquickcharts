@@ -44,29 +44,29 @@ public:
     explicit ModelSource(QObject *parent = nullptr);
 
     int role() const;
+    void setRole(int role);
+    Q_SIGNAL void roleChanged();
+
     QString roleName() const;
+    void setRoleName(const QString &name);
+    Q_SIGNAL void roleNameChanged();
+
     int column() const;
+    void setColumn(int column);
+    Q_SIGNAL void columnChanged();
+
     QAbstractItemModel *model() const;
+    void setModel(QAbstractItemModel *model);
+    Q_SIGNAL void modelChanged();
+
     bool indexColumns() const;
+    void setIndexColumns(bool index);
+    Q_SIGNAL void indexColumnsChanged();
 
     virtual int itemCount() const override;
     virtual QVariant item(int index) const override;
     virtual QVariant minimum() const override;
     virtual QVariant maximum() const override;
-
-public Q_SLOTS:
-    void setRole(int role);
-    void setRoleName(const QString &name);
-    void setColumn(int column);
-    void setModel(QAbstractItemModel *model);
-    void setIndexColumns(bool index);
-
-Q_SIGNALS:
-    void roleChanged();
-    void roleNameChanged();
-    void columnChanged();
-    void modelChanged();
-    void indexColumnsChanged();
 
 private:
     mutable int m_role = -1;
