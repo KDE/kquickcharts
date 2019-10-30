@@ -230,6 +230,11 @@ QVector<QVector2D> interpolate(const QVector<QVector2D> &points, qreal start, qr
     QVector<QVector2D> result;
 
     const auto polygons = path.toSubpathPolygons();
+    auto pointCount = std::accumulate(polygons.begin(), polygons.end(), 0, [](int current, const QPolygonF &polygon) {
+        return current + polygon.size();
+    });
+    result.reserve(pointCount);
+
     for (const auto &polygon : polygons) {
         for (auto point : polygon) {
             result.append(QVector2D{float(point.x()), float(point.y() / height)});
