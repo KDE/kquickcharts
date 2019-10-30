@@ -180,7 +180,7 @@ QVector<QVector2D> interpolate(const QVector<QVector2D> &points, qreal start, qr
     if (points.size() < 4)
         return points;
 
-    const QMatrix4x4 matrix(0, 1, 0, 0, -1 / 6., 1, 1 / 6., 0, 0, 1 / 6., 1, -1 / 6., 0, 0, 1, 0);
+    const auto sixth = 1.f / 6.f;
 
     const qreal xDelta = (end - start) / (points.count() - 3);
     qreal x = start - xDelta;
@@ -188,14 +188,41 @@ QVector<QVector2D> interpolate(const QVector<QVector2D> &points, qreal start, qr
     path.moveTo(start, points[0].y() * height);
 
     for (int i = 1; i < points.count() - 2; i++) {
-        const QMatrix4x4 p(x,              points[i - 1].y() * height, 0, 0,
-                           x + xDelta * 1, points[i + 0].y() * height, 0, 0,
-                           x + xDelta * 2, points[i + 1].y() * height, 0, 0,
-                           x + xDelta * 3, points[i + 2].y() * height, 0, 0);
+        // This code was:
+        //
+        // QMatrix4x4 matrix(   0,   1,   0,    0,
+        //                   -1/6,   1, 1/6,    0,
+        //                      0, 1/6,   1, -1/6,
+        //                      0,   0,   1,    0);
+        // QMatrix4x4 p(x + xDelta * 0, points[i - 1].y() * height, 0, 0,
+        //              x + xDelta * 1, points[i + 0].y() * height, 0, 0,
+        //              x + xDelta * 2, points[i + 1].y() * height, 0, 0,
+        //              x + xDelta * 3, points[i + 2].y() * height, 0, 0)
+        // QMatrix4x4 res = matrix * p;
+        // path.cubicTo(res(1,0), res(1, 1), res(2, 0), res(2, 1), res(3, 0), res(3, 1))
+        //
+        // The below calculations calculate the used elements from the matrix directly, avoiding
+        // most of an expensive matrix multiplication.
 
-        const QMatrix4x4 res = matrix * p;
+        auto p0 = points[i - 1].y() * height;
+        auto p1 = points[i].y() * height;
+        auto p2 = points[i + 1].y() * height;
+        auto p3 = points[i + 2].y() * height;
 
-        path.cubicTo(res(1, 0), res(1, 1), res(2, 0), res(2, 1), res(3, 0), res(3, 1));
+        //res(1, 0) = (-1/6, 1, 1/6, 0) dot (x, x + xDelta, x + xDelta * 2, x + xDelta * 3)
+        auto res10 = (3 * x + 4 * xDelta) / 3.f;
+        //res(1, 1) = (-1/6, 1, 1/6, 0) dot (p[i-1].y, p[i].y, p[i+1].y, p[i+2].y)
+        auto res11 = -sixth * p0 + p1 + sixth * p2;
+        //res(2, 0) = (0, 1/6, 1, -1/6) dot (x, x + xDelta, x + xDelta * 2, x + xDelta * 3)
+        auto res20 = (3 * x + 5 * xDelta) / 3.f;
+        //res(2, 1) = (0, 1/6, 1, -1/6) dot (p[i-1].y, p[i].y, p[i+1].y, p[i+2].y)
+        auto res21 = sixth * p1 + p2 + -sixth * p3;
+        //res(3, 0) = (0, 0, 1, 0) dot (x, x + xDelta, x + xDelta * 2, x + xDelta * 3)
+        auto res30 = x + 2 * xDelta;
+        //res(3, 1) = (0, 0, 1, 0) dot (p[i-1].y, p[i].y, p[i+1].y, p[i+2].y)
+        auto res31 = p2;
+
+        path.cubicTo(res10, res11, res20, res21, res30, res31);
 
         x += xDelta;
     }
