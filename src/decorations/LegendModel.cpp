@@ -113,6 +113,14 @@ void LegendModel::queueUpdate()
     }
 }
 
+void LegendModel::queueDataChange()
+{
+    if (!m_dataChangeQueued) {
+        m_dataChangeQueued = true;
+        QMetaObject::invokeMethod(this, &LegendModel::updateData, Qt::QueuedConnection);
+    }
+}
+
 void LegendModel::update()
 {
     m_updateQueued = false;
@@ -134,7 +142,7 @@ void LegendModel::update()
     int itemCount = countItems();
 
     std::transform(sources.cbegin(), sources.cend(), std::back_inserter(m_connections), [this](ChartDataSource *source) {
-        return connect(source, &ChartDataSource::dataChanged, this, &LegendModel::updateData, Qt::UniqueConnection);
+        return connect(source, &ChartDataSource::dataChanged, this, &LegendModel::queueDataChange, Qt::UniqueConnection);
     });
 
     m_connections.push_back(connect(m_chart, &Chart::valueSourcesChanged, this, &LegendModel::queueUpdate, Qt::UniqueConnection));
@@ -144,23 +152,19 @@ void LegendModel::update()
         return;
     }
 
-    if (colorSource)
-        m_connections.push_back(connect(colorSource, &ChartDataSource::dataChanged, this, &LegendModel::updateData, Qt::UniqueConnection));
+    if (colorSource) {
+        m_connections.push_back(connect(colorSource, &ChartDataSource::dataChanged, this, &LegendModel::queueDataChange, Qt::UniqueConnection));
+    }
 
-    if (nameSource)
-        m_connections.push_back(connect(nameSource, &ChartDataSource::dataChanged, this, &LegendModel::updateData, Qt::UniqueConnection));
+    if (nameSource) {
+        m_connections.push_back(connect(nameSource, &ChartDataSource::dataChanged, this, &LegendModel::queueDataChange, Qt::UniqueConnection));
+    }
 
     for (int i = 0; i < itemCount; ++i) {
         LegendItem item;
         item.name = nameSource ? nameSource->item(i).toString() : QString();
         item.color = colorSource ? colorSource->item(i).value<QColor>() : QColor();
-
-        if (m_sourceIndex < 0) {
-            item.value = m_chart->valueSources().at(i)->item(0);
-        } else {
-            item.value = valueSource ? valueSource->item(i) : QVariant{};
-        }
-
+        item.value = getValueForItem(i);
         m_items.push_back(item);
     }
 
@@ -175,26 +179,44 @@ void LegendModel::updateData()
 
     auto itemCount = countItems();
 
+    m_dataChangeQueued = false;
+
     if (itemCount != int(m_items.size())) {
         // Number of items changed, so trigger a full update
         queueUpdate();
         return;
     }
 
-    std::for_each(m_items.begin(), m_items.end(), [&, i = 0](LegendItem &item) mutable {
-        item.name = nameSource ? nameSource->item(i).toString() : QString();
-        item.color = colorSource ? colorSource->item(i).value<QColor>() : QColor();
+    QVector<QVector<int>> changedRows(itemCount);
 
-        if (m_sourceIndex < 0) {
-            item.value = m_chart->valueSources().at(i)->item(0);
-        } else {
-            item.value = valueSource ? valueSource->item(i) : QVariant{};
+    std::for_each(m_items.begin(), m_items.end(), [&, i = 0](LegendItem &item) mutable {
+        auto name = nameSource ? nameSource->item(i).toString() : QString{};
+        if (item.name != name) {
+            item.name = name;
+            changedRows[i] << NameRole;
+        }
+
+        auto color = colorSource ? colorSource->item(i).toString() : QColor{};
+        if (item.color != color) {
+            item.color = color;
+            changedRows[i] << ColorRole;
+        }
+
+        auto value = getValueForItem(i);
+        if (item.value != value) {
+            item.value = value;
+            changedRows[i] << ValueRole;
         }
 
         i++;
     });
 
-    Q_EMIT dataChanged(index(0, 0), index(itemCount - 1, 0), {NameRole, ColorRole, ValueRole});
+    for(auto i = 0; i < changedRows.size(); ++i) {
+        auto changedRoles = changedRows.at(i);
+        if (!changedRoles.isEmpty()) {
+            Q_EMIT dataChanged(index(i, 0), index(i, 0), changedRoles);
+        }
+    }
 }
 
 int LegendModel::countItems()
@@ -219,4 +241,31 @@ int LegendModel::countItems()
     }
 
     return itemCount;
+}
+
+QVariant LegendModel::getValueForItem(int item)
+{
+    const auto sources = m_chart->valueSources();
+    auto value = QVariant{};
+
+    switch (m_chart->indexingMode()) {
+    case Chart::IndexSourceValues:
+        value = sources.at(0)->item(item);
+        break;
+    case Chart::IndexEachSource:
+        value = sources.at(item)->item(0);
+        break;
+    case Chart::IndexAllValues:
+        for (auto source : sources) {
+            if (source->itemCount() < item) {
+                item -= source->itemCount();
+            } else {
+                value = source->item(item);
+                break;
+            }
+        }
+        break;
+    }
+
+    return value;
 }

@@ -68,13 +68,16 @@ public:
 
 private:
     void queueUpdate();
+    void queueDataChange();
     void update();
     void updateData();
     int countItems();
+    QVariant getValueForItem(int item);
 
     Chart *m_chart = nullptr;
     int m_sourceIndex = UseSourceCount;
     bool m_updateQueued = false;
+    bool m_dataChangeQueued = false;
     std::vector<QMetaObject::Connection> m_connections;
     std::vector<LegendItem> m_items;
 };
