@@ -122,7 +122,7 @@ void LineSegmentNode::updatePoints()
         return;
 
     QVector<QVector2D> points;
-    points.reserve(m_values.size() + 6);
+    points.reserve(m_values.size() + 8);
 
     points << QVector2D{0.0, -0.5};
     points << QVector2D{-0.5, -0.5};
