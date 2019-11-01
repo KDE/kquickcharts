@@ -24,6 +24,7 @@
 #include <QAbstractItemModel>
 #include <QDebug>
 #include <QVariantList>
+#include <QTimer>
 
 ModelHistorySource::ModelHistorySource(QObject *parent)
     : ModelSource(parent)
@@ -90,6 +91,47 @@ void ModelHistorySource::setMaximumHistory(int maximumHistory)
     Q_EMIT maximumHistoryChanged();
 }
 
+int ModelHistorySource::interval() const
+{
+    return m_updateTimer ? m_updateTimer->interval() : -1;
+}
+
+void ModelHistorySource::setInterval(int newInterval)
+{
+    if (m_updateTimer && newInterval == m_updateTimer->interval()) {
+        return;
+    }
+
+    if (newInterval > 0) {
+        if (!m_updateTimer) {
+            m_updateTimer = std::make_unique<QTimer>();
+            // We need precise timers to avoid missing updates when dealing with semi-constantly
+            // updating model. That is, if the model updates at 500ms and we also update at that
+            // rate, a drift of 2ms can cause us to miss updates.
+            m_updateTimer->setTimerType(Qt::PreciseTimer);
+            connect(m_updateTimer.get(), &QTimer::timeout, this, [this]() {
+                if (!model()) {
+                    return;
+                }
+
+                auto index = model()->index(m_row, column());
+                onDataChanged(index, index, {role()});
+            });
+            if (model()) {
+                disconnect(model(), &QAbstractItemModel::dataChanged, this, &ModelHistorySource::onDataChanged);
+            }
+        }
+        m_updateTimer->setInterval(newInterval);
+        m_updateTimer->start();
+    } else {
+        m_updateTimer.reset();
+        onModelChanged();
+    }
+
+    Q_EMIT intervalChanged();
+}
+
+
 void ModelHistorySource::clear()
 {
     m_history.clear();
@@ -98,26 +140,35 @@ void ModelHistorySource::clear()
 
 void ModelHistorySource::onModelChanged()
 {
-    if (model())
+    if (model() && !m_updateTimer) {
         connect(model(), &QAbstractItemModel::dataChanged, this, &ModelHistorySource::onDataChanged);
+    }
 }
 
 void ModelHistorySource::onDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles)
 {
-    if (!roles.isEmpty() && !roles.contains(role()))
+    if (!model()) {
         return;
+    }
 
-    if (topLeft.row() > m_row || bottomRight.row() < m_row)
+    if (!roles.isEmpty() && !roles.contains(role())) {
         return;
+    }
 
-    if (topLeft.column() > column() || bottomRight.column() < column())
+    if (topLeft.row() > m_row || bottomRight.row() < m_row) {
         return;
+    }
+
+    if (topLeft.column() > column() || bottomRight.column() < column()) {
+        return;
+    }
 
     auto entry = model()->data(model()->index(m_row, column()), role());
 
     m_history.prepend(entry);
-    while (m_history.size() > m_maximumHistory)
+    while (m_history.size() > m_maximumHistory) {
         m_history.pop_back();
+    }
 
     Q_EMIT dataChanged();
 }

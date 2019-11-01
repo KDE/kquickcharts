@@ -22,6 +22,8 @@
 #ifndef MODELHISTORYSOURCE_H
 #define MODELHISTORYSOURCE_H
 
+#include <memory>
+#include <QTimer>
 #include "ModelSource.h"
 
 /**
@@ -30,8 +32,16 @@
 class ModelHistorySource : public ModelSource
 {
     Q_OBJECT
+    // The row to read data from. The items of this source will be the values of
+    // that row, using the column and role from ModelSource.
     Q_PROPERTY(int row READ row WRITE setRow NOTIFY rowChanged)
+    // The maximum amount of history to keep.
     Q_PROPERTY(int maximumHistory READ maximumHistory WRITE setMaximumHistory NOTIFY maximumHistoryChanged)
+    // The update interval. If not set or set to a value < 0, a new item will be
+    // added whenever the underlying model changes. Otherwise, the source will
+    // sample the underlying model every interval milliseconds and add a new item
+    // with whatever value the model has at that point - even if it did not change.
+    Q_PROPERTY(int interval READ interval WRITE setInterval NOTIFY intervalChanged)
 
 public:
     explicit ModelHistorySource(QObject *parent = nullptr);
@@ -49,6 +59,10 @@ public:
     void setMaximumHistory(int maximumHistory);
     Q_SIGNAL void maximumHistoryChanged();
 
+    int interval() const;
+    void setInterval(int newInterval);
+    Q_SIGNAL void intervalChanged();
+
     Q_INVOKABLE void clear();
 
 private:
@@ -58,6 +72,7 @@ private:
     int m_row;
     int m_maximumHistory;
     QVariantList m_history;
+    std::unique_ptr<QTimer> m_updateTimer;
 };
 
 #endif // MODELHISTORYSOURCE_H

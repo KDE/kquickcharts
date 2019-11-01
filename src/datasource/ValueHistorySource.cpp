@@ -69,12 +69,14 @@ void ValueHistorySource::setValue(const QVariant &newValue)
 {
     m_value = newValue;
 
-    m_history.prepend(newValue);
-    while (m_history.size() > m_maximumHistory) {
-        m_history.removeLast();
-    }
+    if (!m_updateTimer) {
+        m_history.prepend(newValue);
+        while (m_history.size() > m_maximumHistory) {
+            m_history.removeLast();
+        }
 
-    Q_EMIT dataChanged();
+        Q_EMIT dataChanged();
+    }
 }
 
 int ValueHistorySource::maximumHistory() const
@@ -94,6 +96,40 @@ void ValueHistorySource::setMaximumHistory(int newMaximumHistory)
     }
     Q_EMIT maximumHistoryChanged();
 }
+
+int ValueHistorySource::interval() const
+{
+    return m_updateTimer ? m_updateTimer->interval() : -1;
+}
+
+void ValueHistorySource::setInterval(int newInterval)
+{
+    if (m_updateTimer && newInterval == m_updateTimer->interval()) {
+        return;
+    }
+
+    if (newInterval > 0) {
+        if (!m_updateTimer) {
+            m_updateTimer = std::make_unique<QTimer>();
+            // See ModelHistorySource.cpp line 110
+            m_updateTimer->setTimerType(Qt::PreciseTimer);
+            connect(m_updateTimer.get(), &QTimer::timeout, this, [this]() {
+                m_history.prepend(m_value);
+                while (m_history.size() > m_maximumHistory) {
+                    m_history.removeLast();
+                }
+                Q_EMIT dataChanged();
+            });
+        }
+        m_updateTimer->setInterval(newInterval);
+        m_updateTimer->start();
+    } else {
+        m_updateTimer.reset();
+    }
+
+    Q_EMIT intervalChanged();
+}
+
 
 void ValueHistorySource::clear()
 {

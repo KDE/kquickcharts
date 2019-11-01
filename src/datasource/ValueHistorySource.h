@@ -22,8 +22,10 @@
 #ifndef VALUEHISTORYSOURCE_H
 #define VALUEHISTORYSOURCE_H
 
+#include <memory>
 #include <QVariant>
 #include <QVector>
+#include <QTimer>
 
 #include "ChartDataSource.h"
 
@@ -35,6 +37,7 @@ class ValueHistorySource : public ChartDataSource
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY dataChanged)
     Q_PROPERTY(int maximumHistory READ maximumHistory WRITE setMaximumHistory NOTIFY maximumHistoryChanged)
+    Q_PROPERTY(int interval READ interval WRITE setInterval NOTIFY intervalChanged)
 
 public:
     explicit ValueHistorySource(QObject *parent = nullptr);
@@ -51,11 +54,16 @@ public:
     void setMaximumHistory(int maximumHistory);
     Q_SIGNAL void maximumHistoryChanged();
 
+    int interval() const;
+    void setInterval(int newInterval);
+    Q_SIGNAL void intervalChanged();
+
     Q_INVOKABLE void clear();
 
 private:
     QVariant m_value;
     int m_maximumHistory = 10;
+    std::unique_ptr<QTimer> m_updateTimer;
     QVector<QVariant> m_history;
 };
 
