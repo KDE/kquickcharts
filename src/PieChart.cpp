@@ -213,7 +213,7 @@ void PieChart::onDataChanged()
         for (int i = 0; i < source->itemCount(); ++i) {
             result += source->item(i).toDouble();
         }
-        return result;
+        return std::max(result, source->maximum().toDouble());
     };
 
     auto indexMode = indexingMode();
