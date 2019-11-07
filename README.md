@@ -1,4 +1,4 @@
-# Quick Charts
+# KQuickCharts
 
 A QtQuick module providing high-performance charts.
 

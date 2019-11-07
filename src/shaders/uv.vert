@@ -1,5 +1,5 @@
 /*
- * This file is part of Quick Charts.
+ * This file is part of KQuickCharts.
  * Copyright 2019 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
  * This program is free software; you can redistribute it and/or

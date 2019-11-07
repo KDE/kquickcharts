@@ -1,5 +1,5 @@
 description: A QtQuick module providing high-performance charts.
-fancyname: Quick Charts
+fancyname: KQuickCharts
 maintainer: ahiemstra
 group: frameworks
 subgroup: tier 1

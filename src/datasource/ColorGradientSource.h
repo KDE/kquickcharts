@@ -1,5 +1,5 @@
 /*
- * This file is part of Quick Charts
+ * This file is part of KQuickCharts
  * Copyright 2019 Marco Martin <mart@kde.org>
  * Copyright 2019 David Edmundson <davidedmundson@kde.org>
  * Copyright 2019 Arjen Hiemstra <ahiemstra@heimr.nl>
