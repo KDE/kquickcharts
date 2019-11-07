@@ -25,28 +25,26 @@ import QtQuick.Controls 2.11
 
 import org.kde.quickcharts 1.0 as Charts
 
-ApplicationWindow {
-    width: 500
-    height: 500
+Charts.PieChart {
+    width: 400
+    height: 300
 
-    Rectangle {
-        anchors.centerIn: parent
-        width: 300
-        height: 200
-        border.width: 2
+    valueSources: Charts.ModelSource {
+        roleName: "data";
+        model: listModel
+    }
+    colorSource: Charts.ArraySource { array: ["red", "green", "blue", "yellow", "cyan"] }
+    nameSource: Charts.ArraySource { array: ["Red", "Green", "Blue", "Yellow", "Cyan"] }
 
-        Charts.LineChart {
-            anchors.fill: parent
+    thickness: 50
 
-            colorSource: Charts.ArraySource { array: ["red", "green", "blue"] }
-            nameSource: Charts.ArraySource { array: ["First", "Second", "Third"] }
-
-            valueSources: [
-                Charts.ArraySource { array: [1, 2, 2, 1] },
-                Charts.ArraySource { array: [2, 5, 2, 5] },
-                Charts.ArraySource { array: [5, 4, 3, 4] }
-            ]
-        }
+    ListModel {
+        id: listModel
+        ListElement { data: 12 }
+        ListElement { data: 19 }
+        ListElement { data: 10 }
+        ListElement { data: 13 }
+        ListElement { data: 13 }
     }
 }
 //! [example]

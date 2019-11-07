@@ -120,11 +120,16 @@ void XYChart::updateComputedRange()
     result.endY = yRange.end;
     result.distanceY = yRange.distance;
 
-    if (result == m_computedRange) {
+    setComputedRange(result);
+}
+
+void XYChart::setComputedRange(ComputedRange range)
+{
+    if (range == m_computedRange) {
         return;
     }
 
-    m_computedRange = result;
+    m_computedRange = range;
     Q_EMIT computedRangeChanged();
 }
 

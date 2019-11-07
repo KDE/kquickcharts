@@ -30,6 +30,12 @@ class LineChartNode;
 
 /**
  * A line chart.
+ *
+ * ## Usage example
+ *
+ * \snippet snippets/linechart.qml example
+ *
+ * \image html linechart.png "The resulting bar chart."
  */
 class LineChart : public XYChart
 {

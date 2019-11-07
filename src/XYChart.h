@@ -42,7 +42,7 @@ struct ComputedRange
 bool operator==(const ComputedRange &first, const ComputedRange &second);
 
 /**
- * Base class for Charts that are based on an X/Y grid.
+ * A base class for Charts that are based on an X/Y grid.
  */
 class XYChart : public Chart
 {
@@ -60,13 +60,21 @@ class XYChart : public Chart
      */
     Q_PROPERTY(Direction direction READ direction WRITE setDirection NOTIFY directionChanged)
     /**
-     * Whether the values of each value source should be stacked or treated separately.
+     * Whether the values of each value source should be stacked.
+     *
+     * When true, Y values will be added on top of each other. The precise
+     * meaning of this property depends on the specific chart. The default is
+     * false.
      */
     Q_PROPERTY(bool stacked READ stacked WRITE setStacked NOTIFY stackedChanged)
 
 public:
     /**
      * The direction of values on the X axis.
+     *
+     * "Start" is defined as the starting direction of the chart, when using a
+     * left-to-right language it will be the left side, with a right-to-left
+     * language it will be right.
      */
     enum class Direction {
         ZeroAtStart, ///< Zero is at the beginning of the chart, values run from begin to end.
@@ -97,11 +105,31 @@ public:
     void setStacked(bool newStacked);
     Q_SIGNAL void stackedChanged();
 
+    /**
+     * Get the complete, calculated range for this chart.
+     */
     ComputedRange computedRange() const;
+    /**
+     * Emitted whenever the complete range is recalculated.
+     */
     Q_SIGNAL void computedRangeChanged();
 
 protected:
+    /**
+     * Re-calculate the chart's range.
+     *
+     * By default, this will make use of the xRange/yRange properties and
+     * calculate a proper range. This method can be overridden by subclasses if
+     * some special calculation is needed.
+     */
     virtual void updateComputedRange();
+
+    /**
+     * Set the computed range.
+     *
+     * \param range The new range.
+     */
+    void setComputedRange(ComputedRange range);
 
 private:
     RangeGroup *m_xRange = nullptr;

@@ -29,24 +29,29 @@
 class ChartDataSource;
 
 /**
- * An object that can be used as a grouped property to provide a range for charts.
+ * An object that can be used as a grouped property to provide a value range for charts.
+ *
  */
 class RangeGroup : public QObject
 {
     Q_OBJECT
     /**
      * The start of this range.
+     *
+     * The default is 0.
      */
     Q_PROPERTY(qreal from READ from WRITE setFrom NOTIFY fromChanged)
     /**
      * The end of this range.
+     *
+     * The default is 100.
      */
     Q_PROPERTY(qreal to READ to WRITE setTo NOTIFY toChanged)
     /**
      * Whether to determine the range based on values of a chart.
      *
-     * If true (the default), `from` and `to` are ignored and instead calculated from the minimum and
-     * maximum values of a chart's valueSources.
+     * If true (the default), `from` and `to` are ignored and instead calculated
+     * from the minimum and maximum values of a chart's valueSources.
      */
     Q_PROPERTY(bool automatic READ automatic WRITE setAutomatic NOTIFY automaticChanged)
     /**
@@ -54,11 +59,19 @@ class RangeGroup : public QObject
      */
     Q_PROPERTY(qreal distance READ distance NOTIFY rangeChanged)
     /**
-     * The minimum size of the range. Mostly relevant when automatic is true.
+     * The minimum size of the range.
+     *
+     * This is mostly relevant when automatic is true. Setting this value will
+     * ensure that the range will never be smaller than this value. The default
+     * is `std::numeric_limits<qreal>::min`, which means minimum is disabled.
      */
     Q_PROPERTY(qreal minimum READ minimum WRITE setMinimum NOTIFY minimumChanged)
     /**
-     * The amount with which the range increases. That is, the total range will be limited to a multiple of this value.
+     * The amount with which the range increases.
+     *
+     * The total range will be limited to a multiple of this value. This is
+     * mostly useful when automatic is true. The default is 0.0, which means do
+     * not limit the range increment.
      */
     Q_PROPERTY(qreal increment READ increment WRITE setIncrement NOTIFY incrementChanged)
 

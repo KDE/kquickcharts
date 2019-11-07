@@ -1,3 +1,1 @@
 EXCLUDE_PATTERNS = */scenegraph/*
-EXPAND_AS_DEFINED = BEGIN_NAMESPACE \
-                    END_NAMESPACE

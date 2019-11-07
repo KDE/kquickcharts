@@ -25,7 +25,15 @@
 #include "XYChart.h"
 
 /**
- * A bar chart.
+ * An item to render a bar chart.
+ *
+ * This chart renders
+ *
+ * ## Usage example
+ *
+ * \snippet snippets/barchart.qml example
+ *
+ * \image html barchart.png "The resulting bar chart."
  */
 class BarChart : public XYChart
 {
@@ -33,15 +41,15 @@ class BarChart : public XYChart
     /**
      * The spacing between bars for each value source.
      *
-     * Note that spacing between each X axis value is determined automatically based on barWidth, spacing and
-     * total chart width.
+     * Note that spacing between each X axis value is determined automatically
+     * based on barWidth, spacing and total chart width. The default is 0.
      */
     Q_PROPERTY(qreal spacing READ spacing WRITE setSpacing NOTIFY spacingChanged)
     /**
      * The width of individual bars in the chart.
      *
-     * If set to WidthMode::AutoWidth, the width will be calculated automatically based on total chart width and
-     * item count.
+     * If set to WidthMode::AutoWidth (also the default), the width will be
+     * calculated automatically based on total chart width and item count.
      */
     Q_PROPERTY(qreal barWidth READ barWidth WRITE setBarWidth NOTIFY barWidthChanged)
 
@@ -63,7 +71,13 @@ public:
     Q_SIGNAL void barWidthChanged();
 
 protected:
+    /**
+     * Reimplemented from QQuickItem.
+     */
     QSGNode *updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *) override;
+    /**
+     * Reimplemented from Chart.
+     */
     void onDataChanged() override;
 
 private:

@@ -25,28 +25,31 @@ import QtQuick.Controls 2.11
 
 import org.kde.quickcharts 1.0 as Charts
 
-ApplicationWindow {
-    width: 500
-    height: 500
+Charts.BarChart {
+    id: barChart
 
-    Rectangle {
-        anchors.centerIn: parent
-        width: 300
-        height: 200
-        border.width: 2
+    width: 400
+    height: 300
 
-        Charts.LineChart {
-            anchors.fill: parent
+    valueSources: [
+        Charts.ModelSource { roleName: "value1"; model: listModel },
+        Charts.ModelSource { roleName: "value2"; model: listModel },
+        Charts.ModelSource { roleName: "value3"; model: listModel }
+    ]
 
-            colorSource: Charts.ArraySource { array: ["red", "green", "blue"] }
-            nameSource: Charts.ArraySource { array: ["First", "Second", "Third"] }
+    colorSource: Charts.ArraySource { array: ["red", "green", "blue"] }
+    nameSource: Charts.ArraySource { array: ["Example 1", "Example 2", "Example 3"] }
 
-            valueSources: [
-                Charts.ArraySource { array: [1, 2, 2, 1] },
-                Charts.ArraySource { array: [2, 5, 2, 5] },
-                Charts.ArraySource { array: [5, 4, 3, 4] }
-            ]
-        }
+    barWidth: 20
+
+    ListModel {
+        id: listModel
+
+        ListElement { value1: 19; value2: 2; value3: 6 }
+        ListElement { value1: 14; value2: 20; value3: 17 }
+        ListElement { value1: 4; value2: 10; value3: 11 }
+        ListElement { value1: 5; value2: 11; value3: 9 }
+        ListElement { value1: 20; value2: 7; value3: 13 }
     }
 }
 //! [example]
