@@ -95,7 +95,7 @@ Control {
 
                 font: control.font
 
-                layoutWidth: control.Layout.maximumWidth / legendRepeater.count
+                layoutWidth: control.Layout.maximumWidth / Math.ceil(legendRepeater.count / legend.rows) - control.spacing
             }
         }
     }
