@@ -104,7 +104,8 @@ Control {
 
                 font: control.font
 
-                layoutWidth: control.Layout.maximumWidth / Math.ceil(legendRepeater.count / legend.rows) - control.spacing
+                layoutWidth: legend.flow == GridLayout.TopToBottom ? control.Layout.maximumWidth
+                                : control.Layout.maximumWidth / legendRepeater.count - control.spacing
             }
         }
     }
