@@ -42,7 +42,7 @@ Control {
     property alias flow: legend.flow
     property int sourceIndex: -1
 
-    property var formatValue: function(input) { return input }
+    property var formatValue: function(input, index) { return input }
 
     property bool valueVisible: false
     property real valueWidth: -1
@@ -84,7 +84,16 @@ Control {
                 property var itemData: typeof modelData !== "undefined" ? modelData : model
                 name: itemData[control.nameRole] !== undefined ? itemData[control.nameRole] : ""
                 color: itemData[control.colorRole] !== undefined ? itemData[control.colorRole] : "white"
-                value: itemData[control.valueRole] !== undefined ? control.formatValue(itemData[control.valueRole]) : ""
+                value: {
+                    if (itemData[control.valueRole] !== undefined) {
+                        if (control.formatValue.length == 2) {
+                            return control.formatValue(itemData[control.valueRole], index)
+                        } else {
+                            return control.formatValue(itemData[control.valueRole])
+                        }
+                    }
+                    return ""
+                }
 
                 colorVisible: control.colorVisible
                 colorWidth: control.colorWidth
