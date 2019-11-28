@@ -88,6 +88,10 @@ ComputedRange XYChart::computedRange() const
 
 void XYChart::updateComputedRange()
 {
+    if (valueSources().count() == 0) {
+        return;
+    }
+
     ComputedRange result;
 
     auto xRange = m_xRange->calculateRange(valueSources(),
