@@ -115,7 +115,15 @@ RowLayout {
                 return true;
             }
 
-            return delegate.layoutWidth - delegate.colorWidth - delegate.spacing * 4 - name.contentWidth >= delegate.valueWidth
+            var remainingWidth = delegate.layoutWidth - delegate.spacing * 2
+            if (delegate.colorVisible) {
+                remainingWidth -= delegate.colorWidth - delegate.spacing
+            }
+            if (name.visible) {
+                remainingWidth -= name.contentWidth - delegate.spacing
+            }
+
+            return remainingWidth >= delegate.valueWidth
         }
     }
 
