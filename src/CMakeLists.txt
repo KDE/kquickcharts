@@ -52,6 +52,6 @@ if (BUILD_TESTING)
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/src/qmldir ${CMAKE_BINARY_DIR}/bin/org/kde/quickcharts
     )
     add_custom_command(TARGET QuickCharts POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_BINARY_DIR}/bin/libQuickCharts.so ${CMAKE_BINARY_DIR}/bin/org/kde/quickcharts/libQuickCharts.so
+        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:QuickCharts> ${CMAKE_BINARY_DIR}/bin/org/kde/quickcharts
     )
 endif()
