@@ -133,7 +133,6 @@ void LegendModel::update()
 
     ChartDataSource *colorSource = m_chart->colorSource();
     ChartDataSource *nameSource = m_chart->nameSource();
-    ChartDataSource *valueSource = nullptr;
 
     m_connections.push_back(connect(m_chart, &Chart::colorSourceChanged, this, &LegendModel::queueUpdate, Qt::UniqueConnection));
     m_connections.push_back(connect(m_chart, &Chart::nameSourceChanged, this, &LegendModel::queueUpdate, Qt::UniqueConnection));
@@ -175,7 +174,6 @@ void LegendModel::updateData()
 {
     ChartDataSource *colorSource = m_chart->colorSource();
     ChartDataSource *nameSource = m_chart->nameSource();
-    ChartDataSource *valueSource = nullptr;
 
     auto itemCount = countItems();
 
