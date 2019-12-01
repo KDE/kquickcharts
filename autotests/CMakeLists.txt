@@ -7,7 +7,7 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 
 ecm_add_tests(
     ArraySourceTest.cpp
-    LINK_LIBRARIES QuickCharts Qt5::Test
+    LINK_LIBRARIES QuickChartsStatic Qt5::Test
 )
 
 add_executable(qmltest qmltest.cpp)

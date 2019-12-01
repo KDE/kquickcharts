@@ -1,7 +1,5 @@
 
 set(quickcharts_SRCS
-    ChartsPlugin.cpp
-
     Chart.cpp
     XYChart.cpp
     PieChart.cpp
@@ -37,20 +35,16 @@ qt5_add_resources(quickcharts_QRC shaders/shaders.qrc)
 
 add_definitions(-DQT_NO_KEYWORDS)
 
-add_library(QuickCharts SHARED ${quickcharts_SRCS} ${quickcharts_QRC})
-target_link_libraries(QuickCharts
-    Qt5::Core
-    Qt5::Quick
-    Qt5::Qml
-    Qt5::Gui
-)
+add_library(QuickChartsStatic STATIC ${quickcharts_SRCS} ${quickcharts_QRC})
+target_link_libraries(QuickChartsStatic PUBLIC Qt5::Core Qt5::Quick Qt5::Qml Qt5::Quick)
+
+add_library(QuickCharts SHARED ChartsPlugin.cpp)
+target_link_libraries(QuickCharts PRIVATE QuickChartsStatic)
 
 install(TARGETS QuickCharts EXPORT KF5QuickChartsTargets DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/quickcharts)
 install(FILES qmldir DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/quickcharts)
 
 if (BUILD_TESTING)
-    set_target_properties(QuickCharts PROPERTIES CXX_VISIBILITY_PRESET default)
-
     add_custom_command(TARGET QuickCharts POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/bin/org/kde/quickcharts
     )
