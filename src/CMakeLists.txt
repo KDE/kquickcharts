@@ -49,6 +49,8 @@ install(TARGETS QuickCharts EXPORT KF5QuickChartsTargets DESTINATION ${KDE_INSTA
 install(FILES qmldir DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/quickcharts)
 
 if (BUILD_TESTING)
+    set_target_properties(QuickCharts PROPERTIES CXX_VISIBILITY_PRESET default)
+
     add_custom_command(TARGET QuickCharts POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/bin/org/kde/quickcharts
     )
