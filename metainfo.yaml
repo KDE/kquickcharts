@@ -3,6 +3,7 @@ fancyname: KQuickCharts
 maintainer: ahiemstra
 group: frameworks
 subgroup: tier 1
+release: true
 type: functional
 platforms:
 - name: Linux
