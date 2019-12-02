@@ -173,12 +173,12 @@ void GridLines::setSpacing(float newSpacing)
     Q_EMIT spacingChanged();
 }
 
-LinePropertiesGroup *GridLines::major() const
+LinePropertiesGroup *GridLines::majorGroup() const
 {
     return m_major.get();
 }
 
-LinePropertiesGroup *GridLines::minor() const
+LinePropertiesGroup *GridLines::minorGroup() const
 {
     return m_minor.get();
 }

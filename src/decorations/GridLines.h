@@ -78,8 +78,8 @@ class GridLines : public QQuickItem
     Q_PROPERTY(GridLines::Direction direction READ direction WRITE setDirection NOTIFY directionChanged)
     Q_PROPERTY(XYChart *chart READ chart WRITE setChart NOTIFY chartChanged)
     Q_PROPERTY(float spacing READ spacing WRITE setSpacing NOTIFY spacingChanged)
-    Q_PROPERTY(LinePropertiesGroup *major READ major CONSTANT)
-    Q_PROPERTY(LinePropertiesGroup *minor READ minor CONSTANT)
+    Q_PROPERTY(LinePropertiesGroup *major READ majorGroup CONSTANT)
+    Q_PROPERTY(LinePropertiesGroup *minor READ minorGroup CONSTANT)
 
 public:
     enum class Direction { Horizontal, Vertical };
@@ -101,8 +101,8 @@ public:
     void setSpacing(float newSpacing);
     Q_SIGNAL void spacingChanged();
 
-    LinePropertiesGroup *major() const;
-    LinePropertiesGroup *minor() const;
+    LinePropertiesGroup *majorGroup() const;
+    LinePropertiesGroup *minorGroup() const;
 
 private:
     QSGNode *updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *) override;
