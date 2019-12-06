@@ -12,7 +12,7 @@ set(quickcharts_example_SRCS
 
 qt5_add_resources(quickcharts_example_QRC charts.qrc)
 
-add_executable(kf5quickcharts_example ${quickcharts_example_SRCS} ${quickcharts_example_QRC})
-target_link_libraries(kf5quickcharts_example Qt5::Quick Qt5::Widgets)
+add_executable(kquickcharts_example ${quickcharts_example_SRCS} ${quickcharts_example_QRC})
+target_link_libraries(kquickcharts_example Qt5::Quick Qt5::Widgets)
 
-install(TARGETS kf5quickcharts_example DESTINATION ${KDE_INSTALL_BINDIR})
+install(TARGETS kquickcharts_example DESTINATION ${KDE_INSTALL_BINDIR})
