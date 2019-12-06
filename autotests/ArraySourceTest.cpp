@@ -110,6 +110,6 @@ private Q_SLOTS:
 };
 
 
-QTEST_MAIN(ArraySourceTest)
+QTEST_GUILESS_MAIN(ArraySourceTest)
 
 #include "ArraySourceTest.moc"
