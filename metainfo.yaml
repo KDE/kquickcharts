@@ -7,6 +7,7 @@ release: true
 type: functional
 platforms:
 - name: Linux
+- name: FreeBSD
 public_lib: true
 public_source_dirs:
 - controls
