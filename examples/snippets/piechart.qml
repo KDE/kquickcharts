@@ -31,20 +31,18 @@ Charts.PieChart {
 
     valueSources: Charts.ModelSource {
         roleName: "data";
-        model: listModel
+        model: ListModel {
+            id: listModel
+            ListElement { data: 12 }
+            ListElement { data: 19 }
+            ListElement { data: 10 }
+            ListElement { data: 13 }
+            ListElement { data: 13 }
+        }
     }
     colorSource: Charts.ArraySource { array: ["red", "green", "blue", "yellow", "cyan"] }
     nameSource: Charts.ArraySource { array: ["Red", "Green", "Blue", "Yellow", "Cyan"] }
 
     thickness: 50
-
-    ListModel {
-        id: listModel
-        ListElement { data: 12 }
-        ListElement { data: 19 }
-        ListElement { data: 10 }
-        ListElement { data: 13 }
-        ListElement { data: 13 }
-    }
 }
 //! [example]

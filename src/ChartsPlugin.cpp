@@ -51,6 +51,12 @@ void QuickChartsPlugin::registerTypes(const char *uri)
 
     Q_INIT_RESOURCE(shaders);
 
+#if QT_VERSION_CHECK(5, 14, 0)
+    qmlRegisterAnonymousType<QAbstractItemModel>(uri, 1);
+#else
+    qmlRegisterType<QAbstractItemModel>();
+#endif
+
     qmlRegisterType<PieChart>(uri, 1, 0, "PieChart");
     qmlRegisterType<LineChart>(uri, 1, 0, "LineChart");
     qmlRegisterType<BarChart>(uri, 1, 0, "BarChart");
