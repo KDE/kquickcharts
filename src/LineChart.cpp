@@ -144,8 +144,13 @@ void LineChart::updateLineNode(LineChartNode *node, const QColor &lineColor, Cha
     float stepSize = width() / (range.distanceX - 1);
     QVector<QVector2D> values(range.distanceX);
     auto generator = [&, i = range.startX]() mutable -> QVector2D {
+        float value = 0;
+        if (range.distanceY != 0) {
+            value = (valueSource->item(i).toFloat() - range.startY) / range.distanceY;
+        }
+
         auto result = QVector2D{direction() == Direction::ZeroAtStart ? i * stepSize : float(boundingRect().right()) - i * stepSize,
-                                (valueSource->item(i).toFloat() - range.startY) / range.distanceY};
+                                value};
         i++;
         return result;
     };
