@@ -27,7 +27,7 @@
 #include "LineChartMaterial.h"
 #include "LineSegmentNode.h"
 
-static const int MaxPointsInSegment = 100;
+static const int MaxPointsInSegment = 10;
 
 qreal calculateNormalizedLineWidth(qreal pixelWidth, const QRectF &rect)
 {
