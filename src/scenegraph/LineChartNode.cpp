@@ -111,7 +111,7 @@ void LineChartNode::updatePoints()
 
     auto currentX = m_rect.left();
     auto pointStart = 0;
-    auto pointsPerSegment = m_values.count() / m_segments.count();
+    auto pointsPerSegment = MaxPointsInSegment;
 
     for (auto segment : qAsConst(m_segments)) {
         auto segmentPoints = m_values.mid(pointStart, pointsPerSegment);
