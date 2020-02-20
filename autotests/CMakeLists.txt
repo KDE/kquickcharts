@@ -13,20 +13,26 @@ ecm_add_tests(
 add_executable(qmltest qmltest.cpp)
 target_link_libraries(qmltest Qt5::QuickTest)
 
-add_test(
-    NAME BarChart
-    COMMAND ${CMAKE_BINARY_DIR}/bin/qmltest -import ${CMAKE_BINARY_DIR}/bin -input tst_BarChart.qml
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
-add_test(
-    NAME LineChart
-    COMMAND ${CMAKE_BINARY_DIR}/bin/qmltest -import ${CMAKE_BINARY_DIR}/bin -input tst_LineChart.qml
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
-add_test(
-    NAME PieChart
-    COMMAND ${CMAKE_BINARY_DIR}/bin/qmltest -import ${CMAKE_BINARY_DIR}/bin -input tst_PieChart.qml
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+macro(add_qml_tests)
+    if (WIN32)
+        set(_extra_args -platform offscreen)
+    endif()
+
+    foreach(test ${ARGV})
+        add_test(NAME ${test}
+                 COMMAND ${CMAKE_BINARY_DIR}/bin/qmltest
+                         ${_extra_args}
+                         -import ${CMAKE_BINARY_DIR}/bin
+                         -input ${test}
+                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        )
+    endforeach()
+endmacro()
+
+add_qml_tests(
+    tst_BarChart.qml
+    tst_LineChart.qml
+    tst_PieChart.qml
 )
 
 find_program(GLSL_VALIDATOR NAMES glslangValidator)
