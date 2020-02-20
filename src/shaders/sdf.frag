@@ -117,6 +117,19 @@ lowp float sdf_polygon(in lowp vec2 point, in lowp vec2[SDF_POLYGON_MAX_POINT_CO
 }
 #endif
 
+// Distance field for a rectangle.
+//
+// \param point A point on the distance field.
+// \param rect A vec2 with the size of the rectangle.
+//
+// \return The signed distance from point to rectangle. If negative, point is
+//         inside the rectangle.
+lowp float sdf_rectangle(in lowp vec2 point, in lowp vec2 rect)
+{
+    lowp vec2 d = abs(point) - rect;
+    return length(max(d, 0.0)) + min(max(d.x, d.y), 0.0);
+}
+
 /*********************
     Operators
 *********************/
