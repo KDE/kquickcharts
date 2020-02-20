@@ -6,10 +6,8 @@ result=0
 shaderdir=$1
 
 if [ -z $glslang ]; then
-    curl -L -o output.zip https://github.com/KhronosGroup/glslang/releases/download/master-tot/glslang-master-linux-Release.zip 2> /dev/null
-    python -m zipfile -e output.zip glslang
-    chmod +x glslang/bin/glslangValidator
-    glslang="./glslang/bin/glslangValidator"
+    echo "Error: glslangValidator not found, cannot validate shaders!"
+    exit 1
 fi
 
 function print_error
