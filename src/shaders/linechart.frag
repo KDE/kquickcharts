@@ -25,6 +25,7 @@ uniform lowp float opacity; // inherited opacity of this item
 uniform lowp vec4 lineColor;
 uniform lowp vec4 fillColor;
 uniform lowp float lineWidth;
+uniform lowp vec2 bounds;
 
 uniform lowp vec2 points[SDF_POLYGON_MAX_POINT_COUNT];
 uniform int pointCount;
@@ -36,6 +37,15 @@ void main()
     lowp vec2 point = uv;
 
     lowp vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
+
+    if (point.y > bounds.y + 0.01) {
+        discard;
+    }
+
+    if (point.y < bounds.x - 0.01) {
+        gl_FragColor = fillColor * opacity;
+        return;
+    }
 
 #if !defined(GL_ES) || !defined(VALIDATING)
 // See sdf.frag line 98
