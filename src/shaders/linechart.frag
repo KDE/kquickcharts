@@ -38,10 +38,15 @@ void main()
 
     lowp vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
 
+    // bounds.y contains the line segment's maximum value. If we are a bit above
+    // that, we will never render anything, so just discard the pixel.
     if (point.y > bounds.y + 0.01) {
         discard;
     }
 
+    // bounds.x contains the line segment's minimum value. If we are a bit below
+    // that, we know we will always be inside the polygon described by points.
+    // So just return a pixel with fillColor.
     if (point.y < bounds.x - 0.01) {
         gl_FragColor = fillColor * opacity;
         return;
