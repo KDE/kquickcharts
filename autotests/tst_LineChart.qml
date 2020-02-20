@@ -28,6 +28,11 @@ TestCase {
     id: testCase
     name: "Line Chart Tests"
 
+    width: 400
+    height: 400
+    visible: true
+    when: windowShown
+
     Component {
         id: minimal
         Charts.LineChart { }
@@ -54,5 +59,6 @@ TestCase {
     function test_create(data) {
         var item = createTemporaryObject(data.component, testCase)
         verify(item)
+        verify(waitForRendering(item))
     }
 }

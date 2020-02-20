@@ -28,6 +28,11 @@ TestCase {
     id: testCase
     name: "Pie Chart Tests"
 
+    width: 400
+    height: 400
+    visible: true
+    when: windowShown
+
     Component {
         id: minimal
         Charts.PieChart { }
@@ -95,6 +100,7 @@ TestCase {
     function test_create(data) {
         var item = createTemporaryObject(data.component, testCase)
         verify(item)
+        verify(waitForRendering(item))
     }
 }
 
