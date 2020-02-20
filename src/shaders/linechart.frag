@@ -61,7 +61,7 @@ void main()
 
     color = sdf_render(polygon, color, fillColor, 0.001);
 
-    if (lineWidth > 0) {
+    if (lineWidth > 0.0) {
         color = sdf_render(sdf_annular(sdf_outline(polygon), lineWidth), color, lineColor, 0.0002);
     }
 
