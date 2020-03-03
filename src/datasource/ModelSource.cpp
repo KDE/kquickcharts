@@ -20,8 +20,9 @@ ModelSource::ModelSource(QObject *parent)
 
 int ModelSource::role() const
 {
-    if (m_role < 0 && !m_roleName.isEmpty())
+    if (m_role < 0 && !m_roleName.isEmpty()) {
         m_role = m_model->roleNames().key(m_roleName.toLatin1(), -1);
+    }
 
     return m_role;
 }
@@ -62,12 +63,16 @@ QVariant ModelSource::item(int index) const
     // For certain model (QML ListModel for example), the roleNames() are more
     // dynamic and may only be valid when this method gets called. So try and
     // lookup the role first before anything else.
-    if (m_role < 0 && !m_roleName.isEmpty())
-        m_role = m_model->roleNames().key(m_roleName.toLatin1(), -1);
-
     if (m_role < 0) {
-        qWarning() << "ModelSource: Invalid role " << m_role << m_roleName;
-        return QVariant{};
+        if (m_roleName.isEmpty()) {
+            return QVariant{};
+        }
+
+        m_role = m_model->roleNames().key(m_roleName.toLatin1(), -1);
+        if (m_role < 0) {
+            qWarning() << "ModelSource: Invalid role " << m_role << m_roleName;
+            return QVariant{};
+        }
     }
 
     if (!m_indexColumns && (m_column < 0 || m_column > m_model->columnCount())) {
