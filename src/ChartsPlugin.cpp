@@ -25,6 +25,7 @@
 #include "datasource/ModelSource.h"
 #include "datasource/SingleValueSource.h"
 #include "datasource/ValueHistorySource.h"
+#include "datasource/MapProxySource.h"
 
 QuickChartsPlugin::QuickChartsPlugin(QObject *parent)
     : QQmlExtensionPlugin(parent)
@@ -57,6 +58,7 @@ void QuickChartsPlugin::registerTypes(const char *uri)
     qmlRegisterType<ChartAxisSource>(uri, 1, 0, "ChartAxisSource");
     qmlRegisterType<ValueHistorySource>(uri, 1, 0, "ValueHistorySource");
     qmlRegisterType<ColorGradientSource>(uri, 1, 0, "ColorGradientSource");
+    qmlRegisterType<MapProxySource>(uri, 1, 0, "MapProxySource");
 
     qmlRegisterUncreatableType<RangeGroup>(uri, 1, 0, "Range", QStringLiteral("Used as a grouped property"));
 

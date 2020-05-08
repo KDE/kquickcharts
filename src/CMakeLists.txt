@@ -20,6 +20,7 @@ set(quickcharts_SRCS
     datasource/ChartAxisSource.cpp
     datasource/ValueHistorySource.cpp
     datasource/ColorGradientSource.cpp
+    datasource/MapProxySource.cpp
 
     scenegraph/PieChartMaterial.cpp
     scenegraph/PieChartNode.cpp
