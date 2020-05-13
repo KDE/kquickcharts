@@ -20,6 +20,10 @@ ModelSource::ModelSource(QObject *parent)
 
 int ModelSource::role() const
 {
+    if (!m_model) {
+        return -1;
+    }
+
     if (m_role < 0 && !m_roleName.isEmpty()) {
         m_role = m_model->roleNames().key(m_roleName.toLatin1(), -1);
     }
@@ -90,7 +94,7 @@ QVariant ModelSource::item(int index) const
 
 QVariant ModelSource::minimum() const
 {
-    if (itemCount() <= 0)
+    if (!m_model || itemCount() <= 0)
         return QVariant{};
 
     auto minProperty = m_model->property("minimum");
@@ -108,7 +112,7 @@ QVariant ModelSource::minimum() const
 
 QVariant ModelSource::maximum() const
 {
-    if (itemCount() <= 0)
+    if (!m_model || itemCount() <= 0)
         return QVariant{};
 
     auto minProperty = m_model->property("minimum");

@@ -11,6 +11,7 @@
 #include "ChartDataSource.h"
 
 #include <QAbstractItemModel>
+#include <QPointer>
 
 /**
  * A data source that reads data from a QAbstractItemModel.
@@ -59,7 +60,7 @@ private:
     QString m_roleName;
     int m_column = 0;
     bool m_indexColumns = false;
-    QAbstractItemModel *m_model = nullptr;
+    QPointer<QAbstractItemModel> m_model;
 };
 
 #endif // MODELSOURCE_H
