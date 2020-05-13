@@ -17,7 +17,6 @@
 BarChart::BarChart(QQuickItem *parent)
     : XYChart(parent)
 {
-    connect(this, &BarChart::computedRangeChanged, this, &BarChart::onDataChanged);
 }
 
 qreal BarChart::spacing() const
