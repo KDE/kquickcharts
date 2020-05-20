@@ -19,6 +19,7 @@ QHash<int, QByteArray> LegendModel::roleNames() const
 {
     static QHash<int, QByteArray> names = {
         {NameRole, "name"},
+        {ShortNameRole, "shortName"},
         {ColorRole, "color"},
         {ValueRole, "value"},
     };
@@ -43,6 +44,8 @@ QVariant LegendModel::data(const QModelIndex &index, int role) const
     switch (role) {
     case NameRole:
         return m_items.at(index.row()).name;
+    case ShortNameRole:
+        return m_items.at(index.row()).shortName;
     case ColorRole:
         return m_items.at(index.row()).color;
     case ValueRole:
@@ -119,6 +122,7 @@ void LegendModel::update()
 
     ChartDataSource *colorSource = m_chart->colorSource();
     ChartDataSource *nameSource = m_chart->nameSource();
+    ChartDataSource *shortNameSource = m_chart->shortNameSource();
 
     m_connections.push_back(connect(m_chart, &Chart::colorSourceChanged, this, &LegendModel::queueUpdate, Qt::UniqueConnection));
     m_connections.push_back(connect(m_chart, &Chart::nameSourceChanged, this, &LegendModel::queueUpdate, Qt::UniqueConnection));
@@ -132,7 +136,7 @@ void LegendModel::update()
 
     m_connections.push_back(connect(m_chart, &Chart::valueSourcesChanged, this, &LegendModel::queueUpdate, Qt::UniqueConnection));
 
-    if ((!colorSource && !nameSource) || itemCount <= 0) {
+    if ((!colorSource && !nameSource && !shortNameSource) || itemCount <= 0) {
         endResetModel();
         return;
     }
@@ -145,9 +149,14 @@ void LegendModel::update()
         m_connections.push_back(connect(nameSource, &ChartDataSource::dataChanged, this, &LegendModel::queueDataChange, Qt::UniqueConnection));
     }
 
+    if (shortNameSource) {
+        m_connections.push_back(connect(shortNameSource, &ChartDataSource::dataChanged, this, &LegendModel::queueDataChange, Qt::UniqueConnection));
+    }
+
     for (int i = 0; i < itemCount; ++i) {
         LegendItem item;
         item.name = nameSource ? nameSource->item(i).toString() : QString();
+        item.shortName = shortNameSource ? shortNameSource->item(i).toString() : QString();
         item.color = colorSource ? colorSource->item(i).value<QColor>() : QColor();
         item.value = getValueForItem(i);
         m_items.push_back(item);
@@ -160,6 +169,7 @@ void LegendModel::updateData()
 {
     ChartDataSource *colorSource = m_chart->colorSource();
     ChartDataSource *nameSource = m_chart->nameSource();
+    ChartDataSource *shortNameSource = m_chart->shortNameSource();
 
     auto itemCount = countItems();
 
@@ -177,6 +187,12 @@ void LegendModel::updateData()
         auto name = nameSource ? nameSource->item(i).toString() : QString{};
         if (item.name != name) {
             item.name = name;
+            changedRows[i] << NameRole;
+        }
+
+        auto shortName = shortNameSource ? shortNameSource->item(i).toString() : QString{};
+        if (item.shortName != shortName) {
+            item.shortName = shortName;
             changedRows[i] << NameRole;
         }
 

@@ -19,6 +19,7 @@ class ChartDataSource;
 struct LegendItem
 {
     QString name;
+    QString shortName;
     QColor color;
     QVariant value;
 };
@@ -33,7 +34,7 @@ class LegendModel : public QAbstractListModel
     Q_PROPERTY(int sourceIndex READ sourceIndex WRITE setSourceIndex NOTIFY sourceIndexChanged)
 
 public:
-    enum Roles { NameRole = Qt::UserRole, ColorRole, ValueRole };
+    enum Roles { NameRole = Qt::UserRole, ShortNameRole, ColorRole, ValueRole };
 
     enum SourceIndex { UseSourceCount = -2 };
     Q_ENUM(SourceIndex)

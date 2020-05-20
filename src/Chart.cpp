@@ -29,6 +29,21 @@ void Chart::setNameSource(ChartDataSource *nameSource)
     Q_EMIT nameSourceChanged();
 }
 
+ChartDataSource *Chart::shortNameSource() const
+{
+    return m_shortNameSource;
+}
+
+void Chart::setShortNameSource(ChartDataSource *shortNameSource)
+{
+    if (m_shortNameSource == shortNameSource) {
+        return;
+    }
+
+    m_shortNameSource = shortNameSource;
+    Q_EMIT shortNameSourceChanged();
+}
+
 ChartDataSource *Chart::colorSource() const
 {
     return m_colorSource;

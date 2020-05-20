@@ -23,6 +23,10 @@ class Chart : public QQuickItem
      */
     Q_PROPERTY(ChartDataSource *nameSource READ nameSource WRITE setNameSource NOTIFY nameSourceChanged)
     /**
+     * The data source to use for short names of chart items.
+     */
+    Q_PROPERTY(ChartDataSource *shortNameSource READ shortNameSource WRITE setShortNameSource NOTIFY shortNameSourceChanged)
+    /**
      * The data source to use for colors of chart items.
      */
     Q_PROPERTY(ChartDataSource *colorSource READ colorSource WRITE setColorSource NOTIFY colorSourceChanged)
@@ -54,6 +58,10 @@ public:
     ChartDataSource *nameSource() const;
     void setNameSource(ChartDataSource *nameSource);
     Q_SIGNAL void nameSourceChanged();
+
+    ChartDataSource *shortNameSource() const;
+    void setShortNameSource(ChartDataSource *shortNameSource);
+    Q_SIGNAL void shortNameSourceChanged();
 
     ChartDataSource *colorSource() const;
     void setColorSource(ChartDataSource *colorSource);
@@ -89,6 +97,7 @@ private:
     static void clearSources(DataSourcesProperty *list);
 
     ChartDataSource *m_nameSource = nullptr;
+    ChartDataSource *m_shortNameSource = nullptr;
     ChartDataSource *m_colorSource = nullptr;
     QVector<ChartDataSource *> m_valueSources;
     IndexingMode m_indexingMode = IndexEachSource;
