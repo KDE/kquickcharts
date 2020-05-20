@@ -19,21 +19,25 @@ function print_error
 
 function validate_vert
 {
-    output=$(cat "$shaderdir/desktop_header.glsl" "$shaderdir/$1" | $glslang --stdin -S vert -l -DVALIDATING)
+    output=$(cat "$shaderdir/header_desktop.glsl" "$shaderdir/$1" | $glslang --stdin -S vert -l -DVALIDATING)
     if [ $? -ne 0 ]; then print_error "$1" "$output"; fi
-    output=$(cat "$shaderdir/es_header.glsl" "$shaderdir/$1" | $glslang --stdin -S vert -l -DVALIDATING)
+    output=$(cat "$shaderdir/header_desktop_core.glsl" "$shaderdir/$1" | $glslang --stdin -S vert -l -DVALIDATING)
     if [ $? -ne 0 ]; then print_error "$1" "$output"; fi
-    output=$(cat "$shaderdir/desktop_header_core.glsl" "$shaderdir/${1/.vert/_core.vert}" | $glslang --stdin -S vert -l -DVALIDATING)
+    output=$(cat "$shaderdir/header_es2.glsl" "$shaderdir/$1" | $glslang --stdin -S vert -l -DVALIDATING)
+    if [ $? -ne 0 ]; then print_error "$1" "$output"; fi
+    output=$(cat "$shaderdir/header_es3.glsl" "$shaderdir/$1" | $glslang --stdin -S vert -l -DVALIDATING)
     if [ $? -ne 0 ]; then print_error "$1" "$output"; fi
 }
 
 function validate_frag
 {
-    output=$(cat "$shaderdir/desktop_header.glsl" "$shaderdir/sdf.frag" "$shaderdir/$1" | $glslang --stdin -S frag -l -DVALIDATING)
+    output=$(cat "$shaderdir/header_desktop.glsl" "$shaderdir/sdf.glsl" "$shaderdir/$1" | $glslang --stdin -S frag -l -DVALIDATING)
     if [ $? -ne 0 ]; then print_error "$1" "$output"; fi
-    output=$(cat "$shaderdir/es_header.glsl" "$shaderdir/sdf.frag" "$shaderdir/$1" | $glslang --stdin -S frag -l -DVALIDATING)
+    output=$(cat "$shaderdir/header_desktop_core.glsl" "$shaderdir/sdf.glsl" "$shaderdir/$1" | $glslang --stdin -S frag -l -DVALIDATING)
     if [ $? -ne 0 ]; then print_error "$1" "$output"; fi
-    output=$(cat "$shaderdir/desktop_header_core.glsl" "$shaderdir/sdf_core.frag" "$shaderdir/${1/.frag/_core.frag}" | $glslang --stdin -S frag -l -DVALIDATING)
+    output=$(cat "$shaderdir/header_es2.glsl" "$shaderdir/sdf.glsl" "$shaderdir/$1" | $glslang --stdin -S frag -l -DVALIDATING)
+    if [ $? -ne 0 ]; then print_error "$1" "$output"; fi
+    output=$(cat "$shaderdir/header_es3.glsl" "$shaderdir/sdf.glsl" "$shaderdir/$1" | $glslang --stdin -S frag -l -DVALIDATING)
     if [ $? -ne 0 ]; then print_error "$1" "$output"; fi
 }
 
