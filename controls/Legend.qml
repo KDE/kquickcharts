@@ -36,6 +36,7 @@ Control {
     property real colorWidth: Theme.smallSpacing
 
     property string nameRole: "name"
+    property string shortNameRole: "shortName"
     property string colorRole: "color"
     property string valueRole: "value"
 
@@ -69,6 +70,7 @@ Control {
 
                 property var itemData: typeof modelData !== "undefined" ? modelData : model
                 name: itemData[control.nameRole] !== undefined ? itemData[control.nameRole] : ""
+                shortName: itemData[control.shortNameRole] !== undefined ? itemData[control.shortNameRole] : ""
                 color: itemData[control.colorRole] !== undefined ? itemData[control.colorRole] : "white"
                 value: {
                     if (itemData[control.valueRole] !== undefined) {

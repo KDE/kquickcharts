@@ -22,6 +22,7 @@ RowLayout {
     Layout.preferredWidth: 0
 
     property string name
+    property string shortName
     property color color
     property string value
     property color valueColor: name.color
@@ -68,15 +69,11 @@ RowLayout {
 
         Layout.fillWidth: true
         Layout.fillHeight: true
+        Layout.minimumWidth: 0
 
-        text: delegate.name
-        visible: {
-            if (delegate.layoutWidth < 0) {
-                return true;
-            }
+        text: delegate.name + (delegate.shortName.length > 0 ? "\x9C" + delegate.shortName : "")
+        elide: Text.ElideRight
 
-            return delegate.layoutWidth - delegate.colorWidth - delegate.spacing * 2 >= contentWidth
-        }
         verticalAlignment: Qt.AlignVCenter
     }
 
@@ -84,33 +81,15 @@ RowLayout {
         id: value
 
         Layout.fillHeight: true
-        Layout.preferredWidth: delegate.valueWidth
+        Layout.fillWidth: true
+        Layout.minimumWidth: implicitWidth
+        //Layout.preferredWidth: delegate.valueWidth
 
         text: delegate.value;
         font: name.font
         color: delegate.valueColor
         verticalAlignment: Qt.AlignVCenter
         horizontalAlignment: Qt.AlignRight
-
-        visible: {
-            if (!delegate.valueVisible) {
-                return false;
-            }
-
-            if (delegate.layoutWidth < 0) {
-                return true;
-            }
-
-            var remainingWidth = delegate.layoutWidth - delegate.spacing * 2
-            if (delegate.colorVisible) {
-                remainingWidth -= delegate.colorWidth - delegate.spacing
-            }
-            if (name.visible) {
-                remainingWidth -= name.contentWidth - delegate.spacing
-            }
-
-            return remainingWidth >= delegate.valueWidth
-        }
     }
 
     Component { id: defaultIndicator; Rectangle { color: delegateColor } }
