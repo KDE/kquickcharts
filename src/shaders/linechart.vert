@@ -9,10 +9,15 @@ uniform highp mat4 matrix;
 uniform lowp float lineWidth;
 uniform lowp float aspect;
 
+#ifdef LEGACY_STAGE_INOUT
 attribute highp vec4 in_vertex;
 attribute mediump vec2 in_uv;
-
 varying mediump vec2 uv;
+#else
+in highp vec4 in_vertex;
+in mediump vec2 in_uv;
+out mediump vec2 uv;
+#endif
 
 void main() {
     uv.x = in_uv.x;

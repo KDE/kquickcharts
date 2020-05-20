@@ -26,7 +26,12 @@ uniform lowp vec4 colors[MAX_SEGMENTS];
 uniform int segments[MAX_SEGMENTS];
 uniform int segmentCount;
 
+#ifdef LEGACY_STAGE_INOUT
 varying lowp vec2 uv;
+#else
+in lowp vec2 uv;
+out lowp vec4 out_color;
+#endif
 
 const lowp vec2 origin = vec2(0.0, 0.0);
 const lowp float lineSmooth = 0.001;
@@ -65,5 +70,9 @@ void main()
         color = sdf_render(segment, color, backgroundColor, lineSmooth);
     }
 
+#ifdef LEGACY_STAGE_INOUT
     gl_FragColor = color * opacity;
+#else
+    out_color = color * opacity;
+#endif
 }
