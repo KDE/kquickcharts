@@ -136,7 +136,7 @@ void LegendModel::update()
 
     m_connections.push_back(connect(m_chart, &Chart::valueSourcesChanged, this, &LegendModel::queueUpdate, Qt::UniqueConnection));
 
-    if ((!colorSource && !nameSource && !shortNameSource) || itemCount <= 0) {
+    if ((!colorSource && !(nameSource || shortNameSource)) || itemCount <= 0) {
         endResetModel();
         return;
     }
