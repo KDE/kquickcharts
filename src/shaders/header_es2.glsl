@@ -10,18 +10,10 @@
 // Important: If a specific GLSL version is needed, it should be set in this
 // file.
 
-// This file is intended for desktop OpenGL version 2.1 or greater.
+// This file is intended for OpenGLES version 2.0 or greater.
 
-#version 120
+// #version 100
+#extension GL_OES_standard_derivatives : require
 
-#ifndef lowp
-    #define lowp
-#endif
-
-#ifndef mediump
-    #define mediump
-#endif
-
-#ifndef highp
-    #define highp mediump
-#endif
+#define API_ES2
+#define LEGACY_STAGE_INOUT

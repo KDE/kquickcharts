@@ -6,11 +6,6 @@
 // This file is based on
 // https://iquilezles.org/www/articles/distfunctions2d/distfunctions2d.htm
 
-//if not GLES
-// include "desktop_header.glsl"
-//else
-// include "es_header.glsl"
-
 // A maximum point count to be used for sdf_polygon input arrays.
 // Unfortunately even function inputs require a fixed size at declaration time
 // for arrays, unless we were to use OpenGL 4.5.
@@ -67,6 +62,7 @@ lowp float sdf_triangle(in lowp vec2 point, in lowp vec2 p0, in lowp vec2 p1, in
     return -sqrt(d.x)*sign(d.y);
 }
 
+#if !defined(API_ES2)
 // Distance field for an arbitrary polygon.
 //
 // \param point A point on the distance field.
@@ -78,10 +74,6 @@ lowp float sdf_triangle(in lowp vec2 point, in lowp vec2 p0, in lowp vec2 p1, in
 //
 // \return The signed distance from point to triangle. If negative, point is
 //         inside the triangle.
-
-// Strictly speaking, GLES 2.0 doesn't support function array arguments (apparently), so our validation fails here.
-// But at least Mesa GLES 2.0 accepts it, so skip validation here instead.
-#if !defined(GL_ES) || !defined(VALIDATING)
 lowp float sdf_polygon(in lowp vec2 point, in lowp vec2[SDF_POLYGON_MAX_POINT_COUNT] vertices, in lowp int count)
 {
     lowp float d = dot(point - vertices[0], point - vertices[0]);
@@ -113,6 +105,41 @@ lowp float sdf_rectangle(in lowp vec2 point, in lowp vec2 rect)
     lowp vec2 d = abs(point) - rect;
     return length(max(d, 0.0)) + min(max(d.x, d.y), 0.0);
 }
+
+lowp float sdf_torus_segment(in lowp vec2 point, in lowp float start, in lowp float end, in lowp float inner_radius, in lowp float outer_radius)
+{
+    start = clamp(start, 0.0, end);
+    end = clamp(end, start, 2.0 * pi);
+
+    lowp float angle = (end - start) / 2.0;
+    lowp float rotation = (start + end) / 2.0;
+
+    lowp vec2 rotated = point * mat2(cos(rotation), -sin(rotation), sin(rotation), cos(rotation));
+    lowp vec2 c = vec2(sin(angle), cos(angle));
+
+    rotated.x = abs(rotated.x);
+    lowp float l = length(rotated) - outer_radius;
+    lowp float m = length(rotated - c * clamp(dot(rotated, c), 0.0, outer_radius));
+    return max(l, m * sign(c.y * rotated.x - c.x * rotated.y));
+}
+
+// float pie( in vec2 p, in float start, in float end, in float r )
+// {
+//     start = clamp(start, 0.0, end);
+//     end = clamp(end, start, 2.0 * PI);
+//
+//     float angle = (end - start) / 2.0;
+//
+//     float rot = (start + end) / 2.0;
+//
+//     vec2 rotated = p * mat2(cos(rot), -sin(rot), sin(rot), cos(rot));
+//     vec2 c = vec2(sin(angle), cos(angle));
+//
+//     rotated.x = abs(rotated.x);
+//     float l = length(rotated) - r;
+// 	float m = length(rotated - c * clamp(dot(rotated, c), 0.0, r));
+//     return max(l, m * sign(c.y * rotated.x - c.x * rotated.y));
+// }
 
 /*********************
     Operators
@@ -210,6 +237,11 @@ lowp float sdf_outline(in lowp float sdf)
 // indicate a value that is really far away from the actual sdf shape.
 const lowp float sdf_null = 99999.0;
 
+// A constant for a default level of smoothing when rendering an sdf.
+const lowp float sdf_default_smoothing = 0.625;
+
+const lowp float pi = acos(-1.0);
+
 // Render an sdf shape.
 //
 // This will render the sdf shape on top of whatever source color is input,
@@ -218,11 +250,37 @@ const lowp float sdf_null = 99999.0;
 // \param sdf The sdf shape to render.
 // \param sourceColor The source color to render on top of.
 // \param sdfColor The color to use for rendering the sdf shape.
-// \param smoothing The amount of smoothing to apply to the sdf.
 //
 // \return sourceColor with the sdf shape rendered on top.
+lowp vec4 sdf_render(in lowp float sdf, in lowp vec4 sourceColor, in lowp vec4 sdfColor)
+{
+    lowp float g = fwidth(sdf);
+    return mix(sourceColor, sdfColor, 1.0 - smoothstep(-sdf_default_smoothing * g, sdf_default_smoothing * g, sdf));
+}
+
+// Render an sdf shape.
+//
+// This is an overload of sdf_render(float, vec4, vec4) that allows specifying a
+// smoothing amount.
+//
+// \param smoothing The amount of smoothing to apply to the sdf.
+//
 lowp vec4 sdf_render(in lowp float sdf, in lowp vec4 sourceColor, in lowp vec4 sdfColor, in lowp float smoothing)
 {
     lowp float g = fwidth(sdf);
-    return mix(sourceColor, sdfColor, sdfColor.a * (1.0 - smoothstep(smoothing - g, smoothing + g, sdf)));
+    return mix(sourceColor, sdfColor, 1.0 - smoothstep(-smoothing * g, smoothing * g, sdf));
+}
+
+// Render an sdf shape alpha-blended onto an existing color.
+//
+// This is an overload of sdf_render(float, vec4, vec4) that allows specifying a
+// blending amount and a smoothing amount.
+//
+// \param alpha The alpha to use for blending.
+// \param smoothing The amount of smoothing to apply to the sdf.
+//
+lowp vec4 sdf_render(in lowp float sdf, in lowp vec4 sourceColor, in lowp vec4 sdfColor, in lowp float alpha, in lowp float smoothing)
+{
+    lowp float g = fwidth(sdf);
+    return mix(sourceColor, sdfColor, alpha * (1.0 - smoothstep(-smoothing * g, smoothing * g, sdf)));
 }

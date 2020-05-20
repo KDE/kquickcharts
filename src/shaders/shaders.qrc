@@ -1,19 +1,19 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
     <qresource prefix="/org.kde.quickcharts">
-        <file>desktop_header.glsl</file>
-        <file>desktop_header_core.glsl</file>
-        <file>es_header.glsl</file>
-        <file>sdf.frag</file>
-        <file>sdf_core.frag</file>
-        <file>uv.vert</file>
+        <file>header_desktop.glsl</file>
+        <file>header_desktop_core.glsl</file>
+        <file>header_es2.glsl</file>
+        <file>header_es3.glsl</file>
+        <file>sdf.glsl</file>
+        <file alias="sdf_core.glsl">sdf.glsl</file>
         <file>piechart.frag</file>
-        <file>piechart_core.frag</file>
+        <file alias="piechart_core.frag">piechart.frag</file>
         <file>piechart.vert</file>
-        <file>piechart_core.vert</file>
+        <file alias="piechart_core.vert">piechart.vert</file>
         <file>linechart.frag</file>
-        <file>linechart_core.frag</file>
+        <file alias="linechart_core.frag">linechart.frag</file>
         <file>linechart.vert</file>
-        <file>linechart_core.vert</file>
+        <file alias="linechart_core.vert">linechart.vert</file>
     </qresource>
 </RCC>

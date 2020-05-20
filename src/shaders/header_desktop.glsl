@@ -10,6 +10,9 @@
 // Important: If a specific GLSL version is needed, it should be set in this
 // file.
 
-// This file is intended for desktop OpenGL version 4.5 or greater.
+// This file is intended for desktop OpenGL version 2.1 or greater.
 
-#version 450
+#version 120
+
+#define API_DESKTOP
+#define LEGACY_STAGE_INOUT

@@ -21,13 +21,13 @@ SDFShader::~SDFShader()
 
 void SDFShader::setShaders(const QString &vertex, const QString &fragment)
 {
-    auto header = QOpenGLContext::currentContext()->isOpenGLES() ? QStringLiteral("es_header.glsl") : QStringLiteral("desktop_header.glsl");
+    auto header = QStringLiteral("header_desktop.glsl");
 
     setShaderSourceFiles(QOpenGLShader::Vertex, {QString::fromLatin1(shaderRoot) + header, QString::fromLatin1(shaderRoot) + vertex});
 
     setShaderSourceFiles(
         QOpenGLShader::Fragment,
         {QString::fromLatin1(shaderRoot) + header,
-         QString::fromLatin1(shaderRoot) + QStringLiteral("sdf.frag"),
+         QString::fromLatin1(shaderRoot) + QStringLiteral("sdf.glsl"),
          QString::fromLatin1(shaderRoot) + fragment});
 }

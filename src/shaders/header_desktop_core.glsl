@@ -10,7 +10,8 @@
 // Important: If a specific GLSL version is needed, it should be set in this
 // file.
 
-// This file is intended for OpenGLES version 2.0 or greater.
+// This file is intended for desktop OpenGL version 4.5 or greater.
 
-#version 100
-#extension GL_OES_standard_derivatives : enable
+#version 450
+
+#define API_CORE
