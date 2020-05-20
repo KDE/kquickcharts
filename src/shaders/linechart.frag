@@ -76,10 +76,10 @@ void main()
     lowp float polygon = sdf_polygon(point, points, pointCount);
 #endif
 
-    color = sdf_render(polygon, color, fillColor, 0.001);
+    color = sdf_render(polygon, color, fillColor);
 
     if (lineWidth > 0.0) {
-        color = sdf_render(sdf_annular(sdf_outline(polygon), lineWidth), color, lineColor, 0.0002);
+        color = sdf_render(sdf_annular(sdf_outline(polygon), lineWidth), color, lineColor);
     }
 
 #ifdef LEGACY_STAGE_INOUT

@@ -58,16 +58,16 @@ void main()
                   ? sdf_intersect_smooth(donut, segment, thickness)
                   : sdf_intersect(donut, segment);
 
-        color = sdf_render(segment, color, colors[i], lineSmooth);
+        color = sdf_render(segment, color, colors[i]);
     }
 
     // Finally, render an end segment with the background color.
     if (smoothEnds) {
-        lowp vec4 background = sdf_render(donut, vec4(0.0), backgroundColor, lineSmooth);
+        lowp vec4 background = sdf_render(donut, vec4(0.0), backgroundColor);
         color = mix(background, color, color.a);
     } else {
         lowp float segment = sdf_subtract(sdf_round(donut, lineSmooth), totalSegments);
-        color = sdf_render(segment, color, backgroundColor, lineSmooth);
+        color = sdf_render(segment, color, backgroundColor);
     }
 
 #ifdef LEGACY_STAGE_INOUT
