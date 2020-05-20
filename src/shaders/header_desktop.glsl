@@ -14,5 +14,11 @@
 
 #version 120
 
+#ifdef VALIDATING
+    #define lowp
+    #define mediump
+    #define highp
+#endif
+
 #define API_DESKTOP
 #define LEGACY_STAGE_INOUT

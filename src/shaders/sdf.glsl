@@ -13,6 +13,9 @@
 // at least less than MAX_FRAGMENT_UNIFORM_COMPONENTS / 2 (since we need vec2).
 #define SDF_POLYGON_MAX_POINT_COUNT 400
 
+// A constant for pi
+const lowp float pi = acos(-1.0);
+
 /*********************************
     Shapes
 *********************************/
@@ -62,7 +65,7 @@ lowp float sdf_triangle(in lowp vec2 point, in lowp vec2 p0, in lowp vec2 p1, in
     return -sqrt(d.x)*sign(d.y);
 }
 
-#if !defined(API_ES2)
+#ifndef API_ES2
 // Distance field for an arbitrary polygon.
 //
 // \param point A point on the distance field.
@@ -239,8 +242,6 @@ const lowp float sdf_null = 99999.0;
 
 // A constant for a default level of smoothing when rendering an sdf.
 const lowp float sdf_default_smoothing = 0.625;
-
-const lowp float pi = acos(-1.0);
 
 // Render an sdf shape.
 //
