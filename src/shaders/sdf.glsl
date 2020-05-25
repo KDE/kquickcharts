@@ -109,6 +109,16 @@ lowp float sdf_rectangle(in lowp vec2 point, in lowp vec2 rect)
     return length(max(d, 0.0)) + min(max(d.x, d.y), 0.0);
 }
 
+// Distance field for a torus segment.
+//
+// \param point A point on the distance field.
+// \param start The start angle in radians of the segment.
+// \param end The end angle in radians of the segment.
+// \param inner_radius The inner radius of the torus.
+// \param outer_radius The outer radius of the torus.
+//
+// \return The signed distance from point to the torus segment. If negative,
+//         point is inside the segment.
 lowp float sdf_torus_segment(in lowp vec2 point, in lowp float start, in lowp float end, in lowp float inner_radius, in lowp float outer_radius)
 {
     start = clamp(start, 0.0, end);
@@ -121,28 +131,13 @@ lowp float sdf_torus_segment(in lowp vec2 point, in lowp float start, in lowp fl
     lowp vec2 c = vec2(sin(angle), cos(angle));
 
     rotated.x = abs(rotated.x);
-    lowp float l = length(rotated) - outer_radius;
-    lowp float m = length(rotated - c * clamp(dot(rotated, c), 0.0, outer_radius));
+
+    lowp float t = (outer_radius - inner_radius) / 2.0;
+    lowp float l = abs(length(rotated) - (inner_radius + t)) - t;
+
+    lowp float m = length(rotated - c * clamp(dot(rotated, c), inner_radius, outer_radius));
     return max(l, m * sign(c.y * rotated.x - c.x * rotated.y));
 }
-
-// float pie( in vec2 p, in float start, in float end, in float r )
-// {
-//     start = clamp(start, 0.0, end);
-//     end = clamp(end, start, 2.0 * PI);
-//
-//     float angle = (end - start) / 2.0;
-//
-//     float rot = (start + end) / 2.0;
-//
-//     vec2 rotated = p * mat2(cos(rot), -sin(rot), sin(rot), cos(rot));
-//     vec2 c = vec2(sin(angle), cos(angle));
-//
-//     rotated.x = abs(rotated.x);
-//     float l = length(rotated) - r;
-// 	float m = length(rotated - c * clamp(dot(rotated, c), 0.0, r));
-//     return max(l, m * sign(c.y * rotated.x - c.x * rotated.y));
-// }
 
 /*********************
     Operators
