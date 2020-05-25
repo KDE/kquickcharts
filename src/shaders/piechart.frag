@@ -56,7 +56,7 @@ void main()
         color = mix(background, color, color.a);
     } else {
         lowp vec2 last_segment = segments[segmentCount - 1];
-        lowp float segment_sdf = sdf_torus_segment(uv, last_segment.y, 2 * pi, innerRadius, outerRadius);
+        lowp float segment_sdf = sdf_torus_segment(uv, last_segment.y, 2.0 * pi, innerRadius, outerRadius);
         color = sdf_render(segment_sdf, color, backgroundColor);
     }
 
