@@ -172,86 +172,30 @@ void PieChartNode::setSmoothEnds(bool smooth)
 
 void PieChartNode::updateTriangles()
 {
-    if (m_sections.isEmpty() || m_sections.size() != m_colors.size())
+    if (m_sections.isEmpty() || m_sections.size() != m_colors.size()) {
         return;
-
-    QVector<QVector2D> trianglePoints;
-    QVector<QVector4D> triangleColors;
-    QVector<int> segments;
-
-    qreal totalAngle = degToRad(m_toAngle);
-    qreal overlap = m_smoothEnds ? 0.2 : 0.05;
-
-    auto sections = m_sections;
-    auto colors = m_colors;
-
-    QVector2D point = rotated(QVector2D{0.0, -2.0}, degToRad(m_fromAngle));
-    auto index = 0;
-    auto current = sections.at(0) * totalAngle;
-    auto sectionCount = 0;
-    auto total = 0.0;
-
-    while (index < sections.size()) {
-        auto currentSection = std::max(current - sectionSize, 0.0);
-        auto angle = (currentSection > 0.0) ? sectionSize : current;
-        auto overlapAngle = angle + (m_smoothEnds ? overlap : std::min(currentSection, overlap));
-        overlapAngle = index == sections.size() - 1 && currentSection <= 0.0 ? angle : overlapAngle;
-
-        trianglePoints << point;
-        trianglePoints << rotated(point, overlapAngle);
-
-        point = rotated(point, angle);
-        current -= angle;
-        sectionCount++;
-
-        while (qFuzzyCompare(current, 0.0)) {
-            triangleColors << colorToVec4(colors.at(index));
-            segments << sectionCount;
-            sectionCount = 0;
-            total += sections.at(index);
-            index++;
-
-            if (index < sections.size()) {
-                current = sections.at(index) * totalAngle;
-            } else {
-                break;
-            }
-        }
     }
 
-    if (sections.size() == 1 && qFuzzyCompare(sections.at(0), 0.0)) {
-        trianglePoints.clear();
-        triangleColors.clear();
+    qreal startAngle = degToRad(m_fromAngle);
+    qreal totalAngle = degToRad(m_toAngle - m_fromAngle);
+
+    QVector<QVector2D> segments;
+    QVector<QVector4D> colors;
+
+
+    for (int i = 0; i < m_sections.size(); ++i) {
+        QVector2D segment{float(startAngle), float(startAngle + m_sections.at(i) * totalAngle)};
+        segments << segment;
+        startAngle = segment.y();
+        colors << colorToVec4(m_colors.at(i));
+    }
+
+    if (m_sections.size() == 1 && qFuzzyCompare(m_sections.at(0), 0.0)) {
         segments.clear();
     }
 
-    if (!qFuzzyCompare(totalAngle, 360.0) && total < 1.0) {
-        sectionCount = 0;
-        current = (1.0 - total) * totalAngle;
-
-        auto overlapAngle = std::min(total * totalAngle, overlap);
-        point = rotated(point, -overlapAngle);
-        current += overlapAngle;
-
-        while (current > 0.0) {
-            auto currentSection = std::max(current - sectionSize, 0.0);
-            auto angle = (currentSection > 0.0) ? sectionSize : current;
-
-            trianglePoints.prepend(point);
-            trianglePoints.prepend(rotated(point, angle + std::min(currentSection, overlap)));
-
-            point = rotated(point, angle);
-            current -= angle;
-            sectionCount++;
-        }
-
-        triangleColors.prepend(colorToVec4(m_backgroundColor));
-        segments.prepend(sectionCount);
-    }
-
-    m_material->setTriangles(trianglePoints);
-    m_material->setColors(triangleColors);
     m_material->setSegments(segments);
+    m_material->setColors(colors);
 
     markDirty(QSGNode::DirtyMaterial);
 }

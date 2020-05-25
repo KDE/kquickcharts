@@ -47,19 +47,14 @@ QColor PieChartMaterial::backgroundColor() const
     return m_backgroundColor;
 }
 
-QVector<QVector2D> PieChartMaterial::triangles() const
+QVector<QVector2D> PieChartMaterial::segments() const
 {
-    return m_triangles;
+    return m_segments;
 }
 
 QVector<QVector4D> PieChartMaterial::colors() const
 {
     return m_colors;
-}
-
-QVector<int> PieChartMaterial::segments() const
-{
-    return m_segments;
 }
 
 bool PieChartMaterial::smoothEnds() const
@@ -87,19 +82,14 @@ void PieChartMaterial::setBackgroundColor(const QColor &color)
     m_backgroundColor = color;
 }
 
-void PieChartMaterial::setTriangles(const QVector<QVector2D> &triangles)
+void PieChartMaterial::setSegments(const QVector<QVector2D> &segments)
 {
-    m_triangles = triangles;
+    m_segments = segments;
 }
 
 void PieChartMaterial::setColors(const QVector<QVector4D> &colors)
 {
     m_colors = colors;
-}
-
-void PieChartMaterial::setSegments(const QVector<int> &segments)
-{
-    m_segments = segments;
 }
 
 void PieChartMaterial::setSmoothEnds(bool smooth)
@@ -131,7 +121,6 @@ void PieChartShader::initialize()
     m_outerRadiusLocation = program()->uniformLocation("outerRadius");
     m_aspectLocation = program()->uniformLocation("aspect");
     m_backgroundColorLocation = program()->uniformLocation("backgroundColor");
-    m_trianglesLocation = program()->uniformLocation("triangles");
     m_colorsLocation = program()->uniformLocation("colors");
     m_segmentsLocation = program()->uniformLocation("segments");
     m_segmentCountLocation = program()->uniformLocation("segmentCount");
@@ -151,7 +140,6 @@ void PieChartShader::updateState(const QSGMaterialShader::RenderState &state, QS
         program()->setUniformValue(m_outerRadiusLocation, material->outerRadius());
         program()->setUniformValue(m_aspectLocation, material->aspectRatio());
         program()->setUniformValue(m_backgroundColorLocation, material->backgroundColor());
-        program()->setUniformValueArray(m_trianglesLocation, material->triangles().constData(), material->triangles().size());
         program()->setUniformValueArray(m_colorsLocation, material->colors().constData(), material->colors().size());
         program()->setUniformValueArray(m_segmentsLocation, material->segments().constData(), material->segments().size());
         program()->setUniformValue(m_segmentCountLocation, material->segments().size());

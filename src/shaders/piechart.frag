@@ -21,9 +21,8 @@ uniform lowp float outerRadius;
 uniform lowp vec4 backgroundColor;
 uniform bool smoothEnds;
 
-uniform lowp vec2 triangles[MAX_SEGMENTS * 2];
+uniform lowp vec2 segments[MAX_SEGMENTS];
 uniform lowp vec4 colors[MAX_SEGMENTS];
-uniform int segments[MAX_SEGMENTS];
 uniform int segmentCount;
 
 #ifdef LEGACY_STAGE_INOUT
@@ -38,36 +37,27 @@ const lowp float lineSmooth = 0.001;
 
 void main()
 {
-    lowp vec2 point = uv * (1.0 + lineSmooth * 2.0);
+    lowp vec4 color = vec4(0.0);
 
     lowp float thickness = (outerRadius - innerRadius) / 2.0;
-    lowp float donut = sdf_annular(sdf_circle(point, innerRadius + thickness), thickness);
-
-    lowp vec4 color = vec4(0.0);
-    lowp float totalSegments = sdf_null;
-    int index = 0;
+    lowp float rounding = smoothEnds ? thickness : 0.0;
 
     for (int i = 0; i < segmentCount && i < MAX_SEGMENTS; ++i) {
-        lowp float segment = sdf_null;
-        for(int j = 0; j < segments[i] && j < MAX_SEGMENTS; j++) {
-            segment = sdf_union(segment, sdf_round(sdf_triangle(point, origin, triangles[index++], triangles[index++]), lineSmooth));
-        }
-        totalSegments = sdf_union(totalSegments, segment);
+        lowp vec2 segment = segments[i];
 
-        segment = smoothEnds
-                  ? sdf_intersect_smooth(donut, segment, thickness)
-                  : sdf_intersect(donut, segment);
-
-        color = sdf_render(segment, color, colors[i]);
+        lowp float segment_sdf = sdf_torus_segment(uv, segment.x + rounding, segment.y - rounding, innerRadius + rounding, outerRadius - rounding) - rounding;
+        color = sdf_render(segment_sdf, color, colors[i]);
     }
 
     // Finally, render an end segment with the background color.
     if (smoothEnds) {
-        lowp vec4 background = sdf_render(donut, vec4(0.0), backgroundColor);
+        lowp float torus = sdf_annular(sdf_circle(uv, innerRadius + thickness), thickness);
+        lowp vec4 background = sdf_render(torus, vec4(0.0), backgroundColor);
         color = mix(background, color, color.a);
     } else {
-        lowp float segment = sdf_subtract(sdf_round(donut, lineSmooth), totalSegments);
-        color = sdf_render(segment, color, backgroundColor);
+        lowp vec2 last_segment = segments[segmentCount - 1];
+        lowp float segment_sdf = sdf_torus_segment(uv, last_segment.y, 2 * pi, innerRadius, outerRadius);
+        color = sdf_render(segment_sdf, color, backgroundColor);
     }
 
 #ifdef LEGACY_STAGE_INOUT

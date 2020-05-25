@@ -20,5 +20,6 @@ out mediump vec2 uv;
 
 void main() {
     uv = (-1.0 + 2.0 * in_uv) * aspect;
+    uv.y *= -1.0;
     gl_Position = matrix * in_vertex;
 }
