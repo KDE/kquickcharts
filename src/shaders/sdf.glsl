@@ -121,8 +121,8 @@ lowp float sdf_rectangle(in lowp vec2 point, in lowp vec2 rect)
 //         point is inside the segment.
 lowp float sdf_torus_segment(in lowp vec2 point, in lowp float start, in lowp float end, in lowp float inner_radius, in lowp float outer_radius)
 {
-    start = clamp(start, 0.0, end);
-    end = clamp(end, start, 2.0 * pi);
+    start = clamp(start, end - 2.0 * pi, end);
+    end = clamp(end, start, start + 2.0 * pi);
 
     lowp float angle = (end - start) / 2.0;
     lowp float rotation = (start + end) / 2.0;
