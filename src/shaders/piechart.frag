@@ -37,6 +37,11 @@ out lowp vec4 out_color;
 const lowp vec2 origin = vec2(0.0, 0.0);
 const lowp float lineSmooth = 0.001;
 
+lowp float rounded_segment(lowp float from, lowp float to, lowp float inner, lowp float outer, lowp float rounding)
+{
+    return sdf_torus_segment(uv, from + rounding, to - rounding, inner + rounding, outer - rounding) - rounding;
+}
+
 void main()
 {
     lowp vec4 color = vec4(0.0);
@@ -51,7 +56,7 @@ void main()
     for (int i = 0; i < segmentCount && i < MAX_SEGMENTS; ++i) {
         lowp vec2 segment = segments[i];
 
-        lowp float segment_sdf = sdf_torus_segment(uv, segment.x + rounding, segment.y - rounding, innerRadius + rounding, outerRadius - rounding) - rounding;
+        lowp float segment_sdf = rounded_segment(segment.x, segment.y, innerRadius, outerRadius, rounding);
         color = sdf_render(segment_sdf, color, colors[i]);
     }
 
