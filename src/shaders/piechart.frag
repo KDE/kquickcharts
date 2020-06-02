@@ -50,14 +50,8 @@ void main()
     lowp float rounding = smoothEnds ? thickness : 0.0;
 
     // Background first, slightly smaller than the actual pie to avoid antialiasing artifacts.
-    lowp float background = sdf_null;
-    if ((toAngle - fromAngle) >= 2.0 * pi) {
-        // In this case, we want the entire background to be filled, regardless of smoothing.
-        // So use a full circle instead of just a segment, since the segment will be rounded.
-        background = sdf_annular(sdf_circle(uv, innerRadius + thickness), thickness - 0.001);
-    } else {
-        background = rounded_segment(fromAngle, toAngle, innerRadius, outerRadius, rounding + 0.001);
-    }
+    lowp float background_rounding = (toAngle - fromAngle) >= 2.0 * pi ? 0.001 : rounding + 0.001;
+    lowp float background = rounded_segment(fromAngle, toAngle, innerRadius, outerRadius, background_rounding);
     color = sdf_render(background, color, backgroundColor);
 
     for (int i = 0; i < segmentCount && i < MAX_SEGMENTS; ++i) {
