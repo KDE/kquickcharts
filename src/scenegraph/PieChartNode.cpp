@@ -124,12 +124,8 @@ void PieChartNode::setBackgroundColor(const QColor &color)
         return;
 
     m_backgroundColor = color;
-    if (qFuzzyCompare(m_toAngle, 360.0)) {
-        m_material->setBackgroundColor(color);
-        markDirty(QSGNode::DirtyMaterial);
-    } else {
-        updateTriangles();
-    }
+    m_material->setBackgroundColor(color);
+    markDirty(QSGNode::DirtyMaterial);
 }
 
 void PieChartNode::setFromAngle(qreal angle)
@@ -149,13 +145,6 @@ void PieChartNode::setToAngle(qreal angle)
     }
 
     m_toAngle = angle;
-
-    if (!qFuzzyCompare(m_toAngle, 360.0)) {
-        m_material->setBackgroundColor(Qt::transparent);
-    } else {
-        m_material->setBackgroundColor(m_backgroundColor);
-    }
-
     updateTriangles();
 }
 
@@ -181,7 +170,6 @@ void PieChartNode::updateTriangles()
 
     QVector<QVector2D> segments;
     QVector<QVector4D> colors;
-
 
     for (int i = 0; i < m_sections.size(); ++i) {
         QVector2D segment{float(startAngle), float(startAngle + m_sections.at(i) * totalAngle)};
