@@ -28,6 +28,8 @@ public:
     float outerRadius() const;
     QColor backgroundColor() const;
     bool smoothEnds() const;
+    float fromAngle() const;
+    float toAngle() const;
 
     QVector<QVector2D> segments() const;
     QVector<QVector4D> colors() const;
@@ -37,6 +39,8 @@ public:
     void setOuterRadius(float radius);
     void setBackgroundColor(const QColor &color);
     void setSmoothEnds(bool smooth);
+    void setFromAngle(float angle);
+    void setToAngle(float angle);
 
     void setSegments(const QVector<QVector2D> &triangles);
     void setColors(const QVector<QVector4D> &colors);
@@ -47,6 +51,8 @@ private:
     float m_outerRadius = 0.0f;
     QColor m_backgroundColor;
     bool m_smoothEnds = false;
+    float m_fromAngle = 0.0;
+    float m_toAngle = 6.28318; // 2 * pi
 
     QVector<QVector2D> m_segments;
     QVector<QVector4D> m_colors;
@@ -74,6 +80,8 @@ private:
     int m_segmentsLocation = 0;
     int m_segmentCountLocation = 0;
     int m_smoothEndsLocation = 0;
+    int m_fromAngleLocation = 0;
+    int m_toAngleLocation = 0;
 };
 
 #endif // PIECHARTMATERIAL_H

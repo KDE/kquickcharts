@@ -20,6 +20,8 @@ uniform lowp float innerRadius;
 uniform lowp float outerRadius;
 uniform lowp vec4 backgroundColor;
 uniform bool smoothEnds;
+uniform lowp float fromAngle;
+uniform lowp float toAngle;
 
 uniform lowp vec2 segments[MAX_SEGMENTS];
 uniform lowp vec4 colors[MAX_SEGMENTS];

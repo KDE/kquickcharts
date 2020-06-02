@@ -135,6 +135,7 @@ void PieChartNode::setFromAngle(qreal angle)
     }
 
     m_fromAngle = angle;
+    m_material->setFromAngle(degToRad(angle));
     updateTriangles();
 }
 
@@ -145,6 +146,7 @@ void PieChartNode::setToAngle(qreal angle)
     }
 
     m_toAngle = angle;
+    m_material->setToAngle(degToRad(angle));
     updateTriangles();
 }
 
