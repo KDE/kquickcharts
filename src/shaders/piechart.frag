@@ -42,22 +42,15 @@ void main()
     lowp float thickness = (outerRadius - innerRadius) / 2.0;
     lowp float rounding = smoothEnds ? thickness : 0.0;
 
+    // Background first, slightly smaller than the actual pie to avoid antialiasing artifacts.
+    lowp float torus = sdf_annular(sdf_torus_segment(uv,   innerRadius + thickness), thickness - 0.001);
+    color = sdf_render(torus, color, backgroundColor);
+
     for (int i = 0; i < segmentCount && i < MAX_SEGMENTS; ++i) {
         lowp vec2 segment = segments[i];
 
         lowp float segment_sdf = sdf_torus_segment(uv, segment.x + rounding, segment.y - rounding, innerRadius + rounding, outerRadius - rounding) - rounding;
         color = sdf_render(segment_sdf, color, colors[i]);
-    }
-
-    // Finally, render an end segment with the background color.
-    if (smoothEnds) {
-        lowp float torus = sdf_annular(sdf_circle(uv, innerRadius + thickness), thickness);
-        lowp vec4 background = sdf_render(torus, vec4(0.0), backgroundColor);
-        color = mix(background, color, color.a);
-    } else {
-        lowp vec2 last_segment = segments[segmentCount - 1];
-        lowp float segment_sdf = sdf_torus_segment(uv, last_segment.y, 2.0 * pi, innerRadius, outerRadius);
-        color = sdf_render(segment_sdf, color, backgroundColor);
     }
 
 #ifdef LEGACY_STAGE_INOUT
