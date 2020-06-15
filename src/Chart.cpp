@@ -98,7 +98,17 @@ void Chart::removeValueSource(int index)
 
 void Chart::removeValueSource(QObject *source)
 {
-    removeValueSource(m_valueSources.indexOf(qobject_cast<ChartDataSource *>(source)));
+    auto itr = std::find_if(m_valueSources.begin(), m_valueSources.end(), [source](QObject *dataSource) {
+        return dataSource == source;
+    });
+
+    if (itr != m_valueSources.end()) {
+        (*itr)->disconnect(this);
+        m_valueSources.erase(itr);
+    }
+
+    onDataChanged();
+    Q_EMIT valueSourcesChanged();
 }
 
 Chart::IndexingMode Chart::indexingMode() const
