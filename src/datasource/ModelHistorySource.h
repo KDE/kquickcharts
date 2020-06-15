@@ -55,8 +55,8 @@ private:
     void onModelChanged();
     void onDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles);
 
-    int m_row;
-    int m_maximumHistory;
+    int m_row = 0;
+    int m_maximumHistory = 10;
     QVariantList m_history;
     std::unique_ptr<QTimer> m_updateTimer;
 };
