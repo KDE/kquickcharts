@@ -18,15 +18,31 @@
 class ModelHistorySource : public ModelSource
 {
     Q_OBJECT
-    // The row to read data from. The items of this source will be the values of
-    // that row, using the column and role from ModelSource.
+    /**
+     * The row to read data from.
+     *
+     * The items of this source will be the values of that row, using the column
+     * and role from ModelSource.
+     *
+     * The default is 0.
+     */
     Q_PROPERTY(int row READ row WRITE setRow NOTIFY rowChanged)
-    // The maximum amount of history to keep.
+    /**
+     * The maximum amount of history to keep.
+     *
+     * The default is 10.
+     */
     Q_PROPERTY(int maximumHistory READ maximumHistory WRITE setMaximumHistory NOTIFY maximumHistoryChanged)
-    // The update interval. If not set or set to a value < 0, a new item will be
-    // added whenever the underlying model changes. Otherwise, the source will
-    // sample the underlying model every interval milliseconds and add a new item
-    // with whatever value the model has at that point - even if it did not change.
+    /**
+     * The interval, in milliseconds, with which to query the model.
+     *
+     * If not set or set to a value < 0, a new item will be added whenever the
+     * underlying model changes. Otherwise, the source will sample the
+     * underlying model every interval milliseconds and add a new item with
+     * whatever value the model has at that point - even if it did not change.
+     *
+     * The default is 0.
+     */
     Q_PROPERTY(int interval READ interval WRITE setInterval NOTIFY intervalChanged)
 
 public:

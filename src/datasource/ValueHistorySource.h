@@ -21,8 +21,29 @@
 class ValueHistorySource : public ChartDataSource
 {
     Q_OBJECT
+    /**
+     * The value to track.
+     *
+     * Depending on the value of \property interval , changing this will add a
+     * new item to the source.
+     */
     Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY dataChanged)
+    /**
+     * The maximum amount of history to keep.
+     *
+     * The default is 10.
+     */
     Q_PROPERTY(int maximumHistory READ maximumHistory WRITE setMaximumHistory NOTIFY maximumHistoryChanged)
+    /**
+     * The interval, in milliseconds, with which to query the value.
+     *
+     * If not set or set to a value < 0, a new item will be added whenever value
+     * changes. Otherwise, the source will sample the value every interval
+     * milliseconds and add a new item with whatever value it has at that point
+     * - even if it did not change.
+     *
+     * The default is 0.
+     */
     Q_PROPERTY(int interval READ interval WRITE setInterval NOTIFY intervalChanged)
 
 public:
