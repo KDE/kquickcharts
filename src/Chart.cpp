@@ -127,9 +127,7 @@ void Chart::componentComplete()
 void Chart::appendSource(Chart::DataSourcesProperty *list, ChartDataSource *source)
 {
     auto chart = reinterpret_cast<Chart *>(list->data);
-    chart->m_valueSources.append(source);
-    QObject::connect(source, &ChartDataSource::dataChanged, chart, &Chart::onDataChanged);
-    chart->onDataChanged();
+    chart->insertValueSource(chart->valueSources().size(), source);
 }
 
 int Chart::sourceCount(Chart::DataSourcesProperty *list)
