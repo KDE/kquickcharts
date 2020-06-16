@@ -79,7 +79,7 @@ void main()
     color = sdf_render(polygon, color, fillColor);
 
     if (lineWidth > 0.0) {
-        color = sdf_render(sdf_annular(sdf_outline(polygon), lineWidth), color, lineColor);
+        color = mix(color, lineColor, 1.0 - smoothstep(-0.001, 0.001, sdf_annular(polygon, lineWidth)));
     }
 
 #ifdef LEGACY_STAGE_INOUT
