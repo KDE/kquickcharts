@@ -14,7 +14,7 @@
 #define SDF_POLYGON_MAX_POINT_COUNT 400
 
 // A constant for pi
-const lowp float pi = acos(-1.0);
+const lowp float pi = 3.1415926535897932384626433832795;
 
 /*********************************
     Shapes
