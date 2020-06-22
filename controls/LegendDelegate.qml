@@ -66,7 +66,7 @@ RowLayout {
 
     Label {
         id: name
-
+        visible: delegate.width - delegate.colorWidth - delegate.spacing - value.implicitWidth > 0
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.minimumWidth: 0
@@ -79,17 +79,17 @@ RowLayout {
 
     Label {
         id: value
-
         Layout.fillHeight: true
         Layout.fillWidth: true
-        Layout.minimumWidth: implicitWidth
-        //Layout.preferredWidth: delegate.valueWidth
+        Layout.minimumWidth: name.visible ? implicitWidth : 0
+        Layout.preferredWidth: implicitWidth
 
         text: delegate.value;
+        elide: Text.ElideRight
         font: name.font
         color: delegate.valueColor
         verticalAlignment: Qt.AlignVCenter
-        horizontalAlignment: Qt.AlignRight
+        horizontalAlignment: name.visible ? Qt.AlignRight :  Qt.AlignLeft
     }
 
     Component { id: defaultIndicator; Rectangle { color: delegateColor } }
