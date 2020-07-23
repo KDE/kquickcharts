@@ -91,13 +91,10 @@ void XYChart::updateComputedRange()
         if (!m_stacked) {
             return source->maximum().toDouble();
         } else {
-            qreal max = std::numeric_limits<qreal>::min();
-            for (int i = xRange.start; i < xRange.end; ++i) {
-                qreal yDistance = 0.0;
-                for (auto source : valueSources()) {
-                    yDistance += source->item(i).toDouble();
-                }
-                max = std::max(max, yDistance);
+            qreal max = 0;
+            for (auto source : valueSources()) {
+                qreal yDistance = source->maximum().toDouble();
+                max = std::max(max, max + yDistance);
             }
             return max;
         }
