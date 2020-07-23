@@ -36,6 +36,12 @@ QVariant ModelHistorySource::minimum() const
     if (m_history.isEmpty())
         return QVariant{};
 
+    auto minProperty = model()->property("minimum");
+    auto maxProperty = model()->property("maximum");
+    if (maxProperty.isValid() && maxProperty != minProperty) {
+        return maxProperty;
+    }
+
     return *std::min_element(m_history.begin(), m_history.end());
 }
 
@@ -43,6 +49,12 @@ QVariant ModelHistorySource::maximum() const
 {
     if (m_history.isEmpty())
         return QVariant{};
+
+    auto minProperty = model()->property("minimum");
+    auto maxProperty = model()->property("maximum");
+    if (maxProperty.isValid() && maxProperty != minProperty) {
+        return maxProperty;
+    }
 
     return *std::max_element(m_history.begin(), m_history.end());
 }
