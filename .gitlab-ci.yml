@@ -1,9 +1,12 @@
-image: kdeorg/ci-suse-qt512
+include:
+  - https://invent.kde.org/sysadmin/ci-tooling/raw/master/invent/ci-before.yml
+  - https://invent.kde.org/sysadmin/ci-tooling/raw/master/invent/ci-frameworks-linux.yml
+  - https://invent.kde.org/sysadmin/ci-tooling/raw/master/invent/ci-frameworks-freebsd.yml
+  - https://invent.kde.org/sysadmin/ci-tooling/raw/master/invent/ci-frameworks-android.yml
 
 stages:
 - check
 - build
-- test
 
 .clazy:
   stage: check
@@ -18,13 +21,3 @@ validate_shaders:
     stage: check
     script:
     - bash scripts/validate_shaders.sh src/shaders
-
-linux-gcc-qt512:
-    stage: build
-    script:
-    - "[ -e ecm ] || bash scripts/install_ecm.sh"
-    - mkdir -p build
-    - cd build
-    - cmake .. -DCMAKE_INSTALL_PREFIX=../inst -DECM_DIR=$PWD/../ecm/share/ECM/cmake/
-    - make
-    - make install
