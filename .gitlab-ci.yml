@@ -20,5 +20,7 @@ stages:
 validate_shaders:
     image: python:3
     stage: check
+    before_script:
+    - echo
     script:
     - bash scripts/validate_shaders.sh src/shaders
