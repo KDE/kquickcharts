@@ -18,9 +18,6 @@ validate_shaders:
     stage: check
     script:
     - bash scripts/validate_shaders.sh src/shaders
-    cache:
-        paths:
-        - glslang
 
 linux-gcc-qt512:
     stage: build
@@ -31,7 +28,3 @@ linux-gcc-qt512:
     - cmake .. -DCMAKE_INSTALL_PREFIX=../inst -DECM_DIR=$PWD/../ecm/share/ECM/cmake/
     - make
     - make install
-    cache:
-        paths:
-        - build
-        - ecm
