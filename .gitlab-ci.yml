@@ -1,24 +1,24 @@
 include:
-  - https://invent.kde.org/sysadmin/ci-tooling/raw/master/invent/ci-before.yml
-  - https://invent.kde.org/sysadmin/ci-tooling/raw/master/invent/ci-frameworks-linux.yml
-  - https://invent.kde.org/sysadmin/ci-tooling/raw/master/invent/ci-frameworks-freebsd.yml
-  #- https://invent.kde.org/sysadmin/ci-tooling/raw/master/invent/ci-frameworks-android.yml
+- https://invent.kde.org/sysadmin/ci-tooling/raw/master/invent/ci-before.yml
+- https://invent.kde.org/sysadmin/ci-tooling/raw/master/invent/ci-frameworks-linux.yml
+- https://invent.kde.org/sysadmin/ci-tooling/raw/master/invent/ci-frameworks-freebsd.yml
+#- https://invent.kde.org/sysadmin/ci-tooling/raw/master/invent/ci-frameworks-android.yml
 
 stages:
 - check
 - build
 
 .clazy:
-  stage: check
-  script:
-  - zypper -qn install clazy
-  - mkdir clazy
-  - cd clazy
-  - cmake .. -DCMAKE_CXX_COMPILER=clazy
-  - make
+    stage: check
+    script:
+    - zypper -qn install clazy
+    - mkdir clazy
+    - cd clazy
+    - cmake .. -DCMAKE_CXX_COMPILER=clazy
+    - make
 
 validate_shaders:
-    image: python:3
+    image: kdeorg/ci-suse-qt514
     stage: check
     before_script:
     - echo
