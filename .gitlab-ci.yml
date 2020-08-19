@@ -18,7 +18,7 @@ stages:
     - make
 
 validate_shaders:
-    image: kdeorg/ci-suse-qt514
+    image: kdeorg/ci-suse-qt515
     stage: check
     before_script:
     - echo
