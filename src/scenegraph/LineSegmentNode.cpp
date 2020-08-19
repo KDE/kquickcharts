@@ -146,5 +146,6 @@ void LineSegmentNode::updatePoints()
 
     m_material->setPoints(points);
     m_material->setBounds(min, max);
+    m_material->setSize(QVector2D{m_rect.width(), m_rect.height()});
     markDirty(QSGNode::DirtyMaterial);
 }

@@ -12,12 +12,14 @@ uniform lowp vec4 lineColor;
 uniform lowp vec4 fillColor;
 uniform lowp float lineWidth;
 uniform lowp vec2 bounds;
+uniform lowp vec2 size;
 
 uniform lowp vec2 points[SDF_POLYGON_MAX_POINT_COUNT];
 uniform int pointCount;
 
 #ifdef LEGACY_STAGE_INOUT
 varying lowp vec2 uv;
+#define out_color gl_FragColor
 #else
 in lowp vec2 uv;
 out lowp vec4 out_color;
@@ -64,11 +66,7 @@ void main()
     // that, we know we will always be inside the polygon described by points.
     // So just return a pixel with fillColor.
     if (point.y < bounds.x - bounds_range) {
-#ifdef LEGACY_STAGE_INOUT
-        gl_FragColor = fillColor * opacity;
-#else
         out_color = fillColor * opacity;
-#endif
         return;
     }
 
@@ -81,12 +79,9 @@ void main()
     color = sdf_render(polygon, color, fillColor);
 
     if (lineWidth > 0.0) {
-        color = mix(color, lineColor, 1.0 - smoothstep(-0.001, 0.001, sdf_annular(polygon, lineWidth)));
+        lowp float g = 0.5 / max(size.x, size.y);
+        color = mix(color, lineColor, 1.0 - smoothstep(-g, g, sdf_annular(polygon, lineWidth)));
     }
 
-#ifdef LEGACY_STAGE_INOUT
-    gl_FragColor = color * opacity;
-#else
     out_color = color * opacity;
-#endif
 }

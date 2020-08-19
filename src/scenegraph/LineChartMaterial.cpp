@@ -57,6 +57,11 @@ QVector2D LineChartMaterial::bounds() const
     return m_bounds;
 }
 
+QVector2D LineChartMaterial::size() const
+{
+    return m_size;
+}
+
 void LineChartMaterial::setLineColor(const QColor &color)
 {
     m_lineColor = color;
@@ -87,6 +92,11 @@ void LineChartMaterial::setBounds(float min, float max)
     m_bounds = QVector2D{min, max};
 }
 
+void LineChartMaterial::setSize(const QVector2D &size)
+{
+    m_size = size;
+}
+
 LineChartShader::LineChartShader()
 {
     setShaders(QStringLiteral("linechart.vert"), QStringLiteral("linechart.frag"));
@@ -114,6 +124,7 @@ void LineChartShader::initialize()
     m_pointCountLocation = program()->uniformLocation("pointCount");
     m_aspectLocation = program()->uniformLocation("aspect");
     m_boundsLocation = program()->uniformLocation("bounds");
+    m_sizeLocation = program()->uniformLocation("size");
 }
 
 void LineChartShader::updateState(const QSGMaterialShader::RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial)
@@ -132,5 +143,6 @@ void LineChartShader::updateState(const QSGMaterialShader::RenderState &state, Q
         program()->setUniformValue(m_pointCountLocation, material->points().size());
         program()->setUniformValueArray(m_pointsLocation, material->points().constData(), material->points().size());
         program()->setUniformValue(m_boundsLocation, material->bounds());
+        program()->setUniformValue(m_sizeLocation, material->size());
     }
 }
