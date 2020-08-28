@@ -79,7 +79,7 @@ void main()
     color = sdf_render(polygon, color, fillColor);
 
     if (lineWidth > 0.0) {
-        lowp float g = 0.5 / max(size.x, size.y);
+        lowp float g = clamp(0.25 / ((size.x + size.y) / 2.0 - 100.0), 0.0, 0.1);
         color = mix(color, lineColor, 1.0 - smoothstep(-g, g, sdf_annular(polygon, lineWidth)));
     }
 
