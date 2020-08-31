@@ -12,7 +12,7 @@ uniform lowp vec4 lineColor;
 uniform lowp vec4 fillColor;
 uniform lowp float lineWidth;
 uniform lowp vec2 bounds;
-uniform lowp vec2 size;
+uniform lowp float smoothing;
 
 uniform lowp vec2 points[SDF_POLYGON_MAX_POINT_COUNT];
 uniform int pointCount;
@@ -79,8 +79,7 @@ void main()
     color = sdf_render(polygon, color, fillColor);
 
     if (lineWidth > 0.0) {
-        lowp float g = clamp(0.25 / ((size.x + size.y) / 2.0 - 100.0), 0.0, 0.1);
-        color = mix(color, lineColor, 1.0 - smoothstep(-g, g, sdf_annular(polygon, lineWidth)));
+        color = mix(color, lineColor, 1.0 - smoothstep(-smoothing, smoothing, sdf_annular(polygon, lineWidth)));
     }
 
     out_color = color * opacity;

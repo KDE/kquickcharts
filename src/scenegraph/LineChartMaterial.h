@@ -27,26 +27,26 @@ public:
     QColor fillColor() const;
     float lineWidth() const;
     float aspect() const;
+    float smoothing() const;
     QVector<QVector2D> points() const;
     QVector2D bounds() const;
-    QVector2D size() const;
 
     void setLineColor(const QColor &color);
     void setFillColor(const QColor &color);
     void setLineWidth(float width);
     void setPoints(const QVector<QVector2D> &points);
     void setAspect(float aspect);
+    void setSmoothing(float smoothing);
     void setBounds(float min, float max);
-    void setSize(const QVector2D &size);
 
 private:
     QColor m_lineColor;
     QColor m_fillColor;
     float m_lineWidth = 0.0;
     float m_aspect = 1.0;
+    float m_smoothing = 0.1;
     QVector2D m_bounds;
     QVector<QVector2D> m_points;
-    QVector2D m_size;
 };
 
 class LineChartShader : public SDFShader
@@ -70,7 +70,7 @@ private:
     int m_pointCountLocation = 0;
     int m_aspectLocation = 0;
     int m_boundsLocation = 0;
-    int m_sizeLocation = 0;
+    int m_smoothingLocation = 0;
 };
 
 #endif // LINECHARTMATERIAL_H

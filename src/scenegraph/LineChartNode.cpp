@@ -112,6 +112,7 @@ void LineChartNode::updatePoints()
 
         segment->setRect(rect);
         segment->setAspect(segmentWidth / m_rect.width(), m_aspect);
+        segment->setSmoothing(m_smoothing);
         segment->setLineWidth(calculateNormalizedLineWidth(m_lineWidth, m_rect));
         segment->setLineColor(m_lineColor);
         segment->setFillColor(m_fillColor);

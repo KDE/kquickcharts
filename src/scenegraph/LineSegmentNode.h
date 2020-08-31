@@ -35,6 +35,7 @@ public:
 
     void setRect(const QRectF &rect);
     void setAspect(float xAspect, float yAspect);
+    void setSmoothing(float smoothing);
     void setLineWidth(float width);
     void setLineColor(const QColor &color);
     void setFillColor(const QColor &color);
@@ -49,6 +50,7 @@ private:
     float m_lineWidth = 0.0;
     float m_xAspect = 1.0;
     float m_yAspect = 1.0;
+    float m_smoothing = 0.1;
     QVector2D m_farLeft;
     QVector2D m_farRight;
     QVector<QVector2D> m_values;

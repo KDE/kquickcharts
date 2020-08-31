@@ -59,6 +59,17 @@ void LineSegmentNode::setAspect(float xAspect, float yAspect)
     markDirty(QSGNode::DirtyGeometry);
 }
 
+void LineSegmentNode::setSmoothing(float smoothing)
+{
+    if (qFuzzyCompare(smoothing, m_smoothing)) {
+        return;
+    }
+
+    m_smoothing = smoothing;
+    m_material->setSmoothing(m_smoothing);
+    markDirty(QSGNode::DirtyMaterial);
+}
+
 void LineSegmentNode::setLineWidth(float width)
 {
     if (qFuzzyCompare(width, m_lineWidth))
@@ -146,6 +157,5 @@ void LineSegmentNode::updatePoints()
 
     m_material->setPoints(points);
     m_material->setBounds(min, max);
-    m_material->setSize(QVector2D{float(m_rect.width()), float(m_rect.height())});
     markDirty(QSGNode::DirtyMaterial);
 }
