@@ -33,13 +33,18 @@ LineChartNode::~LineChartNode()
 {
 }
 
-void LineChartNode::setRect(const QRectF &rect)
+void LineChartNode::setRect(const QRectF &rect, qreal devicePixelRatio)
 {
     if (rect == m_rect)
         return;
 
     m_rect = rect;
     m_aspect = m_rect.height() / m_rect.width();
+
+    auto nativeSize = QSizeF(m_rect.width() * devicePixelRatio, m_rect.height() * devicePixelRatio);
+    auto diagonal = std::sqrt(nativeSize.width() * nativeSize.width() + nativeSize.height() * nativeSize.height());
+    m_smoothing = 1.0 / diagonal;
+
     updatePoints();
 }
 

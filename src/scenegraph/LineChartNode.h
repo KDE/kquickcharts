@@ -28,7 +28,7 @@ public:
      */
     ~LineChartNode();
 
-    void setRect(const QRectF &rect);
+    void setRect(const QRectF &rect, qreal devicePixelRatio);
     void setLineWidth(float width);
     void setLineColor(const QColor &color);
     void setFillColor(const QColor &color);

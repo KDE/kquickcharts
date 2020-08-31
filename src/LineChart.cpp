@@ -9,6 +9,7 @@
 
 #include <QPainter>
 #include <QPainterPath>
+#include <QQuickWindow>
 #include <numeric>
 
 #include "RangeGroup.h"
@@ -120,7 +121,11 @@ void LineChart::updateLineNode(LineChartNode *node, const QColor &lineColor, Cha
     fillColor.setBlueF(fillColor.blueF() * m_fillOpacity);
     fillColor.setAlphaF(m_fillOpacity);
 
-    node->setRect(boundingRect());
+    if (window()) {
+        node->setRect(boundingRect(), window()->devicePixelRatio());
+    } else {
+        node->setRect(boundingRect(), 1.0);
+    }
     node->setLineColor(lineColor);
     node->setFillColor(fillColor);
     node->setLineWidth(m_lineWidth);
