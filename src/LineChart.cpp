@@ -19,6 +19,16 @@
 
 QVector<QVector2D> interpolate(const QVector<QVector2D> &points, qreal start, qreal end, qreal height);
 
+QColor colorWithAlpha(const QColor &color, qreal opacity)
+{
+    auto result = color;
+    result.setRedF(result.redF() * opacity);
+    result.setGreenF(result.greenF() * opacity);
+    result.setBlueF(result.blueF() * opacity);
+    result.setAlphaF(opacity);
+    return result;
+}
+
 LineChart::LineChart(QQuickItem *parent)
     : XYChart(parent)
 {
@@ -72,6 +82,22 @@ void LineChart::setFillOpacity(qreal opacity)
     Q_EMIT fillOpacityChanged();
 }
 
+ChartDataSource *LineChart::fillColorSource() const
+{
+    return m_fillColorSource;
+}
+
+void LineChart::setFillColorSource(ChartDataSource *newFillColorSource)
+{
+    if (newFillColorSource == m_fillColorSource) {
+        return;
+    }
+
+    m_fillColorSource = newFillColorSource;
+    update();
+    Q_EMIT fillColorSourceChanged();
+}
+
 QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *data)
 {
     Q_UNUSED(data);
@@ -97,7 +123,8 @@ QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
         }
         auto lineNode = static_cast<LineChartNode *>(node->childAtIndex(childIndex));
         auto color = colorSource() ? colorSource()->item(i).value<QColor>() : Qt::black;
-        updateLineNode(lineNode, color, sources.at(i));
+        auto fillColor = m_fillColorSource ? m_fillColorSource->item(i).value<QColor>() : colorWithAlpha(color, m_fillOpacity);
+        updateLineNode(lineNode, color, fillColor, sources.at(i));
     }
 
     while (node->childCount() > sources.size()) {
@@ -113,14 +140,8 @@ void LineChart::onDataChanged()
     update();
 }
 
-void LineChart::updateLineNode(LineChartNode *node, const QColor &lineColor, ChartDataSource *valueSource)
+void LineChart::updateLineNode(LineChartNode *node, const QColor &lineColor, const QColor &fillColor, ChartDataSource *valueSource)
 {
-    auto fillColor = lineColor;
-    fillColor.setRedF(fillColor.redF() * m_fillOpacity);
-    fillColor.setGreenF(fillColor.greenF() * m_fillOpacity);
-    fillColor.setBlueF(fillColor.blueF() * m_fillOpacity);
-    fillColor.setAlphaF(m_fillOpacity);
-
     if (window()) {
         node->setRect(boundingRect(), window()->devicePixelRatio());
     } else {
