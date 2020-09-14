@@ -25,11 +25,7 @@ void SDFShader::setShaders(const QString &vertex, const QString &fragment)
     auto header = QStringLiteral("header_desktop.glsl");
     auto format = QOpenGLContext::currentContext()->format();
     if (format.renderableType() == QSurfaceFormat::OpenGLES) {
-        if (format.majorVersion() >= 3) {
-            header = QStringLiteral("header_es3.glsl");
-        } else {
-            header = QStringLiteral("header_es2.glsl");
-        }
+        header = QStringLiteral("header_es2.glsl");
     }
 
     setShaderSourceFiles(QOpenGLShader::Vertex, {QString::fromLatin1(shaderRoot) + header, QString::fromLatin1(shaderRoot) + vertex});
