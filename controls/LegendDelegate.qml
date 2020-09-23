@@ -63,18 +63,25 @@ RowLayout {
             ToolTip.text: "%1: %2".arg(delegate.name).arg(delegate.value)
         }
     }
-
-    Label {
-        id: name
-        visible: delegate.width - delegate.colorWidth - delegate.spacing - value.implicitWidth > 0
-        Layout.fillWidth: true
+    Item {
+        implicitWidth: metrics.advanceWidth
         Layout.fillHeight: true
-        Layout.minimumWidth: 0
+        Layout.fillWidth: true
+        Label {
+            anchors.fill: parent
+            id: name
+            visible: delegate.width - delegate.colorWidth - delegate.spacing - value.implicitWidth > 0
+            Layout.minimumWidth: 0
 
-        text: delegate.name + (delegate.shortName.length > 0 ? "\x9C" + delegate.shortName : "")
-        elide: Text.ElideRight
+            text: delegate.name + (delegate.shortName.length > 0 ? "\x9C" + delegate.shortName : "")
+            elide: Text.ElideRight
 
-        verticalAlignment: Qt.AlignVCenter
+            verticalAlignment: Qt.AlignVCenter
+        }
+        TextMetrics {
+            id: metrics
+            text: delegate.name
+        }
     }
 
     Label {
