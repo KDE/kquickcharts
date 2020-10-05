@@ -128,7 +128,11 @@ QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
     }
 
     while (node->childCount() > sources.size()) {
-        node->removeChildNode(node->childAtIndex(node->childCount() - 1));
+        // removeChildNode unfortunately does not take care of deletion so we
+        // need to handle this manually.
+        auto lastNode = node->childAtIndex(node->childCount() - 1);
+        node->removeChildNode(lastNode);
+        delete lastNode;
     }
 
     return node;

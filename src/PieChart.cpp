@@ -176,7 +176,9 @@ QSGNode *PieChart::updatePaintNode(QSGNode *node, UpdatePaintNodeData *data)
     }
 
     while (node->childCount() > sourceCount) {
-        node->removeChildNode(node->childAtIndex(node->childCount() - 1));
+        auto lastNode = node->childAtIndex(node->childCount() - 1);
+        node->removeChildNode(lastNode);
+        delete lastNode;
     }
 
     return node;
