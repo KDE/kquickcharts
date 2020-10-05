@@ -91,6 +91,7 @@ void LineChartNode::updatePoints()
     auto segmentCount = qCeil(qreal(m_values.count()) / MaxPointsInSegment);
     if (segmentCount != m_segments.count()) {
         removeAllChildNodes();
+        qDeleteAll(m_segments);
         m_segments.clear();
 
         for (int i = 0; i < segmentCount; ++i) {
