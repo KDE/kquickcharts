@@ -98,17 +98,64 @@ void LineChart::setFillColorSource(ChartDataSource *newFillColorSource)
     Q_EMIT fillColorSourceChanged();
 }
 
+void LineChart::updatePolish()
+{
+    if (m_rangeInvalid) {
+        updateComputedRange();
+        m_rangeInvalid = false;
+    }
+
+    QVector<QVector2D> previousValues;
+
+    const auto range = computedRange();
+    const auto sources = valueSources();
+    for (int i = 0; i < sources.size(); ++i) {
+        auto valueSource = sources.at(i);
+
+        float stepSize = width() / (range.distanceX - 1);
+        QVector<QVector2D> values(range.distanceX);
+        auto generator = [&, i = range.startX]() mutable -> QVector2D {
+            float value = 0;
+            if (range.distanceY != 0) {
+                value = (valueSource->item(i).toFloat() - range.startY) / range.distanceY;
+            }
+
+            auto result = QVector2D{direction() == Direction::ZeroAtStart ? i * stepSize
+                                    : float(boundingRect().right()) - i * stepSize, value};
+            i++;
+            return result;
+        };
+
+        if (direction() == Direction::ZeroAtStart) {
+            std::generate_n(values.begin(), range.distanceX, generator);
+        } else {
+            std::generate_n(values.rbegin(), range.distanceX, generator);
+        }
+
+        if (stacked() && !previousValues.isEmpty()) {
+            if (values.size() != previousValues.size()) {
+                qWarning() << "Value source" << valueSource->objectName()
+                        << "has a different number of elements from the previuous source. Ignoring stacking for this source.";
+            } else {
+                std::for_each(values.begin(), values.end(), [this, i = 0](QVector2D &point) mutable {
+                    point.setY(point.y() + m_previousValues.at(i++).y());
+                });
+            }
+        }
+        previousValues = values;
+
+        m_values[valueSource] = values;
+    }
+
+    update();
+}
+
 QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *data)
 {
     Q_UNUSED(data);
 
     if (!node) {
         node = new QSGNode();
-    }
-
-    if (m_rangeInvalid) {
-        updateComputedRange();
-        m_rangeInvalid = false;
     }
 
     if (stacked()) {
@@ -141,7 +188,16 @@ QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
 void LineChart::onDataChanged()
 {
     m_rangeInvalid = true;
-    update();
+    polish();
+}
+
+void LineChart::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
+{
+    XYChart::geometryChanged(newGeometry, oldGeometry);
+
+    if (newGeometry != oldGeometry) {
+        polish();
+    }
 }
 
 void LineChart::updateLineNode(LineChartNode *node, const QColor &lineColor, const QColor &fillColor, ChartDataSource *valueSource)
@@ -155,38 +211,7 @@ void LineChart::updateLineNode(LineChartNode *node, const QColor &lineColor, con
     node->setFillColor(fillColor);
     node->setLineWidth(m_lineWidth);
 
-    auto range = computedRange();
-
-    float stepSize = width() / (range.distanceX - 1);
-    QVector<QVector2D> values(range.distanceX);
-    auto generator = [&, i = range.startX]() mutable -> QVector2D {
-        float value = 0;
-        if (range.distanceY != 0) {
-            value = (valueSource->item(i).toFloat() - range.startY) / range.distanceY;
-        }
-
-        auto result = QVector2D{direction() == Direction::ZeroAtStart ? i * stepSize : float(boundingRect().right()) - i * stepSize,
-                                value};
-        i++;
-        return result;
-    };
-
-    if (direction() == Direction::ZeroAtStart) {
-        std::generate_n(values.begin(), range.distanceX, generator);
-    } else {
-        std::generate_n(values.rbegin(), range.distanceX, generator);
-    }
-
-    if (stacked() && !m_previousValues.isEmpty()) {
-        if (values.size() != m_previousValues.size()) {
-            qWarning() << "Value source" << valueSource->objectName()
-                       << "has a different number of elements from the previuous source. Ignoring stacking for this source.";
-        } else {
-            std::for_each(
-                values.begin(), values.end(), [this, i = 0](QVector2D &point) mutable { point.setY(point.y() + m_previousValues.at(i++).y()); });
-        }
-    }
-    m_previousValues = values;
+    auto values = m_values.value(valueSource);
 
     if (m_smooth) {
         values = interpolate(values, 0.0, width(), height());

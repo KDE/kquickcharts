@@ -70,8 +70,10 @@ public:
     Q_SIGNAL void fillColorSourceChanged();
 
 protected:
+    void updatePolish() override;
     QSGNode *updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *data) override;
     void onDataChanged() override;
+    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
 
 private:
     void updateLineNode(LineChartNode *node, const QColor &lineColor, const QColor &fillColor, ChartDataSource *valueSource);
@@ -82,6 +84,7 @@ private:
     bool m_rangeInvalid = true;
     QVector<QVector2D> m_previousValues;
     ChartDataSource *m_fillColorSource = nullptr;
+    QHash<ChartDataSource*, QVector<QVector2D>> m_values;
 };
 
 #endif // LINECHART_H
