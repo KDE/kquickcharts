@@ -29,6 +29,41 @@ QColor colorWithAlpha(const QColor &color, qreal opacity)
     return result;
 }
 
+LineChartAttached::LineChartAttached(QObject* parent)
+    : QObject(parent)
+{
+}
+
+QVariant LineChartAttached::value() const
+{
+    return m_value;
+}
+
+QColor LineChartAttached::color() const
+{
+    return m_color;
+}
+
+void LineChartAttached::setValue(const QVariant& value)
+{
+    if (value == m_value) {
+        return;
+    }
+
+    m_value = value;
+    Q_EMIT valueChanged();
+}
+
+void LineChartAttached::setColor(const QColor& color)
+{
+    if (color == m_color) {
+        return;
+    }
+
+    m_color = color;
+    Q_EMIT colorChanged();
+}
+
 LineChart::LineChart(QQuickItem *parent)
     : XYChart(parent)
 {
@@ -98,6 +133,26 @@ void LineChart::setFillColorSource(ChartDataSource *newFillColorSource)
     Q_EMIT fillColorSourceChanged();
 }
 
+QQmlComponent *LineChart::pointDelegate() const
+{
+    return m_pointDelegate;
+}
+
+void LineChart::setPointDelegate(QQmlComponent *newPointDelegate)
+{
+    if (newPointDelegate == m_pointDelegate) {
+        return;
+    }
+
+    m_pointDelegate = newPointDelegate;
+    for (auto entry : qAsConst(m_pointDelegates)) {
+        qDeleteAll(entry);
+    }
+    m_pointDelegates.clear();
+    polish();
+    Q_EMIT pointDelegateChanged();
+}
+
 void LineChart::updatePolish()
 {
     if (m_rangeInvalid) {
@@ -144,7 +199,28 @@ void LineChart::updatePolish()
         }
         previousValues = values;
 
+        auto color = colorSource() ? colorSource()->item(i).value<QColor>() : Qt::black;
+        if (m_pointDelegate) {
+            auto& delegates = m_pointDelegates[valueSource];
+            if (delegates.size() != values.size()) {
+                qDeleteAll(delegates);
+                createPointDelegates(values, valueSource, color);
+            } else {
+                for (int i = 0; i < values.size(); ++i) {
+                    auto delegate = delegates.at(i);
+                    updatePointDelegate(delegate, values.at(i), color, valueSource->item(i));
+                }
+            }
+        }
+
         m_values[valueSource] = values;
+    }
+
+    const auto pointKeys = m_pointDelegates.keys();
+    for (auto key : pointKeys) {
+        if (!sources.contains(key)) {
+            m_pointDelegates.remove(key);
+        }
     }
 
     update();
@@ -288,4 +364,36 @@ QVector<QVector2D> interpolate(const QVector<QVector2D> &points, qreal start, qr
     }
 
     return result;
+}
+
+void LineChart::createPointDelegates(const QVector<QVector2D> &values, ChartDataSource *valueSource, const QColor &color)
+{
+    QVector<QQuickItem*> delegates;
+    for (int i = 0; i < values.size(); ++i) {
+        auto delegate = qobject_cast<QQuickItem*>(m_pointDelegate->beginCreate(qmlContext(m_pointDelegate)));
+        if (!delegate) {
+            qWarning() << "Delegate creation for point" << i << "of value source" << valueSource->objectName()
+                       << "failed, make sure pointDelegate is a QQuickItem";
+            delegate = new QQuickItem(this);
+        }
+
+        delegate->setParentItem(this);
+        updatePointDelegate(delegate, values.at(i), color, valueSource->item(i));
+
+        m_pointDelegate->completeCreate();
+
+        delegates.append(delegate);
+    }
+
+    m_pointDelegates.insert(valueSource, delegates);
+}
+
+void LineChart::updatePointDelegate(QQuickItem *delegate, const QVector2D &position, const QColor &color, const QVariant &value)
+{
+    auto pos = QPointF{position.x() - delegate->width() / 2, (1.0 - position.y()) * height() - delegate->height() / 2};
+    delegate->setPosition(pos);
+
+    auto attached = static_cast<LineChartAttached*>(qmlAttachedPropertiesObject<LineChart>(delegate, true));
+    attached->setValue(value);
+    attached->setColor(color);
 }

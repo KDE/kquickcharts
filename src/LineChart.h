@@ -14,6 +14,28 @@
 
 class LineChartNode;
 
+class LineChartAttached : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QVariant value READ value NOTIFY valueChanged)
+    Q_PROPERTY(QColor color READ color NOTIFY colorChanged)
+
+public:
+    LineChartAttached(QObject *parent = nullptr);
+
+    QVariant value() const;
+    void setValue(const QVariant &value);
+    Q_SIGNAL void valueChanged();
+
+    QColor color() const;
+    void setColor(const QColor &color);
+    Q_SIGNAL void colorChanged();
+
+private:
+    QVariant m_value;
+    QColor m_color;
+};
+
 /**
  * A line chart.
  *
@@ -49,6 +71,11 @@ class LineChart : public XYChart
      * with the fillOpacity used as its opacity.
      */
     Q_PROPERTY(ChartDataSource *fillColorSource READ fillColorSource WRITE setFillColorSource NOTIFY fillColorSourceChanged)
+    /**
+     * A delegate that will be placed at each line chart point when set.
+     *
+     */
+    Q_PROPERTY(QQmlComponent *pointDelegate READ pointDelegate WRITE setPointDelegate NOTIFY pointDelegateChanged)
 
 public:
     explicit LineChart(QQuickItem *parent = nullptr);
@@ -69,6 +96,15 @@ public:
     void setFillColorSource(ChartDataSource *newFillColorSource);
     Q_SIGNAL void fillColorSourceChanged();
 
+    QQmlComponent *pointDelegate() const;
+    void setPointDelegate(QQmlComponent *newPointDelegate);
+    Q_SIGNAL void pointDelegateChanged();
+
+    static LineChartAttached *qmlAttachedProperties(QObject *object)
+    {
+        return new LineChartAttached(object);
+    }
+
 protected:
     void updatePolish() override;
     QSGNode *updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *data) override;
@@ -77,6 +113,8 @@ protected:
 
 private:
     void updateLineNode(LineChartNode *node, const QColor &lineColor, const QColor &fillColor, ChartDataSource *valueSource);
+    void createPointDelegates(const QVector<QVector2D> &values, ChartDataSource *valueSource, const QColor &color);
+    void updatePointDelegate(QQuickItem *delegate, const QVector2D &position, const QColor &color, const QVariant &value);
 
     bool m_smooth = false;
     qreal m_lineWidth = 1.0;
@@ -85,6 +123,10 @@ private:
     QVector<QVector2D> m_previousValues;
     ChartDataSource *m_fillColorSource = nullptr;
     QHash<ChartDataSource*, QVector<QVector2D>> m_values;
+    QQmlComponent *m_pointDelegate = nullptr;
+    QHash<ChartDataSource*, QVector<QQuickItem*>> m_pointDelegates;
 };
+
+QML_DECLARE_TYPEINFO(LineChart, QML_HAS_ATTACHED_PROPERTIES)
 
 #endif // LINECHART_H

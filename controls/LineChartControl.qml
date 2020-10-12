@@ -38,6 +38,8 @@ Control {
     property alias xAxisSource: xAxisLabels.source
     property alias yAxisSource: yAxisLabels.source
 
+    property alias pointDelegate: lineChart.pointDelegate
+
     background: Rectangle { color: Theme.backgroundColor }
 
     contentItem: Item {
