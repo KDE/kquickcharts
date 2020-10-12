@@ -53,6 +53,22 @@ Kirigami.Page {
                 ]
 
                 names: ["Example 1", "Example 2", "Example 3"]
+
+                pointDelegate: Rectangle {
+                    width: 5;
+                    height: width;
+                    radius: width / 2;
+                    color: Charts.LineChart.color
+
+                    MouseArea {
+                        id: mouse
+                        anchors.fill: parent
+                        hoverEnabled: true
+                    }
+
+                    ToolTip.visible: mouse.containsMouse
+                    ToolTip.text: Charts.LineChart.value
+                }
             }
         }
 
