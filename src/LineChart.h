@@ -72,8 +72,16 @@ class LineChart : public XYChart
      */
     Q_PROPERTY(ChartDataSource *fillColorSource READ fillColorSource WRITE setFillColorSource NOTIFY fillColorSourceChanged)
     /**
-     * A delegate that will be placed at each line chart point when set.
+     * A delegate that will be placed at each line chart point.
      *
+     * When this is not null, the specified component will be used to
+     * instantiate an object for each point in the chart. These objects will
+     * then be placed centered at positions corresponding to the points on the
+     * chart. Each instance will have access to the attached properties of
+     * LineChartAttached through LineChart attached object.
+     *
+     * \note The component assigned to this property is expected to create a
+     *       QQuickItem, since the created object needs to be positioned.
      */
     Q_PROPERTY(QQmlComponent *pointDelegate READ pointDelegate WRITE setPointDelegate NOTIFY pointDelegateChanged)
 
