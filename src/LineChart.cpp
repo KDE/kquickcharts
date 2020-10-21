@@ -192,8 +192,8 @@ void LineChart::updatePolish()
                 qWarning() << "Value source" << valueSource->objectName()
                         << "has a different number of elements from the previuous source. Ignoring stacking for this source.";
             } else {
-                std::for_each(values.begin(), values.end(), [this, i = 0](QVector2D &point) mutable {
-                    point.setY(point.y() + m_previousValues.at(i++).y());
+                std::for_each(values.begin(), values.end(), [previousValues, i = 0](QVector2D &point) mutable {
+                    point.setY(point.y() + previousValues.at(i++).y());
                 });
             }
         }
@@ -232,10 +232,6 @@ QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
 
     if (!node) {
         node = new QSGNode();
-    }
-
-    if (stacked()) {
-        m_previousValues.clear();
     }
 
     const auto sources = valueSources();

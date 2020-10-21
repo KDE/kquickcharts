@@ -120,7 +120,6 @@ private:
     qreal m_lineWidth = 1.0;
     qreal m_fillOpacity = 0.0;
     bool m_rangeInvalid = true;
-    QVector<QVector2D> m_previousValues;
     ChartDataSource *m_fillColorSource = nullptr;
     QHash<ChartDataSource*, QVector<QVector2D>> m_values;
     QQmlComponent *m_pointDelegate = nullptr;
