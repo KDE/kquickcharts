@@ -19,6 +19,8 @@ class LineChartAttached : public QObject
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value NOTIFY valueChanged)
     Q_PROPERTY(QColor color READ color NOTIFY colorChanged)
+    Q_PROPERTY(QString name READ name NOTIFY nameChanged)
+    Q_PROPERTY(QString shortName READ shortName NOTIFY shortNameChanged)
 
 public:
     LineChartAttached(QObject *parent = nullptr);
@@ -31,9 +33,19 @@ public:
     void setColor(const QColor &color);
     Q_SIGNAL void colorChanged();
 
+    QString name() const;
+    void setName(const QString &newName);
+    Q_SIGNAL void nameChanged();
+
+    QString shortName() const;
+    void setShortName(const QString & newShortName);
+    Q_SIGNAL void shortNameChanged();
+
 private:
     QVariant m_value;
     QColor m_color;
+    QString m_name;
+    QString m_shortName;
 };
 
 /**
@@ -121,8 +133,8 @@ protected:
 
 private:
     void updateLineNode(LineChartNode *node, const QColor &lineColor, const QColor &fillColor, ChartDataSource *valueSource);
-    void createPointDelegates(const QVector<QVector2D> &values, ChartDataSource *valueSource, const QColor &color);
-    void updatePointDelegate(QQuickItem *delegate, const QVector2D &position, const QColor &color, const QVariant &value);
+    void createPointDelegates(const QVector<QVector2D> &values, int sourceIndex);
+    void updatePointDelegate(QQuickItem *delegate, const QVector2D &position, const QVariant &value, int sourceIndex);
 
     bool m_smooth = false;
     qreal m_lineWidth = 1.0;

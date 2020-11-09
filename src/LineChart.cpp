@@ -39,11 +39,6 @@ QVariant LineChartAttached::value() const
     return m_value;
 }
 
-QColor LineChartAttached::color() const
-{
-    return m_color;
-}
-
 void LineChartAttached::setValue(const QVariant& value)
 {
     if (value == m_value) {
@@ -54,6 +49,11 @@ void LineChartAttached::setValue(const QVariant& value)
     Q_EMIT valueChanged();
 }
 
+QColor LineChartAttached::color() const
+{
+    return m_color;
+}
+
 void LineChartAttached::setColor(const QColor& color)
 {
     if (color == m_color) {
@@ -62,6 +62,40 @@ void LineChartAttached::setColor(const QColor& color)
 
     m_color = color;
     Q_EMIT colorChanged();
+}
+
+QString LineChartAttached::name() const
+{
+    return m_name;
+}
+
+void LineChartAttached::setName(const QString & newName)
+{
+    if (newName == m_name) {
+        return;
+    }
+
+    m_name = newName;
+    Q_EMIT nameChanged();
+}
+
+QString LineChartAttached::shortName() const
+{
+    if (m_shortName.isEmpty()) {
+        return m_name;
+    } else {
+        return m_shortName;
+    }
+}
+
+void LineChartAttached::setShortName(const QString & newShortName)
+{
+    if (newShortName == m_shortName) {
+        return;
+    }
+
+    m_shortName = newShortName;
+    Q_EMIT shortNameChanged();
 }
 
 LineChart::LineChart(QQuickItem *parent)
@@ -199,16 +233,15 @@ void LineChart::updatePolish()
         }
         previousValues = values;
 
-        auto color = colorSource() ? colorSource()->item(i).value<QColor>() : Qt::black;
         if (m_pointDelegate) {
             auto& delegates = m_pointDelegates[valueSource];
             if (delegates.size() != values.size()) {
                 qDeleteAll(delegates);
-                createPointDelegates(values, valueSource, color);
+                createPointDelegates(values, i);
             } else {
-                for (int i = 0; i < values.size(); ++i) {
-                    auto delegate = delegates.at(i);
-                    updatePointDelegate(delegate, values.at(i), color, valueSource->item(i));
+                for (int item = 0; item < values.size(); ++item) {
+                    auto delegate = delegates.at(item);
+                    updatePointDelegate(delegate, values.at(item), valueSource->item(item), i);
                 }
             }
         }
@@ -362,8 +395,10 @@ QVector<QVector2D> interpolate(const QVector<QVector2D> &points, qreal start, qr
     return result;
 }
 
-void LineChart::createPointDelegates(const QVector<QVector2D> &values, ChartDataSource *valueSource, const QColor &color)
+void LineChart::createPointDelegates(const QVector<QVector2D> &values, int sourceIndex)
 {
+    auto valueSource = valueSources().at(sourceIndex);
+
     QVector<QQuickItem*> delegates;
     for (int i = 0; i < values.size(); ++i) {
         auto delegate = qobject_cast<QQuickItem*>(m_pointDelegate->beginCreate(qmlContext(m_pointDelegate)));
@@ -374,7 +409,7 @@ void LineChart::createPointDelegates(const QVector<QVector2D> &values, ChartData
         }
 
         delegate->setParentItem(this);
-        updatePointDelegate(delegate, values.at(i), color, valueSource->item(i));
+        updatePointDelegate(delegate, values.at(i), valueSource->item(i), sourceIndex);
 
         m_pointDelegate->completeCreate();
 
@@ -384,12 +419,14 @@ void LineChart::createPointDelegates(const QVector<QVector2D> &values, ChartData
     m_pointDelegates.insert(valueSource, delegates);
 }
 
-void LineChart::updatePointDelegate(QQuickItem *delegate, const QVector2D &position, const QColor &color, const QVariant &value)
+void LineChart::updatePointDelegate(QQuickItem *delegate, const QVector2D &position, const QVariant &value, int sourceIndex)
 {
     auto pos = QPointF{position.x() - delegate->width() / 2, (1.0 - position.y()) * height() - delegate->height() / 2};
     delegate->setPosition(pos);
 
     auto attached = static_cast<LineChartAttached*>(qmlAttachedPropertiesObject<LineChart>(delegate, true));
     attached->setValue(value);
-    attached->setColor(color);
+    attached->setColor(colorSource() ? colorSource()->item(sourceIndex).value<QColor>() : Qt::black);
+    attached->setName(nameSource() ? nameSource()->item(sourceIndex).toString() : QString{});
+    attached->setShortName(shortNameSource() ? shortNameSource()->item(sourceIndex).toString() : QString{});
 }
