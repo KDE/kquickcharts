@@ -67,7 +67,7 @@ Kirigami.Page {
                     }
 
                     ToolTip.visible: mouse.containsMouse
-                    ToolTip.text: Charts.LineChart.value
+                    ToolTip.text: "%1: %2".arg(Charts.LineChart.name).arg(Charts.LineChart.value)
                 }
             }
         }
