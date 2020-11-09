@@ -14,12 +14,29 @@
 
 class LineChartNode;
 
+/**
+ * An attached property that is exposed to point delegates created in line charts.
+ *
+ * \sa LineChart::pointDelegate
+ */
 class LineChartAttached : public QObject
 {
     Q_OBJECT
+    /**
+     * The value at the current point.
+     */
     Q_PROPERTY(QVariant value READ value NOTIFY valueChanged)
+    /**
+     * The color at the current point.
+     */
     Q_PROPERTY(QColor color READ color NOTIFY colorChanged)
+    /**
+     * The name at the current point.
+     */
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
+    /**
+     * The short name at the current point.
+     */
     Q_PROPERTY(QString shortName READ shortName NOTIFY shortNameChanged)
 
 public:
@@ -55,7 +72,7 @@ private:
  *
  * \snippet snippets/linechart.qml example
  *
- * \image html linechart.png "The resulting bar chart."
+ * \image html linechart.png "The resulting line chart."
  */
 class LineChart : public XYChart
 {
