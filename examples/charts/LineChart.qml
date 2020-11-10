@@ -83,6 +83,7 @@ Kirigami.Page {
             Label { text: "Fill Opacity" }
             SpinBox { from: 0; to: 100; value: lineChart.fillOpacity * 100; onValueModified: lineChart.fillOpacity = value / 100; }
             CheckBox { text: "Stacked"; checked: lineChart.stacked; onToggled: lineChart.stacked = checked }
+            CheckBox { text: "Smooth"; checked: lineChart.chart.smooth; onToggled: lineChart.chart.smooth = checked }
         }
 
         Frame {
