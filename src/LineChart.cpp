@@ -125,7 +125,7 @@ void LineChart::setSmooth(bool smooth)
     }
 
     m_smooth = smooth;
-    update();
+    polish();
     Q_EMIT smoothChanged();
 }
 
@@ -246,7 +246,11 @@ void LineChart::updatePolish()
             }
         }
 
-        m_values[valueSource] = values;
+        if (m_smooth) {
+            m_values[valueSource] = interpolate(values, height());
+        } else {
+            m_values[valueSource] = values;
+        }
     }
 
     const auto pointKeys = m_pointDelegates.keys();
@@ -318,11 +322,6 @@ void LineChart::updateLineNode(LineChartNode *node, const QColor &lineColor, con
     node->setLineWidth(m_lineWidth);
 
     auto values = m_values.value(valueSource);
-
-    if (m_smooth) {
-        values = interpolate(values, 0.0, width(), height());
-    }
-
     node->setValues(values);
 }
 
