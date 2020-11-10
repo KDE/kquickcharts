@@ -17,7 +17,9 @@
 #include "scenegraph/LineChartNode.h"
 #include "scenegraph/LineGridNode.h"
 
-QVector<QVector2D> interpolate(const QVector<QVector2D> &points, qreal start, qreal end, qreal height);
+QVector<QPointF> solveControlPoints(const QVector<QPointF> input);
+QVector<QPair<QPointF, QPointF>> calculateControlPoints(const QVector<QVector2D> &points, qreal height);
+QVector<QVector2D> interpolate(const QVector<QVector2D> &points, qreal height);
 
 QColor colorWithAlpha(const QColor &color, qreal opacity)
 {
@@ -97,6 +99,7 @@ void LineChartAttached::setShortName(const QString & newShortName)
     m_shortName = newShortName;
     Q_EMIT shortNameChanged();
 }
+
 
 LineChart::LineChart(QQuickItem *parent)
     : XYChart(parent)
@@ -325,57 +328,21 @@ void LineChart::updateLineNode(LineChartNode *node, const QColor &lineColor, con
     node->setValues(values);
 }
 
-QVector<QVector2D> interpolate(const QVector<QVector2D> &points, qreal start, qreal end, qreal height)
+QVector<QVector2D> interpolate(const QVector<QVector2D> &points, qreal height) //, qreal start, qreal end, qreal height)
 {
-    QPainterPath path;
-    if (points.size() < 4)
+    if (points.size() < 2) {
         return points;
+    }
 
-    const auto sixth = 1.f / 6.f;
+    auto controlPoints = calculateControlPoints(points, height);
 
-    const qreal xDelta = (end - start) / (points.count() - 3);
-    qreal x = start - xDelta;
+    QPainterPath path;
+    path.moveTo(0.0, points.first().y() * height);
 
-    path.moveTo(start, points[0].y() * height);
-
-    for (int i = 1; i < points.count() - 2; i++) {
-        // This code was:
-        //
-        // QMatrix4x4 matrix(   0,   1,   0,    0,
-        //                   -1/6,   1, 1/6,    0,
-        //                      0, 1/6,   1, -1/6,
-        //                      0,   0,   1,    0);
-        // QMatrix4x4 p(x + xDelta * 0, points[i - 1].y() * height, 0, 0,
-        //              x + xDelta * 1, points[i + 0].y() * height, 0, 0,
-        //              x + xDelta * 2, points[i + 1].y() * height, 0, 0,
-        //              x + xDelta * 3, points[i + 2].y() * height, 0, 0)
-        // QMatrix4x4 res = matrix * p;
-        // path.cubicTo(res(1,0), res(1, 1), res(2, 0), res(2, 1), res(3, 0), res(3, 1))
-        //
-        // The below calculations calculate the used elements from the matrix directly, avoiding
-        // most of an expensive matrix multiplication.
-
-        auto p0 = points[i - 1].y() * height;
-        auto p1 = points[i].y() * height;
-        auto p2 = points[i + 1].y() * height;
-        auto p3 = points[i + 2].y() * height;
-
-        //res(1, 0) = (-1/6, 1, 1/6, 0) dot (x, x + xDelta, x + xDelta * 2, x + xDelta * 3)
-        auto res10 = (3 * x + 4 * xDelta) / 3.f;
-        //res(1, 1) = (-1/6, 1, 1/6, 0) dot (p[i-1].y, p[i].y, p[i+1].y, p[i+2].y)
-        auto res11 = -sixth * p0 + p1 + sixth * p2;
-        //res(2, 0) = (0, 1/6, 1, -1/6) dot (x, x + xDelta, x + xDelta * 2, x + xDelta * 3)
-        auto res20 = (3 * x + 5 * xDelta) / 3.f;
-        //res(2, 1) = (0, 1/6, 1, -1/6) dot (p[i-1].y, p[i].y, p[i+1].y, p[i+2].y)
-        auto res21 = sixth * p1 + p2 + -sixth * p3;
-        //res(3, 0) = (0, 0, 1, 0) dot (x, x + xDelta, x + xDelta * 2, x + xDelta * 3)
-        auto res30 = x + 2 * xDelta;
-        //res(3, 1) = (0, 0, 1, 0) dot (p[i-1].y, p[i].y, p[i+1].y, p[i+2].y)
-        auto res31 = p2;
-
-        path.cubicTo(res10, res11, res20, res21, res30, res31);
-
-        x += xDelta;
+    for (int i = 0; i < points.size() - 1; ++i) {
+        auto controlPoint = controlPoints.at(i);
+        auto nextPoint = QPointF{points.at(i + 1).x(), points.at(i + 1).y() * height};
+        path.cubicTo(controlPoint.first, controlPoint.second, nextPoint);
     }
 
     QVector<QVector2D> result;
@@ -430,4 +397,86 @@ void LineChart::updatePointDelegate(QQuickItem *delegate, const QVector2D &posit
     attached->setColor(colorSource() ? colorSource()->item(sourceIndex).value<QColor>() : Qt::black);
     attached->setName(nameSource() ? nameSource()->item(sourceIndex).toString() : QString{});
     attached->setShortName(shortNameSource() ? shortNameSource()->item(sourceIndex).toString() : QString{});
+}
+
+QVector<QPair<QPointF, QPointF>> calculateControlPoints(const QVector<QVector2D> &points, qreal height)
+{
+    // This is based on
+    // https://www.codeproject.com/Articles/31859/Draw-a-Smooth-Curve-through-a-Set-of-2D-Points-wit
+    // and calculates the control points based on the derivative of the curve.
+
+    auto count = points.size() - 1;
+    QVector<QPair<QPointF, QPointF>> result(count);
+
+    const auto first = QPointF{points.first().x(), points.first().y() * height};
+    const auto last = QPointF{points.last().x(), points.last().y() * height};
+
+    if (count == 1) {
+        auto &controlPoint = result[0];
+
+        controlPoint.first.rx() = (2.0 * first.x() + last.x()) / 3.0;
+        controlPoint.first.ry() = (2.0 * first.y() + last.y()) / 3.0;
+
+        controlPoint.second.rx() = 2.0 * controlPoint.first.x() - first.x();
+        controlPoint.second.ry() = 2.0 * controlPoint.first.y() - first.y();
+
+        return result;
+    }
+
+    QVector<QPointF> coordinates(count);
+    std::generate_n(coordinates.begin() + 1, count - 2, [&points, height, i = 1]() mutable {
+        auto x = 4.0 * points[i].x() + 2.0 * points[i + 1].x();
+        auto y = 4.0 * points[i].y() * height + 2.0 * points[i + 1].y() * height;
+        i++;
+        return QPointF{x, y};
+    });
+
+    coordinates.first().rx() = first.x() + 2.0 * points.at(1).x();
+    coordinates.first().ry() = first.y() + 2.0 * points.at(1).y() * height;
+    coordinates.last().rx() = (8.0 * points.at(count - 1).x() + last.x()) / 2.0;
+    coordinates.last().ry() = (8.0 * points.at(count - 1).y() * height + last.y()) / 2.0;
+
+    const auto solved = solveControlPoints(coordinates);
+
+    for (int i = 0; i < count; ++i) {
+        auto &controlPoint = result[i];
+        controlPoint.first = solved[i];
+
+        if (i < count - 1) {
+            controlPoint.second = QPointF{
+                2.0 * points.at(i + 1).x() - solved.at(i + 1).x(),
+                2.0 * points.at(i + 1).y() * height - solved.at(i + 1).y()
+            };
+        } else {
+            controlPoint.second = QPointF{
+                (last.x() + solved.at(count - 1).x()) / 2.0,
+                (last.y() + solved.at(count - 1).y()) / 2.0
+            };
+        }
+    }
+
+    return result;
+}
+
+QVector<QPointF> solveControlPoints(const QVector<QPointF> input)
+{
+    auto count = input.size();
+    QVector<QPointF> result(count);
+    QVector<double> temp(count);
+
+    double b = 2.0;
+    result.first() = input.first() / b;
+
+    for (int i = 1; i < count; ++i) {
+        temp[i] = 1.0 / b;
+        b = (i < count - 1 ? 4.0 : 3.5) - temp[i];
+        result[i].rx() = (input[i].x() - result[i - 1].x()) / b;
+        result[i].ry() = (input[i].y() - result[i - 1].y()) / b;
+    }
+
+    for (int i = 1; i < count; ++i) {
+        result[count - i - 1] -= temp[count - i] * result[count - i];
+    }
+
+    return result;
 }
