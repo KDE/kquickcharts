@@ -54,20 +54,23 @@ Kirigami.Page {
 
                 names: ["Example 1", "Example 2", "Example 3"]
 
-                pointDelegate: Rectangle {
-                    width: 5;
-                    height: width;
-                    radius: width / 2;
-                    color: Charts.LineChart.color
+                pointDelegate: Item {
+                    Rectangle {
+                        anchors.centerIn: parent
+                        width: lineChart.lineWidth + Kirigami.Units.smallSpacing;
+                        height: width
+                        radius: width / 2;
+                        color: parent.Charts.LineChart.color
 
-                    MouseArea {
-                        id: mouse
-                        anchors.fill: parent
-                        hoverEnabled: true
+                        MouseArea {
+                            id: mouse
+                            anchors.fill: parent
+                            hoverEnabled: true
+                        }
+
+                        ToolTip.visible: mouse.containsMouse
+                        ToolTip.text: "%1: %2".arg(parent.Charts.LineChart.name).arg(parent.Charts.LineChart.value)
                     }
-
-                    ToolTip.visible: mouse.containsMouse
-                    ToolTip.text: "%1: %2".arg(Charts.LineChart.name).arg(Charts.LineChart.value)
                 }
             }
         }
