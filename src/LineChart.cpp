@@ -252,6 +252,7 @@ void LineChart::updatePolish()
     const auto pointKeys = m_pointDelegates.keys();
     for (auto key : pointKeys) {
         if (!sources.contains(key)) {
+            qDeleteAll(m_pointDelegates[key]);
             m_pointDelegates.remove(key);
         }
     }
@@ -408,6 +409,7 @@ void LineChart::createPointDelegates(const QVector<QVector2D> &values, int sourc
             delegate = new QQuickItem(this);
         }
 
+        delegate->setParent(this);
         delegate->setParentItem(this);
         updatePointDelegate(delegate, values.at(i), valueSource->item(i), sourceIndex);
 
