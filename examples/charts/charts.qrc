@@ -3,9 +3,9 @@
         <file>main.qml</file>
         <file>PieChart.qml</file>
         <file>LineChart.qml</file>
-        <file>ContinuousLineChart.qml</file>
         <file>RangeEditor.qml</file>
         <file>BarChart.qml</file>
+        <file>HistoryProxySource.qml</file>
     </qresource>
 </RCC>
 

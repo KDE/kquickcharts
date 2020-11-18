@@ -23,8 +23,8 @@ Kirigami.ApplicationWindow {
                 id: pagesModel
                 ListElement { label: "Pie Chart"; file: "qrc:/PieChart.qml"; identifier: "pie" }
                 ListElement { label: "Line Chart"; file: "qrc:/LineChart.qml"; identifier: "line" }
-                ListElement { label: "Continuous Line Chart"; file: "qrc:/ContinuousLineChart.qml"; identifier: "continuous" }
                 ListElement { label: "Bar Chart"; file: "qrc:/BarChart.qml"; identifier: "bar" }
+                ListElement { label: "History Proxy Source"; file: "qrc:/HistoryProxySource.qml"; identifier: "history" }
             }
 
             delegate: Kirigami.BasicListItem {
