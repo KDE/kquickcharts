@@ -12,9 +12,13 @@
 #include <QVariantList>
 #include <QTimer>
 
+#include "charts_general_logging.h"
+
 ModelHistorySource::ModelHistorySource(QObject *parent)
     : ModelSource(parent)
 {
+    qCWarning(GENERAL) << "ModelHistorySource is deprecated, use HistoryProxySource instead";
+
     connect(this, &ModelHistorySource::modelChanged, this, &ModelHistorySource::onModelChanged);
 }
 

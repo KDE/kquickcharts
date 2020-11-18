@@ -7,11 +7,12 @@
 
 #include "ValueHistorySource.h"
 
-#include <QDebug>
+#include "charts_general_logging.h"
 
 ValueHistorySource::ValueHistorySource(QObject *parent)
     : ChartDataSource(parent)
 {
+    qCWarning(GENERAL) << "ValueHistorySource is deprecated, use HistoryProxySource instead";
 }
 
 int ValueHistorySource::itemCount() const

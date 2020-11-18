@@ -14,6 +14,9 @@
 
 /**
  * A data source that watches a QAbstractItemModel cell and provides the history of that cell as data.
+ *
+ * \deprecated Since 5.77, use HistoryProxySource instead with a ModelSource as
+ * inner source.
  */
 class ModelHistorySource : public ModelSource
 {
