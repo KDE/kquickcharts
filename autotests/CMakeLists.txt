@@ -8,6 +8,7 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 ecm_add_tests(
     ArraySourceTest.cpp
     MapProxySourceTest.cpp
+    HistoryProxySourceTest.cpp
     LINK_LIBRARIES QuickChartsStatic Qt5::Test
 )
 
