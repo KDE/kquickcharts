@@ -26,6 +26,7 @@
 #include "datasource/SingleValueSource.h"
 #include "datasource/ValueHistorySource.h"
 #include "datasource/MapProxySource.h"
+#include "datasource/HistoryProxySource.h"
 
 QuickChartsPlugin::QuickChartsPlugin(QObject *parent)
     : QQmlExtensionPlugin(parent)
@@ -67,4 +68,6 @@ void QuickChartsPlugin::registerTypes(const char *uri)
     qmlRegisterType<AxisLabels>(uri, 1, 0, "AxisLabels");
     qmlRegisterUncreatableType<AxisLabelsAttached>(uri, 1, 0, "AxisLabelsAttached", QStringLiteral("Attached property"));
     qmlRegisterType<LegendModel>(uri, 1, 0, "LegendModel");
+
+    qmlRegisterType<HistoryProxySource>(uri, 1, 0, "HistoryProxySource");
 }
