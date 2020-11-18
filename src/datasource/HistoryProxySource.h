@@ -60,8 +60,6 @@ class HistoryProxySource : public ChartDataSource
      * even if it did not change.
      *
      * The default is 0.
-     *
-     * \note Changing this property will clear the existing history.
      */
     Q_PROPERTY(int interval READ interval WRITE setInterval NOTIFY intervalChanged)
     /**

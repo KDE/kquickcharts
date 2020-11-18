@@ -180,7 +180,6 @@ void HistoryProxySource::setInterval(int newInterval)
         m_updateTimer.reset();
     }
 
-    clear();
     Q_EMIT intervalChanged();
 }
 
