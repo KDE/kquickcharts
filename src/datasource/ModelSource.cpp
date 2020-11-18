@@ -7,7 +7,7 @@
 
 #include "ModelSource.h"
 
-#include <QDebug>
+#include "charts_datasource_logging.h"
 
 ModelSource::ModelSource(QObject *parent)
     : ChartDataSource(parent)
@@ -74,13 +74,13 @@ QVariant ModelSource::item(int index) const
 
         m_role = m_model->roleNames().key(m_roleName.toLatin1(), -1);
         if (m_role < 0) {
-            qWarning() << "ModelSource: Invalid role " << m_role << m_roleName;
+            qCWarning(DATASOURCE) << "ModelSource: Invalid role " << m_role << m_roleName;
             return QVariant{};
         }
     }
 
     if (!m_indexColumns && (m_column < 0 || m_column > m_model->columnCount())) {
-        qWarning() << "ModelSource: Invalid column" << m_column;
+        qCWarning(DATASOURCE) << "ModelSource: Invalid column" << m_column;
         return QVariant{};
     }
 

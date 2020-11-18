@@ -36,6 +36,24 @@ qt5_add_resources(quickcharts_QRC shaders/shaders.qrc)
 
 add_definitions(-DQT_NO_KEYWORDS)
 
+ecm_qt_declare_logging_category(quickcharts_SRCS
+    HEADER charts_general_logging.h
+    IDENTIFIER GENERAL
+    CATEGORY_NAME kf.quickcharts.general
+    DEFAULT_SEVERITY Warning
+    DESCRIPTION "KQuickCharts Library - General"
+    EXPORT KQuickCharts
+)
+
+ecm_qt_declare_logging_category(quickcharts_SRCS
+    HEADER charts_datasource_logging.h
+    IDENTIFIER DATASOURCE
+    CATEGORY_NAME kf.quickcharts.datasource
+    DEFAULT_SEVERITY Warning
+    DESCRIPTION "KQuickCharts Library - Data Sources"
+    EXPORT KQuickCharts
+)
+
 add_library(QuickChartsStatic STATIC ${quickcharts_SRCS} ${quickcharts_QRC})
 target_link_libraries(QuickChartsStatic PUBLIC Qt5::Core Qt5::Quick Qt5::Qml Qt5::Quick)
 
@@ -44,6 +62,8 @@ target_link_libraries(QuickCharts PRIVATE QuickChartsStatic)
 
 install(TARGETS QuickCharts EXPORT KF5QuickChartsTargets DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/quickcharts)
 install(FILES qmldir DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/quickcharts)
+
+ecm_qt_install_logging_categories(EXPORT KQuickCharts DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
 
 if (BUILD_TESTING)
     add_custom_command(TARGET QuickCharts POST_BUILD
