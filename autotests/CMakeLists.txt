@@ -9,6 +9,7 @@ ecm_add_tests(
     ArraySourceTest.cpp
     MapProxySourceTest.cpp
     HistoryProxySourceTest.cpp
+    ItemBuilderTest.cpp
     LINK_LIBRARIES QuickChartsStatic Qt5::Test
 )
 

@@ -7,6 +7,7 @@ set(quickcharts_SRCS
     BarChart.cpp
 
     RangeGroup.cpp
+    ItemBuilder.cpp
 
     decorations/GridLines.cpp
     decorations/AxisLabels.cpp
