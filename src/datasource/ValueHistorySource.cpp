@@ -9,6 +9,8 @@
 
 #include "charts_general_logging.h"
 
+#if QUICKCHARTS_BUILD_DEPRECATED_SINCE(5, 78)
+
 ValueHistorySource::ValueHistorySource(QObject *parent)
     : ChartDataSource(parent)
 {
@@ -123,3 +125,5 @@ void ValueHistorySource::clear()
     m_history.clear();
     Q_EMIT dataChanged();
 }
+
+#endif // QUICKCHARTS_BUILD_DEPRECATED_SINCE

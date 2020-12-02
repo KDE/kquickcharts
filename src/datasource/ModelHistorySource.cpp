@@ -14,6 +14,8 @@
 
 #include "charts_general_logging.h"
 
+#if QUICKCHARTS_BUILD_DEPRECATED_SINCE(5, 78)
+
 ModelHistorySource::ModelHistorySource(QObject *parent)
     : ModelSource(parent)
 {
@@ -174,3 +176,5 @@ void ModelHistorySource::onDataChanged(const QModelIndex &topLeft, const QModelI
 
     Q_EMIT dataChanged();
 }
+
+#endif // QUICKCHARTS_BUILD_DEPRECATED_SINCE

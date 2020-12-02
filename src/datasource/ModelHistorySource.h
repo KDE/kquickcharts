@@ -11,6 +11,9 @@
 #include <memory>
 #include <QTimer>
 #include "ModelSource.h"
+#include "quickcharts_export.h"
+
+#if QUICKCHARTS_BUILD_DEPRECATED_SINCE(5, 78)
 
 /**
  * A data source that watches a QAbstractItemModel cell and provides the history of that cell as data.
@@ -79,5 +82,7 @@ private:
     QVariantList m_history;
     std::unique_ptr<QTimer> m_updateTimer;
 };
+
+#endif // QUICKCHARTS_BUILD_DEPRECATED_SINCE
 
 #endif // MODELHISTORYSOURCE_H

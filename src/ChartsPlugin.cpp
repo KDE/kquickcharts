@@ -28,6 +28,8 @@
 #include "datasource/MapProxySource.h"
 #include "datasource/HistoryProxySource.h"
 
+#include "quickcharts_export.h"
+
 QuickChartsPlugin::QuickChartsPlugin(QObject *parent)
     : QQmlExtensionPlugin(parent)
 {
@@ -55,11 +57,19 @@ void QuickChartsPlugin::registerTypes(const char *uri)
     qmlRegisterType<ModelSource>(uri, 1, 0, "ModelSource");
     qmlRegisterType<SingleValueSource>(uri, 1, 0, "SingleValueSource");
     qmlRegisterType<ArraySource>(uri, 1, 0, "ArraySource");
-    qmlRegisterType<ModelHistorySource>(uri, 1, 0, "ModelHistorySource");
     qmlRegisterType<ChartAxisSource>(uri, 1, 0, "ChartAxisSource");
-    qmlRegisterType<ValueHistorySource>(uri, 1, 0, "ValueHistorySource");
     qmlRegisterType<ColorGradientSource>(uri, 1, 0, "ColorGradientSource");
     qmlRegisterType<MapProxySource>(uri, 1, 0, "MapProxySource");
+
+#if QUICKCHARTS_BUILD_DEPRECATED_SINCE(5, 78)
+    qmlRegisterType<ModelHistorySource>(uri, 1, 0, "ModelHistorySource");
+    qmlRegisterType<ValueHistorySource>(uri, 1, 0, "ValueHistorySource");
+#else
+    qmlRegisterTypeNotAvailable(uri, 1, 0, "ModelHistorySource",
+                                QStringLiteral("ModelHistorySource is deprecated, use HistoryProxySource instead"));
+    qmlRegisterTypeNotAvailable(uri, 1, 0, "ValueHistorySource",
+                                QStringLiteral("ValueHistorySource is deprecated, use HistoryProxySource instead"));
+#endif
 
     qmlRegisterUncreatableType<RangeGroup>(uri, 1, 0, "Range", QStringLiteral("Used as a grouped property"));
 

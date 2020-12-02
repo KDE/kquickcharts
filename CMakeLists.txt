@@ -16,7 +16,7 @@ include(KDEInstallDirs)
 include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
 include(KDECMakeSettings)
 
-include(GenerateExportHeader)
+include(ECMGenerateExportHeader)
 
 include(ECMAddTests)
 include(ECMSetupVersion)
@@ -29,6 +29,8 @@ option(BUILD_EXAMPLES "Build example applications" OFF)
 
 set(REQUIRED_QT_VERSION 5.13.0)
 find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED Qml Quick QuickControls2)
+
+set(EXCLUDE_DEPRECATED_BEFORE_AND_AT 0 CACHE STRING "Control the range of deprecated API excluded from the build [default=0].")
 
 add_subdirectory(controls)
 add_subdirectory(src)

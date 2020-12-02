@@ -14,6 +14,9 @@
 #include <QTimer>
 
 #include "ChartDataSource.h"
+#include "quickcharts_export.h"
+
+#if QUICKCHARTS_BUILD_DEPRECATED_SINCE(5, 78)
 
 /**
  * A data source that provides a history of a single value.
@@ -76,5 +79,7 @@ private:
     std::unique_ptr<QTimer> m_updateTimer;
     QVector<QVariant> m_history;
 };
+
+#endif // QUICKCHARTS_BUILD_DEPRECATED_SINCE
 
 #endif // VALUEHISTORYSOURCE_H
