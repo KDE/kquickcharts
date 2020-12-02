@@ -12,14 +12,14 @@
 #include <QVariantList>
 #include <QTimer>
 
-#include "charts_general_logging.h"
+#include "QmlDeprecated.h"
 
 #if QUICKCHARTS_BUILD_DEPRECATED_SINCE(5, 78)
 
 ModelHistorySource::ModelHistorySource(QObject *parent)
     : ModelSource(parent)
 {
-    qCWarning(GENERAL) << "ModelHistorySource is deprecated, use HistoryProxySource instead";
+    QML_DEPRECATED("ModelHistorySource", "5.78", "Use HistoryProxySource instead.")
 
     connect(this, &ModelHistorySource::modelChanged, this, &ModelHistorySource::onModelChanged);
 }

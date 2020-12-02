@@ -7,14 +7,14 @@
 
 #include "ValueHistorySource.h"
 
-#include "charts_general_logging.h"
+#include "QmlDeprecated.h"
 
 #if QUICKCHARTS_BUILD_DEPRECATED_SINCE(5, 78)
 
 ValueHistorySource::ValueHistorySource(QObject *parent)
     : ChartDataSource(parent)
 {
-    qCWarning(GENERAL) << "ValueHistorySource is deprecated, use HistoryProxySource instead";
+    QML_DEPRECATED("ValueHistorySource", "5.78", "Use HistoryProxySource instead")
 }
 
 int ValueHistorySource::itemCount() const
