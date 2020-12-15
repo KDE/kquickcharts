@@ -17,6 +17,7 @@
 #include "decorations/AxisLabels.h"
 #include "decorations/GridLines.h"
 #include "decorations/LegendModel.h"
+#include "decorations/Legend.h"
 
 #include "datasource/ArraySource.h"
 #include "datasource/ChartAxisSource.h"
@@ -56,6 +57,7 @@ void QuickChartsPlugin::registerTypes(const char *uri)
     qmlRegisterType<ChartAxisSource>(uri, 1, 0, "ChartAxisSource");
     qmlRegisterType<ColorGradientSource>(uri, 1, 0, "ColorGradientSource");
     qmlRegisterType<MapProxySource>(uri, 1, 0, "MapProxySource");
+    qmlRegisterType<HistoryProxySource>(uri, 1, 0, "HistoryProxySource");
 
 #if QUICKCHARTS_BUILD_DEPRECATED_SINCE(5, 78)
     qmlRegisterType<ModelHistorySource>(uri, 1, 0, "ModelHistorySource");
@@ -72,6 +74,5 @@ void QuickChartsPlugin::registerTypes(const char *uri)
     qmlRegisterType<AxisLabels>(uri, 1, 0, "AxisLabels");
     qmlRegisterUncreatableType<AxisLabelsAttached>(uri, 1, 0, "AxisLabelsAttached", QStringLiteral("Attached property"));
     qmlRegisterType<LegendModel>(uri, 1, 0, "LegendModel");
-
-    qmlRegisterType<HistoryProxySource>(uri, 1, 0, "HistoryProxySource");
+    qmlRegisterType<Legend>(uri, 1, 0, "Legend");
 }

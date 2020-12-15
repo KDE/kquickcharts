@@ -12,6 +12,7 @@ set(quickcharts_SRCS
     decorations/GridLines.cpp
     decorations/AxisLabels.cpp
     decorations/LegendModel.cpp
+    decorations/Legend.cpp
 
     datasource/ChartDataSource.cpp
     datasource/ModelSource.cpp
