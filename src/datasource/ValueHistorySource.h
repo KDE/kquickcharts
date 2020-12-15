@@ -21,7 +21,7 @@
 /**
  * A data source that provides a history of a single value.
  *
- * \deprecated Since 5.77, use HistoryProxySource instead with a
+ * \deprecated Since 5.78, use HistoryProxySource instead with a
  * SingleValueSource as inner source.
  */
 class ValueHistorySource : public ChartDataSource
