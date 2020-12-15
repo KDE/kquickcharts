@@ -41,8 +41,6 @@ RowLayout {
 
     spacing: Theme.smallSpacing
 
-    opacity: parent.height >= y + height // This will hide the item if it is out of bounds
-
     Loader {
         Layout.preferredHeight: name.contentHeight
         Layout.preferredWidth: delegate.colorWidth
