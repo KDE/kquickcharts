@@ -14,6 +14,7 @@
 #include <Qt>
 
 class ChartDataSource;
+class ItemBuilder;
 
 class AxisLabels;
 
@@ -56,6 +57,7 @@ public:
     Q_ENUM(Direction)
 
     explicit AxisLabels(QQuickItem *parent = nullptr);
+    ~AxisLabels() override;
 
     AxisLabels::Direction direction() const;
     Q_SLOT void setDirection(AxisLabels::Direction newDirection);
@@ -90,13 +92,14 @@ private:
     bool isHorizontal();
     void updateLabels();
     void layout();
+    void onBeginCreate(int index, QQuickItem* item);
 
     Direction m_direction = Direction::HorizontalLeftRight;
-    QQmlComponent *m_delegate = nullptr;
     ChartDataSource *m_source = nullptr;
     Qt::Alignment m_alignment = Qt::AlignHCenter | Qt::AlignVCenter;
     bool m_constrainToBounds = true;
-    QVector<QQuickItem *> m_labels;
+
+    std::unique_ptr<ItemBuilder> m_itemBuilder;
     bool m_layoutScheduled = false;
 };
 

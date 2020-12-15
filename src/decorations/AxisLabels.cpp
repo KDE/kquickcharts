@@ -8,9 +8,10 @@
 #include "AxisLabels.h"
 
 #include <QDebug>
-
-#include "datasource/ChartDataSource.h"
 #include <QQmlContext>
+
+#include "ItemBuilder.h"
+#include "datasource/ChartDataSource.h"
 
 AxisLabelsAttached::AxisLabelsAttached(QObject *parent)
     : QObject(parent)
@@ -50,7 +51,12 @@ void AxisLabelsAttached::setLabel(const QString &newLabel)
 AxisLabels::AxisLabels(QQuickItem *parent)
     : QQuickItem(parent)
 {
+    m_itemBuilder = std::make_unique<ItemBuilder>();
+    connect(m_itemBuilder.get(), &ItemBuilder::finished, this, &AxisLabels::scheduleLayout);
+    connect(m_itemBuilder.get(), &ItemBuilder::beginCreate, this, &AxisLabels::onBeginCreate);
 }
+
+AxisLabels::~AxisLabels() = default;
 
 AxisLabels::Direction AxisLabels::direction() const
 {
@@ -70,16 +76,16 @@ void AxisLabels::setDirection(AxisLabels::Direction newDirection)
 
 QQmlComponent *AxisLabels::delegate() const
 {
-    return m_delegate;
+    return m_itemBuilder->component();
 }
 
 void AxisLabels::setDelegate(QQmlComponent *newDelegate)
 {
-    if (newDelegate == m_delegate) {
+    if (newDelegate == m_itemBuilder->component()) {
         return;
     }
 
-    m_delegate = newDelegate;
+    m_itemBuilder->setComponent(newDelegate);
     updateLabels();
     Q_EMIT delegateChanged();
 }
@@ -171,58 +177,30 @@ bool AxisLabels::isHorizontal()
 
 void AxisLabels::updateLabels()
 {
-    qDeleteAll(m_labels);
-    m_labels.clear();
+    m_itemBuilder->clear();
 
-    if (!m_delegate || !m_source) {
+    if (!m_itemBuilder->component() || !m_source) {
         return;
     }
 
-    for (int i = 0; i < m_source->itemCount(); ++i) {
-        auto label = m_source->item(i).toString();
-
-        auto context = new QQmlContext(qmlContext(this));
-        auto item = qobject_cast<QQuickItem *>(m_delegate->beginCreate(context));
-        if (!item) {
-            qWarning() << "Failed to create label instance for label" << label;
-            continue;
-        }
-
-        QObject::connect(item, &QQuickItem::xChanged, this, [this]() {
-            scheduleLayout();
-        });
-        QObject::connect(item, &QQuickItem::yChanged, this, [this]() {
-            scheduleLayout();
-        });
-        QObject::connect(item, &QQuickItem::widthChanged, this, [this]() {
-            scheduleLayout();
-        });
-        QObject::connect(item, &QQuickItem::heightChanged, this, [this]() {
-            scheduleLayout();
-        });
-
-        context->setParent(item);
-        item->setParentItem(this);
-
-        auto attached = static_cast<AxisLabelsAttached *>(qmlAttachedPropertiesObject<AxisLabels>(item, true));
-        attached->setIndex(i);
-        attached->setLabel(label);
-
-        m_delegate->completeCreate();
-        m_labels << item;
-    }
-
-    scheduleLayout();
+    m_itemBuilder->setCount(m_source->itemCount());
+    m_itemBuilder->build(this);
 }
 
 void AxisLabels::layout()
 {
+    if (!m_itemBuilder->isFinished()) {
+        scheduleLayout();
+        return;
+    }
+
     auto maxWidth = 0.0;
     auto totalWidth = 0.0;
     auto maxHeight = 0.0;
     auto totalHeight = 0.0;
 
-    for (auto label : qAsConst(m_labels)) {
+    auto labels = m_itemBuilder->items();
+    for (auto label : labels) {
         maxWidth = std::max(maxWidth, label->width());
         maxHeight = std::max(maxHeight, label->height());
         totalWidth += label->width();
@@ -239,12 +217,12 @@ void AxisLabels::layout()
     setImplicitWidth(impWidth);
     setImplicitHeight(impHeight);
 
-    auto spacing = (isHorizontal() ? width() : height()) / (m_labels.size() - 1);
+    auto spacing = (isHorizontal() ? width() : height()) / (labels.size() - 1);
     auto i = 0;
     auto layoutWidth = isHorizontal() ? 0.0 : width();
     auto layoutHeight = isHorizontal() ? height() : 0.0;
 
-    for (auto label : qAsConst(m_labels)) {
+    for (auto label : labels) {
         auto x = 0.0;
         auto y = 0.0;
 
@@ -286,4 +264,16 @@ void AxisLabels::layout()
         label->setY(y);
         i++;
     }
+}
+
+void AxisLabels::onBeginCreate(int index, QQuickItem *item)
+{
+    QObject::connect(item, &QQuickItem::xChanged, this, [this]() { scheduleLayout(); });
+    QObject::connect(item, &QQuickItem::yChanged, this, [this]() { scheduleLayout(); });
+    QObject::connect(item, &QQuickItem::widthChanged, this, [this]() { scheduleLayout(); });
+    QObject::connect(item, &QQuickItem::heightChanged, this, [this]() { scheduleLayout(); });
+
+    auto attached = static_cast<AxisLabelsAttached *>(qmlAttachedPropertiesObject<AxisLabels>(item, true));
+    attached->setIndex(index);
+    attached->setLabel(m_source->item(index).toString());
 }
