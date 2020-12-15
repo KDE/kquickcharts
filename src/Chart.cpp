@@ -12,6 +12,7 @@ Chart::Chart(QQuickItem *parent)
     : QQuickItem(parent)
 {
     setFlag(ItemHasContents, true);
+    connect(this, &Chart::dataChanged, this, &Chart::onDataChanged);
 }
 
 ChartDataSource *Chart::nameSource() const
@@ -26,6 +27,7 @@ void Chart::setNameSource(ChartDataSource *nameSource)
     }
 
     m_nameSource = nameSource;
+    Q_EMIT dataChanged();
     Q_EMIT nameSourceChanged();
 }
 
@@ -41,6 +43,7 @@ void Chart::setShortNameSource(ChartDataSource *shortNameSource)
     }
 
     m_shortNameSource = shortNameSource;
+    Q_EMIT dataChanged();
     Q_EMIT shortNameSourceChanged();
 }
 
@@ -56,6 +59,7 @@ void Chart::setColorSource(ChartDataSource *colorSource)
     }
 
     m_colorSource = colorSource;
+    Q_EMIT dataChanged();
     Q_EMIT colorSourceChanged();
 }
 
@@ -77,9 +81,9 @@ void Chart::insertValueSource(int index, ChartDataSource *source)
 
     m_valueSources.insert(index, source);
     connect(source, &QObject::destroyed, this, qOverload<QObject *>(&Chart::removeValueSource));
-    connect(source, &ChartDataSource::dataChanged, this, &Chart::onDataChanged);
+    connect(source, &ChartDataSource::dataChanged, this, &Chart::dataChanged);
 
-    onDataChanged();
+    Q_EMIT dataChanged();
     Q_EMIT valueSourcesChanged();
 }
 
@@ -92,7 +96,7 @@ void Chart::removeValueSource(int index)
     m_valueSources.at(index)->disconnect(this);
     m_valueSources.remove(index);
 
-    onDataChanged();
+    Q_EMIT dataChanged();
     Q_EMIT valueSourcesChanged();
 }
 
@@ -107,7 +111,7 @@ void Chart::removeValueSource(QObject *source)
         m_valueSources.erase(itr);
     }
 
-    onDataChanged();
+    Q_EMIT dataChanged();
     Q_EMIT valueSourcesChanged();
 }
 
@@ -123,14 +127,14 @@ void Chart::setIndexingMode(IndexingMode newIndexingMode)
     }
 
     m_indexingMode = newIndexingMode;
-    onDataChanged();
+    Q_EMIT dataChanged();
     Q_EMIT indexingModeChanged();
 }
 
 void Chart::componentComplete()
 {
     QQuickItem::componentComplete();
-    onDataChanged();
+    Q_EMIT dataChanged();
 }
 
 void Chart::appendSource(Chart::DataSourcesProperty *list, ChartDataSource *source)
@@ -156,5 +160,5 @@ void Chart::clearSources(Chart::DataSourcesProperty *list)
         source->disconnect(chart);
     });
     chart->m_valueSources.clear();
-    chart->onDataChanged();
+    Q_EMIT chart->dataChanged();
 }

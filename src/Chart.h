@@ -78,6 +78,8 @@ public:
     void setIndexingMode(IndexingMode newIndexingMode);
     Q_SIGNAL void indexingModeChanged();
 
+    Q_SIGNAL void dataChanged();
+
 protected:
     /**
      * Called when the data of a value source changes.
