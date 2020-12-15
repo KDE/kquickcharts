@@ -6,6 +6,7 @@
         <file>RangeEditor.qml</file>
         <file>BarChart.qml</file>
         <file>HistoryProxySource.qml</file>
+        <file>Legend.qml</file>
     </qresource>
 </RCC>
 
