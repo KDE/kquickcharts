@@ -17,6 +17,7 @@ install(FILES
     LineChartControl.qml
     PieChartControl.qml
     Theme.qml
+    Logging.qml
     DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/quickcharts/controls
 )
 

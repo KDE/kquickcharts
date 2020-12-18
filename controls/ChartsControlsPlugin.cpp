@@ -29,6 +29,8 @@ void ChartsControlsPlugin::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("LegendDelegate.qml")), uri, 1, 0, "LegendDelegate");
     qmlRegisterType(componentUrl(QStringLiteral("LineChartControl.qml")), uri, 1, 0, "LineChartControl");
     qmlRegisterType(componentUrl(QStringLiteral("PieChartControl.qml")), uri, 1, 0, "PieChartControl");
+
+    qmlRegisterSingletonType(componentUrl(QStringLiteral("Logging.qml")), uri, 1, 0, "Logging");
 }
 
 QUrl ChartsControlsPlugin::componentUrl(const QString &fileName)
