@@ -15,15 +15,6 @@ public:
         m_context = context;
     }
 
-    int index() const
-    {
-        return m_index;
-    }
-
-    void setIndex(int index) {
-        m_index = index;
-    }
-
     void setStateCallback(std::function<void(QQuickItem*)> callback)
     {
         m_stateCallback = callback;
@@ -70,7 +61,6 @@ private:
         }
     }
 
-    int m_index = -1;
     QQmlComponent *m_component;
     QQmlContext *m_context;
     std::function<void(QQuickItem*)> m_stateCallback;
@@ -175,8 +165,6 @@ void ItemBuilder::build(QQuickItem *parent)
         auto context = m_context ? m_context : qmlContext(m_component);
         auto incubator = std::make_unique<ItemIncubator>(m_component, context);
 
-        incubator->setIndex(i);
-
         incubator->setStateCallback([this, parent, i](QQuickItem *item) {
             item->setParentItem(parent);
 
@@ -187,23 +175,19 @@ void ItemBuilder::build(QQuickItem *parent)
             Q_EMIT beginCreate(i, item);
         });
 
-        incubator->setCompletedCallback([this](ItemIncubator *incubator) {
+        incubator->setCompletedCallback([this, i](ItemIncubator *incubator) {
             auto item = std::shared_ptr<QQuickItem>(qobject_cast<QQuickItem*>(incubator->object()));
-            m_items[incubator->index()] = item;
+            m_items[i] = item;
 
-            Q_EMIT endCreate(incubator->index(), item.get());
+            Q_EMIT endCreate(i, item.get());
 
             m_completed++;
             if (m_completed == m_count) {
+                QMetaObject::invokeMethod(this, [this]() {
+                    m_incubators.clear();
+                }, Qt::QueuedConnection);
                 Q_EMIT finished();
             }
-
-            QMetaObject::invokeMethod(this, [this, incubator]() {
-                auto itr = std::find_if(m_incubators.begin(), m_incubators.end(), [incubator](const std::unique_ptr<ItemIncubator> &item) {
-                    return item.get() == incubator;
-                });
-                m_incubators.erase(itr);
-            }, Qt::QueuedConnection);
         });
 
         incubator->create();
