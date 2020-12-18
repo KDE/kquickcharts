@@ -22,6 +22,7 @@ class LegendAttached : public QObject
     Q_PROPERTY(QColor color READ color NOTIFY colorChanged)
 
     Q_PROPERTY(qreal minimumWidth READ minimumWidth WRITE setMinimumWidth NOTIFY minimumWidthChanged)
+    Q_PROPERTY(qreal preferredWidth READ preferredWidth WRITE setPreferredWidth NOTIFY preferredWidthChanged)
     Q_PROPERTY(qreal maximumWidth READ maximumWidth WRITE setMaximumWidth NOTIFY maximumWidthChanged)
 
 public:
@@ -51,6 +52,10 @@ public:
     void setMinimumWidth(qreal newMinimumWidth);
     Q_SIGNAL void minimumWidthChanged();
 
+    qreal preferredWidth() const;
+    void setPreferredWidth(qreal newPreferredWidth);
+    Q_SIGNAL void preferredWidthChanged();
+
     qreal maximumWidth() const;
     void setMaximumWidth(qreal newMaximumWidth);
     Q_SIGNAL void maximumWidthChanged();
@@ -63,6 +68,7 @@ private:
     QColor m_color;
 
     qreal m_minimumWidth = -1.0;
+    qreal m_preferredWidth = -1.0;
     qreal m_maximumWidth = -1.0;
 };
 

@@ -116,6 +116,21 @@ void LegendAttached::setMinimumWidth(qreal newMinimumWidth)
     Q_EMIT minimumWidthChanged();
 }
 
+qreal LegendAttached::preferredWidth() const
+{
+    return m_preferredWidth;
+}
+
+void LegendAttached::setPreferredWidth(qreal newPreferredWidth)
+{
+    if (newPreferredWidth == m_preferredWidth) {
+        return;
+    }
+
+    m_preferredWidth = newPreferredWidth;
+    Q_EMIT preferredWidthChanged();
+}
+
 qreal LegendAttached::maximumWidth() const
 {
     return m_maximumWidth;
@@ -313,6 +328,7 @@ void Legend::updateItem(int index, QQuickItem* item)
     }
 
     connect(attached, &LegendAttached::minimumWidthChanged, this, &Legend::polish, Qt::UniqueConnection);
+    connect(attached, &LegendAttached::preferredWidthChanged, this, &Legend::polish, Qt::UniqueConnection);
     connect(attached, &LegendAttached::maximumWidthChanged, this, &Legend::polish, Qt::UniqueConnection);
 
     attached->setName(m_chart->nameSource() ? m_chart->nameSource()->item(index).toString() : QString{});
@@ -356,14 +372,15 @@ std::tuple<int, int, qreal, qreal> Legend::determineColumns()
     // Determine how many columns should be used for layouting the items.
 
     auto minWidth = std::numeric_limits<qreal>::min();
+    auto preferredWidth = std::numeric_limits<qreal>::min();
     auto maxWidth = std::numeric_limits<qreal>::max();
     auto maxHeight = std::numeric_limits<qreal>::min();
 
     const auto items = m_itemBuilder->items();
 
-    // First, we determine the minimum and maximum width of all items. These are
-    // determined from the attached object, or implicitWidth for minimum size if
-    // minimumWidth has not been set.
+    // First, we determine the minimum, preferred and maximum width of all
+    // items. These are determined from the attached object, or implicitWidth
+    // for minimum size if minimumWidth has not been set.
     //
     // We also determine the maximum height of items so we do not need to do
     // that later.
@@ -374,6 +391,10 @@ std::tuple<int, int, qreal, qreal> Legend::determineColumns()
             minWidth = std::max(minWidth, attached->minimumWidth());
         } else {
             minWidth = std::max(minWidth, item->implicitWidth());
+        }
+
+        if (attached->preferredWidth() > 0.0) {
+            preferredWidth = std::max(preferredWidth, attached->preferredWidth());
         }
 
         if (attached->maximumWidth() > 0.0) {
@@ -398,12 +419,13 @@ std::tuple<int, int, qreal, qreal> Legend::determineColumns()
     auto columns = 1;
     auto rows = items.size();
     auto tries = items.size();
+    bool fit = true;
 
     // Calculate the actual number of rows and columns by trying to fit items
     // until we find the right number. In certain cases this may end up not
     // finding a correct solution, so we limit the amount of attempts we make to
     // the number of items.
-    while (tries > 0) {
+    while (true) {
         auto minTotalWidth = sizeWithSpacing(columns, minWidth, m_horizontalSpacing);
         auto maxTotalWidth = sizeWithSpacing(columns, maxWidth, m_horizontalSpacing);
 
@@ -415,6 +437,7 @@ std::tuple<int, int, qreal, qreal> Legend::determineColumns()
             if (rows >= 1) {
                 columns = std::ceil(items.size() / float(rows));
             } else {
+                fit = false;
                 break;
             }
         } else if (minTotalWidth > availableWidth) {
@@ -424,9 +447,13 @@ std::tuple<int, int, qreal, qreal> Legend::determineColumns()
         }
 
         tries--;
+        if (tries <= 0) {
+            qWarning() << "Could not find a proper layout solution";
+            break;
+        }
     }
 
-    auto itemWidth = (width() - m_horizontalSpacing * (columns - 1)) / columns;
+    auto itemWidth = fit ? (width() - m_horizontalSpacing * (columns - 1)) / columns : preferredWidth;
 
     rows = std::ceil(items.size() / float(columns));
 
