@@ -17,7 +17,7 @@
 #include "decorations/AxisLabels.h"
 #include "decorations/GridLines.h"
 #include "decorations/LegendModel.h"
-#include "decorations/Legend.h"
+#include "decorations/LegendLayout.h"
 
 #include "datasource/ArraySource.h"
 #include "datasource/ChartAxisSource.h"
@@ -74,5 +74,5 @@ void QuickChartsPlugin::registerTypes(const char *uri)
     qmlRegisterType<AxisLabels>(uri, 1, 0, "AxisLabels");
     qmlRegisterUncreatableType<AxisLabelsAttached>(uri, 1, 0, "AxisLabelsAttached", QStringLiteral("Attached property"));
     qmlRegisterType<LegendModel>(uri, 1, 0, "LegendModel");
-    qmlRegisterType<Legend>(uri, 1, 0, "Legend");
+    qmlRegisterType<LegendLayout>(uri, 1, 0, "LegendLayout");
 }

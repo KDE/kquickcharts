@@ -23,133 +23,158 @@ Control {
      */
     property Charts.Chart chart
     /**
+     * The delegate to use to display legend information.
+     *
+     * \sa Legend::delegate
      */
-    property Component delegate: LegendDelegate {
-        name: Charts.Legend.name
-        shortName: Charts.Legend.shortName
-        color: Charts.Legend.color
-        value: Charts.Legend.value
+    property alias delegate: legendRepeater.delegate
+    /**
+     *
+     */
+    property alias model: legendRepeater.model
 
-        Charts.Legend.minimumWidth: implicitWidth
-        Charts.Legend.maximumWidth: Theme.gridUnit * 10
+    property alias horizontalSpacing: legend.horizontalSpacing
+    property alias verticalSpacing: legend.verticalSpacing
 
-        Component.onCompleted: print(Charts.Legend.index, width, height)
-    }
+    property real maximumDelegateWidth: Theme.gridUnit * 10
+
+    property var formatValue: function(input, index) { return input }
+    property var maximumValueWidth: function(input, index) { return -1 }
+
+    property string nameRole: "name"
+    property string shortNameRole: "shortName"
+    property string colorRole: "color"
+    property string valueRole: "value"
+
+    property int flow
+    onFlowChanged: Logging.deprecated("Legend", "flow", "5.82", "Legend uses a dynamic column layout now")
+    property int sourceIndex
+    onSourceIndexChanged: Logging.deprecated("Legend", "sourceIndex", "5.82", "Use Chart's indexingMode property")
+
+    property bool valueVisible: false
+    onValueVisibleChanged: Logging.deprecated("Legend", "valueVisible", "5.82", "Customise the delegate instead")
+    property real valueWidth: -1
+    onValueWidthChanged: Logging.deprecated("Legend", "valueWidth", "5.82", "Customise the delegate instead")
+    property bool colorVisible: true
+    onColorVisibleChanged: Logging.deprecated("Legend", "colorVisible", "5.82", "Customise the delegate instead")
+    property real colorWidth: 0
+    onColorWidthChanged: Logging.deprecated("Legend", "colorWidth", "5.82", "Customise the delegate instead")
+
+    default property alias _children: legend.children
 
     leftPadding: 0
     rightPadding: 0
     topPadding: 0
     bottomPadding: 0
 
-    implicitWidth: Math.max(contentItem.implicitWidth, background.implicitWidth) + leftPadding + rightPadding
-    implicitHeight: Math.max(contentItem.implicitHeight, background.implicitHeight) + topPadding + bottomPadding
+    implicitWidth: Math.max(implicitContentWidth, implicitBackgroundWidth) + leftPadding + rightPadding
+    implicitHeight: Math.max(implicitContentHeight, implicitBackgroundHeight) + topPadding + bottomPadding
 
     contentItem: Flickable {
+        anchors.fill: parent
+
         contentHeight: legend.implicitHeight
         clip: true
         boundsBehavior: Flickable.StopAtBounds
 
         implicitHeight: legend.implicitHeight
+        implicitWidth: legend.implicitWidth
 
-        Charts.Legend {
+        // Limit maximum flick velocity to ensure we can scroll one line per
+        // mouse wheel "tick" when the legend's height is very constrained.
+        maximumFlickVelocity: Theme.gridUnit * 50
+        Charts.LegendLayout {
             id: legend
 
             width: parent.width
 
-            chart: control.chart
-            delegate: control.delegate
+            Repeater {
+                id: legendRepeater
 
-            horizontalSpacing: Theme.smallSpacing
-            verticalSpacing: Theme.largeSpacing
+                model: Charts.LegendModel { chart: control.chart }
+
+                delegate: LegendDelegate {
+                    property var itemData: typeof modelData !== "undefined" ? modelData : model
+
+                    name: itemData[control.nameRole] !== undefined ? itemData[control.nameRole] : ""
+                    shortName: itemData[control.shortNameRole] !== undefined ? itemData[control.shortNameRole] : ""
+                    color: itemData[control.colorRole] !== undefined ? itemData[control.colorRole] : "white"
+                    value: itemData[control.valueRole] !== undefined ? control.formatValue(itemData[control.valueRole], index) : ""
+
+                    maximumValueWidth: {
+                        var result = control.maximumValueWidth(model.value, index)
+                        if (result > 0) {
+                            return result
+                        }
+
+                        // Backward compatibility: While valueWidth is deprecated, it may still end up
+                        // being set as a size hint, so we should use that rather than nothing if it is
+                        // set.
+                        if (control.valueWidth > 0) {
+                            return control.valueWidth
+                        }
+
+                        return -1
+                    }
+
+                    Charts.LegendLayout.minimumWidth: minimumWidth
+                    Charts.LegendLayout.preferredWidth: preferredWidth
+                    Charts.LegendLayout.maximumWidth: Math.max(control.maximumDelegateWidth, preferredWidth)
+                }
+            }
+
+            horizontalSpacing: Theme.largeSpacing
+            verticalSpacing: Theme.smallSpacing
         }
 
         children: [
-            ToolSeparator { width: parent.width; height: 1; visible: parent.contentY > 0 },
-            ToolSeparator {
+            Item {
+                width: parent.width;
+                height: 1;
+                visible: parent.contentY > 0
+
+                ToolSeparator {
+                    anchors.left: parent.horizontalCenter
+                    anchors.top: parent.bottom
+                    width: 1
+                    height: Theme.smallSpacing
+                    transformOrigin: Item.Top
+                    rotation: 45
+                }
+
+                ToolSeparator {
+                    anchors.right: parent.horizontalCenter
+                    anchors.top: parent.bottom
+                    width: 1
+                    height: Theme.smallSpacing
+                    transformOrigin: Item.Top
+                    rotation: -45
+                }
+            },
+            Item {
                 y: parent.height - height
                 width: parent.width;
                 height: 1;
                 visible: parent.contentY + parent.height < legend.height
+
+                ToolSeparator {
+                    anchors.left: parent.horizontalCenter
+                    anchors.bottom: parent.top
+                    width: 1
+                    height: Theme.smallSpacing
+                    transformOrigin: Item.Bottom
+                    rotation: 45
+                }
+
+                ToolSeparator {
+                    anchors.right: parent.horizontalCenter
+                    anchors.bottom: parent.top
+                    width: 1
+                    height: Theme.smallSpacing
+                    transformOrigin: Item.Bottom
+                    rotation: -45
+                }
             }
         ]
     }
-
-    background: Item { }
-
-    //implicitHeight: legend.implicitHeight
-
-    //property alias model: legendRepeater.model
-    //property alias delegate: legendRepeater.delegate
-    //property alias flow: legend.flow
-    //property int sourceIndex: -1
-
-    //property var formatValue: function(input, index) { return input }
-
-    //property bool valueVisible: false
-    //property real valueWidth: -1
-    //property bool colorVisible: true
-    //property real colorWidth: Theme.smallSpacing
-
-    //property string nameRole: "name"
-    //property string shortNameRole: "shortName"
-    //property string colorRole: "color"
-    //property string valueRole: "value"
-
-    //property Component indicator: null
-
-    //default property alias extraItems: legend.children
-
-    //leftPadding: 0
-    //rightPadding: 0
-    //topPadding: 0
-    //bottomPadding: 0
-
-    //implicitWidth: legend.implicitWidth
-    //implicitHeight: legend.implicitHeight
-
-    //contentItem: GridLayout {
-        //id: legend
-
-        //columns: flow == GridLayout.TopToBottom ? 1 : -1
-        //rows: flow == GridLayout.TopToBottom ? -1 : 1
-
-        //rowSpacing: control.spacing
-        //columnSpacing: rowSpacing
-
-        //Repeater {
-            //id: legendRepeater
-            //model: Charts.LegendModel { id: legendModel; chart: control.chart; sourceIndex: control.sourceIndex }
-
-            //delegate: LegendDelegate {
-                //Layout.preferredWidth: implicitWidth
-
-                //property var itemData: typeof modelData !== "undefined" ? modelData : model
-                //name: itemData[control.nameRole] !== undefined ? itemData[control.nameRole] : ""
-                //shortName: itemData[control.shortNameRole] !== undefined ? itemData[control.shortNameRole] : ""
-                //color: itemData[control.colorRole] !== undefined ? itemData[control.colorRole] : "white"
-                //value: {
-                    //if (itemData[control.valueRole] !== undefined) {
-                        //if (control.formatValue.length == 2) {
-                            //return control.formatValue(itemData[control.valueRole], index)
-                        //} else {
-                            //return control.formatValue(itemData[control.valueRole])
-                        //}
-                    //}
-                    //return ""
-                //}
-
-                //colorVisible: control.colorVisible
-                //colorWidth: control.colorWidth
-                //valueVisible: control.valueVisible
-                //valueWidth: control.valueWidth
-
-                //indicator: control.indicator
-
-                //font: control.font
-
-                //layoutWidth: legend.flow == GridLayout.TopToBottom ? control.Layout.maximumWidth
-                                //: control.Layout.maximumWidth / legendRepeater.count - control.spacing
-            //}
-        //}
-    //}
 }
