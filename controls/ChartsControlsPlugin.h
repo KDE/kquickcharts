@@ -21,7 +21,6 @@ public:
 
 private:
     QUrl componentUrl(const QString &fileName);
-    QUrl styledComponentUrl(const QString &fileName);
     QString m_styleName;
 };
 
