@@ -73,7 +73,7 @@ target_link_libraries(QuickCharts PRIVATE QuickChartsStatic)
 ecm_generate_export_header(QuickCharts
     BASE_NAME QuickCharts
     GROUP_BASE_NAME KF
-    VERSION ${KF5_VERSION}
+    VERSION ${KF_VERSION}
     DEPRECATED_BASE_VERSION 0
     DEPRECATION_VERSIONS 5.78
     EXCLUDE_DEPRECATED_BEFORE_AND_AT ${EXCLUDE_DEPRECATED_BEFORE_AND_AT}
