@@ -26,6 +26,8 @@ public:
     virtual QVariant minimum() const = 0;
     virtual QVariant maximum() const = 0;
 
+    virtual QVariant first() const;
+
     Q_SIGNAL void dataChanged();
 };
 

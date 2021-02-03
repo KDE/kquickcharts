@@ -112,6 +112,8 @@ public:
     QVariant minimum() const override;
     QVariant maximum() const override;
 
+    QVariant first() const override;
+
     ChartDataSource *source() const;
     void setSource(ChartDataSource *newSource);
     Q_SIGNAL void sourceChanged();

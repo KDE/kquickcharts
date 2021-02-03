@@ -253,7 +253,7 @@ QVariant LegendModel::getValueForItem(int item)
         value = sources.at(0)->item(item);
         break;
     case Chart::IndexEachSource:
-        value = sources.at(item)->item(0);
+        value = sources.at(item)->first();
         break;
     case Chart::IndexAllValues:
         for (auto source : sources) {

@@ -7,7 +7,14 @@
 
 #include "ChartDataSource.h"
 
+#include <QVariant>
+
 ChartDataSource::ChartDataSource(QObject *parent)
     : QObject(parent)
 {
+}
+
+QVariant ChartDataSource::first() const
+{
+    return item(0);
 }

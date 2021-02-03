@@ -91,6 +91,14 @@ QVariant HistoryProxySource::maximum() const
     return *std::max_element(m_history.begin(), m_history.end());
 }
 
+QVariant HistoryProxySource::first() const
+{
+    if (!m_history.isEmpty()) {
+        return m_history.first();
+    }
+    return QVariant{};
+}
+
 ChartDataSource * HistoryProxySource::source() const
 {
     return m_dataSource;
