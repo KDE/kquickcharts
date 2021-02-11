@@ -1,2 +1,3 @@
 *kdev*
 *.kate-swp
+/compile_commands.json
