@@ -193,7 +193,7 @@ void LegendModel::updateData()
         auto shortName = shortNameSource ? shortNameSource->item(i).toString() : QString{};
         if (item.shortName != shortName) {
             item.shortName = shortName;
-            changedRows[i] << NameRole;
+            changedRows[i] << ShortNameRole;
         }
 
         auto color = colorSource ? colorSource->item(i).toString() : QColor{};
