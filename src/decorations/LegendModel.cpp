@@ -257,7 +257,7 @@ QVariant LegendModel::getValueForItem(int item)
         break;
     case Chart::IndexAllValues:
         for (auto source : sources) {
-            if (source->itemCount() < item) {
+            if (item >= source->itemCount()) {
                 item -= source->itemCount();
             } else {
                 value = source->item(item);
