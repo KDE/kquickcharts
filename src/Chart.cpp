@@ -58,7 +58,16 @@ void Chart::setColorSource(ChartDataSource *colorSource)
         return;
     }
 
+    if (m_colorSource) {
+        disconnect(m_colorSource, &ChartDataSource::dataChanged, this, &Chart::dataChanged);
+    }
+
     m_colorSource = colorSource;
+
+    if (m_colorSource) {
+        connect(m_colorSource, &ChartDataSource::dataChanged, this, &Chart::dataChanged);
+    }
+
     Q_EMIT dataChanged();
     Q_EMIT colorSourceChanged();
 }
