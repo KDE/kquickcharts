@@ -1,3 +1,6 @@
 *kdev*
 *.kate-swp
 /compile_commands.json
+/.clang-format
+.idea
+/build
