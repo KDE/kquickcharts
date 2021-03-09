@@ -9,8 +9,8 @@
 
 #include <QAbstractItemModel>
 #include <QDebug>
-#include <QVariantList>
 #include <QTimer>
+#include <QVariantList>
 
 #include "QmlDeprecated.h"
 
@@ -134,7 +134,6 @@ void ModelHistorySource::setInterval(int newInterval)
 
     Q_EMIT intervalChanged();
 }
-
 
 void ModelHistorySource::clear()
 {

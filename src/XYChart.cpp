@@ -12,8 +12,7 @@
 
 bool operator==(const ComputedRange &first, const ComputedRange &second)
 {
-    return first.startX == second.startX && first.endX == second.endX && qFuzzyCompare(first.startY, second.startY)
-        && qFuzzyCompare(first.endY, second.endY);
+    return first.startX == second.startX && first.endX == second.endX && qFuzzyCompare(first.startY, second.startY) && qFuzzyCompare(first.endY, second.endY);
 }
 
 XYChart::XYChart(QQuickItem *parent)
@@ -80,9 +79,14 @@ void XYChart::updateComputedRange()
 
     ComputedRange result;
 
-    auto xRange = m_xRange->calculateRange(valueSources(),
-                                           [](ChartDataSource *) { return 0; },
-                                           [](ChartDataSource *source) { return source->itemCount(); });
+    auto xRange = m_xRange->calculateRange(
+        valueSources(),
+        [](ChartDataSource *) {
+            return 0;
+        },
+        [](ChartDataSource *source) {
+            return source->itemCount();
+        });
     result.startX = xRange.start;
     result.endX = xRange.end;
     result.distanceX = xRange.distance;
@@ -103,9 +107,12 @@ void XYChart::updateComputedRange()
         }
     };
 
-    auto yRange = m_yRange->calculateRange(valueSources(),
-                                           [](ChartDataSource *source) { return std::min(0.0, source->minimum().toDouble()); },
-                                           maximumY);
+    auto yRange = m_yRange->calculateRange(
+        valueSources(),
+        [](ChartDataSource *source) {
+            return std::min(0.0, source->minimum().toDouble());
+        },
+        maximumY);
     result.startY = yRange.start;
     result.endY = yRange.end;
     result.distanceY = yRange.distance;
@@ -125,7 +132,7 @@ void XYChart::setComputedRange(ComputedRange range)
 
 QDebug operator<<(QDebug debug, const ComputedRange &range)
 {
-    debug << "Range: startX" << range.startX << "endX" << range.endX << "distance" << range.distanceX << "startY" << range.startY << "endY"
-          << range.endY << "distance" << range.distanceY;
+    debug << "Range: startX" << range.startX << "endX" << range.endX << "distance" << range.distanceX << "startY" << range.startY << "endY" << range.endY
+          << "distance" << range.distanceY;
     return debug;
 }

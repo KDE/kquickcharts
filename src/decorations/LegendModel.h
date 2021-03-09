@@ -16,8 +16,7 @@
 class Chart;
 class ChartDataSource;
 
-struct LegendItem
-{
+struct LegendItem {
     QString name;
     QString shortName;
     QColor color;

@@ -65,7 +65,9 @@ void LineChartNode::setLineColor(const QColor &color)
         return;
 
     m_lineColor = color;
-    std::for_each(m_segments.cbegin(), m_segments.cend(), [color](LineSegmentNode *node) { node->setLineColor(color); });
+    std::for_each(m_segments.cbegin(), m_segments.cend(), [color](LineSegmentNode *node) {
+        node->setLineColor(color);
+    });
 }
 
 void LineChartNode::setFillColor(const QColor &color)
@@ -74,7 +76,9 @@ void LineChartNode::setFillColor(const QColor &color)
         return;
 
     m_fillColor = color;
-    std::for_each(m_segments.cbegin(), m_segments.cend(), [color](LineSegmentNode *node) { node->setFillColor(color); });
+    std::for_each(m_segments.cbegin(), m_segments.cend(), [color](LineSegmentNode *node) {
+        node->setFillColor(color);
+    });
 }
 
 void LineChartNode::setValues(const QVector<QVector2D> &values)

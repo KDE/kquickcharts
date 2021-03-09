@@ -8,10 +8,10 @@
 #ifndef VALUEHISTORYSOURCE_H
 #define VALUEHISTORYSOURCE_H
 
-#include <memory>
+#include <QTimer>
 #include <QVariant>
 #include <QVector>
-#include <QTimer>
+#include <memory>
 
 #include "ChartDataSource.h"
 #include "quickcharts_export.h"

@@ -211,7 +211,7 @@ void LegendModel::updateData()
         i++;
     });
 
-    for(auto i = 0; i < changedRows.size(); ++i) {
+    for (auto i = 0; i < changedRows.size(); ++i) {
         auto changedRoles = changedRows.at(i);
         if (!changedRoles.isEmpty()) {
             Q_EMIT dataChanged(index(i, 0), index(i, 0), changedRoles);

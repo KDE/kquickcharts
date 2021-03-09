@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2020 Arjen Hiemstra <ahiemstra@heimr.nl>
- * 
+ *
  * SPDX-License-Identifier: LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
  */
 
@@ -25,14 +25,14 @@ class MapProxySource : public ChartDataSource
     /**
      * A ChartDataSource that is used as map indexes.
      */
-    Q_PROPERTY(ChartDataSource * source READ source WRITE setSource NOTIFY sourceChanged)
+    Q_PROPERTY(ChartDataSource *source READ source WRITE setSource NOTIFY sourceChanged)
     /**
      * The map to index for values.
      */
     Q_PROPERTY(QVariantMap map READ map WRITE setMap NOTIFY mapChanged)
 
 public:
-    MapProxySource(QObject* parent = nullptr);
+    MapProxySource(QObject *parent = nullptr);
 
     virtual int itemCount() const override;
     virtual QVariant item(int index) const override;

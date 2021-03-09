@@ -10,9 +10,9 @@
 #include <QDebug>
 #include <QSGNode>
 
+#include "RangeGroup.h"
 #include "datasource/ChartDataSource.h"
 #include "scenegraph/BarChartNode.h"
-#include "RangeGroup.h"
 
 BarChart::BarChart(QQuickItem *parent)
     : XYChart(parent)

@@ -61,7 +61,7 @@ QVariant HistoryProxySource::minimum() const
 
     // TODO: Find a nicer solution for data sources to indicate
     // "I provide a min/max value not derived from my items"
-    auto model = m_dataSource->property("model").value<QObject*>();
+    auto model = m_dataSource->property("model").value<QObject *>();
     if (model) {
         auto minProperty = model->property("minimum");
         auto maxProperty = model->property("maximum");
@@ -79,7 +79,7 @@ QVariant HistoryProxySource::maximum() const
         return QVariant{};
     }
 
-    auto model = m_dataSource->property("model").value<QObject*>();
+    auto model = m_dataSource->property("model").value<QObject *>();
     if (model) {
         auto minProperty = model->property("minimum");
         auto maxProperty = model->property("maximum");
@@ -99,12 +99,12 @@ QVariant HistoryProxySource::first() const
     return QVariant{};
 }
 
-ChartDataSource * HistoryProxySource::source() const
+ChartDataSource *HistoryProxySource::source() const
 {
     return m_dataSource;
 }
 
-void HistoryProxySource::setSource(ChartDataSource * newSource)
+void HistoryProxySource::setSource(ChartDataSource *newSource)
 {
     if (newSource == m_dataSource) {
         return;
@@ -141,7 +141,6 @@ void HistoryProxySource::setItem(int newItem)
     clear();
     Q_EMIT itemChanged();
 }
-
 
 int HistoryProxySource::maximumHistory() const
 {

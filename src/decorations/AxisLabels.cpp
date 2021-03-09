@@ -102,7 +102,9 @@ void AxisLabels::setSource(ChartDataSource *newSource)
     m_source = newSource;
 
     if (m_source) {
-        connect(m_source, &ChartDataSource::dataChanged, this, [this]() { updateLabels(); });
+        connect(m_source, &ChartDataSource::dataChanged, this, [this]() {
+            updateLabels();
+        });
     }
 
     updateLabels();
@@ -186,10 +188,18 @@ void AxisLabels::updateLabels()
             continue;
         }
 
-        QObject::connect(item, &QQuickItem::xChanged, this, [this]() { scheduleLayout(); });
-        QObject::connect(item, &QQuickItem::yChanged, this, [this]() { scheduleLayout(); });
-        QObject::connect(item, &QQuickItem::widthChanged, this, [this]() { scheduleLayout(); });
-        QObject::connect(item, &QQuickItem::heightChanged, this, [this]() { scheduleLayout(); });
+        QObject::connect(item, &QQuickItem::xChanged, this, [this]() {
+            scheduleLayout();
+        });
+        QObject::connect(item, &QQuickItem::yChanged, this, [this]() {
+            scheduleLayout();
+        });
+        QObject::connect(item, &QQuickItem::widthChanged, this, [this]() {
+            scheduleLayout();
+        });
+        QObject::connect(item, &QQuickItem::heightChanged, this, [this]() {
+            scheduleLayout();
+        });
 
         context->setParent(item);
         item->setParentItem(this);

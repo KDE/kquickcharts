@@ -15,8 +15,7 @@ class RangeGroup;
 /**
  * A helper containing the calculated X and Y ranges of a chart.
  */
-struct ComputedRange
-{
+struct ComputedRange {
     int startX = 0;
     int endX = 0;
     int distanceX = 0;

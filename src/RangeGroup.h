@@ -96,9 +96,9 @@ public:
 
     Q_SIGNAL void rangeChanged();
 
-    RangeResult calculateRange(const QVector<ChartDataSource*> &sources,
-                               std::function<qreal(ChartDataSource*)> minimumCallback,
-                               std::function<qreal(ChartDataSource*)> maximumCallback);
+    RangeResult calculateRange(const QVector<ChartDataSource *> &sources,
+                               std::function<qreal(ChartDataSource *)> minimumCallback,
+                               std::function<qreal(ChartDataSource *)> maximumCallback);
 
 private:
     qreal m_from = 0.0;
