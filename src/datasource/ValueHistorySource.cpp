@@ -119,7 +119,6 @@ void ValueHistorySource::setInterval(int newInterval)
     Q_EMIT intervalChanged();
 }
 
-
 void ValueHistorySource::clear()
 {
     m_history.clear();

@@ -21,12 +21,12 @@
 #include "datasource/ArraySource.h"
 #include "datasource/ChartAxisSource.h"
 #include "datasource/ColorGradientSource.h"
+#include "datasource/HistoryProxySource.h"
+#include "datasource/MapProxySource.h"
 #include "datasource/ModelHistorySource.h"
 #include "datasource/ModelSource.h"
 #include "datasource/SingleValueSource.h"
 #include "datasource/ValueHistorySource.h"
-#include "datasource/MapProxySource.h"
-#include "datasource/HistoryProxySource.h"
 
 #include "quickcharts_export.h"
 
@@ -61,10 +61,8 @@ void QuickChartsPlugin::registerTypes(const char *uri)
     qmlRegisterType<ModelHistorySource>(uri, 1, 0, "ModelHistorySource");
     qmlRegisterType<ValueHistorySource>(uri, 1, 0, "ValueHistorySource");
 #else
-    qmlRegisterTypeNotAvailable(uri, 1, 0, "ModelHistorySource",
-                                QStringLiteral("ModelHistorySource is deprecated, use HistoryProxySource instead"));
-    qmlRegisterTypeNotAvailable(uri, 1, 0, "ValueHistorySource",
-                                QStringLiteral("ValueHistorySource is deprecated, use HistoryProxySource instead"));
+    qmlRegisterTypeNotAvailable(uri, 1, 0, "ModelHistorySource", QStringLiteral("ModelHistorySource is deprecated, use HistoryProxySource instead"));
+    qmlRegisterTypeNotAvailable(uri, 1, 0, "ValueHistorySource", QStringLiteral("ValueHistorySource is deprecated, use HistoryProxySource instead"));
 #endif
 
     qmlRegisterUncreatableType<RangeGroup>(uri, 1, 0, "Range", QStringLiteral("Used as a grouped property"));

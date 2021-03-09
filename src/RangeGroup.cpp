@@ -107,8 +107,8 @@ bool RangeGroup::isValid() const
 }
 
 RangeGroup::RangeResult RangeGroup::calculateRange(const QVector<ChartDataSource *> &sources,
-                                                   std::function<qreal(ChartDataSource*)> minimumCallback,
-                                                   std::function<qreal(ChartDataSource*)> maximumCallback)
+                                                   std::function<qreal(ChartDataSource *)> minimumCallback,
+                                                   std::function<qreal(ChartDataSource *)> maximumCallback)
 {
     RangeResult result;
 

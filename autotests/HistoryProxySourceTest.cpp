@@ -7,8 +7,8 @@
 #include <QTest>
 
 #include "datasource/HistoryProxySource.h"
-#include "datasource/SingleValueSource.h"
 #include "datasource/ModelSource.h"
+#include "datasource/SingleValueSource.h"
 
 #define qs QStringLiteral
 
@@ -19,7 +19,8 @@ class TestModel : public QAbstractListModel
     Q_PROPERTY(int maximum READ maximum NOTIFY maximumChanged)
 
 public:
-    TestModel(QObject *parent = nullptr) : QAbstractListModel(parent)
+    TestModel(QObject *parent = nullptr)
+        : QAbstractListModel(parent)
     {
         m_items.fill(1, 10);
     }
@@ -171,7 +172,8 @@ private Q_SLOTS:
         }
     }
 
-    void testWithModel() {
+    void testWithModel()
+    {
         auto model = std::make_unique<TestModel>();
         auto modelSource = std::make_unique<ModelSource>();
         modelSource->setModel(model.get());

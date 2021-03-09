@@ -55,7 +55,7 @@ public:
     Q_SIGNAL void nameChanged();
 
     QString shortName() const;
-    void setShortName(const QString & newShortName);
+    void setShortName(const QString &newShortName);
     Q_SIGNAL void shortNameChanged();
 
 private:
@@ -158,9 +158,9 @@ private:
     qreal m_fillOpacity = 0.0;
     bool m_rangeInvalid = true;
     ChartDataSource *m_fillColorSource = nullptr;
-    QHash<ChartDataSource*, QVector<QVector2D>> m_values;
+    QHash<ChartDataSource *, QVector<QVector2D>> m_values;
     QQmlComponent *m_pointDelegate = nullptr;
-    QHash<ChartDataSource*, QVector<QQuickItem*>> m_pointDelegates;
+    QHash<ChartDataSource *, QVector<QQuickItem *>> m_pointDelegates;
 };
 
 QML_DECLARE_TYPEINFO(LineChart, QML_HAS_ATTACHED_PROPERTIES)

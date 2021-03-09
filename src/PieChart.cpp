@@ -196,7 +196,7 @@ void PieChart::onDataChanged()
         return;
     }
 
-    auto maximum = [](ChartDataSource* source) {
+    auto maximum = [](ChartDataSource *source) {
         qreal result = 0.0;
         for (int i = 0; i < source->itemCount(); ++i) {
             result += source->item(i).toDouble();

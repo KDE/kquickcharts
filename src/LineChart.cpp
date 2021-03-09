@@ -31,7 +31,7 @@ QColor colorWithAlpha(const QColor &color, qreal opacity)
     return result;
 }
 
-LineChartAttached::LineChartAttached(QObject* parent)
+LineChartAttached::LineChartAttached(QObject *parent)
     : QObject(parent)
 {
 }
@@ -41,7 +41,7 @@ QVariant LineChartAttached::value() const
     return m_value;
 }
 
-void LineChartAttached::setValue(const QVariant& value)
+void LineChartAttached::setValue(const QVariant &value)
 {
     if (value == m_value) {
         return;
@@ -56,7 +56,7 @@ QColor LineChartAttached::color() const
     return m_color;
 }
 
-void LineChartAttached::setColor(const QColor& color)
+void LineChartAttached::setColor(const QColor &color)
 {
     if (color == m_color) {
         return;
@@ -71,7 +71,7 @@ QString LineChartAttached::name() const
     return m_name;
 }
 
-void LineChartAttached::setName(const QString & newName)
+void LineChartAttached::setName(const QString &newName)
 {
     if (newName == m_name) {
         return;
@@ -90,7 +90,7 @@ QString LineChartAttached::shortName() const
     }
 }
 
-void LineChartAttached::setShortName(const QString & newShortName)
+void LineChartAttached::setShortName(const QString &newShortName)
 {
     if (newShortName == m_shortName) {
         return;
@@ -99,7 +99,6 @@ void LineChartAttached::setShortName(const QString & newShortName)
     m_shortName = newShortName;
     Q_EMIT shortNameChanged();
 }
-
 
 LineChart::LineChart(QQuickItem *parent)
     : XYChart(parent)
@@ -212,8 +211,7 @@ void LineChart::updatePolish()
                 value = (valueSource->item(i).toFloat() - range.startY) / range.distanceY;
             }
 
-            auto result = QVector2D{direction() == Direction::ZeroAtStart ? i * stepSize
-                                    : float(boundingRect().right()) - i * stepSize, value};
+            auto result = QVector2D{direction() == Direction::ZeroAtStart ? i * stepSize : float(boundingRect().right()) - i * stepSize, value};
             i++;
             return result;
         };
@@ -227,7 +225,7 @@ void LineChart::updatePolish()
         if (stacked() && !previousValues.isEmpty()) {
             if (values.size() != previousValues.size()) {
                 qWarning() << "Value source" << valueSource->objectName()
-                        << "has a different number of elements from the previuous source. Ignoring stacking for this source.";
+                           << "has a different number of elements from the previuous source. Ignoring stacking for this source.";
             } else {
                 std::for_each(values.begin(), values.end(), [previousValues, i = 0](QVector2D &point) mutable {
                     point.setY(point.y() + previousValues.at(i++).y());
@@ -237,7 +235,7 @@ void LineChart::updatePolish()
         previousValues = values;
 
         if (m_pointDelegate) {
-            auto& delegates = m_pointDelegates[valueSource];
+            auto &delegates = m_pointDelegates[valueSource];
             if (delegates.size() != values.size()) {
                 qDeleteAll(delegates);
                 createPointDelegates(values, i);
@@ -304,7 +302,7 @@ void LineChart::onDataChanged()
     polish();
 }
 
-void LineChart::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
+void LineChart::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     XYChart::geometryChanged(newGeometry, oldGeometry);
 
@@ -366,9 +364,9 @@ void LineChart::createPointDelegates(const QVector<QVector2D> &values, int sourc
 {
     auto valueSource = valueSources().at(sourceIndex);
 
-    QVector<QQuickItem*> delegates;
+    QVector<QQuickItem *> delegates;
     for (int i = 0; i < values.size(); ++i) {
-        auto delegate = qobject_cast<QQuickItem*>(m_pointDelegate->beginCreate(qmlContext(m_pointDelegate)));
+        auto delegate = qobject_cast<QQuickItem *>(m_pointDelegate->beginCreate(qmlContext(m_pointDelegate)));
         if (!delegate) {
             qWarning() << "Delegate creation for point" << i << "of value source" << valueSource->objectName()
                        << "failed, make sure pointDelegate is a QQuickItem";
@@ -392,7 +390,7 @@ void LineChart::updatePointDelegate(QQuickItem *delegate, const QVector2D &posit
     auto pos = QPointF{position.x() - delegate->width() / 2, (1.0 - position.y()) * height() - delegate->height() / 2};
     delegate->setPosition(pos);
 
-    auto attached = static_cast<LineChartAttached*>(qmlAttachedPropertiesObject<LineChart>(delegate, true));
+    auto attached = static_cast<LineChartAttached *>(qmlAttachedPropertiesObject<LineChart>(delegate, true));
     attached->setValue(value);
     attached->setColor(colorSource() ? colorSource()->item(sourceIndex).value<QColor>() : Qt::black);
     attached->setName(nameSource() ? nameSource()->item(sourceIndex).toString() : QString{});

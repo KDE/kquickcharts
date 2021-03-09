@@ -127,7 +127,6 @@ void Chart::setIndexingMode(IndexingMode newIndexingMode)
     Q_EMIT indexingModeChanged();
 }
 
-
 void Chart::componentComplete()
 {
     QQuickItem::componentComplete();
@@ -153,7 +152,9 @@ ChartDataSource *Chart::source(Chart::DataSourcesProperty *list, int index)
 void Chart::clearSources(Chart::DataSourcesProperty *list)
 {
     auto chart = reinterpret_cast<Chart *>(list->data);
-    std::for_each(chart->m_valueSources.cbegin(), chart->m_valueSources.cend(), [chart](ChartDataSource *source) { source->disconnect(chart); });
+    std::for_each(chart->m_valueSources.cbegin(), chart->m_valueSources.cend(), [chart](ChartDataSource *source) {
+        source->disconnect(chart);
+    });
     chart->m_valueSources.clear();
     chart->onDataChanged();
 }

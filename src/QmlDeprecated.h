@@ -9,8 +9,8 @@
 
 #include "charts_deprecated_logging.h"
 
-#include <QQmlEngine>
 #include <QQmlContext>
+#include <QQmlEngine>
 
 /**
  * Tiny helper macro to mark a QML item as deprecated.

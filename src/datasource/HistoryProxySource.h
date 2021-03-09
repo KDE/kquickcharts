@@ -8,10 +8,10 @@
 #ifndef HISTORYPROXYSOURCE_H
 #define HISTORYPROXYSOURCE_H
 
-#include <memory>
+#include <QTimer>
 #include <QVariant>
 #include <QVector>
-#include <QTimer>
+#include <memory>
 
 #include "ChartDataSource.h"
 
@@ -33,7 +33,7 @@ class HistoryProxySource : public ChartDataSource
      *
      * \note Changing this property will clear the existing history.
      */
-    Q_PROPERTY(ChartDataSource * source READ source WRITE setSource NOTIFY sourceChanged)
+    Q_PROPERTY(ChartDataSource *source READ source WRITE setSource NOTIFY sourceChanged)
     /**
      * The item of the data source to read data from.
      *

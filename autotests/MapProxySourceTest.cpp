@@ -81,11 +81,8 @@ private Q_SLOTS:
         QFETCH(QVariant, maximum);
         QCOMPARE(mapSource->maximum(), maximum);
     }
-
 };
-
 
 QTEST_GUILESS_MAIN(MapProxySourceTest)
 
 #include "MapProxySourceTest.moc"
-

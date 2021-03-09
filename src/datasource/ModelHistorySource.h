@@ -8,10 +8,10 @@
 #ifndef MODELHISTORYSOURCE_H
 #define MODELHISTORYSOURCE_H
 
-#include <memory>
-#include <QTimer>
 #include "ModelSource.h"
 #include "quickcharts_export.h"
+#include <QTimer>
+#include <memory>
 
 #if QUICKCHARTS_BUILD_DEPRECATED_SINCE(5, 78)
 
