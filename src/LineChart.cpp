@@ -443,15 +443,11 @@ QVector<QPair<QPointF, QPointF>> calculateControlPoints(const QVector<QVector2D>
         controlPoint.first = solved[i];
 
         if (i < count - 1) {
-            controlPoint.second = QPointF{
-                2.0 * points.at(i + 1).x() - solved.at(i + 1).x(),
-                2.0 * points.at(i + 1).y() * height - solved.at(i + 1).y()
-            };
+            controlPoint.second = QPointF{2.0 * points.at(i + 1).x() - solved.at(i + 1).x(), //
+                                          2.0 * points.at(i + 1).y() * height - solved.at(i + 1).y()};
         } else {
-            controlPoint.second = QPointF{
-                (last.x() + solved.at(count - 1).x()) / 2.0,
-                (last.y() + solved.at(count - 1).y()) / 2.0
-            };
+            controlPoint.second = QPointF{(last.x() + solved.at(count - 1).x()) / 2.0, //
+                                          (last.y() + solved.at(count - 1).y()) / 2.0};
         }
     }
 

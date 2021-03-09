@@ -30,9 +30,8 @@ void SDFShader::setShaders(const QString &vertex, const QString &fragment)
 
     setShaderSourceFiles(QOpenGLShader::Vertex, {QString::fromLatin1(shaderRoot) + header, QString::fromLatin1(shaderRoot) + vertex});
 
-    setShaderSourceFiles(
-        QOpenGLShader::Fragment,
-        {QString::fromLatin1(shaderRoot) + header,
-         QString::fromLatin1(shaderRoot) + QStringLiteral("sdf.glsl"),
-         QString::fromLatin1(shaderRoot) + fragment});
+    setShaderSourceFiles(QOpenGLShader::Fragment,
+                         {QString::fromLatin1(shaderRoot) + header, //
+                          QString::fromLatin1(shaderRoot) + QStringLiteral("sdf.glsl"), //
+                          QString::fromLatin1(shaderRoot) + fragment});
 }

@@ -37,6 +37,7 @@ private Q_SLOTS:
         QTest::addColumn<QVariant>("minimum");
         QTest::addColumn<QVariant>("maximum");
 
+        // clang-format off
         QTest::newRow("basic mapping")
             << QVariantList{qs("one"), qs("two"), qs("three"), qs("four")}
             << QVariantMap{{qs("one"), 4}, {qs("two"), 3}, {qs("three"), 2}, {qs("four"), 1}}
@@ -50,6 +51,7 @@ private Q_SLOTS:
             << QVariantList{QColor{Qt::red}, QColor{Qt::green}, QColor{Qt::blue}, QColor{Qt::red}, QColor{Qt::green}, QColor{Qt::blue}}
             << QVariant{QColor{Qt::blue}}
             << QVariant{QColor{Qt::red}};
+        // clang-format on
     }
 
     void testWithArray()

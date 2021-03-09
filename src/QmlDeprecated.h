@@ -24,11 +24,13 @@
  * \param since The version since when the deprecation happened.
  * \param message An extra message to display, like which item to use instead.
  */
+// clang-format off
 #define QML_DEPRECATED(item, since, message) \
     QMetaObject::invokeMethod(this, [this]() {\
         qCWarning(DEPRECATED) << item <<  "is deprecated (since" << since << "):" << message;\
         QString elidedName = QStringLiteral("...") % qmlContext(this)->baseUrl().toString().right(80);\
         qCWarning(DEPRECATED) << "Note: Instantiated from" << elidedName;\
     }, Qt::QueuedConnection);
+// clang-format on
 
 #endif // DEPRECATED_H
