@@ -206,9 +206,10 @@ void PieChart::onDataChanged()
 
     auto indexMode = indexingMode();
     auto colorIndex = 0;
-    auto range = m_range->calculateRange(valueSources(),
-                                         [](ChartDataSource*) { return 0.0; },
-                                         maximum);
+    auto calculateZeroRange = [](ChartDataSource *) {
+        return 0.0;
+    };
+    auto range = m_range->calculateRange(valueSources(), calculateZeroRange, maximum);
 
     for (auto source : sources) {
         qreal threshold = range.start;

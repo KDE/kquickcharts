@@ -153,10 +153,11 @@ void AxisLabels::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeo
 void AxisLabels::scheduleLayout()
 {
     if (!m_layoutScheduled) {
-        QMetaObject::invokeMethod(
-            this,
-            [this]() { layout(); m_layoutScheduled = false; },
-            Qt::QueuedConnection);
+        auto scheduleLayoutLambda = [this]() {
+            layout();
+            m_layoutScheduled = false;
+        };
+        QMetaObject::invokeMethod(this, scheduleLayoutLambda, Qt::QueuedConnection);
         m_layoutScheduled = true;
     }
 }
