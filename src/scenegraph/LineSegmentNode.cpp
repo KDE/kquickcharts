@@ -121,9 +121,6 @@ void LineSegmentNode::updatePoints()
     QVector<QVector2D> points;
     points.reserve(m_values.size() + 8);
 
-    points << QVector2D{0.0, -0.5};
-    points << QVector2D{-0.5, -0.5};
-
     auto min = std::numeric_limits<float>::max();
     auto max = std::numeric_limits<float>::min();
 
@@ -151,9 +148,6 @@ void LineSegmentNode::updatePoints()
     } else {
         points << QVector2D(1.5, points.last().y());
     }
-
-    points << QVector2D{1.5, -0.5};
-    points << QVector2D{0.0, -0.5};
 
     m_material->setPoints(points);
     m_material->setBounds(min, max);

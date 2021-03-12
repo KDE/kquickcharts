@@ -5,6 +5,8 @@
  * SPDX-License-Identifier: LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
  */
 
+#line 8
+
 // This requires "sdf.frag" which is included through SDFShader.
 
 uniform lowp float opacity; // inherited opacity of this item
@@ -48,6 +50,20 @@ lowp float sdf_polygon(in lowp vec2 point, in lowp int count)
 }
 #endif
 
+lowp float signed_line_segment(in lowp vec2 point, in lowp vec2 start, in lowp vec2 end)
+{
+    lowp vec2 point_start = point - start;
+    lowp vec2 point_end = point - end;
+    lowp vec2 start_end = end - start;
+    float h = clamp(dot(point_start, start_end) / dot(start_end, start_end), 0.0, 1.0);
+
+    lowp float left = sign(start_end.x * point_start.y - start_end.y * point_start.x);
+    left = point_start.x < 0.0 ? 1.0 : left;
+    left = point_end.x > 0.0 ? 1.0 : left;
+
+    return left * length(point_start - start_end * h);
+}
+
 void main()
 {
     lowp vec2 point = uv;
@@ -70,16 +86,16 @@ void main()
         return;
     }
 
-#ifdef API_ES2
-    lowp float polygon = sdf_polygon(point, pointCount);
-#else
-    lowp float polygon = sdf_polygon(point, points, pointCount);
-#endif
+    lowp float path = sdf_null;
+    for (int i = 0; i < pointCount - 1 && i < SDF_POLYGON_MAX_POINT_COUNT - 1; ++i) {
+        lowp float line = signed_line_segment(point, points[i], points[i + 1]);
+        path = sdf_union(path, line);
+    }
 
-    color = sdf_render(polygon, color, fillColor);
+    color = sdf_render(path, color, fillColor);
 
     if (lineWidth > 0.0) {
-        color = mix(color, lineColor, 1.0 - smoothstep(-smoothing, smoothing, sdf_annular(polygon, lineWidth)));
+        color = mix(color, lineColor, 1.0 - smoothstep(-smoothing, smoothing, sdf_annular(path, lineWidth)));
     }
 
     out_color = color * opacity;
