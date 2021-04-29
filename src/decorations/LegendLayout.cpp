@@ -104,6 +104,11 @@ void LegendLayout::setVerticalSpacing(qreal newVerticalSpacing)
     Q_EMIT verticalSpacingChanged();
 }
 
+qreal LegendLayout::preferredWidth() const
+{
+    return m_preferredWidth;
+}
+
 void LegendLayout::componentComplete()
 {
     QQuickItem::componentComplete();
@@ -281,6 +286,11 @@ std::tuple<int, int, qreal, qreal> LegendLayout::determineColumns()
     // Ensure we don't try to size things below their minimum size.
     if (maxWidth < minWidth) {
         maxWidth = minWidth;
+    }
+
+    if (preferredWidth != m_preferredWidth) {
+        m_preferredWidth = preferredWidth;
+        Q_EMIT preferredWidthChanged();
     }
 
     auto columns = 1;

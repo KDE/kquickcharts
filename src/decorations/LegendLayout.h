@@ -42,6 +42,7 @@ class LegendLayout : public QQuickItem
     Q_OBJECT
     Q_PROPERTY(qreal horizontalSpacing READ horizontalSpacing WRITE setHorizontalSpacing NOTIFY horizontalSpacingChanged)
     Q_PROPERTY(qreal verticalSpacing READ verticalSpacing WRITE setVerticalSpacing NOTIFY verticalSpacingChanged)
+    Q_PROPERTY(qreal preferredWidth READ preferredWidth NOTIFY preferredWidthChanged)
 
 public:
     explicit LegendLayout(QQuickItem *parent = nullptr);
@@ -53,6 +54,9 @@ public:
     qreal verticalSpacing() const;
     void setVerticalSpacing(qreal newVerticalSpacing);
     Q_SIGNAL void verticalSpacingChanged();
+
+    qreal preferredWidth() const;
+    Q_SIGNAL void preferredWidthChanged();
 
     static LegendLayoutAttached *qmlAttachedProperties(QObject *object)
     {
@@ -71,6 +75,7 @@ private:
 
     qreal m_horizontalSpacing = 0.0;
     qreal m_verticalSpacing = 0.0;
+    qreal m_preferredWidth = 0.0;
 
     bool m_completed = false;
 };
