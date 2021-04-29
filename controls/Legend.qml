@@ -41,6 +41,8 @@ Control {
     property var formatValue: function(input, index) { return input }
     property var maximumValueWidth: function(input, index) { return -1 }
 
+    property alias preferredWidth: legend.preferredWidth
+
     property string nameRole: "name"
     property string shortNameRole: "shortName"
     property string colorRole: "color"
