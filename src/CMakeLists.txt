@@ -37,8 +37,6 @@ set(quickcharts_SRCS
 
 qt5_add_resources(quickcharts_QRC shaders/shaders.qrc)
 
-add_definitions(-DQT_NO_KEYWORDS)
-
 ecm_qt_declare_logging_category(quickcharts_SRCS
     HEADER charts_general_logging.h
     IDENTIFIER GENERAL
