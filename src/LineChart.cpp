@@ -7,19 +7,22 @@
 
 #include "LineChart.h"
 
+#include <cmath>
+
 #include <QPainter>
 #include <QPainterPath>
 #include <QQuickWindow>
-#include <numeric>
 
 #include "RangeGroup.h"
 #include "datasource/ChartDataSource.h"
 #include "scenegraph/LineChartNode.h"
 #include "scenegraph/LineGridNode.h"
 
-QVector<QPointF> solveControlPoints(const QVector<QPointF> input);
-QVector<QPair<QPointF, QPointF>> calculateControlPoints(const QVector<QVector2D> &points, qreal height);
-QVector<QVector2D> interpolate(const QVector<QVector2D> &points, qreal height);
+static const float PixelsPerStep = 1.0;
+
+QVector<QVector2D> interpolate(const QVector<QVector2D> &points, float height);
+QVector<float> calculateTangents(const QVector<QVector2D> &points, float height);
+QVector2D cubicHermite(const QVector2D &first, const QVector2D &second, float step, float mFirst, float mSecond);
 
 QColor colorWithAlpha(const QColor &color, qreal opacity)
 {
@@ -326,40 +329,6 @@ void LineChart::updateLineNode(LineChartNode *node, const QColor &lineColor, con
     node->setValues(values);
 }
 
-QVector<QVector2D> interpolate(const QVector<QVector2D> &points, qreal height) //, qreal start, qreal end, qreal height)
-{
-    if (points.size() < 2) {
-        return points;
-    }
-
-    auto controlPoints = calculateControlPoints(points, height);
-
-    QPainterPath path;
-    path.moveTo(0.0, points.first().y() * height);
-
-    for (int i = 0; i < points.size() - 1; ++i) {
-        auto controlPoint = controlPoints.at(i);
-        auto nextPoint = QPointF{points.at(i + 1).x(), points.at(i + 1).y() * height};
-        path.cubicTo(controlPoint.first, controlPoint.second, nextPoint);
-    }
-
-    QVector<QVector2D> result;
-
-    const auto polygons = path.toSubpathPolygons();
-    auto pointCount = std::accumulate(polygons.begin(), polygons.end(), 0, [](int current, const QPolygonF &polygon) {
-        return current + polygon.size();
-    });
-    result.reserve(pointCount);
-
-    for (const auto &polygon : polygons) {
-        for (auto point : polygon) {
-            result.append(QVector2D{float(point.x()), float(point.y() / height)});
-        }
-    }
-
-    return result;
-}
-
 void LineChart::createPointDelegates(const QVector<QVector2D> &values, int sourceIndex)
 {
     auto valueSource = valueSources().at(sourceIndex);
@@ -397,80 +366,133 @@ void LineChart::updatePointDelegate(QQuickItem *delegate, const QVector2D &posit
     attached->setShortName(shortNameSource() ? shortNameSource()->item(sourceIndex).toString() : QString{});
 }
 
-QVector<QPair<QPointF, QPointF>> calculateControlPoints(const QVector<QVector2D> &points, qreal height)
+// Smoothly interpolate between points, using monotonic cubic interpolation.
+QVector<QVector2D> interpolate(const QVector<QVector2D> &points, float height)
 {
-    // This is based on
-    // https://www.codeproject.com/Articles/31859/Draw-a-Smooth-Curve-through-a-Set-of-2D-Points-wit
-    // and calculates the control points based on the derivative of the curve.
-
-    auto count = points.size() - 1;
-    QVector<QPair<QPointF, QPointF>> result(count);
-
-    const auto first = QPointF{points.first().x(), points.first().y() * height};
-    const auto last = QPointF{points.last().x(), points.last().y() * height};
-
-    if (count == 1) {
-        auto &controlPoint = result[0];
-
-        controlPoint.first.rx() = (2.0 * first.x() + last.x()) / 3.0;
-        controlPoint.first.ry() = (2.0 * first.y() + last.y()) / 3.0;
-
-        controlPoint.second.rx() = 2.0 * controlPoint.first.x() - first.x();
-        controlPoint.second.ry() = 2.0 * controlPoint.first.y() - first.y();
-
-        return result;
+    if (points.size() < 2) {
+        return points;
     }
 
-    QVector<QPointF> coordinates(count);
-    std::generate_n(coordinates.begin() + 1, count - 2, [&points, height, i = 1]() mutable {
-        auto x = 4.0 * points[i].x() + 2.0 * points[i + 1].x();
-        auto y = 4.0 * points[i].y() * height + 2.0 * points[i + 1].y() * height;
-        i++;
-        return QPointF{x, y};
-    });
+    auto tangents = calculateTangents(points, height);
 
-    coordinates.first().rx() = first.x() + 2.0 * points.at(1).x();
-    coordinates.first().ry() = first.y() + 2.0 * points.at(1).y() * height;
-    coordinates.last().rx() = (8.0 * points.at(count - 1).x() + last.x()) / 2.0;
-    coordinates.last().ry() = (8.0 * points.at(count - 1).y() * height + last.y()) / 2.0;
+    QVector<QVector2D> result;
 
-    const auto solved = solveControlPoints(coordinates);
+    auto current = QVector2D{0.0, points.first().y() * height};
+    result.append(QVector2D{0.0, points.first().y()});
 
-    for (int i = 0; i < count; ++i) {
-        auto &controlPoint = result[i];
-        controlPoint.first = solved[i];
+    for (int i = 0; i < points.size() - 1; ++i) {
+        auto next = QVector2D{points.at(i + 1).x(), points.at(i + 1).y() * height};
 
-        if (i < count - 1) {
-            controlPoint.second = QPointF{2.0 * points.at(i + 1).x() - solved.at(i + 1).x(), //
-                                          2.0 * points.at(i + 1).y() * height - solved.at(i + 1).y()};
-        } else {
-            controlPoint.second = QPointF{(last.x() + solved.at(count - 1).x()) / 2.0, //
-                                          (last.y() + solved.at(count - 1).y()) / 2.0};
+        auto currentTangent = tangents.at(i);
+        auto nextTangent = tangents.at(i + 1);
+
+        auto stepCount = int(std::max(1.0f, (next.x() - current.x()) / PixelsPerStep));
+        auto stepSize = (next.x() - current.x()) / stepCount;
+
+        if (stepCount == 1 || qFuzzyIsNull(next.y() - current.y())) {
+            result.append(QVector2D{next.x(), next.y() / height});
+            current = next;
+            continue;
         }
+
+        for (auto delta = current.x(); delta < next.x(); delta += stepSize) {
+            auto interpolated = cubicHermite(current, next, delta, currentTangent, nextTangent);
+            interpolated.setY(interpolated.y() / height);
+            result.append(interpolated);
+        }
+
+        current = next;
     }
+
+    current.setY(current.y() / height);
+    result.append(current);
 
     return result;
 }
 
-QVector<QPointF> solveControlPoints(const QVector<QPointF> input)
+// This calculates the tangents for monotonic cubic spline interpolation.
+// See https://en.wikipedia.org/wiki/Monotone_cubic_interpolation for details.
+QVector<float> calculateTangents(const QVector<QVector2D> &points, float height)
 {
-    auto count = input.size();
-    QVector<QPointF> result(count);
-    QVector<double> temp(count);
+    QVector<float> secantSlopes;
+    secantSlopes.reserve(points.size());
 
-    double b = 2.0;
-    result.first() = input.first() / b;
+    QVector<float> tangents;
+    tangents.reserve(points.size());
 
-    for (int i = 1; i < count; ++i) {
-        temp[i] = 1.0 / b;
-        b = (i < count - 1 ? 4.0 : 3.5) - temp[i];
-        result[i].rx() = (input[i].x() - result[i - 1].x()) / b;
-        result[i].ry() = (input[i].y() - result[i - 1].y()) / b;
+    float previousSlope = 0.0;
+    float slope = 0.0;
+
+    for (int i = 0; i < points.size() - 1; ++i) {
+        auto current = points.at(i);
+        auto next = points.at(i + 1);
+
+        previousSlope = slope;
+        slope = (next.y() * height - current.y() * height) / (next.x() - current.x());
+
+        secantSlopes.append(slope);
+
+        if (i == 0) {
+            tangents.append(slope);
+        } else if (previousSlope * slope < 0.0) {
+            tangents.append(0.0);
+        } else {
+            tangents.append((previousSlope + slope) / 2.0);
+        }
+    }
+    tangents.append(secantSlopes.last());
+
+    for (int i = 0; i < points.size() - 1; ++i) {
+        auto slope = secantSlopes.at(i);
+
+        if (qFuzzyIsNull(slope)) {
+            tangents[i] = 0.0;
+            tangents[i + 1] = 0.0;
+            continue;
+        }
+
+        auto alpha = tangents.at(i) / slope;
+        auto beta = tangents.at(i + 1) / slope;
+
+        if (alpha < 0.0) {
+            tangents[i] = 0.0;
+        }
+
+        if (beta < 0.0) {
+            tangents[i + 1] = 0.0;
+        }
+
+        auto length = alpha * alpha + beta * beta;
+        if (length > 9) {
+            auto tau = 3.0 / sqrt(length);
+            tangents[i] = tau * alpha * slope;
+            tangents[i + 1] = tau * beta * slope;
+        }
     }
 
-    for (int i = 1; i < count; ++i) {
-        result[count - i - 1] -= temp[count - i] * result[count - i];
-    }
+    return tangents;
+}
 
+// Cubic Hermite Interpolation between two points
+// Given two points, an X value between those two points and two tangents, this
+// will perform cubic hermite interpolation between the two points.
+// See https://en.wikipedia.org/wiki/Cubic_Hermite_spline for details as well as
+// the above mentioned article on monotonic interpolation.
+QVector2D cubicHermite(const QVector2D &first, const QVector2D &second, float step, float mFirst, float mSecond)
+{
+    const auto delta = second.x() - first.x();
+    const auto t = (step - first.x()) / delta;
+
+    // Hermite basis values
+    // h₀₀(t) = 2t³ - 3t² + 1
+    const auto h00 = 2.0f * std::pow(t, 3.0f) - 3.0f * std::pow(t, 2.0f) + 1.0f;
+    // h₁₀(t) = t³ - 2t² + t
+    const auto h10 = std::pow(t, 3.0f) - 2.0f * std::pow(t, 2.0f) + t;
+    // h₀₁(t) = -2t³ + 3t²
+    const auto h01 = -2.0f * std::pow(t, 3.0f) + 3.0f * std::pow(t, 2.0f);
+    // h₁₁(t) = t³ - t²
+    const auto h11 = std::pow(t, 3.0f) - std::pow(t, 2.0f);
+
+    auto result = QVector2D{step, first.y() * h00 + delta * mFirst * h10 + second.y() * h01 + delta * mSecond * h11};
     return result;
 }
