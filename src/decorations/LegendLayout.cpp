@@ -306,7 +306,7 @@ std::tuple<int, int, qreal, qreal> LegendLayout::determineColumns()
         // If the minimum width is less than our width, but the maximum is
         // larger, we found a correct solution since we can resize the items to
         // fit within the provided bounds.
-        if (minTotalWidth < availableWidth && maxTotalWidth >= availableWidth) {
+        if (minTotalWidth <= availableWidth && maxTotalWidth >= availableWidth) {
             break;
         }
 
