@@ -80,7 +80,7 @@ QVariant ModelSource::item(int index) const
     }
 
     if (!m_indexColumns && (m_column < 0 || m_column > m_model->columnCount())) {
-        qCWarning(DATASOURCE) << "ModelSource: Invalid column" << m_column;
+        qCDebug(DATASOURCE) << "ModelSource: Invalid column" << m_column;
         return QVariant{};
     }
 
