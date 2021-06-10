@@ -63,7 +63,7 @@ Control {
     spacing: Theme.smallSpacing
 
     contentItem: RowLayout {
-        property real actualValueWidth: control.maximumValueWidth > 0 ? control.maximumValueWidth : value.contentWidth
+        property real actualValueWidth: control.maximumValueWidth > 0 ? control.maximumValueWidth : value.implicitWidth
         property real minimumValueWidth: control.width - indicator.width - control.spacing
 
         property real minimumWidth: indicator.width + actualValueWidth + control.spacing
