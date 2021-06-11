@@ -7,7 +7,6 @@
 
 #include "LineSegmentNode.h"
 
-#include <QColor>
 #include <QSGGeometry>
 
 #include "LineChartMaterial.h"

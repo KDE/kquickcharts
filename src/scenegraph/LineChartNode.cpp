@@ -7,7 +7,6 @@
 
 #include "LineChartNode.h"
 
-#include <QColor>
 #include <QtMath>
 
 #include "LineChartMaterial.h"
