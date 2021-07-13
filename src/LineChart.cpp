@@ -228,7 +228,7 @@ void LineChart::updatePolish()
         if (stacked() && !previousValues.isEmpty()) {
             if (values.size() != previousValues.size()) {
                 qWarning() << "Value source" << valueSource->objectName()
-                           << "has a different number of elements from the previuous source. Ignoring stacking for this source.";
+                           << "has a different number of elements from the previous source. Ignoring stacking for this source.";
             } else {
                 std::for_each(values.begin(), values.end(), [previousValues, i = 0](QVector2D &point) mutable {
                     point.setY(point.y() + previousValues.at(i++).y());
