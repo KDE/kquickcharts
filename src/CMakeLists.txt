@@ -33,6 +33,7 @@ set(quickcharts_SRCS
     scenegraph/LineSegmentNode.cpp
     scenegraph/SDFShader.cpp
     scenegraph/BarChartNode.cpp
+    scenegraph/BarChartMaterial.cpp
 )
 
 qt5_add_resources(quickcharts_QRC shaders/shaders.qrc)

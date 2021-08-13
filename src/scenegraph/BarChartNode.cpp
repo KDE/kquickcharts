@@ -1,5 +1,4 @@
 /*
- * This file is part of KQuickCharts
  * SPDX-FileCopyrightText: 2019 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
  * SPDX-License-Identifier: LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
@@ -9,7 +8,91 @@
 
 #include <QColor>
 #include <QDebug>
-#include <QSGVertexColorMaterial>
+
+#include "BarChartMaterial.h"
+
+struct BarVertex {
+    float x;
+    float y;
+
+    float u;
+    float v;
+
+    float r;
+    float g;
+    float b;
+    float a;
+
+    float value;
+
+    void set(const QPointF &position, const QVector2D &uv, const QColor &color, float newValue)
+    {
+        x = position.x();
+        y = position.y();
+        u = uv.x();
+        v = uv.y();
+        r = color.redF();
+        g = color.greenF();
+        b = color.blueF();
+        a = color.alphaF();
+        value = newValue;
+    }
+};
+
+/* clang-format off */
+QSGGeometry::Attribute BarAttributes[] = {
+    QSGGeometry::Attribute::create(0, 2, GL_FLOAT, true),
+    QSGGeometry::Attribute::create(1, 2, GL_FLOAT, false),
+    QSGGeometry::Attribute::create(2, 4, GL_FLOAT, false),
+    QSGGeometry::Attribute::create(3, 1, GL_FLOAT, false)
+};
+/* clang-format on */
+
+QSGGeometry::AttributeSet BarAttributeSet = {4, sizeof(BarVertex), BarAttributes};
+
+void updateBarGeometry(QSGGeometry *geometry, const QRectF &rect, const QColor &color, float value)
+{
+    auto vertices = static_cast<BarVertex *>(geometry->vertexData());
+    vertices[0].set(rect.topLeft(), {0.0, 0.0}, color, value);
+    vertices[1].set(rect.bottomLeft(), {0.0, 1.0}, color, value);
+    vertices[2].set(rect.topRight(), {1.0, 0.0}, color, value);
+    vertices[3].set(rect.bottomRight(), {1.0, 1.0}, color, value);
+    geometry->markVertexDataDirty();
+}
+
+class BarNode : public QSGGeometryNode
+{
+public:
+    BarNode(const QRectF &r)
+    {
+        geometry = new QSGGeometry(BarAttributeSet, 4);
+        geometry->setVertexDataPattern(QSGGeometry::DynamicPattern);
+        updateBarGeometry(geometry, r, Qt::transparent, 0.0);
+        setGeometry(geometry);
+
+        rect = r;
+
+        material = new BarChartMaterial{};
+        setMaterial(material);
+
+        setFlags(QSGNode::OwnsGeometry | QSGNode::OwnsMaterial);
+    }
+
+    void update()
+    {
+        auto minSize = std::min(rect.width(), rect.height());
+        auto aspect = rect.height() / minSize;
+        updateBarGeometry(geometry, rect, color, value * aspect);
+
+        markDirty(QSGNode::DirtyGeometry);
+    }
+
+    QSGGeometry *geometry;
+    BarChartMaterial *material;
+    QRectF rect;
+    QColor color;
+    float value;
+};
 
 bool compareCount(const QVector<QPair<qreal, QColor>> &first, const QVector<QPair<qreal, QColor>> &second)
 {
@@ -18,88 +101,55 @@ bool compareCount(const QVector<QPair<qreal, QColor>> &first, const QVector<QPai
 
 BarChartNode::BarChartNode()
 {
-    m_geometry = new QSGGeometry{QSGGeometry::defaultAttributes_ColoredPoint2D(), 0};
-    m_geometry->setDrawingMode(QSGGeometry::DrawTriangles);
-    setGeometry(m_geometry);
 
-    setMaterial(new QSGVertexColorMaterial{});
-
-    setFlags(QSGNode::OwnsGeometry | QSGNode::OwnsMaterial);
-}
-
-BarChartNode::~BarChartNode()
-{
 }
 
 void BarChartNode::setRect(const QRectF &rect)
 {
-    if (rect == m_rect) {
-        return;
-    }
-
     m_rect = rect;
 }
 
-void BarChartNode::setValues(const QVector<QPair<QVector2D, QColor>> &values)
+void BarChartNode::setBars(const QVector<Bar> &bars)
 {
-    m_values = values;
-}
-
-void BarChartNode::setBarWidth(qreal width)
-{
-    if (qFuzzyCompare(width, m_barWidth)) {
-        return;
-    }
-
-    m_barWidth = width;
+    m_bars = bars;
 }
 
 void BarChartNode::update()
 {
-    if (!m_rect.isValid() || m_values.isEmpty()) {
+    if (!m_rect.isValid() || m_bars.isEmpty()) {
         return;
     }
 
-    auto itemCount = m_values.count();
+    for (auto index = 0; index < m_bars.count(); ++index) {
+        auto entry = m_bars.at(index);
 
-    if (itemCount <= 0) {
-        return;
+        auto rect = QRectF{QPointF{entry.x, m_rect.top()}, QSizeF{entry.width, m_rect.height()}};
+
+        if (childCount() <= index) {
+            appendChildNode(new BarNode{rect});
+        }
+
+        auto child = static_cast<BarNode *>(childAtIndex(index));
+
+        auto minSize = std::min(rect.width(), rect.height());
+        auto aspect = QVector2D{float(rect.width() / minSize), float(rect.height() / minSize)};
+
+        if (aspect != child->material->aspect) {
+            child->material->aspect = aspect;
+            child->markDirty(QSGNode::DirtyMaterial);
+        }
+
+        if (child->rect != rect || !qFuzzyCompare(child->value, entry.value) || child->color != entry.color) {
+            child->rect = rect;
+            child->value = entry.value;
+            child->color = entry.color;
+            child->update();
+        }
     }
 
-    int totalVertices = itemCount * 6;
-    if (totalVertices != m_geometry->vertexCount()) {
-        m_geometry->allocate(totalVertices, totalVertices);
+    while (childCount() > m_bars.count()) {
+        auto child = childAtIndex(childCount() - 1);
+        removeChildNode(child);
+        delete child;
     }
-
-    auto vertices = m_geometry->vertexDataAsColoredPoint2D();
-    auto indices = m_geometry->indexDataAsUShort();
-
-    auto index = 0;
-    for (const auto &entry : qAsConst(m_values)) {
-        auto value = entry.first;
-        value.setY(std::min(value.y() * m_rect.height(), m_rect.height()));
-        auto color = entry.second;
-        auto rect = QRectF{QPointF{value.x(), m_rect.bottom() - value.y()}, QSizeF{m_barWidth, value.y()}};
-        bar(vertices, indices, index, rect, color);
-    }
-
-    m_geometry->markVertexDataDirty();
-    m_geometry->markIndexDataDirty();
-    markDirty(QSGNode::DirtyGeometry);
-}
-
-void BarChartNode::bar(QSGGeometry::ColoredPoint2D *vertices, quint16 *indices, int &index, const QRectF &bar, const QColor &color)
-{
-    indices[index] = index;
-    vertices[index++].set(bar.left(), bar.bottom(), color.red(), color.green(), color.blue(), color.alpha());
-    indices[index] = index;
-    vertices[index++].set(bar.left(), bar.top(), color.red(), color.green(), color.blue(), color.alpha());
-    indices[index] = index;
-    vertices[index++].set(bar.right(), bar.top(), color.red(), color.green(), color.blue(), color.alpha());
-    indices[index] = index;
-    vertices[index++].set(bar.right(), bar.top(), color.red(), color.green(), color.blue(), color.alpha());
-    indices[index] = index;
-    vertices[index++].set(bar.right(), bar.bottom(), color.red(), color.green(), color.blue(), color.alpha());
-    indices[index] = index;
-    vertices[index++].set(bar.left(), bar.bottom(), color.red(), color.green(), color.blue(), color.alpha());
 }

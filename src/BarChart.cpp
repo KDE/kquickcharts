@@ -1,5 +1,4 @@
 /*
- * This file is part of KQuickCharts
  * SPDX-FileCopyrightText: 2019 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
  * SPDX-License-Identifier: LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
@@ -53,83 +52,29 @@ void BarChart::setBarWidth(qreal newBarWidth)
 
 QSGNode *BarChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *)
 {
+    BarChartNode *barNode = nullptr;
+
     if (!node) {
-        node = new BarChartNode{};
-    }
-
-    QVector<QPair<QVector2D, QColor>> values;
-
-    // TODO: Find some way to clean this up and simplify it, since this is pretty ugly.
-    auto w = m_barWidth;
-    if (w < 0.0) {
-        if (stacked()) {
-            auto totalItemCount = m_values.size();
-            w = width() / totalItemCount - m_spacing;
-
-            auto x = float(m_spacing / 2);
-            auto itemSpacing = w + m_spacing;
-
-            for (const auto &items : qAsConst(m_values)) {
-                for (int i = items.count() - 1; i >= 0; --i) {
-                    auto entry = items.at(i);
-                    values << QPair<QVector2D, QColor>{QVector2D{x, float(entry.first)}, entry.second};
-                }
-                x += itemSpacing;
-            }
-        } else {
-            auto totalItemCount = m_values.size() * valueSources().count();
-
-            w = width() / totalItemCount - m_spacing;
-
-            auto x = float(m_spacing / 2);
-            auto itemSpacing = w + m_spacing;
-
-            for (const auto &items : qAsConst(m_values)) {
-                for (const auto &entry : items) {
-                    values << QPair<QVector2D, QColor>{QVector2D{x, float(entry.first)}, entry.second};
-                    x += itemSpacing;
-                }
-            }
-        }
+        barNode = new BarChartNode{};
+        node = barNode;
     } else {
-        auto itemSpacing = width() / m_values.size();
-        if (stacked()) {
-            auto x = float(itemSpacing / 2 - m_barWidth / 2);
-
-            for (const auto &items : qAsConst(m_values)) {
-                for (int i = items.count() - 1; i >= 0; --i) {
-                    auto entry = items.at(i);
-                    values << QPair<QVector2D, QColor>{QVector2D{x, float(entry.first)}, entry.second};
-                }
-                x += itemSpacing;
-            }
-        } else {
-            auto totalWidth = m_barWidth * valueSources().count() + m_spacing * (valueSources().count() - 1);
-
-            auto x = float(itemSpacing / 2 - totalWidth / 2);
-
-            for (const auto &items : qAsConst(m_values)) {
-                for (int i = 0; i < items.count(); ++i) {
-                    auto entry = items.at(i);
-                    values << QPair<QVector2D, QColor>{QVector2D{float(x + i * (m_barWidth + m_spacing)), float(entry.first)}, entry.second};
-                }
-                x += itemSpacing;
-            }
-        }
+        barNode = static_cast<BarChartNode *>(node);
     }
 
-    auto barNode = static_cast<BarChartNode *>(node);
     barNode->setRect(boundingRect());
-    barNode->setValues(values);
-    barNode->setBarWidth(w);
+    barNode->setBars(calculateBars());
 
     barNode->update();
 
-    return barNode;
+    return node;
 }
 
 void BarChart::onDataChanged()
 {
+    if (valueSources().size() == 0 || !colorSource()) {
+        return;
+    }
+
     m_values.clear();
 
     updateComputedRange();
@@ -179,4 +124,72 @@ void BarChart::onDataChanged()
     }
 
     update();
+}
+
+QVector<Bar> BarChart::calculateBars()
+{
+    QVector<Bar> result;
+
+    // TODO: Find some way to clean this up and simplify it, since this is pretty ugly.
+
+    auto targetWidth = width();
+
+    float w = m_barWidth;
+    if (w < 0.0) {
+        auto totalItemCount = stacked() ? m_values.size() : m_values.size() * valueSources().count();
+
+        if (stacked()) {
+            w = targetWidth / totalItemCount - m_spacing;
+
+            auto x = float(m_spacing / 2);
+            auto itemSpacing = w + m_spacing;
+
+            for (const auto &items : qAsConst(m_values)) {
+                for (int i = items.count() - 1; i >= 0; --i) {
+                    auto entry = items.at(i);
+                    result << Bar{x, w, float(entry.first), entry.second};
+                }
+                x += itemSpacing;
+            }
+        } else {
+            w = targetWidth / totalItemCount - m_spacing;
+
+            auto x = float(m_spacing / 2);
+            auto itemSpacing = w + m_spacing;
+
+            for (const auto &items : qAsConst(m_values)) {
+                for (const auto &entry : items) {
+                    result << Bar{x, w, float(entry.first), entry.second};
+                    x += itemSpacing;
+                }
+            }
+        }
+    } else {
+        auto itemSpacing = targetWidth / m_values.size();
+        if (stacked()) {
+            auto x = float(itemSpacing / 2 - m_barWidth / 2);
+
+            for (const auto &items : qAsConst(m_values)) {
+                for (int i = items.count() - 1; i >= 0; --i) {
+                    auto entry = items.at(i);
+                    result << Bar{x, w, float(entry.first), entry.second};
+                }
+                x += itemSpacing;
+            }
+        } else {
+            auto totalWidth = m_barWidth * valueSources().count() + m_spacing * (valueSources().count() - 1);
+
+            auto x = float(itemSpacing / 2 - totalWidth / 2);
+
+            for (const auto &items : qAsConst(m_values)) {
+                for (int i = 0; i < items.count(); ++i) {
+                    auto entry = items.at(i);
+                    result << Bar{float(x + i * (m_barWidth + m_spacing)), w, float(entry.first), entry.second};
+                }
+                x += itemSpacing;
+            }
+        }
+    }
+
+    return result;
 }

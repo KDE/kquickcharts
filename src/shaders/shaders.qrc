@@ -15,5 +15,9 @@
         <file alias="linechart_core.frag">linechart.frag</file>
         <file>linechart.vert</file>
         <file alias="linechart_core.vert">linechart.vert</file>
+        <file>barchart.vert</file>
+        <file alias="barchart_core.vert">barchart.vert</file>
+        <file>barchart.frag</file>
+        <file alias="barchart_core.frag">barchart.frag</file>
     </qresource>
 </RCC>
