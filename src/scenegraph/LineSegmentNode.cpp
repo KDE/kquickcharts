@@ -34,8 +34,9 @@ LineSegmentNode::~LineSegmentNode()
 
 void LineSegmentNode::setRect(const QRectF &rect)
 {
-    if (rect == m_rect)
+    if (rect == m_rect) {
         return;
+    }
 
     m_rect = rect;
     QSGGeometry::updateTexturedRectGeometry(m_geometry, m_rect, QRectF{0.0, 0, m_xAspect, 1});
@@ -46,8 +47,9 @@ void LineSegmentNode::setRect(const QRectF &rect)
 
 void LineSegmentNode::setAspect(float xAspect, float yAspect)
 {
-    if (qFuzzyCompare(xAspect, m_xAspect) && qFuzzyCompare(yAspect, m_yAspect))
+    if (qFuzzyCompare(xAspect, m_xAspect) && qFuzzyCompare(yAspect, m_yAspect)) {
         return;
+    }
 
     m_yAspect = yAspect;
     m_material->setAspect(m_yAspect);
@@ -71,8 +73,9 @@ void LineSegmentNode::setSmoothing(float smoothing)
 
 void LineSegmentNode::setLineWidth(float width)
 {
-    if (qFuzzyCompare(width, m_lineWidth))
+    if (qFuzzyCompare(width, m_lineWidth)) {
         return;
+    }
 
     m_lineWidth = width;
     m_material->setLineWidth(m_lineWidth);
@@ -81,8 +84,9 @@ void LineSegmentNode::setLineWidth(float width)
 
 void LineSegmentNode::setLineColor(const QColor &color)
 {
-    if (m_material->lineColor() == color)
+    if (m_material->lineColor() == color) {
         return;
+    }
 
     m_material->setLineColor(color);
     markDirty(QSGNode::DirtyMaterial);
@@ -90,8 +94,9 @@ void LineSegmentNode::setLineColor(const QColor &color)
 
 void LineSegmentNode::setFillColor(const QColor &color)
 {
-    if (m_material->fillColor() == color)
+    if (m_material->fillColor() == color) {
         return;
+    }
 
     m_material->setFillColor(color);
     markDirty(QSGNode::DirtyMaterial);
@@ -114,8 +119,9 @@ void LineSegmentNode::setFarRight(const QVector2D &value)
 
 void LineSegmentNode::updatePoints()
 {
-    if (m_values.isEmpty())
+    if (m_values.isEmpty()) {
         return;
+    }
 
     QVector<QVector2D> points;
     points.reserve(m_values.size() + 8);

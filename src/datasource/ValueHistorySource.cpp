@@ -34,8 +34,9 @@ QVariant ValueHistorySource::item(int index) const
 QVariant ValueHistorySource::minimum() const
 {
     auto item = std::min_element(m_history.cbegin(), m_history.cend());
-    if (item != m_history.cend())
+    if (item != m_history.cend()) {
         return *item;
+    }
 
     return QVariant{};
 }
@@ -43,8 +44,9 @@ QVariant ValueHistorySource::minimum() const
 QVariant ValueHistorySource::maximum() const
 {
     auto item = std::max_element(m_history.cbegin(), m_history.cend());
-    if (item != m_history.cend())
+    if (item != m_history.cend()) {
         return *item;
+    }
 
     return QVariant{};
 }

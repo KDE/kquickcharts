@@ -22,8 +22,9 @@ ChartAxisSource::ChartAxisSource(QObject *parent)
 
 QVariant ChartAxisSource::item(int index) const
 {
-    if (!m_chart || index < 0 || index > m_itemCount)
-        return QVariant{};
+    if (!m_chart || index < 0 || index > m_itemCount) {
+        return {};
+    }
 
     auto range = m_chart->computedRange();
     if (m_axis == Axis::XAxis) {
@@ -35,8 +36,9 @@ QVariant ChartAxisSource::item(int index) const
 
 QVariant ChartAxisSource::minimum() const
 {
-    if (!m_chart)
-        return QVariant{};
+    if (!m_chart) {
+        return {};
+    }
 
     if (m_axis == Axis::XAxis) {
         return m_chart->computedRange().startX;
@@ -47,8 +49,9 @@ QVariant ChartAxisSource::minimum() const
 
 QVariant ChartAxisSource::maximum() const
 {
-    if (!m_chart)
-        return QVariant{};
+    if (!m_chart) {
+        return {};
+    }
 
     if (m_axis == Axis::XAxis) {
         return m_chart->computedRange().endX;

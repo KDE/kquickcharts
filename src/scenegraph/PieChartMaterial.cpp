@@ -151,10 +151,12 @@ void PieChartShader::initialize()
 
 void PieChartShader::updateState(const QSGMaterialShader::RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial)
 {
-    if (state.isMatrixDirty())
+    if (state.isMatrixDirty()) {
         program()->setUniformValue(m_matrixLocation, state.combinedMatrix());
-    if (state.isOpacityDirty())
+    }
+    if (state.isOpacityDirty()) {
         program()->setUniformValue(m_opacityLocation, state.opacity());
+    }
 
     if (!oldMaterial || newMaterial->compare(oldMaterial) != 0) {
         PieChartMaterial *material = static_cast<PieChartMaterial *>(newMaterial);

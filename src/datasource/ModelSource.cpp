@@ -53,16 +53,18 @@ bool ModelSource::indexColumns() const
 
 int ModelSource::itemCount() const
 {
-    if (!m_model)
+    if (!m_model) {
         return 0;
+    }
 
     return m_indexColumns ? m_model->columnCount() : m_model->rowCount();
 }
 
 QVariant ModelSource::item(int index) const
 {
-    if (!m_model)
-        return QVariant{};
+    if (!m_model) {
+        return {};
+    }
 
     // For certain model (QML ListModel for example), the roleNames() are more
     // dynamic and may only be valid when this method gets called. So try and
@@ -94,8 +96,9 @@ QVariant ModelSource::item(int index) const
 
 QVariant ModelSource::minimum() const
 {
-    if (!m_model || itemCount() <= 0)
-        return QVariant{};
+    if (!m_model || itemCount() <= 0) {
+        return {};
+    }
 
     auto minProperty = m_model->property("minimum");
     auto maxProperty = m_model->property("maximum");
@@ -112,8 +115,9 @@ QVariant ModelSource::minimum() const
 
 QVariant ModelSource::maximum() const
 {
-    if (!m_model || itemCount() <= 0)
-        return QVariant{};
+    if (!m_model || itemCount() <= 0) {
+        return {};
+    }
 
     auto minProperty = m_model->property("minimum");
     auto maxProperty = m_model->property("maximum");

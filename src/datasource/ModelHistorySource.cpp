@@ -31,16 +31,18 @@ int ModelHistorySource::itemCount() const
 
 QVariant ModelHistorySource::item(int index) const
 {
-    if (index < 0 || index >= m_history.size())
-        return QVariant{};
+    if (index < 0 || index >= m_history.size()) {
+        return {};
+    }
 
     return m_history.at(index);
 }
 
 QVariant ModelHistorySource::minimum() const
 {
-    if (m_history.isEmpty())
-        return QVariant{};
+    if (m_history.isEmpty()) {
+        return {};
+    }
 
     auto minProperty = model()->property("minimum");
     auto maxProperty = model()->property("maximum");
@@ -53,8 +55,9 @@ QVariant ModelHistorySource::minimum() const
 
 QVariant ModelHistorySource::maximum() const
 {
-    if (m_history.isEmpty())
-        return QVariant{};
+    if (m_history.isEmpty()) {
+        return {};
+    }
 
     auto minProperty = model()->property("minimum");
     auto maxProperty = model()->property("maximum");

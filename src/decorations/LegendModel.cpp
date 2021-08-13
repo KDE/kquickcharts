@@ -38,8 +38,9 @@ int LegendModel::rowCount(const QModelIndex &parent) const
 
 QVariant LegendModel::data(const QModelIndex &index, int role) const
 {
-    if (!checkIndex(index, CheckIndexOption::ParentIsInvalid | CheckIndexOption::IndexIsValid))
-        return QVariant{};
+    if (!checkIndex(index, CheckIndexOption::ParentIsInvalid | CheckIndexOption::IndexIsValid)) {
+        return {};
+    }
 
     switch (role) {
     case NameRole:
@@ -114,8 +115,9 @@ void LegendModel::update()
 {
     m_updateQueued = false;
 
-    if (!m_chart)
+    if (!m_chart) {
         return;
+    }
 
     beginResetModel();
     m_items.clear();

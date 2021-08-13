@@ -33,8 +33,9 @@ BarChartNode::~BarChartNode()
 
 void BarChartNode::setRect(const QRectF &rect)
 {
-    if (rect == m_rect)
+    if (rect == m_rect) {
         return;
+    }
 
     m_rect = rect;
 }
@@ -46,21 +47,24 @@ void BarChartNode::setValues(const QVector<QPair<QVector2D, QColor>> &values)
 
 void BarChartNode::setBarWidth(qreal width)
 {
-    if (qFuzzyCompare(width, m_barWidth))
+    if (qFuzzyCompare(width, m_barWidth)) {
         return;
+    }
 
     m_barWidth = width;
 }
 
 void BarChartNode::update()
 {
-    if (!m_rect.isValid() || m_values.isEmpty())
+    if (!m_rect.isValid() || m_values.isEmpty()) {
         return;
+    }
 
     auto itemCount = m_values.count();
 
-    if (itemCount <= 0)
+    if (itemCount <= 0) {
         return;
+    }
 
     int totalVertices = itemCount * 6;
     if (totalVertices != m_geometry->vertexCount()) {

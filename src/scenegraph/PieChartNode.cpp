@@ -58,8 +58,9 @@ PieChartNode::~PieChartNode()
 
 void PieChartNode::setRect(const QRectF &rect)
 {
-    if (rect == m_rect)
+    if (rect == m_rect) {
         return;
+    }
 
     m_rect = rect;
     QSGGeometry::updateTexturedRectGeometry(m_geometry, m_rect, QRectF{0, 0, 1, 1});
@@ -120,8 +121,9 @@ void PieChartNode::setSections(const QVector<qreal> &sections)
 
 void PieChartNode::setBackgroundColor(const QColor &color)
 {
-    if (color == m_backgroundColor)
+    if (color == m_backgroundColor) {
         return;
+    }
 
     m_backgroundColor = color;
     m_material->setBackgroundColor(color);

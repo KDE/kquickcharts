@@ -34,8 +34,9 @@ LineChartNode::~LineChartNode()
 
 void LineChartNode::setRect(const QRectF &rect, qreal devicePixelRatio)
 {
-    if (rect == m_rect)
+    if (rect == m_rect) {
         return;
+    }
 
     m_rect = rect;
     m_aspect = m_rect.height() / m_rect.width();
@@ -49,8 +50,9 @@ void LineChartNode::setRect(const QRectF &rect, qreal devicePixelRatio)
 
 void LineChartNode::setLineWidth(float width)
 {
-    if (qFuzzyCompare(width, m_lineWidth))
+    if (qFuzzyCompare(width, m_lineWidth)) {
         return;
+    }
 
     m_lineWidth = width;
     std::for_each(m_segments.cbegin(), m_segments.cend(), [this](LineSegmentNode *node) {
@@ -60,8 +62,9 @@ void LineChartNode::setLineWidth(float width)
 
 void LineChartNode::setLineColor(const QColor &color)
 {
-    if (m_lineColor == color)
+    if (m_lineColor == color) {
         return;
+    }
 
     m_lineColor = color;
     std::for_each(m_segments.cbegin(), m_segments.cend(), [color](LineSegmentNode *node) {
@@ -71,8 +74,9 @@ void LineChartNode::setLineColor(const QColor &color)
 
 void LineChartNode::setFillColor(const QColor &color)
 {
-    if (m_fillColor == color)
+    if (m_fillColor == color) {
         return;
+    }
 
     m_fillColor = color;
     std::for_each(m_segments.cbegin(), m_segments.cend(), [color](LineSegmentNode *node) {
@@ -88,8 +92,9 @@ void LineChartNode::setValues(const QVector<QVector2D> &values)
 
 void LineChartNode::updatePoints()
 {
-    if (m_values.isEmpty())
+    if (m_values.isEmpty()) {
         return;
+    }
 
     auto segmentCount = qCeil(qreal(m_values.count()) / MaxPointsInSegment);
     if (segmentCount != m_segments.count()) {

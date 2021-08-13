@@ -31,8 +31,9 @@ LineGridNode::~LineGridNode()
 
 void LineGridNode::setVisible(bool visible)
 {
-    if (visible == m_visible)
+    if (visible == m_visible) {
         return;
+    }
 
     m_visible = visible;
     markDirty(QSGNode::DirtySubtreeBlocked);
@@ -40,24 +41,27 @@ void LineGridNode::setVisible(bool visible)
 
 void LineGridNode::setVertical(bool vertical)
 {
-    if (vertical == m_vertical)
+    if (vertical == m_vertical) {
         return;
+    }
 
     m_vertical = vertical;
 }
 
 void LineGridNode::setRect(const QRectF &rect)
 {
-    if (rect == m_rect)
+    if (rect == m_rect) {
         return;
+    }
 
     m_rect = rect;
 }
 
 void LineGridNode::setColor(const QColor &color)
 {
-    if (color == m_material->color())
+    if (color == m_material->color()) {
         return;
+    }
 
     m_material->setColor(color);
     markDirty(QSGNode::DirtyMaterial);
@@ -65,8 +69,9 @@ void LineGridNode::setColor(const QColor &color)
 
 void LineGridNode::setSpacing(float spacing)
 {
-    if (qFuzzyCompare(spacing, m_spacing))
+    if (qFuzzyCompare(spacing, m_spacing)) {
         return;
+    }
 
     m_spacing = spacing;
 }
@@ -89,8 +94,9 @@ bool LineGridNode::isSubtreeBlocked() const
 
 void LineGridNode::update()
 {
-    if (!m_rect.isValid())
+    if (!m_rect.isValid()) {
         return;
+    }
 
     int totalVertices = 0;
     if (!m_vertical) {
