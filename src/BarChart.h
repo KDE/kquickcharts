@@ -58,6 +58,16 @@ public:
     Q_SIGNAL void barWidthChanged();
 
     /**
+     * The radius of the ends of bars in the chart in pixels.
+     *
+     * By default this is 0, which means no rounding will be done.
+     */
+    Q_PROPERTY(qreal radius READ radius WRITE setRadius NOTIFY radiusChanged)
+    qreal radius() const;
+    void setRadius(qreal newRadius);
+    Q_SIGNAL void radiusChanged();
+
+    /**
      * The background color of bars in the chart.
      *
      * By default this is Qt::transparent. If set to something non-transparent,
@@ -84,6 +94,7 @@ private:
 
     qreal m_spacing = 0.0;
     qreal m_barWidth = AutoWidth;
+    qreal m_radius = 0.0;
     QVector<QVector<QPair<qreal, QColor>>> m_values;
     QColor m_backgroundColor = Qt::transparent;
 };

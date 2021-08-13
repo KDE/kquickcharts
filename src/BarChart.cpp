@@ -50,6 +50,22 @@ void BarChart::setBarWidth(qreal newBarWidth)
     Q_EMIT barWidthChanged();
 }
 
+qreal BarChart::radius() const
+{
+    return m_radius;
+}
+
+void BarChart::setRadius(qreal newRadius)
+{
+    if (newRadius == m_radius) {
+        return;
+    }
+
+    m_radius = newRadius;
+    update();
+    Q_EMIT radiusChanged();
+}
+
 QColor BarChart::backgroundColor() const
 {
     return m_backgroundColor;
@@ -79,6 +95,7 @@ QSGNode *BarChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDat
 
     barNode->setRect(boundingRect());
     barNode->setBars(calculateBars());
+    barNode->setRadius(m_radius);
     barNode->setBackgroundColor(m_backgroundColor);
 
     barNode->update();

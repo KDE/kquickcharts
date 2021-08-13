@@ -32,13 +32,13 @@ int BarChartMaterial::compare(const QSGMaterial *other) const
 
     /* clang-format off */
     if (material->aspect == aspect
+        && qFuzzyCompare(material->radius, radius)
         && material->backgroundColor == backgroundColor) { /* clang-format on */
         return 0;
     }
 
     return QSGMaterial::compare(other);
 }
-
 
 BarChartShader::BarChartShader()
 {
@@ -62,6 +62,7 @@ void BarChartShader::initialize()
     m_opacityLocation = program()->uniformLocation("opacity");
     m_aspectLocation = program()->uniformLocation("aspect");
     m_backgroundColorLocation = program()->uniformLocation("backgroundColor");
+    m_radiusLocation = program()->uniformLocation("radius");
 }
 
 void BarChartShader::updateState(const QSGMaterialShader::RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial)
@@ -77,5 +78,6 @@ void BarChartShader::updateState(const QSGMaterialShader::RenderState &state, QS
         BarChartMaterial *material = static_cast<BarChartMaterial *>(newMaterial);
         program()->setUniformValue(m_aspectLocation, material->aspect);
         program()->setUniformValue(m_backgroundColorLocation, material->backgroundColor);
+        program()->setUniformValue(m_radiusLocation, material->radius);
     }
 }

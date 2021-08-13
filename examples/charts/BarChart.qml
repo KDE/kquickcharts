@@ -158,6 +158,9 @@ Kirigami.Page {
             Label { text: "Bar Spacing" }
             SpinBox { from: 0; to: 100; value: barChart.spacing; onValueModified: barChart.spacing = value; }
             CheckBox { text: "Stacked"; checked: barChart.stacked; onToggled: barChart.stacked = checked }
+            Label { text: "Radius" }
+            SpinBox { from: 0; to: 1000; value: barChart.radius; onValueModified: barChart.radius = value; }
+
         }
 
         Frame {

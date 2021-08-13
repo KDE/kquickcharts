@@ -24,12 +24,14 @@ public:
 
     void setRect(const QRectF &rect);
     void setBars(const QVector<Bar> &bars);
+    void setRadius(qreal radius);
     void setBackgroundColor(const QColor &color);
     void update();
 
 private:
     QRectF m_rect;
     QVector<Bar> m_bars;
+    qreal m_radius = 0.0;
     QColor m_backgroundColor = Qt::transparent;
 };
 

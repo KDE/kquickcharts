@@ -113,6 +113,11 @@ void BarChartNode::setBars(const QVector<Bar> &bars)
     m_bars = bars;
 }
 
+void BarChartNode::setRadius(qreal radius)
+{
+    m_radius = radius;
+}
+
 void BarChartNode::setBackgroundColor(const QColor &color)
 {
     m_backgroundColor = color;
@@ -140,6 +145,12 @@ void BarChartNode::update()
 
         if (aspect != child->material->aspect) {
             child->material->aspect = aspect;
+            child->markDirty(QSGNode::DirtyMaterial);
+        }
+
+        float correctedRadius = (std::min(m_radius, entry.width / 2.0) / minSize) * 2.0;
+        if (!qFuzzyCompare(correctedRadius, child->material->radius)) {
+            child->material->radius = correctedRadius;
             child->markDirty(QSGNode::DirtyMaterial);
         }
 
