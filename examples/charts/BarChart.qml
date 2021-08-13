@@ -141,6 +141,9 @@ Kirigami.Page {
 
                 colorSource: Charts.ArraySource { array: ["red", "green", "blue"] }
                 nameSource: Charts.ArraySource { array: ["Example 1", "Example 2", "Example 3"] }
+
+                backgroundColor: Qt.rgba(0.0, 0.0, 0.0, 0.1)
+
             }
         }
 

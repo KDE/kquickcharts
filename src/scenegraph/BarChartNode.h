@@ -24,11 +24,13 @@ public:
 
     void setRect(const QRectF &rect);
     void setBars(const QVector<Bar> &bars);
+    void setBackgroundColor(const QColor &color);
     void update();
 
 private:
     QRectF m_rect;
     QVector<Bar> m_bars;
+    QColor m_backgroundColor = Qt::transparent;
 };
 
 #endif // BARCHARTNODE_H

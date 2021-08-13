@@ -31,7 +31,8 @@ int BarChartMaterial::compare(const QSGMaterial *other) const
     auto material = static_cast<const BarChartMaterial *>(other);
 
     /* clang-format off */
-    if (material->aspect == aspect) {
+    if (material->aspect == aspect
+        && material->backgroundColor == backgroundColor) { /* clang-format on */
         return 0;
     }
 
@@ -60,6 +61,7 @@ void BarChartShader::initialize()
     m_matrixLocation = program()->uniformLocation("matrix");
     m_opacityLocation = program()->uniformLocation("opacity");
     m_aspectLocation = program()->uniformLocation("aspect");
+    m_backgroundColorLocation = program()->uniformLocation("backgroundColor");
 }
 
 void BarChartShader::updateState(const QSGMaterialShader::RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial)
@@ -74,5 +76,6 @@ void BarChartShader::updateState(const QSGMaterialShader::RenderState &state, QS
     if (!oldMaterial || newMaterial->compare(oldMaterial) != 0) {
         BarChartMaterial *material = static_cast<BarChartMaterial *>(newMaterial);
         program()->setUniformValue(m_aspectLocation, material->aspect);
+        program()->setUniformValue(m_backgroundColorLocation, material->backgroundColor);
     }
 }

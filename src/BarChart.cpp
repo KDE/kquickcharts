@@ -50,6 +50,22 @@ void BarChart::setBarWidth(qreal newBarWidth)
     Q_EMIT barWidthChanged();
 }
 
+QColor BarChart::backgroundColor() const
+{
+    return m_backgroundColor;
+}
+
+void BarChart::setBackgroundColor(const QColor &newBackgroundColor)
+{
+    if (newBackgroundColor == m_backgroundColor) {
+        return;
+    }
+
+    m_backgroundColor = newBackgroundColor;
+    update();
+    Q_EMIT backgroundColorChanged();
+}
+
 QSGNode *BarChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *)
 {
     BarChartNode *barNode = nullptr;
@@ -63,6 +79,7 @@ QSGNode *BarChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDat
 
     barNode->setRect(boundingRect());
     barNode->setBars(calculateBars());
+    barNode->setBackgroundColor(m_backgroundColor);
 
     barNode->update();
 

@@ -8,6 +8,7 @@
 
 uniform lowp vec2 aspect;
 uniform lowp float opacity;
+uniform lowp vec4 backgroundColor;
 
 #ifdef LEGACY_STAGE_INOUT
 varying lowp vec2 uv;
@@ -24,6 +25,10 @@ out lowp vec4 out_color;
 void main()
 {
     lowp vec4 color = vec4(0.0);
+
+    lowp float background = sdf_rectangle(uv, vec2(1.0, aspect.y));
+
+    color = sdf_render(background, color, backgroundColor);
 
     lowp float foreground = sdf_rectangle(vec2(uv.x, -aspect.y + uv.y + value), vec2(1.0, value));
 

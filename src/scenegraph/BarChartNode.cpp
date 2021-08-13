@@ -101,7 +101,6 @@ bool compareCount(const QVector<QPair<qreal, QColor>> &first, const QVector<QPai
 
 BarChartNode::BarChartNode()
 {
-
 }
 
 void BarChartNode::setRect(const QRectF &rect)
@@ -112,6 +111,11 @@ void BarChartNode::setRect(const QRectF &rect)
 void BarChartNode::setBars(const QVector<Bar> &bars)
 {
     m_bars = bars;
+}
+
+void BarChartNode::setBackgroundColor(const QColor &color)
+{
+    m_backgroundColor = color;
 }
 
 void BarChartNode::update()
@@ -136,6 +140,11 @@ void BarChartNode::update()
 
         if (aspect != child->material->aspect) {
             child->material->aspect = aspect;
+            child->markDirty(QSGNode::DirtyMaterial);
+        }
+
+        if (m_backgroundColor != child->material->backgroundColor) {
+            child->material->backgroundColor = m_backgroundColor;
             child->markDirty(QSGNode::DirtyMaterial);
         }
 

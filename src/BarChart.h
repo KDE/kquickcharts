@@ -57,6 +57,18 @@ public:
     void setBarWidth(qreal newBarWidth);
     Q_SIGNAL void barWidthChanged();
 
+    /**
+     * The background color of bars in the chart.
+     *
+     * By default this is Qt::transparent. If set to something non-transparent,
+     * the chart will render backgrounds for the bars. These backgrounds will
+     * have the same width as the bars but stretch the full height.
+     */
+    Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
+    QColor backgroundColor() const;
+    void setBackgroundColor(const QColor &newBackgroundColor);
+    Q_SIGNAL void backgroundColorChanged();
+
 protected:
     /**
      * Reimplemented from QQuickItem.
@@ -73,6 +85,7 @@ private:
     qreal m_spacing = 0.0;
     qreal m_barWidth = AutoWidth;
     QVector<QVector<QPair<qreal, QColor>>> m_values;
+    QColor m_backgroundColor = Qt::transparent;
 };
 
 #endif // BARCHART_H
