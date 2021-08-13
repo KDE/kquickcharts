@@ -161,6 +161,17 @@ Kirigami.Page {
             Label { text: "Radius" }
             SpinBox { from: 0; to: 1000; value: barChart.radius; onValueModified: barChart.radius = value; }
 
+            ComboBox {
+                model: [
+                    { text: "Vertical", value: Charts.BarChart.VerticalOrientation },
+                    { text: "Horizontal", value: Charts.BarChart.HorizontalOrientation }
+                ]
+
+                textRole: "text"
+                valueRole: "value"
+
+                onActivated: barChart.orientation = currentValue
+            }
         }
 
         Frame {

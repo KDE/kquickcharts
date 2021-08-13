@@ -33,6 +33,12 @@ public:
     enum WidthMode { AutoWidth = -2 };
     Q_ENUM(WidthMode)
 
+    enum Orientation {
+        HorizontalOrientation = Qt::Horizontal, ///< Bars are oriented horizontally, with low values left and high values right.
+        VerticalOrientation = Qt::Vertical ///< Bars are oriented vertically, with low values at the bottom and high values at the top.
+    };
+    Q_ENUM(Orientation)
+
     explicit BarChart(QQuickItem *parent = nullptr);
 
     /**
@@ -68,6 +74,16 @@ public:
     Q_SIGNAL void radiusChanged();
 
     /**
+     * The orientation of bars in the chart.
+     *
+     * By default this is Vertical.
+     */
+    Q_PROPERTY(Orientation orientation READ orientation WRITE setOrientation NOTIFY orientationChanged)
+    Orientation orientation() const;
+    void setOrientation(Orientation newOrientation);
+    Q_SIGNAL void orientationChanged();
+
+    /**
      * The background color of bars in the chart.
      *
      * By default this is Qt::transparent. If set to something non-transparent,
@@ -95,6 +111,8 @@ private:
     qreal m_spacing = 0.0;
     qreal m_barWidth = AutoWidth;
     qreal m_radius = 0.0;
+    Orientation m_orientation = VerticalOrientation;
+    bool m_orientationChanged = false;
     QVector<QVector<QPair<qreal, QColor>>> m_values;
     QColor m_backgroundColor = Qt::transparent;
 };

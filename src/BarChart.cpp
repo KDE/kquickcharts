@@ -66,6 +66,23 @@ void BarChart::setRadius(qreal newRadius)
     Q_EMIT radiusChanged();
 }
 
+BarChart::Orientation BarChart::orientation() const
+{
+    return m_orientation;
+}
+
+void BarChart::setOrientation(BarChart::Orientation newOrientation)
+{
+    if (newOrientation == m_orientation) {
+        return;
+    }
+
+    m_orientation = newOrientation;
+    m_orientationChanged = true;
+    update();
+    Q_EMIT orientationChanged();
+}
+
 QColor BarChart::backgroundColor() const
 {
     return m_backgroundColor;
@@ -86,14 +103,42 @@ QSGNode *BarChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDat
 {
     BarChartNode *barNode = nullptr;
 
-    if (!node) {
-        barNode = new BarChartNode{};
-        node = barNode;
-    } else {
-        barNode = static_cast<BarChartNode *>(node);
+    if (m_orientationChanged) {
+        delete node;
+        node = nullptr;
+        m_orientationChanged = false;
     }
 
-    barNode->setRect(boundingRect());
+    if (!node) {
+        barNode = new BarChartNode{};
+        if (m_orientation == VerticalOrientation) {
+            node = barNode;
+        } else {
+            auto transformNode = new QSGTransformNode{};
+            transformNode->appendChildNode(barNode);
+            QMatrix4x4 matrix;
+            matrix.translate(width(), 0.0);
+            matrix.rotate(90.0, 0.0, 0.0, 1.0);
+            transformNode->setMatrix(matrix);
+            node = transformNode;
+        }
+    } else {
+        if (m_orientation == VerticalOrientation) {
+            barNode = static_cast<BarChartNode *>(node);
+        } else {
+            barNode = static_cast<BarChartNode *>(node->childAtIndex(0));
+        }
+    }
+
+    if (m_orientation == VerticalOrientation) {
+        barNode->setRect(boundingRect());
+    } else {
+        QMatrix4x4 matrix;
+        matrix.translate(width(), 0.0);
+        matrix.rotate(90.0, 0.0, 0.0, 1.0);
+        static_cast<QSGTransformNode *>(node)->setMatrix(matrix);
+        barNode->setRect(QRectF{boundingRect().topLeft(), QSizeF{height(), width()}});
+    }
     barNode->setBars(calculateBars());
     barNode->setRadius(m_radius);
     barNode->setBackgroundColor(m_backgroundColor);
@@ -166,7 +211,7 @@ QVector<Bar> BarChart::calculateBars()
 
     // TODO: Find some way to clean this up and simplify it, since this is pretty ugly.
 
-    auto targetWidth = width();
+    auto targetWidth = m_orientation == VerticalOrientation ? width() : height();
 
     float w = m_barWidth;
     if (w < 0.0) {
