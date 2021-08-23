@@ -18,7 +18,7 @@
 #include "scenegraph/LineChartNode.h"
 #include "scenegraph/LineGridNode.h"
 
-static const float PixelsPerStep = 1.0;
+static const float PixelsPerStep = 2.0;
 
 QVector<QVector2D> interpolate(const QVector<QVector2D> &points, float height);
 QVector<float> calculateTangents(const QVector<QVector2D> &points, float height);
