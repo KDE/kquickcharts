@@ -117,10 +117,6 @@ void LineChartNode::updatePoints()
         auto segmentPoints = m_values.mid(pointStart, pointsPerSegment);
         pointStart += pointsPerSegment;
 
-        if (pointStart < m_values.count()) {
-            segmentPoints.append(m_values[pointStart]);
-        }
-
         auto segmentWidth = segmentPoints.last().x() - currentX;
         auto rect = QRectF(currentX, m_rect.top(), segmentWidth, m_rect.height());
 
@@ -133,7 +129,7 @@ void LineChartNode::updatePoints()
         segment->setValues(segmentPoints);
         segment->setFarLeft(m_values.at(std::max(0, pointStart - pointsPerSegment - 1)));
         segment->setFarRight(m_values.at(std::min(m_values.count() - 1, pointStart + 1)));
-        segment->updatePoints();
+        segment->update();
 
         currentX += segmentWidth;
     }

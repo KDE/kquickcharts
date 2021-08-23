@@ -27,74 +27,18 @@ QSGMaterialShader *LineChartMaterial::createShader() const
     return new LineChartShader();
 }
 
-QColor LineChartMaterial::lineColor() const
+int LineChartMaterial::compare(const QSGMaterial *other) const
 {
-    return m_lineColor;
-}
+    auto material = static_cast<const LineChartMaterial *>(other);
 
-QColor LineChartMaterial::fillColor() const
-{
-    return m_fillColor;
-}
+    /* clang-format off */
+    if (qFuzzyCompare(material->aspect, aspect)
+        && qFuzzyCompare(material->lineWidth, lineWidth)
+        && qFuzzyCompare(material->smoothing, smoothing)) { /* clang-format on */
+        return 0;
+    }
 
-float LineChartMaterial::lineWidth() const
-{
-    return m_lineWidth;
-}
-
-QVector<QVector2D> LineChartMaterial::points() const
-{
-    return m_points;
-}
-
-float LineChartMaterial::aspect() const
-{
-    return m_aspect;
-}
-
-QVector2D LineChartMaterial::bounds() const
-{
-    return m_bounds;
-}
-
-float LineChartMaterial::smoothing() const
-{
-    return m_smoothing;
-}
-
-void LineChartMaterial::setLineColor(const QColor &color)
-{
-    m_lineColor = color;
-}
-
-void LineChartMaterial::setFillColor(const QColor &color)
-{
-    m_fillColor = color;
-}
-
-void LineChartMaterial::setLineWidth(float width)
-{
-    m_lineWidth = width;
-}
-
-void LineChartMaterial::setPoints(const QVector<QVector2D> &points)
-{
-    m_points = points;
-}
-
-void LineChartMaterial::setAspect(float aspect)
-{
-    m_aspect = aspect;
-}
-
-void LineChartMaterial::setBounds(float min, float max)
-{
-    m_bounds = QVector2D{min, max};
-}
-
-void LineChartMaterial::setSmoothing(float smoothing)
-{
-    m_smoothing = smoothing;
+    return QSGMaterial::compare(other);
 }
 
 LineChartShader::LineChartShader()
@@ -108,7 +52,25 @@ LineChartShader::~LineChartShader()
 
 const char *const *LineChartShader::attributeNames() const
 {
-    static char const *const names[] = {"in_vertex", "in_uv", nullptr};
+    /* clang-format off */
+    static char const *const names[] = {
+        "in_vertex",
+        "in_uv",
+        "in_lineColor",
+        "in_fillColor",
+        "in_bounds",
+        "in_count",
+        "in_points_0",
+        "in_points_1",
+        "in_points_2",
+        "in_points_3",
+        "in_points_4",
+        "in_points_5",
+        "in_points_6",
+        "in_points_7",
+        "in_points_8",
+        nullptr
+    }; /* clang-format on */
     return names;
 }
 
@@ -117,13 +79,8 @@ void LineChartShader::initialize()
     QSGMaterialShader::initialize();
     m_matrixLocation = program()->uniformLocation("matrix");
     m_opacityLocation = program()->uniformLocation("opacity");
-    m_lineColorLocation = program()->uniformLocation("lineColor");
-    m_fillColorLocation = program()->uniformLocation("fillColor");
     m_lineWidthLocation = program()->uniformLocation("lineWidth");
-    m_pointsLocation = program()->uniformLocation("points");
-    m_pointCountLocation = program()->uniformLocation("pointCount");
     m_aspectLocation = program()->uniformLocation("aspect");
-    m_boundsLocation = program()->uniformLocation("bounds");
     m_smoothingLocation = program()->uniformLocation("smoothing");
 }
 
@@ -138,13 +95,8 @@ void LineChartShader::updateState(const QSGMaterialShader::RenderState &state, Q
 
     if (!oldMaterial || newMaterial->compare(oldMaterial) != 0) {
         LineChartMaterial *material = static_cast<LineChartMaterial *>(newMaterial);
-        program()->setUniformValue(m_lineColorLocation, material->lineColor());
-        program()->setUniformValue(m_fillColorLocation, material->fillColor());
-        program()->setUniformValue(m_lineWidthLocation, material->lineWidth());
-        program()->setUniformValue(m_aspectLocation, material->aspect());
-        program()->setUniformValue(m_pointCountLocation, material->points().size());
-        program()->setUniformValueArray(m_pointsLocation, material->points().constData(), material->points().size());
-        program()->setUniformValue(m_boundsLocation, material->bounds());
-        program()->setUniformValue(m_smoothingLocation, material->smoothing());
+        program()->setUniformValue(m_lineWidthLocation, material->lineWidth);
+        program()->setUniformValue(m_aspectLocation, material->aspect);
+        program()->setUniformValue(m_smoothingLocation, material->smoothing);
     }
 }

@@ -43,7 +43,7 @@ public:
     void setFarLeft(const QVector2D &value);
     void setFarRight(const QVector2D &value);
 
-    void updatePoints();
+    void update();
 
 private:
     QRectF m_rect;
@@ -56,6 +56,8 @@ private:
     QVector<QVector2D> m_values;
     QSGGeometry *m_geometry = nullptr;
     LineChartMaterial *m_material = nullptr;
+    QColor m_lineColor;
+    QColor m_fillColor;
 };
 
 #endif // LINESEGMENTNODE_H

@@ -8,32 +8,38 @@
 // This requires "sdf.frag" which is included through SDFShader.
 
 uniform lowp float opacity; // inherited opacity of this item
-uniform lowp vec4 lineColor;
-uniform lowp vec4 fillColor;
 uniform lowp float lineWidth;
-uniform lowp vec2 bounds;
 uniform lowp float smoothing;
 
-uniform lowp vec2 points[SDF_POLYGON_MAX_POINT_COUNT];
-uniform int pointCount;
+#define MAXIMUM_POINT_COUNT 18
 
 #ifdef LEGACY_STAGE_INOUT
-varying lowp vec2 uv;
+varying mediump vec2 uv;
+varying mediump vec2 points[18];
+varying highp float pointCount;
+varying mediump vec2 bounds;
+varying mediump vec4 lineColor;
+varying mediump vec4 fillColor;
 #define out_color gl_FragColor
 #else
-in lowp vec2 uv;
+in mediump vec2 uv;
+in mediump vec2 points[MAXIMUM_POINT_COUNT];
+in highp float pointCount;
+in mediump vec2 bounds;
+in mediump vec4 lineColor;
+in mediump vec4 fillColor;
 out lowp vec4 out_color;
 #endif
 
-#ifdef API_ES2
 // ES2 does not support array function arguments. So instead we need to
 // reference the uniform array directly. So this copies the implementation of
 // sdf_polygon from sdf.glsl, changing it to refer to the points array directly.
-lowp float sdf_polygon(in lowp vec2 point, in lowp int count)
+// For simplicity, we use the same function also for other APIs.
+lowp float sdf_polygon(in lowp vec2 point, in int count)
 {
     lowp float d = dot(point - points[0], point - points[0]);
     lowp float s = 1.0;
-    for (int i = 0, j = count - 1; i < count && i < SDF_POLYGON_MAX_POINT_COUNT; j = i, i++)
+    for (int i = 0, j = count - 1; i < count && i < MAXIMUM_POINT_COUNT; j = i, i++)
     {
         lowp vec2 e = points[j] - points[i];
         lowp vec2 w = point - points[i];
@@ -46,7 +52,6 @@ lowp float sdf_polygon(in lowp vec2 point, in lowp int count)
     }
     return s * sqrt(d);
 }
-#endif
 
 void main()
 {
@@ -70,11 +75,7 @@ void main()
         return;
     }
 
-#ifdef API_ES2
-    lowp float polygon = sdf_polygon(point, pointCount);
-#else
-    lowp float polygon = sdf_polygon(point, points, pointCount);
-#endif
+    lowp float polygon = sdf_polygon(point, int(pointCount));
 
     color = sdf_render(polygon, color, fillColor);
 

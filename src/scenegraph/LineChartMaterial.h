@@ -22,31 +22,11 @@ public:
 
     QSGMaterialType *type() const override;
     QSGMaterialShader *createShader() const override;
+    int compare(const QSGMaterial *other) const override;
 
-    QColor lineColor() const;
-    QColor fillColor() const;
-    float lineWidth() const;
-    float aspect() const;
-    float smoothing() const;
-    QVector<QVector2D> points() const;
-    QVector2D bounds() const;
-
-    void setLineColor(const QColor &color);
-    void setFillColor(const QColor &color);
-    void setLineWidth(float width);
-    void setPoints(const QVector<QVector2D> &points);
-    void setAspect(float aspect);
-    void setSmoothing(float smoothing);
-    void setBounds(float min, float max);
-
-private:
-    QColor m_lineColor;
-    QColor m_fillColor;
-    float m_lineWidth = 0.0;
-    float m_aspect = 1.0;
-    float m_smoothing = 0.1;
-    QVector2D m_bounds;
-    QVector<QVector2D> m_points;
+    float aspect = 1.0;
+    float lineWidth = 0.0;
+    float smoothing = 0.1;
 };
 
 class LineChartShader : public SDFShader
@@ -63,13 +43,8 @@ public:
 private:
     int m_matrixLocation = 0;
     int m_opacityLocation = 0;
-    int m_lineColorLocation = 0;
-    int m_fillColorLocation = 0;
     int m_lineWidthLocation = 0;
-    int m_pointsLocation = 0;
-    int m_pointCountLocation = 0;
     int m_aspectLocation = 0;
-    int m_boundsLocation = 0;
     int m_smoothingLocation = 0;
 };
 

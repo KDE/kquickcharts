@@ -9,7 +9,112 @@
 
 #include <QSGGeometry>
 
+#include <GL/gl.h>
+
 #include "LineChartMaterial.h"
+
+constexpr int MaxPointsSize = (10 + 8) * 2;
+
+struct LineVertex {
+    float position[2];
+
+    float uv[2];
+
+    float lineColor[4];
+    float fillColor[4];
+
+    float bounds[2];
+
+    float pointCount;
+    float points[MaxPointsSize];
+
+    void set(const QPointF &newPosition,
+             const QPointF &newUv,
+             const QVector<QVector2D> &newPoints,
+             const QColor &newLineColor,
+             const QColor &newFillColor,
+             const QVector2D &newBounds)
+    {
+        position[0] = newPosition.x();
+        position[1] = newPosition.y();
+
+        uv[0] = newUv.x();
+        uv[1] = newUv.y();
+
+        lineColor[0] = newLineColor.redF();
+        lineColor[1] = newLineColor.greenF();
+        lineColor[2] = newLineColor.blueF();
+        lineColor[3] = newLineColor.alphaF();
+
+        fillColor[0] = newFillColor.redF();
+        fillColor[1] = newFillColor.greenF();
+        fillColor[2] = newFillColor.blueF();
+        fillColor[3] = newFillColor.alphaF();
+
+        bounds[0] = newBounds.x();
+        bounds[1] = newBounds.y();
+
+        setPoints(newPoints);
+    }
+
+    void setPoints(const QVector<QVector2D> &newPoints)
+    {
+        memset(points, 0, MaxPointsSize * sizeof(float));
+
+        Q_ASSERT_X(newPoints.size() <= (MaxPointsSize / 2),
+                   "LineVertex::setPoints",
+                   qPrintable(QStringLiteral("Too many points in new points array: %1").arg(newPoints.size())));
+
+        for (int i = 0; i < newPoints.size(); ++i) {
+            points[i * 2 + 0] = newPoints[i].x();
+            points[i * 2 + 1] = newPoints[i].y();
+        }
+
+        pointCount = newPoints.size();
+    }
+};
+
+/* clang-format off */
+QSGGeometry::Attribute LineAttributes[] = {
+    QSGGeometry::Attribute::create(0, 2, GL_FLOAT, true), // in_position
+    QSGGeometry::Attribute::create(1, 2, GL_FLOAT, false), // in_uv
+
+    QSGGeometry::Attribute::create(2, 4, GL_FLOAT, false), // in_lineColor
+    QSGGeometry::Attribute::create(3, 4, GL_FLOAT, false), // in_fillColor
+
+    QSGGeometry::Attribute::create(4, 2, GL_FLOAT, false), // in_bounds
+
+    QSGGeometry::Attribute::create(5, 1, GL_FLOAT, false), // in_count
+
+    QSGGeometry::Attribute::create(6, 4, GL_FLOAT, false), // in_points_0
+    QSGGeometry::Attribute::create(7, 4, GL_FLOAT, false), // in_points_1
+    QSGGeometry::Attribute::create(8, 4, GL_FLOAT, false), // in_points_2
+    QSGGeometry::Attribute::create(9, 4, GL_FLOAT, false), // in_points_3
+    QSGGeometry::Attribute::create(10, 4, GL_FLOAT, false), // in_points_4
+    QSGGeometry::Attribute::create(11, 4, GL_FLOAT, false), // in_points_5
+    QSGGeometry::Attribute::create(12, 4, GL_FLOAT, false), // in_points_6
+    QSGGeometry::Attribute::create(13, 4, GL_FLOAT, false), // in_points_7
+    QSGGeometry::Attribute::create(14, 4, GL_FLOAT, false), // in_points_8
+};
+/* clang-format on */
+
+QSGGeometry::AttributeSet LineAttributeSet = {15, sizeof(LineVertex), LineAttributes};
+
+void updateLineGeometry(QSGGeometry *geometry,
+                        const QRectF &rect,
+                        const QRectF &uvRect,
+                        const QVector<QVector2D> &points,
+                        const QColor &lineColor,
+                        const QColor &fillColor,
+                        const QVector2D &bounds)
+{
+    auto vertices = static_cast<LineVertex *>(geometry->vertexData());
+    vertices[0].set(rect.topLeft(), uvRect.topLeft(), points, lineColor, fillColor, bounds);
+    vertices[1].set(rect.bottomLeft(), uvRect.bottomLeft(), points, lineColor, fillColor, bounds);
+    vertices[2].set(rect.topRight(), uvRect.topRight(), points, lineColor, fillColor, bounds);
+    vertices[3].set(rect.bottomRight(), uvRect.bottomRight(), points, lineColor, fillColor, bounds);
+    geometry->markVertexDataDirty();
+}
 
 LineSegmentNode::LineSegmentNode()
     : LineSegmentNode(QRectF{})
@@ -18,9 +123,12 @@ LineSegmentNode::LineSegmentNode()
 
 LineSegmentNode::LineSegmentNode(const QRectF &rect)
 {
-    m_geometry = new QSGGeometry{QSGGeometry::defaultAttributes_TexturedPoint2D(), 4};
-    QSGGeometry::updateTexturedRectGeometry(m_geometry, rect, QRectF{0, 0, 1, 1});
+    m_geometry = new QSGGeometry{LineAttributeSet, 4};
+    m_geometry->setVertexDataPattern(QSGGeometry::DynamicPattern);
+
     setGeometry(m_geometry);
+
+    m_rect = rect;
 
     m_material = new LineChartMaterial{};
     setMaterial(m_material);
@@ -34,15 +142,7 @@ LineSegmentNode::~LineSegmentNode()
 
 void LineSegmentNode::setRect(const QRectF &rect)
 {
-    if (rect == m_rect) {
-        return;
-    }
-
     m_rect = rect;
-    QSGGeometry::updateTexturedRectGeometry(m_geometry, m_rect, QRectF{0.0, 0, m_xAspect, 1});
-    markDirty(QSGNode::DirtyGeometry);
-
-    updatePoints();
 }
 
 void LineSegmentNode::setAspect(float xAspect, float yAspect)
@@ -52,12 +152,10 @@ void LineSegmentNode::setAspect(float xAspect, float yAspect)
     }
 
     m_yAspect = yAspect;
-    m_material->setAspect(m_yAspect);
+    m_material->aspect = m_yAspect;
     markDirty(QSGNode::DirtyMaterial);
 
     m_xAspect = xAspect;
-    QSGGeometry::updateTexturedRectGeometry(m_geometry, m_rect, QRectF{0.0, 0, m_xAspect, 1});
-    markDirty(QSGNode::DirtyGeometry);
 }
 
 void LineSegmentNode::setSmoothing(float smoothing)
@@ -67,7 +165,7 @@ void LineSegmentNode::setSmoothing(float smoothing)
     }
 
     m_smoothing = smoothing;
-    m_material->setSmoothing(m_smoothing);
+    m_material->smoothing = m_smoothing;
     markDirty(QSGNode::DirtyMaterial);
 }
 
@@ -78,28 +176,18 @@ void LineSegmentNode::setLineWidth(float width)
     }
 
     m_lineWidth = width;
-    m_material->setLineWidth(m_lineWidth);
+    m_material->lineWidth = m_lineWidth;
     markDirty(QSGNode::DirtyMaterial);
 }
 
 void LineSegmentNode::setLineColor(const QColor &color)
 {
-    if (m_material->lineColor() == color) {
-        return;
-    }
-
-    m_material->setLineColor(color);
-    markDirty(QSGNode::DirtyMaterial);
+    m_lineColor = color;
 }
 
 void LineSegmentNode::setFillColor(const QColor &color)
 {
-    if (m_material->fillColor() == color) {
-        return;
-    }
-
-    m_material->setFillColor(color);
-    markDirty(QSGNode::DirtyMaterial);
+    m_fillColor = color;
 }
 
 void LineSegmentNode::setValues(const QVector<QVector2D> &values)
@@ -117,9 +205,11 @@ void LineSegmentNode::setFarRight(const QVector2D &value)
     m_farRight = value;
 }
 
-void LineSegmentNode::updatePoints()
+void LineSegmentNode::update()
 {
-    if (m_values.isEmpty()) {
+    if (m_values.isEmpty() || !m_rect.isValid()) {
+        updateLineGeometry(m_geometry, QRectF{}, QRectF{}, QVector<QVector2D>{}, m_lineColor, m_fillColor, QVector2D{});
+        markDirty(QSGNode::DirtyGeometry);
         return;
     }
 
@@ -160,7 +250,6 @@ void LineSegmentNode::updatePoints()
     points << QVector2D{1.5, -0.5};
     points << QVector2D{0.0, -0.5};
 
-    m_material->setPoints(points);
-    m_material->setBounds(min, max);
-    markDirty(QSGNode::DirtyMaterial);
+    updateLineGeometry(m_geometry, m_rect, {0.0, 0.0, m_xAspect, 1.0}, points, m_lineColor, m_fillColor, QVector2D{min, max});
+    markDirty(QSGNode::DirtyGeometry);
 }
