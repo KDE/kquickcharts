@@ -33,10 +33,9 @@ public:
     void setLineColor(const QColor &color);
     void setFillColor(const QColor &color);
     void setValues(const QVector<QVector2D> &values);
-
-private:
     void updatePoints();
 
+private:
     QRectF m_rect;
     float m_lineWidth = 0.0;
     float m_aspect = 1.0;
@@ -44,7 +43,6 @@ private:
     QColor m_lineColor;
     QColor m_fillColor;
     QVector<QVector2D> m_values;
-    QVector<LineSegmentNode *> m_segments;
 };
 
 #endif // LINECHARTNODE_H

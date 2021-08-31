@@ -44,8 +44,6 @@ void LineChartNode::setRect(const QRectF &rect, qreal devicePixelRatio)
     auto nativeSize = QSizeF(m_rect.width() * devicePixelRatio, m_rect.height() * devicePixelRatio);
     auto diagonal = std::sqrt(nativeSize.width() * nativeSize.width() + nativeSize.height() * nativeSize.height());
     m_smoothing = 1.0 / diagonal;
-
-    updatePoints();
 }
 
 void LineChartNode::setLineWidth(float width)
@@ -55,9 +53,6 @@ void LineChartNode::setLineWidth(float width)
     }
 
     m_lineWidth = width;
-    std::for_each(m_segments.cbegin(), m_segments.cend(), [this](LineSegmentNode *node) {
-        node->setLineWidth(calculateNormalizedLineWidth(m_lineWidth, m_rect));
-    });
 }
 
 void LineChartNode::setLineColor(const QColor &color)
@@ -67,9 +62,6 @@ void LineChartNode::setLineColor(const QColor &color)
     }
 
     m_lineColor = color;
-    std::for_each(m_segments.cbegin(), m_segments.cend(), [color](LineSegmentNode *node) {
-        node->setLineColor(color);
-    });
 }
 
 void LineChartNode::setFillColor(const QColor &color)
@@ -79,15 +71,11 @@ void LineChartNode::setFillColor(const QColor &color)
     }
 
     m_fillColor = color;
-    std::for_each(m_segments.cbegin(), m_segments.cend(), [color](LineSegmentNode *node) {
-        node->setFillColor(color);
-    });
 }
 
 void LineChartNode::setValues(const QVector<QVector2D> &values)
 {
     m_values = values;
-    updatePoints();
 }
 
 void LineChartNode::updatePoints()
@@ -97,23 +85,18 @@ void LineChartNode::updatePoints()
     }
 
     auto segmentCount = qCeil(qreal(m_values.count()) / MaxPointsInSegment);
-    if (segmentCount != m_segments.count()) {
-        removeAllChildNodes();
-        qDeleteAll(m_segments);
-        m_segments.clear();
-
-        for (int i = 0; i < segmentCount; ++i) {
-            auto node = new LineSegmentNode{};
-            m_segments << node;
-            appendChildNode(node);
-        }
-    }
 
     auto currentX = m_rect.left();
     auto pointStart = 0;
     auto pointsPerSegment = MaxPointsInSegment;
 
-    for (auto segment : qAsConst(m_segments)) {
+    for (int i = 0; i < segmentCount; ++i) {
+        if (i >= childCount()) {
+            appendChildNode(new LineSegmentNode{});
+        }
+
+        auto segment = static_cast<LineSegmentNode *>(childAtIndex(i));
+
         auto segmentPoints = m_values.mid(pointStart, pointsPerSegment);
         pointStart += pointsPerSegment;
 
@@ -132,5 +115,11 @@ void LineChartNode::updatePoints()
         segment->update();
 
         currentX += segmentWidth;
+    }
+
+    while (childCount() > segmentCount) {
+        auto child = childAtIndex(childCount() - 1);
+        removeChildNode(child);
+        delete child;
     }
 }

@@ -327,6 +327,8 @@ void LineChart::updateLineNode(LineChartNode *node, const QColor &lineColor, con
 
     auto values = m_values.value(valueSource);
     node->setValues(values);
+
+    node->updatePoints();
 }
 
 void LineChart::createPointDelegates(const QVector<QVector2D> &values, int sourceIndex)
