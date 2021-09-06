@@ -9,8 +9,6 @@
 
 #include <QSGGeometry>
 
-#include <GL/gl.h>
-
 #include "LineChartMaterial.h"
 
 constexpr int MaxPointsSize = (10 + 8) * 2;
