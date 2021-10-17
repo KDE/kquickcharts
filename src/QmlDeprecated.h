@@ -27,8 +27,8 @@
 // clang-format off
 #define QML_DEPRECATED(item, since, message) \
     QMetaObject::invokeMethod(this, [this]() {\
-        qCWarning(DEPRECATED) << item <<  "is deprecated (since" << since << "):" << message;\
-        QString elidedName = QStringLiteral("...") % qmlContext(this)->baseUrl().toString().right(80);\
+        qCWarning(DEPRECATED).nospace() << item <<  " is deprecated (since " << since << "): " << message;\
+        QString elidedName = QStringLiteral("...") + qmlContext(this)->baseUrl().toString().right(80);\
         qCWarning(DEPRECATED) << "Note: Instantiated from" << elidedName;\
     }, Qt::QueuedConnection);
 // clang-format on
