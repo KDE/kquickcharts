@@ -1,39 +1,66 @@
 
 set(quickcharts_SRCS
-    Chart.cpp
-    XYChart.cpp
-    PieChart.cpp
-    LineChart.cpp
     BarChart.cpp
-
-    RangeGroup.cpp
-    ItemBuilder.cpp
-
-    decorations/GridLines.cpp
-    decorations/AxisLabels.cpp
-    decorations/LegendModel.cpp
-    decorations/LegendLayout.cpp
-
-    datasource/ChartDataSource.cpp
-    datasource/ModelSource.cpp
-    datasource/SingleValueSource.cpp
+    BarChart.h
+    Chart.cpp
+    Chart.h
     datasource/ArraySource.cpp
-    datasource/ModelHistorySource.cpp
+    datasource/ArraySource.h
     datasource/ChartAxisSource.cpp
-    datasource/ValueHistorySource.cpp
+    datasource/ChartAxisSource.h
+    datasource/ChartDataSource.cpp
+    datasource/ChartDataSource.h
     datasource/ColorGradientSource.cpp
-    datasource/MapProxySource.cpp
+    datasource/ColorGradientSource.h
     datasource/HistoryProxySource.cpp
-
-    scenegraph/PieChartMaterial.cpp
-    scenegraph/PieChartNode.cpp
-    scenegraph/LineGridNode.cpp
-    scenegraph/LineChartNode.cpp
-    scenegraph/LineChartMaterial.cpp
-    scenegraph/LineSegmentNode.cpp
-    scenegraph/SDFShader.cpp
-    scenegraph/BarChartNode.cpp
+    datasource/HistoryProxySource.h
+    datasource/MapProxySource.cpp
+    datasource/MapProxySource.h
+    datasource/ModelHistorySource.cpp
+    datasource/ModelHistorySource.h
+    datasource/ModelSource.cpp
+    datasource/ModelSource.h
+    datasource/SingleValueSource.cpp
+    datasource/SingleValueSource.h
+    datasource/ValueHistorySource.cpp
+    datasource/ValueHistorySource.h
+    decorations/AxisLabels.cpp
+    decorations/AxisLabels.h
+    decorations/GridLines.cpp
+    decorations/GridLines.h
+    decorations/LegendLayout.cpp
+    decorations/LegendLayout.h
+    decorations/LegendModel.cpp
+    decorations/LegendModel.h
+    ItemBuilder.cpp
+    ItemBuilder.h
+    LineChart.cpp
+    LineChart.h
+    PieChart.cpp
+    PieChart.h
+    QmlDeprecated.h
+    RangeGroup.cpp
+    RangeGroup.h
     scenegraph/BarChartMaterial.cpp
+    scenegraph/BarChartMaterial.h
+    scenegraph/BarChartNode.cpp
+    scenegraph/BarChartNode.h
+    scenegraph/LineChartMaterial.cpp
+    scenegraph/LineChartMaterial.h
+    scenegraph/LineChartNode.cpp
+    scenegraph/LineChartNode.h
+    scenegraph/LineGridNode.cpp
+    scenegraph/LineGridNode.h
+    scenegraph/LineSegmentNode.cpp
+    scenegraph/LineSegmentNode.h
+    scenegraph/PieChartMaterial.cpp
+    scenegraph/PieChartMaterial.h
+    scenegraph/PieChartNode.cpp
+    scenegraph/PieChartNode.h
+    scenegraph/SDFShader.cpp
+    scenegraph/SDFShader.h
+    XYChart.cpp
+    XYChart.h
 )
 
 qt5_add_resources(quickcharts_QRC shaders/shaders.qrc)
@@ -68,7 +95,7 @@ ecm_qt_declare_logging_category(quickcharts_SRCS
 add_library(QuickChartsStatic STATIC ${quickcharts_SRCS} ${quickcharts_QRC})
 target_link_libraries(QuickChartsStatic PUBLIC Qt5::Core Qt5::Quick Qt5::Qml Qt5::Quick)
 
-add_library(QuickCharts SHARED ChartsPlugin.cpp)
+add_library(QuickCharts SHARED ChartsPlugin.cpp ChartsPlugin.h)
 target_link_libraries(QuickCharts PRIVATE QuickChartsStatic)
 
 ecm_generate_export_header(QuickCharts
