@@ -9,6 +9,8 @@ set(quickcharts_SRCS
     RangeGroup.cpp
     ItemBuilder.cpp
 
+    ChartPoint.cpp
+
     decorations/GridLines.cpp
     decorations/AxisLabels.cpp
     decorations/LegendModel.cpp

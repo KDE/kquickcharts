@@ -50,6 +50,9 @@ void QuickChartsPlugin::registerTypes(const char *uri)
     qmlRegisterUncreatableType<XYChart>(uri, 1, 0, "XYChart", QStringLiteral("Just a base class"));
     qmlRegisterUncreatableType<Chart>(uri, 1, 0, "Chart", QStringLiteral("Just a base class"));
 
+    qRegisterMetaType<ChartPoint>();
+    qmlRegisterAnonymousType<ChartPoint>(uri, 1);
+
     qmlRegisterUncreatableType<ChartDataSource>(uri, 1, 0, "ChartDataSource", QStringLiteral("Just a base class"));
     qmlRegisterType<ModelSource>(uri, 1, 0, "ModelSource");
     qmlRegisterType<SingleValueSource>(uri, 1, 0, "SingleValueSource");
