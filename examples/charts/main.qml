@@ -26,6 +26,7 @@ Kirigami.ApplicationWindow {
                 ListElement { label: "Bar Chart"; file: "qrc:/BarChart.qml"; identifier: "bar" }
                 ListElement { label: "History Proxy Source"; file: "qrc:/HistoryProxySource.qml"; identifier: "history" }
                 ListElement { label: "Legend"; file: "qrc:/Legend.qml"; identifier: "legend" }
+                ListElement { label: "Stacked Pie Chart"; file: "qrc:/StackedPieChart.qml"; identifier: "stackedpie" }
             }
 
             delegate: Kirigami.BasicListItem {

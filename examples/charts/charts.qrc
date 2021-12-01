@@ -7,6 +7,7 @@
         <file>BarChart.qml</file>
         <file>HistoryProxySource.qml</file>
         <file>Legend.qml</file>
+        <file>StackedPieChart.qml</file>
     </qresource>
 </RCC>
 
