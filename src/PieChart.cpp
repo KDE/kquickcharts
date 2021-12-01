@@ -222,7 +222,7 @@ void PieChart::onDataChanged()
         for (int i = 0; i < source->itemCount(); ++i) {
             auto value = source->item(i).toReal();
             auto limited = value - threshold;
-            if (limited > 0.0) {
+            if (limited >= 0.0) {
                 if (total + limited >= range.end) {
                     limited = range.end - total;
                 }
