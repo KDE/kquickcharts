@@ -305,6 +305,11 @@ void LineChart::onDataChanged()
     polish();
 }
 
+ChartPoint LineChart::pointFromPosition(const QVector2D &position) const
+{
+    return ChartPoint{};
+}
+
 void LineChart::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     XYChart::geometryChanged(newGeometry, oldGeometry);

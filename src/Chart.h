@@ -10,6 +10,8 @@
 
 #include <QQuickItem>
 
+#include "ChartPoint.h"
+
 class ChartDataSource;
 
 /**
@@ -80,6 +82,9 @@ public:
 
     Q_SIGNAL void dataChanged();
 
+    Q_INVOKABLE ChartPoint pointAt(qreal x, qreal y) const;
+    Q_INVOKABLE ChartPoint pointAt(const QPointF &position) const;
+
 protected:
     /**
      * Called when the data of a value source changes.
@@ -90,6 +95,9 @@ protected:
      * rendering, then call update() to schedule rendering the item.
      */
     virtual void onDataChanged() = 0;
+
+    virtual ChartPoint pointFromPosition(const QVector2D &position) const = 0;
+
     void componentComplete() override;
 
 private:

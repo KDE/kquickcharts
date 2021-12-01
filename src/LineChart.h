@@ -147,6 +147,10 @@ protected:
     QSGNode *updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *data) override;
     void onDataChanged() override;
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
+    /**
+     * Reimplemented from Chart.
+     */
+    ChartPoint pointFromPosition(const QVector2D &position) const override;
 
 private:
     void updateLineNode(LineChartNode *node, const QColor &lineColor, const QColor &fillColor, ChartDataSource *valueSource);

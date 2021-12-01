@@ -146,6 +146,16 @@ void Chart::componentComplete()
     Q_EMIT dataChanged();
 }
 
+ChartPoint Chart::pointAt(qreal x, qreal y) const
+{
+    return pointFromPosition(QVector2D{float(x), float(y)});
+}
+
+ChartPoint Chart::pointAt(const QPointF &position) const
+{
+    return pointFromPosition(QVector2D{position});
+}
+
 void Chart::appendSource(Chart::DataSourcesProperty *list, ChartDataSource *source)
 {
     auto chart = reinterpret_cast<Chart *>(list->data);

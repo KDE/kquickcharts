@@ -260,3 +260,8 @@ void PieChart::onDataChanged()
 
     update();
 }
+
+ChartPoint PieChart::pointFromPosition(const QVector2D &position) const
+{
+    return ChartPoint{};
+}

@@ -104,6 +104,10 @@ protected:
      * Reimplemented from Chart.
      */
     void onDataChanged() override;
+    /**
+     * Reimplemented from Chart.
+     */
+    ChartPoint pointFromPosition(const QVector2D &position) const override;
 
 private:
     QVector<Bar> calculateBars();

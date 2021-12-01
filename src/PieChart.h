@@ -150,6 +150,10 @@ protected:
      * Reimplemented from Chart.
      */
     void onDataChanged() override;
+    /**
+     * Reimplemented from Chart.
+     */
+    ChartPoint pointFromPosition(const QVector2D &position) const override;
 
 private:
     std::unique_ptr<RangeGroup> m_range;

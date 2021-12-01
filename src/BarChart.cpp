@@ -205,6 +205,11 @@ void BarChart::onDataChanged()
     update();
 }
 
+ChartPoint BarChart::pointFromPosition(const QVector2D &position) const
+{
+    return ChartPoint{};
+}
+
 QVector<Bar> BarChart::calculateBars()
 {
     QVector<Bar> result;
