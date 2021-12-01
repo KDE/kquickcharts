@@ -15,24 +15,11 @@
 
 #include "PieChartMaterial.h"
 
-static const qreal pi = std::acos(-1.0);
-static const qreal sectionSize = pi * 0.5;
+#include "Math.h"
 
 inline QVector4D colorToVec4(const QColor &color)
 {
     return QVector4D{float(color.redF()), float(color.greenF()), float(color.blueF()), float(color.alphaF())};
-}
-
-inline qreal degToRad(qreal deg)
-{
-    return (deg / 180.0) * pi;
-}
-
-inline QVector2D rotated(const QVector2D vector, qreal angle)
-{
-    auto newX = vector.x() * std::cos(angle) - vector.y() * std::sin(angle);
-    auto newY = vector.x() * std::sin(angle) + vector.y() * std::cos(angle);
-    return QVector2D(newX, newY);
 }
 
 PieChartNode::PieChartNode()
@@ -137,7 +124,7 @@ void PieChartNode::setFromAngle(qreal angle)
     }
 
     m_fromAngle = angle;
-    m_material->setFromAngle(degToRad(angle));
+    m_material->setFromAngle(Math::degToRad(angle));
     updateTriangles();
 }
 
@@ -148,7 +135,7 @@ void PieChartNode::setToAngle(qreal angle)
     }
 
     m_toAngle = angle;
-    m_material->setToAngle(degToRad(angle));
+    m_material->setToAngle(Math::degToRad(angle));
     updateTriangles();
 }
 
@@ -169,8 +156,8 @@ void PieChartNode::updateTriangles()
         return;
     }
 
-    qreal startAngle = degToRad(m_fromAngle);
-    qreal totalAngle = degToRad(m_toAngle - m_fromAngle);
+    qreal startAngle = Math::degToRad(m_fromAngle);
+    qreal totalAngle = Math::degToRad(m_toAngle - m_fromAngle);
 
     QVector<QVector2D> segments;
     QVector<QVector4D> colors;
