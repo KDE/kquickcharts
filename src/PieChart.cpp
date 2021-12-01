@@ -156,7 +156,7 @@ QSGNode *PieChart::updatePaintNode(QSGNode *node, UpdatePaintNodeData *data)
 
     float outer = minDimension;
     for (int i = 0; i < sourceCount; ++i) {
-        float inner = i == sourceCount - 1 && m_filled ? 0.0 : outer - m_thickness;
+        float inner = i == sourceCount - 1 && m_filled ? 0.0 : outer - m_thickness * 2.0;
 
         if (node->childCount() <= i) {
             node->appendChildNode(new PieChartNode{});
