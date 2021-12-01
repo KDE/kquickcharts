@@ -10,6 +10,7 @@
 #include <QAbstractItemModel>
 #include <QDebug>
 
+#include "Math.h"
 #include "RangeGroup.h"
 #include "datasource/ChartDataSource.h"
 #include "scenegraph/PieChartNode.h"
@@ -263,5 +264,73 @@ void PieChart::onDataChanged()
 
 ChartPoint PieChart::pointFromPosition(const QVector2D &position) const
 {
-    return ChartPoint{};
+    ChartPoint result;
+
+    // Pie Charts are drawn centered within the item, so calculate the position
+    // and distance using the center as origin.
+    auto translated = position - QVector2D{float(width() / 2.0), float(height() / 2.0)};
+    auto distance = translated.lengthSquared();
+
+    auto outer = std::min(width(), height()) / 2.0;
+
+    // If we are not within the outermost radius of the chart, there's no need
+    // to check anything else, we will never get a valid point.
+    if (distance > Math::squared(outer)) {
+        return result;
+    }
+
+    auto sourceCount = valueSources().size();
+    ChartDataSource *source = nullptr;
+    int item = -1;
+
+    for (int i = 0; i < sourceCount; ++i) {
+        auto inner = (i == sourceCount - 1 && m_filled) ? 0.0 : outer - m_thickness;
+
+        // If the distance is less than our inner radius, we will never be within
+        // this circle, so try the next until we either find the correct circle
+        // or run out of circles to try.
+        if (distance < Math::squared(inner)) {
+            outer = inner - m_spacing;
+            continue;
+        }
+
+        source = valueSources().at(i);
+
+        // Calculate at which angle the mouse is currently within the circle.
+        auto angle = Math::radToDeg(std::atan2(translated.y(), translated.x())) + 90.0;
+        angle = angle > 0.0 ? angle : 360 + angle;
+
+        float startAngle = m_fromAngle;
+        float totalAngle = m_toAngle - m_fromAngle;
+
+        // Find the section that contains the mouse.
+        const auto sections = m_sections.at(i);
+        for (auto s = 0; s < sections.size(); ++s) {
+            auto endAngle = startAngle + sections.at(s) * totalAngle;
+
+            if (angle > startAngle && angle < endAngle) {
+                item = s;
+                break;
+            }
+
+            startAngle = endAngle;
+        }
+
+        break;
+    }
+
+    if (!source || item < 0) {
+        return result;
+    }
+
+    result.valueSource = source;
+    result.item = item;
+    result.value = source->item(item);
+    result.name = nameSource() ? nameSource()->item(item).toString() : QString{};
+    result.shortName = shortNameSource() ? shortNameSource()->item(item).toString() : QString{};
+    result.color = colorSource() ? colorSource()->item(item).value<QColor>() : Qt::transparent;
+    result.x = position.x();
+    result.y = position.y();
+
+    return result;
 }
