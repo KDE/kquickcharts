@@ -63,7 +63,7 @@ set(quickcharts_SRCS
     XYChart.h
 )
 
-qt5_add_resources(quickcharts_QRC shaders/shaders.qrc)
+qt_add_resources(quickcharts_QRC shaders/shaders.qrc)
 
 ecm_qt_declare_logging_category(quickcharts_SRCS
     HEADER charts_general_logging.h
@@ -93,7 +93,7 @@ ecm_qt_declare_logging_category(quickcharts_SRCS
 )
 
 add_library(QuickChartsStatic STATIC ${quickcharts_SRCS} ${quickcharts_QRC})
-target_link_libraries(QuickChartsStatic PUBLIC Qt5::Core Qt5::Quick Qt5::Qml Qt5::Quick)
+target_link_libraries(QuickChartsStatic PUBLIC Qt${QT_MAJOR_VERSION}::Core Qt${QT_MAJOR_VERSION}::Quick Qt${QT_MAJOR_VERSION}::Qml Qt${QT_MAJOR_VERSION}::Quick)
 
 add_library(QuickCharts SHARED ChartsPlugin.cpp ChartsPlugin.h)
 target_link_libraries(QuickCharts PRIVATE QuickChartsStatic)

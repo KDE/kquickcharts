@@ -151,13 +151,20 @@ void Chart::appendSource(Chart::DataSourcesProperty *list, ChartDataSource *sour
     auto chart = reinterpret_cast<Chart *>(list->data);
     chart->insertValueSource(chart->valueSources().size(), source);
 }
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 int Chart::sourceCount(Chart::DataSourcesProperty *list)
+#else
+qsizetype Chart::sourceCount(Chart::DataSourcesProperty *list)
+#endif
 {
     return reinterpret_cast<Chart *>(list->data)->m_valueSources.count();
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 ChartDataSource *Chart::source(Chart::DataSourcesProperty *list, int index)
+#else
+ChartDataSource *Chart::source(Chart::DataSourcesProperty *list, qsizetype index)
+#endif
 {
     return reinterpret_cast<Chart *>(list->data)->m_valueSources.at(index);
 }

@@ -167,12 +167,20 @@ void LegendLayout::updatePolish()
                     sizeWithSpacing(rows, itemHeight, m_verticalSpacing));
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void LegendLayout::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+#else
+void LegendLayout::geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry)
+#endif
 {
     if (newGeometry != oldGeometry) {
         polish();
     }
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
+#else
+    QQuickItem::geometryChange(newGeometry, oldGeometry);
+#endif
 }
 
 void LegendLayout::itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData& data)

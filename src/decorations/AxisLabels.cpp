@@ -148,10 +148,17 @@ void AxisLabels::setConstrainToBounds(bool newConstrainToBounds)
     scheduleLayout();
     Q_EMIT constrainToBoundsChanged();
 }
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void AxisLabels::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+#else
+void AxisLabels::geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry)
+#endif
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
+#else
+    QQuickItem::geometryChange(newGeometry, oldGeometry);
+#endif
 
     if (newGeometry != oldGeometry) {
         scheduleLayout();

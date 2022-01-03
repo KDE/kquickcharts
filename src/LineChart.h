@@ -146,8 +146,11 @@ protected:
     void updatePolish() override;
     QSGNode *updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *data) override;
     void onDataChanged() override;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
-
+#else
+    void geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry) override;
+#endif
 private:
     void updateLineNode(LineChartNode *node, const QColor &lineColor, const QColor &fillColor, ChartDataSource *valueSource);
     void createPointDelegates(const QVector<QVector2D> &values, int sourceIndex);

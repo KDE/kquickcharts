@@ -11,9 +11,7 @@
 #include <memory>
 
 #include "Chart.h"
-
-class ChartDataSource;
-class RangeGroup;
+#include "RangeGroup.h"
 
 /**
  * An item to render a pie chart.
