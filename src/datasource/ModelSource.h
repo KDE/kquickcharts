@@ -8,10 +8,10 @@
 #ifndef MODELSOURCE_H
 #define MODELSOURCE_H
 
-#include "ChartDataSource.h"
-
 #include <QAbstractItemModel>
 #include <QPointer>
+
+#include "ChartDataSource.h"
 
 /**
  * A data source that reads data from a QAbstractItemModel.
@@ -56,11 +56,17 @@ public:
     virtual QVariant maximum() const override;
 
 private:
+    Q_SLOT void onMinimumChanged();
+    Q_SLOT void onMaximumChanged();
+
     mutable int m_role = -1;
     QString m_roleName;
     int m_column = 0;
     bool m_indexColumns = false;
     QPointer<QAbstractItemModel> m_model;
+
+    QVariant m_minimum;
+    QVariant m_maximum;
 };
 
 #endif // MODELSOURCE_H
