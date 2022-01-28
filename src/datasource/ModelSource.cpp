@@ -211,6 +211,12 @@ void ModelSource::setModel(QAbstractItemModel *model)
         connect(m_model, &QAbstractItemModel::dataChanged, this, &ModelSource::dataChanged);
         connect(m_model, &QAbstractItemModel::layoutChanged, this, &ModelSource::dataChanged);
 
+        connect(m_model, &QAbstractItemModel::destroyed, this, [this]() {
+            m_minimum = QVariant{};
+            m_maximum = QVariant{};
+            m_model = nullptr;
+        });
+
         auto minimumIndex = m_model->metaObject()->indexOfProperty("minimum");
         if (minimumIndex != -1) {
             auto minimum = m_model->metaObject()->property(minimumIndex);

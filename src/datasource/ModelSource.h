@@ -63,7 +63,7 @@ private:
     QString m_roleName;
     int m_column = 0;
     bool m_indexColumns = false;
-    QPointer<QAbstractItemModel> m_model;
+    QAbstractItemModel *m_model = nullptr;
 
     QVariant m_minimum;
     QVariant m_maximum;
