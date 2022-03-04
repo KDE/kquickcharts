@@ -1,5 +1,7 @@
 
-set(quickcharts_SRCS
+add_library(QuickChartsStatic STATIC)
+
+target_sources(QuickChartsStatic PRIVATE
     BarChart.cpp
     BarChart.h
     Chart.cpp
@@ -61,11 +63,11 @@ set(quickcharts_SRCS
     scenegraph/SDFShader.h
     XYChart.cpp
     XYChart.h
+
+    shaders/shaders.qrc
 )
 
-qt_add_resources(quickcharts_QRC shaders/shaders.qrc)
-
-ecm_qt_declare_logging_category(quickcharts_SRCS
+ecm_qt_declare_logging_category(QuickChartsStatic
     HEADER charts_general_logging.h
     IDENTIFIER GENERAL
     CATEGORY_NAME kf.quickcharts.general
@@ -74,7 +76,7 @@ ecm_qt_declare_logging_category(quickcharts_SRCS
     EXPORT KQuickCharts
 )
 
-ecm_qt_declare_logging_category(quickcharts_SRCS
+ecm_qt_declare_logging_category(QuickChartsStatic
     HEADER charts_datasource_logging.h
     IDENTIFIER DATASOURCE
     CATEGORY_NAME kf.quickcharts.datasource
@@ -83,7 +85,7 @@ ecm_qt_declare_logging_category(quickcharts_SRCS
     EXPORT KQuickCharts
 )
 
-ecm_qt_declare_logging_category(quickcharts_SRCS
+ecm_qt_declare_logging_category(QuickChartsStatic
     HEADER charts_deprecated_logging.h
     IDENTIFIER DEPRECATED
     CATEGORY_NAME kf.quickcharts.deprecated
@@ -92,10 +94,16 @@ ecm_qt_declare_logging_category(quickcharts_SRCS
     EXPORT KQuickCharts
 )
 
-add_library(QuickChartsStatic STATIC ${quickcharts_SRCS} ${quickcharts_QRC})
-target_link_libraries(QuickChartsStatic PUBLIC Qt${QT_MAJOR_VERSION}::Core Qt${QT_MAJOR_VERSION}::Quick Qt${QT_MAJOR_VERSION}::Qml Qt${QT_MAJOR_VERSION}::Quick)
+target_link_libraries(QuickChartsStatic PUBLIC
+    Qt${QT_MAJOR_VERSION}::Core
+    Qt${QT_MAJOR_VERSION}::Quick
+    Qt${QT_MAJOR_VERSION}::Qml
+    Qt${QT_MAJOR_VERSION}::Quick
+)
 
-add_library(QuickCharts SHARED ChartsPlugin.cpp ChartsPlugin.h)
+ecm_add_qml_module(QuickCharts URI "org.kde.quickcharts")
+
+target_sources(QuickCharts PRIVATE ChartsPlugin.cpp ChartsPlugin.h)
 target_link_libraries(QuickCharts PRIVATE QuickChartsStatic)
 
 ecm_generate_export_header(QuickCharts
@@ -107,19 +115,8 @@ ecm_generate_export_header(QuickCharts
     EXCLUDE_DEPRECATED_BEFORE_AND_AT ${EXCLUDE_DEPRECATED_BEFORE_AND_AT}
 )
 
-install(TARGETS QuickCharts EXPORT KF5QuickChartsTargets DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/quickcharts)
-install(FILES qmldir DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/quickcharts)
+ecm_finalize_qml_module(QuickCharts DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/quickcharts)
+
+install(TARGETS QuickCharts EXPORT KF5QuickChartsTargets)
 
 ecm_qt_install_logging_categories(EXPORT KQuickCharts DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
-
-if (BUILD_TESTING)
-    add_custom_command(TARGET QuickCharts POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/bin/org/kde/quickcharts
-    )
-    add_custom_command(TARGET QuickCharts POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/src/qmldir ${CMAKE_BINARY_DIR}/bin/org/kde/quickcharts
-    )
-    add_custom_command(TARGET QuickCharts POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:QuickCharts> ${CMAKE_BINARY_DIR}/bin/org/kde/quickcharts
-    )
-endif()

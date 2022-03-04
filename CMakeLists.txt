@@ -22,6 +22,7 @@ include(ECMGenerateExportHeader)
 include(ECMAddTests)
 include(ECMSetupVersion)
 include(ECMQtDeclareLoggingCategory)
+include(ECMQmlModule)
 
 option(BUILD_EXAMPLES "Build example applications" OFF)
 
