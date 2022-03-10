@@ -117,6 +117,4 @@ ecm_generate_export_header(QuickCharts
 
 ecm_finalize_qml_module(QuickCharts DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/quickcharts)
 
-install(TARGETS QuickCharts EXPORT KF5QuickChartsTargets)
-
 ecm_qt_install_logging_categories(EXPORT KQuickCharts DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR})

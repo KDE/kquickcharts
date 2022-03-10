@@ -63,12 +63,6 @@ install(FILES
     COMPONENT Devel
 )
 
-install(EXPORT KF5QuickChartsTargets
-    DESTINATION ${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5QuickCharts
-    FILE KF5QuickChartsTargets.cmake
-    NAMESPACE KF5::
-)
-
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
 kde_configure_git_pre_commit_hook(CHECKS CLANG_FORMAT)
