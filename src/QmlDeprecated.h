@@ -28,6 +28,7 @@
 #define QML_DEPRECATED(item, since, message) \
     QMetaObject::invokeMethod(this, [this]() {\
         qCWarning(DEPRECATED).nospace() << item <<  " is deprecated (since " << since << "): " << message;\
+        if (!qmlContext(this)) return;\
         QString elidedName = QStringLiteral("...") + qmlContext(this)->baseUrl().toString().right(80);\
         qCWarning(DEPRECATED) << "Note: Instantiated from" << elidedName;\
     }, Qt::QueuedConnection);
