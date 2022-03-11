@@ -4,7 +4,7 @@ include(CMakeFindDependencyMacro)
 find_dependency(Qt@QT_MAJOR_VERSION@Core @REQUIRED_QT_VERSION@)
 
 find_dependency(ECM @KF_DEP_VERSION@)
-include(${ECM_MODULE_PATH}/modules/ECMFindQmlModule.cmake)
+include(${ECM_MODULE_PATH}/ECMFindQmlModule.cmake)
 
 ecm_find_qmlmodule(org.kde.quickcharts 1.0)
 
