@@ -24,4 +24,4 @@ target_link_libraries(QuickChartsControls
     Qt${QT_MAJOR_VERSION}::QuickControls2
 )
 
-ecm_finalize_qml_module(QuickChartsControls DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/quickcharts/controls)
+ecm_finalize_qml_module(QuickChartsControls DESTINATION ${KDE_INSTALL_QMLDIR})
