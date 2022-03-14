@@ -1,9 +1,9 @@
 
-ecm_add_qml_module(chartscontrolsplugin URI "org.kde.quickcharts.controls")
+ecm_add_qml_module(QuickChartsControls URI "org.kde.quickcharts.controls")
 
-target_sources(chartscontrolsplugin PRIVATE ChartsControlsPlugin.cpp)
+target_sources(QuickChartsControls PRIVATE ChartsControlsPlugin.cpp)
 
-ecm_target_qml_sources(chartscontrolsplugin SOURCES
+ecm_target_qml_sources(QuickChartsControls SOURCES
     Legend.qml
     LegendDelegate.qml
     LineChartControl.qml
@@ -12,11 +12,11 @@ ecm_target_qml_sources(chartscontrolsplugin SOURCES
     Logging.qml
 )
 
-ecm_target_qml_sources(chartscontrolsplugin PRIVATE PATH styles/org.kde.desktop SOURCES
+ecm_target_qml_sources(QuickChartsControls PRIVATE PATH styles/org.kde.desktop SOURCES
     styles/org.kde.desktop/Theme.qml
 )
 
-target_link_libraries(chartscontrolsplugin
+target_link_libraries(QuickChartsControls
     Qt${QT_MAJOR_VERSION}::Core
     Qt${QT_MAJOR_VERSION}::Quick
     Qt${QT_MAJOR_VERSION}::Qml
@@ -24,4 +24,4 @@ target_link_libraries(chartscontrolsplugin
     Qt${QT_MAJOR_VERSION}::QuickControls2
 )
 
-ecm_finalize_qml_module(chartscontrolsplugin DESTINATION ${KDE_INSTALL_QMLDIR})
+ecm_finalize_qml_module(QuickChartsControls DESTINATION ${KDE_INSTALL_QMLDIR})
