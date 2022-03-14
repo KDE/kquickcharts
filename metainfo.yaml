@@ -8,6 +8,9 @@ type: functional
 platforms:
 - name: Linux
 - name: FreeBSD
+- name: Android
+- name: Windows
+- name: macOS
 public_lib: true
 public_source_dirs:
 - controls
