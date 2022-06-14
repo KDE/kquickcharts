@@ -113,7 +113,11 @@ private:
     qreal m_radius = 0.0;
     Orientation m_orientation = VerticalOrientation;
     bool m_orientationChanged = false;
-    QVector<QVector<QPair<qreal, QColor>>> m_values;
+    struct BarData {
+        qreal value = 0;
+        QColor color;
+    };
+    QVector<QVector<BarData>> m_barDataItems;
     QColor m_backgroundColor = Qt::transparent;
 };
 

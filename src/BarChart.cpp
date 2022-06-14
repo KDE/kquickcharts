@@ -154,7 +154,7 @@ void BarChart::onDataChanged()
         return;
     }
 
-    m_values.clear();
+    m_barDataItems.clear();
 
     updateComputedRange();
 
@@ -164,14 +164,14 @@ void BarChart::onDataChanged()
     auto indexMode = indexingMode();
     auto colorIndex = 0;
 
-    m_values.fill(QVector<QPair<qreal, QColor>>{}, range.distanceX);
+    m_barDataItems.fill(QVector<BarData>{}, range.distanceX);
 
-    auto generator = [&, i = range.startX]() mutable -> QVector<QPair<qreal, QColor>> {
-        QVector<QPair<qreal, QColor>> values;
+    auto generator = [&, i = range.startX]() mutable -> QVector<BarData> {
+        QVector<BarData> colorInfos;
 
         for (int j = 0; j < sources.count(); ++j) {
             auto value = (sources.at(j)->item(i).toReal() - range.startY) / range.distanceY;
-            values << QPair<qreal, QColor>(value, colors->item(colorIndex).value<QColor>());
+            colorInfos << BarData{value, colors->item(colorIndex).value<QColor>()};
 
             if (indexMode != Chart::IndexSourceValues) {
                 colorIndex++;
@@ -180,9 +180,9 @@ void BarChart::onDataChanged()
 
         if (stacked()) {
             auto previous = 0.0;
-            for (auto &value : values) {
-                value.first += previous;
-                previous = value.first;
+            for (auto &[colorVal, _] : colorInfos) {
+                colorVal += previous;
+                previous = colorVal;
             }
         }
 
@@ -193,13 +193,13 @@ void BarChart::onDataChanged()
         }
 
         i++;
-        return values;
+        return colorInfos;
     };
 
     if (direction() == Direction::ZeroAtStart) {
-        std::generate_n(m_values.begin(), range.distanceX, generator);
+        std::generate_n(m_barDataItems.begin(), range.distanceX, generator);
     } else {
-        std::generate_n(m_values.rbegin(), range.distanceX, generator);
+        std::generate_n(m_barDataItems.rbegin(), range.distanceX, generator);
     }
 
     update();
@@ -215,7 +215,7 @@ QVector<Bar> BarChart::calculateBars()
 
     float w = m_barWidth;
     if (w < 0.0) {
-        auto totalItemCount = stacked() ? m_values.size() : m_values.size() * valueSources().count();
+        auto totalItemCount = stacked() ? m_barDataItems.size() : m_barDataItems.size() * valueSources().count();
 
         if (stacked()) {
             w = targetWidth / totalItemCount - m_spacing;
@@ -223,10 +223,10 @@ QVector<Bar> BarChart::calculateBars()
             auto x = float(m_spacing / 2);
             auto itemSpacing = w + m_spacing;
 
-            for (const auto &items : qAsConst(m_values)) {
+            for (const auto &items : qAsConst(m_barDataItems)) {
                 for (int i = items.count() - 1; i >= 0; --i) {
                     auto entry = items.at(i);
-                    result << Bar{x, w, float(entry.first), entry.second};
+                    result << Bar{x, w, float(entry.value), entry.color};
                 }
                 x += itemSpacing;
             }
@@ -236,22 +236,22 @@ QVector<Bar> BarChart::calculateBars()
             auto x = float(m_spacing / 2);
             auto itemSpacing = w + m_spacing;
 
-            for (const auto &items : qAsConst(m_values)) {
+            for (const auto &items : qAsConst(m_barDataItems)) {
                 for (const auto &entry : items) {
-                    result << Bar{x, w, float(entry.first), entry.second};
+                    result << Bar{x, w, float(entry.value), entry.color};
                     x += itemSpacing;
                 }
             }
         }
     } else {
-        auto itemSpacing = targetWidth / m_values.size();
+        auto itemSpacing = targetWidth / m_barDataItems.size();
         if (stacked()) {
             auto x = float(itemSpacing / 2 - m_barWidth / 2);
 
-            for (const auto &items : qAsConst(m_values)) {
+            for (const auto &items : qAsConst(m_barDataItems)) {
                 for (int i = items.count() - 1; i >= 0; --i) {
                     auto entry = items.at(i);
-                    result << Bar{x, w, float(entry.first), entry.second};
+                    result << Bar{x, w, float(entry.value), entry.color};
                 }
                 x += itemSpacing;
             }
@@ -260,10 +260,10 @@ QVector<Bar> BarChart::calculateBars()
 
             auto x = float(itemSpacing / 2 - totalWidth / 2);
 
-            for (const auto &items : qAsConst(m_values)) {
+            for (const auto &items : qAsConst(m_barDataItems)) {
                 for (int i = 0; i < items.count(); ++i) {
                     auto entry = items.at(i);
-                    result << Bar{float(x + i * (m_barWidth + m_spacing)), w, float(entry.first), entry.second};
+                    result << Bar{float(x + i * (m_barWidth + m_spacing)), w, float(entry.value), entry.color};
                 }
                 x += itemSpacing;
             }
