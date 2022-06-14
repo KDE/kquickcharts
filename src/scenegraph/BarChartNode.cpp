@@ -94,11 +94,6 @@ public:
     float value;
 };
 
-bool compareCount(const QVector<QPair<qreal, QColor>> &first, const QVector<QPair<qreal, QColor>> &second)
-{
-    return first.count() < second.count();
-}
-
 BarChartNode::BarChartNode()
 {
 }
