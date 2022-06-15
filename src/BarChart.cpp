@@ -215,52 +215,48 @@ QVector<Bar> BarChart::calculateBars()
 
     float w = m_barWidth;
     if (w < 0.0) {
-        auto totalItemCount = stacked() ? m_barDataItems.size() : m_barDataItems.size() * valueSources().count();
+        const auto totalItemCount = stacked() ? m_barDataItems.size() : m_barDataItems.size() * valueSources().count();
 
-        if (stacked()) {
-            w = targetWidth / totalItemCount - m_spacing;
+        w = targetWidth / totalItemCount - m_spacing;
 
-            auto x = float(m_spacing / 2);
-            auto itemSpacing = w + m_spacing;
+        auto x = float(m_spacing / 2);
+        const auto itemSpacing = w + m_spacing;
 
-            for (const auto &items : qAsConst(m_barDataItems)) {
-                for (int i = items.count() - 1; i >= 0; --i) {
-                    auto entry = items.at(i);
-                    result << Bar{x, w, float(entry.value), entry.color};
-                }
+        for (const auto &items : qAsConst(m_barDataItems)) {
+            result.reserve(result.size() + items.size());
+            if (stacked()) {
+                std::transform(items.crbegin(), items.crend(), std::back_inserter(result), [x, w](const BarData &entry) {
+                    return Bar{x, w, float(entry.value), entry.color};
+                });
                 x += itemSpacing;
-            }
-        } else {
-            w = targetWidth / totalItemCount - m_spacing;
-
-            auto x = float(m_spacing / 2);
-            auto itemSpacing = w + m_spacing;
-
-            for (const auto &items : qAsConst(m_barDataItems)) {
-                for (const auto &entry : items) {
-                    result << Bar{x, w, float(entry.value), entry.color};
+            } else {
+                std::transform(items.cbegin(), items.cend(), std::back_inserter(result), [&x, itemSpacing, w](const BarData &entry) {
+                    Bar bar{x, w, float(entry.value), entry.color};
                     x += itemSpacing;
-                }
+                    return bar;
+                });
             }
         }
     } else {
-        auto itemSpacing = targetWidth / m_barDataItems.size();
+        const auto itemSpacing = targetWidth / m_barDataItems.size();
         if (stacked()) {
             auto x = float(itemSpacing / 2 - m_barWidth / 2);
 
             for (const auto &items : qAsConst(m_barDataItems)) {
-                for (int i = items.count() - 1; i >= 0; --i) {
-                    auto entry = items.at(i);
-                    result << Bar{x, w, float(entry.value), entry.color};
-                }
+                result.reserve(result.size() + items.size());
+                std::transform(items.crbegin(), items.crend(), std::back_inserter(result), [x, w](const BarData &entry) {
+                    return Bar{x, w, float(entry.value), entry.color};
+                });
+
                 x += itemSpacing;
             }
         } else {
-            auto totalWidth = m_barWidth * valueSources().count() + m_spacing * (valueSources().count() - 1);
+            const auto totalWidth = m_barWidth * valueSources().count() + m_spacing * (valueSources().count() - 1);
 
             auto x = float(itemSpacing / 2 - totalWidth / 2);
 
             for (const auto &items : qAsConst(m_barDataItems)) {
+                result.reserve(result.size() + items.size());
                 for (int i = 0; i < items.count(); ++i) {
                     auto entry = items.at(i);
                     result << Bar{float(x + i * (m_barWidth + m_spacing)), w, float(entry.value), entry.color};
