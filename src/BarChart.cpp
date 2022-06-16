@@ -166,7 +166,7 @@ void BarChart::onDataChanged()
 
     m_barDataItems.fill(QVector<BarData>{}, range.distanceX);
 
-    auto generator = [&, i = range.startX]() mutable -> QVector<BarData> {
+    auto generator = [&, this, i = range.startX]() mutable -> QVector<BarData> {
         QVector<BarData> colorInfos;
 
         for (int j = 0; j < sources.count(); ++j) {
