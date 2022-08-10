@@ -245,7 +245,7 @@ void PieChart::onDataChanged()
         }
 
         for (auto &value : sections) {
-            value = value / range.end;
+            value = value / range.distance;
         }
 
         m_sections << sections;
