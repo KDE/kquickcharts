@@ -47,10 +47,10 @@ private Q_SLOTS:
 
         QTest::newRow("colors")
             << QVariantList{qs("red"), qs("green"), qs("blue"), qs("red"), qs("green"), qs("blue")}
-            << QVariantMap{{qs("red"), QColor{Qt::red}}, {qs("green"), QColor{Qt::green}}, {qs("blue"), QColor{Qt::blue}}}
-            << QVariantList{QColor{Qt::red}, QColor{Qt::green}, QColor{Qt::blue}, QColor{Qt::red}, QColor{Qt::green}, QColor{Qt::blue}}
-            << QVariant{QColor{Qt::blue}}
-            << QVariant{QColor{Qt::red}};
+            << QVariantMap{{qs("red"), QColor{Qt::red}.rgba()}, {qs("green"), QColor{Qt::green}.rgba()}, {qs("blue"), QColor{Qt::blue}.rgba()}}
+            << QVariantList{QColor{Qt::red}.rgba(), QColor{Qt::green}.rgba(), QColor{Qt::blue}.rgba(), QColor{Qt::red}.rgba(), QColor{Qt::green}.rgba(), QColor{Qt::blue}.rgba()}
+            << QVariant{QColor{Qt::blue}.rgba()}
+            << QVariant{QColor{Qt::red}.rgba()};
         // clang-format on
     }
 

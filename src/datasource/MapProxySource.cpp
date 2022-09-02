@@ -24,7 +24,7 @@ int MapProxySource::itemCount() const
 
 QVariant MapProxySource::minimum() const
 {
-    auto itr = std::min_element(m_map.cbegin(), m_map.cend());
+    auto itr = std::min_element(m_map.cbegin(), m_map.cend(), variantCompare);
     if (itr != m_map.cend()) {
         return *itr;
     }
@@ -33,7 +33,7 @@ QVariant MapProxySource::minimum() const
 
 QVariant MapProxySource::maximum() const
 {
-    auto itr = std::max_element(m_map.cbegin(), m_map.cend());
+    auto itr = std::max_element(m_map.cbegin(), m_map.cend(), variantCompare);
     if (itr != m_map.cend()) {
         return *itr;
     }

@@ -114,7 +114,7 @@ QVariant ModelSource::minimum() const
 
     QVariant result = std::numeric_limits<float>::max();
     for (int i = 0; i < itemCount(); ++i) {
-        result = qMin(result, item(i));
+        result = std::min(result, item(i), variantCompare);
     }
     return result;
 }
@@ -137,7 +137,7 @@ QVariant ModelSource::maximum() const
 
     QVariant result = std::numeric_limits<float>::min();
     for (int i = 0; i < itemCount(); ++i) {
-        result = qMax(result, item(i));
+        result = std::max(result, item(i), variantCompare);
     }
     return result;
 }

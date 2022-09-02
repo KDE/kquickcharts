@@ -70,7 +70,7 @@ QVariant HistoryProxySource::minimum() const
         }
     }
 
-    return *std::min_element(m_history.begin(), m_history.end());
+    return *std::min_element(m_history.begin(), m_history.end(), variantCompare);
 }
 
 QVariant HistoryProxySource::maximum() const
@@ -88,7 +88,7 @@ QVariant HistoryProxySource::maximum() const
         }
     }
 
-    return *std::max_element(m_history.begin(), m_history.end());
+    return *std::max_element(m_history.begin(), m_history.end(), variantCompare);
 }
 
 QVariant HistoryProxySource::first() const

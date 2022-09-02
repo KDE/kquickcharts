@@ -29,6 +29,9 @@ public:
     virtual QVariant first() const;
 
     Q_SIGNAL void dataChanged();
+
+protected:
+    static bool variantCompare(const QVariant &lhs, const QVariant &rhs);
 };
 
 #endif // DATASOURCE_H
