@@ -20,7 +20,11 @@ public:
     ~BarChartMaterial();
 
     QSGMaterialType *type() const override;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QSGMaterialShader *createShader() const override;
+#else
+    QSGMaterialShader *createShader(QSGRendererInterface::RenderMode) const override;
+#endif
     int compare(const QSGMaterial *other) const override;
 
     QVector2D aspect = QVector2D{1.0, 1.0};

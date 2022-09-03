@@ -22,7 +22,11 @@ QSGMaterialType *LineChartMaterial::type() const
     return &type;
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 QSGMaterialShader *LineChartMaterial::createShader() const
+#else
+QSGMaterialShader *LineChartMaterial::createShader(QSGRendererInterface::RenderMode) const
+#endif
 {
     return new LineChartShader();
 }

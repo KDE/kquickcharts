@@ -21,7 +21,11 @@ public:
     ~PieChartMaterial();
 
     QSGMaterialType *type() const override;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QSGMaterialShader *createShader() const override;
+#else
+    QSGMaterialShader *createShader(QSGRendererInterface::RenderMode) const override;
+#endif
 
     QVector2D aspectRatio() const;
     float innerRadius() const;

@@ -21,7 +21,11 @@ public:
     ~LineChartMaterial();
 
     QSGMaterialType *type() const override;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QSGMaterialShader *createShader() const override;
+#else
+    QSGMaterialShader *createShader(QSGRendererInterface::RenderMode) const override;
+#endif
     int compare(const QSGMaterial *other) const override;
 
     float aspect = 1.0;

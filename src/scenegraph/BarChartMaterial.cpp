@@ -21,7 +21,11 @@ QSGMaterialType *BarChartMaterial::type() const
     return &type;
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 QSGMaterialShader *BarChartMaterial::createShader() const
+#else
+QSGMaterialShader *BarChartMaterial::createShader(QSGRendererInterface::RenderMode) const
+#endif
 {
     return new BarChartShader();
 }

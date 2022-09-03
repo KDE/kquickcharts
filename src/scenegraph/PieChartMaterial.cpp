@@ -22,7 +22,11 @@ QSGMaterialType *PieChartMaterial::type() const
     return &type;
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 QSGMaterialShader *PieChartMaterial::createShader() const
+#else
+QSGMaterialShader *PieChartMaterial::createShader(QSGRendererInterface::RenderMode) const
+#endif
 {
     return new PieChartShader();
 }
