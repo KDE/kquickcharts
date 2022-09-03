@@ -111,7 +111,7 @@ void LineChartNode::updatePoints()
         segment->setFillColor(m_fillColor);
         segment->setValues(segmentPoints);
         segment->setFarLeft(m_values.at(std::max(0, pointStart - pointsPerSegment - 1)));
-        segment->setFarRight(m_values.at(std::min(m_values.count() - 1, pointStart + 1)));
+        segment->setFarRight(m_values.at(std::min<int>(m_values.count() - 1, pointStart + 1)));
         segment->update();
 
         currentX += segmentWidth;

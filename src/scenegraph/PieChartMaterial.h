@@ -68,6 +68,7 @@ public:
     PieChartShader();
     ~PieChartShader();
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     char const *const *attributeNames() const override;
 
     void initialize() override;
@@ -86,6 +87,9 @@ private:
     int m_smoothEndsLocation = 0;
     int m_fromAngleLocation = 0;
     int m_toAngleLocation = 0;
+#else
+    bool updateUniformData(QSGMaterialShader::RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial) override;
+#endif
 };
 
 #endif // PIECHARTMATERIAL_H

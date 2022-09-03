@@ -1,5 +1,6 @@
 
 add_library(QuickChartsStatic STATIC)
+set_target_properties(QuickChartsStatic PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 target_sources(QuickChartsStatic PRIVATE
     BarChart.cpp
@@ -105,6 +106,9 @@ ecm_add_qml_module(QuickCharts URI "org.kde.quickcharts")
 
 target_sources(QuickCharts PRIVATE ChartsPlugin.cpp ChartsPlugin.h)
 target_link_libraries(QuickCharts PRIVATE QuickChartsStatic)
+if (QT_MAJOR_VERSION EQUAL "6")
+    add_subdirectory(shaders6)
+endif()
 
 ecm_generate_export_header(QuickCharts
     BASE_NAME QuickCharts

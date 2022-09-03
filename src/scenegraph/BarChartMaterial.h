@@ -38,6 +38,7 @@ public:
     BarChartShader();
     ~BarChartShader();
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     char const *const *attributeNames() const override;
 
     void initialize() override;
@@ -49,6 +50,9 @@ private:
     int m_aspectLocation = 0;
     int m_backgroundColorLocation = 0;
     int m_radiusLocation = 0;
+#else
+    bool updateUniformData(QSGMaterialShader::RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial) override;
+#endif
 };
 
 #endif // PIECHARTMATERIAL_H

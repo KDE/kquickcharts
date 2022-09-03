@@ -54,6 +54,7 @@ LineChartShader::~LineChartShader()
 {
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 const char *const *LineChartShader::attributeNames() const
 {
     /* clang-format off */
@@ -104,3 +105,33 @@ void LineChartShader::updateState(const QSGMaterialShader::RenderState &state, Q
         program()->setUniformValue(m_smoothingLocation, material->smoothing);
     }
 }
+#else
+bool LineChartShader::updateUniformData(QSGMaterialShader::RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial)
+{
+    bool changed = false;
+    QByteArray *buf = state.uniformData();
+    Q_ASSERT(buf->size() >= 80);
+
+    if (state.isMatrixDirty()) {
+        const QMatrix4x4 m = state.combinedMatrix();
+        memcpy(buf->data(), m.constData(), 64);
+        changed = true;
+    }
+
+    if (state.isOpacityDirty()) {
+        const float opacity = state.opacity();
+        memcpy(buf->data() + 72, &opacity, 4);
+        changed = true;
+    }
+
+    if (!oldMaterial || newMaterial->compare(oldMaterial) != 0) {
+        const auto material = static_cast<LineChartMaterial *>(newMaterial);
+        memcpy(buf->data() + 64, &material->lineWidth, 4);
+        memcpy(buf->data() + 68, &material->aspect, 4);
+        memcpy(buf->data() + 76, &material->smoothing, 4);
+        changed = true;
+    }
+
+    return changed;
+}
+#endif

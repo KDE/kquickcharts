@@ -130,6 +130,7 @@ PieChartShader::~PieChartShader()
 {
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 const char *const *PieChartShader::attributeNames() const
 {
     static char const *const names[] = {"in_vertex", "in_uv", nullptr};
@@ -176,3 +177,52 @@ void PieChartShader::updateState(const QSGMaterialShader::RenderState &state, QS
         program()->setUniformValue(m_toAngleLocation, material->toAngle());
     }
 }
+#else
+bool PieChartShader::updateUniformData(QSGMaterialShader::RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial)
+{
+    bool changed = false;
+    QByteArray *buf = state.uniformData();
+    Q_ASSERT(buf->size() >= 3332);
+
+    if (state.isMatrixDirty()) {
+        const QMatrix4x4 m = state.combinedMatrix();
+        memcpy(buf->data(), m.constData(), 64);
+        changed = true;
+    }
+
+    if (state.isOpacityDirty()) {
+        const float opacity = state.opacity();
+        memcpy(buf->data() + 72, &opacity, 4);
+        changed = true;
+    }
+
+    if (!oldMaterial || newMaterial->compare(oldMaterial) != 0) {
+        const auto material = static_cast<PieChartMaterial *>(newMaterial);
+        const QVector2D aspect = material->aspectRatio();
+        memcpy(buf->data() + 64, &aspect, 8);
+        float f = material->innerRadius();
+        memcpy(buf->data() + 76, &f, 4);
+        f = material->outerRadius();
+        memcpy(buf->data() + 80, &f, 4);
+        float c[4];
+        material->backgroundColor().getRgbF(&c[0], &c[1], &c[2], &c[3]);
+        memcpy(buf->data() + 96, c, 16);
+        bool b = material->smoothEnds();
+        memcpy(buf->data() + 112, &b, 1);
+        f = material->fromAngle();
+        memcpy(buf->data() + 116, &f, 4);
+        f = material->toAngle();
+        memcpy(buf->data() + 120, &f, 4);
+        const int segmentCount = material->segments().size();
+        for (int i = 0; i < segmentCount; ++i) {
+            const QVector2D v = material->segments().at(i);
+            memcpy(buf->data() + 128 + (i * 16), &v, 8);
+        }
+        memcpy(buf->data() + 1728, material->colors().constData(), segmentCount * 16);
+        memcpy(buf->data() + 3328, &segmentCount, 4);
+        changed = true;
+    }
+
+    return changed;
+}
+#endif

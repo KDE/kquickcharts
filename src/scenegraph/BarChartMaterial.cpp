@@ -53,6 +53,7 @@ BarChartShader::~BarChartShader()
 {
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 const char *const *BarChartShader::attributeNames() const
 {
     static const char *const names[] = {"in_vertex", "in_uv", "in_color", "in_value", nullptr};
@@ -85,3 +86,35 @@ void BarChartShader::updateState(const QSGMaterialShader::RenderState &state, QS
         program()->setUniformValue(m_radiusLocation, material->radius);
     }
 }
+#else
+bool BarChartShader::updateUniformData(QSGMaterialShader::RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial)
+{
+    bool changed = false;
+    QByteArray *buf = state.uniformData();
+    Q_ASSERT(buf->size() >= 96);
+
+    if (state.isMatrixDirty()) {
+        const QMatrix4x4 m = state.combinedMatrix();
+        memcpy(buf->data(), m.constData(), 64);
+        changed = true;
+    }
+
+    if (state.isOpacityDirty()) {
+        const float opacity = state.opacity();
+        memcpy(buf->data() + 72, &opacity, 4);
+        changed = true;
+    }
+
+    if (!oldMaterial || newMaterial->compare(oldMaterial) != 0) {
+        const auto material = static_cast<BarChartMaterial *>(newMaterial);
+        memcpy(buf->data() + 64, &material->aspect, 8);
+        memcpy(buf->data() + 76, &material->radius, 4);
+        float c[4];
+        material->backgroundColor.getRgbF(&c[0], &c[1], &c[2], &c[3]);
+        memcpy(buf->data() + 80, c, 16);
+        changed = true;
+    }
+
+    return changed;
+}
+#endif
