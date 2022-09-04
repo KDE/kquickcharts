@@ -1,6 +1,7 @@
 /*
  * This file is part of KQuickCharts
  * SPDX-FileCopyrightText: 2019 Arjen Hiemstra <ahiemstra@heimr.nl>
+ * SPDX-FileCopyrightText: 2022 Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
  */
@@ -28,10 +29,9 @@ in mediump vec2 in_bounds;
 in highp float in_count;
 
 // Input points. Since OpenGL 2.1/GLSL 1.10 does not support array vertex
-// attributes, we have to manually declare a number of attributes. In addition,
-// while we use vec2 as point data format, we can store either a vec2 or a vec4
-// as a vertex attribute. Therefore, we define these as vec4 and manually unpack
-// to make use of as much storage as possible.
+// attributes, we have to manually declare a number of attributes. We use
+// array of vec4 point tuples instead of vec2 to not cross the OpenGL limits
+// like e.g. GL_MAX_VERTEX_ATTRIBS for some drivers.
 in mediump vec4 in_points_0;
 in mediump vec4 in_points_1;
 in mediump vec4 in_points_2;
@@ -43,7 +43,7 @@ in mediump vec4 in_points_7;
 in mediump vec4 in_points_8;
 
 out mediump vec2 uv;
-out mediump vec2 points[MAXIMUM_POINT_COUNT];
+out mediump vec4 pointTuples[MAXIMUM_POINT_COUNT / 2];
 out highp float pointCount;
 out mediump vec2 bounds;
 out mediump vec4 lineColor;
@@ -53,24 +53,15 @@ void main() {
     uv = in_uv;
     uv.y = (1.0 + -1.0 * uv.y) * aspect;
 
-    points[0] = in_points_0.xy;
-    points[1] = in_points_0.zw;
-    points[2] = in_points_1.xy;
-    points[3] = in_points_1.zw;
-    points[4] = in_points_2.xy;
-    points[5] = in_points_2.zw;
-    points[6] = in_points_3.xy;
-    points[7] = in_points_3.zw;
-    points[8] = in_points_4.xy;
-    points[9] = in_points_4.zw;
-    points[10] = in_points_5.xy;
-    points[11] = in_points_5.zw;
-    points[12] = in_points_6.xy;
-    points[13] = in_points_6.zw;
-    points[14] = in_points_7.xy;
-    points[15] = in_points_7.zw;
-    points[16] = in_points_8.xy;
-    points[17] = in_points_8.zw;
+    pointTuples[0] = in_points_0;
+    pointTuples[1] = in_points_1;
+    pointTuples[2] = in_points_2;
+    pointTuples[3] = in_points_3;
+    pointTuples[4] = in_points_4;
+    pointTuples[5] = in_points_5;
+    pointTuples[6] = in_points_6;
+    pointTuples[7] = in_points_7;
+    pointTuples[8] = in_points_8;
 
     pointCount = in_count;
     bounds = in_bounds;

@@ -1,6 +1,7 @@
 /*
  * This file is part of KQuickCharts
  * SPDX-FileCopyrightText: 2019 Arjen Hiemstra <ahiemstra@heimr.nl>
+ * SPDX-FileCopyrightText: 2022 Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
  */
@@ -21,7 +22,7 @@ layout(std140, binding = 0) uniform buf {
 #define MAXIMUM_POINT_COUNT 18
 
 layout (location = 0) in mediump vec2 uv;
-layout (location = 1) in mediump vec2 points[MAXIMUM_POINT_COUNT];
+layout (location = 1) in mediump vec4 pointTuples[MAXIMUM_POINT_COUNT / 2];
 layout (location = 19) in highp float pointCount;
 layout (location = 20) in mediump vec2 bounds;
 layout (location = 21) in mediump vec4 lineColor;
@@ -34,6 +35,26 @@ layout (location = 0) out lowp vec4 out_color;
 // For simplicity, we use the same function also for other APIs.
 lowp float sdf_polygon(in lowp vec2 point, in int count)
 {
+    mediump vec2 points[MAXIMUM_POINT_COUNT];
+    points[0] = pointTuples[0].xy;
+    points[1] = pointTuples[0].zw;
+    points[2] = pointTuples[1].xy;
+    points[3] = pointTuples[1].zw;
+    points[4] = pointTuples[2].xy;
+    points[5] = pointTuples[2].zw;
+    points[6] = pointTuples[3].xy;
+    points[7] = pointTuples[3].zw;
+    points[8] = pointTuples[4].xy;
+    points[9] = pointTuples[4].zw;
+    points[10] = pointTuples[5].xy;
+    points[11] = pointTuples[5].zw;
+    points[12] = pointTuples[6].xy;
+    points[13] = pointTuples[6].zw;
+    points[14] = pointTuples[7].xy;
+    points[15] = pointTuples[7].zw;
+    points[16] = pointTuples[8].xy;
+    points[17] = pointTuples[8].zw;
+
     lowp float d = dot(point - points[0], point - points[0]);
     lowp float s = 1.0;
     for (int i = 0, j = count - 1; i < count && i < MAXIMUM_POINT_COUNT; j = i, i++)
