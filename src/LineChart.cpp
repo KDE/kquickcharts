@@ -184,7 +184,7 @@ void LineChart::setPointDelegate(QQmlComponent *newPointDelegate)
     }
 
     m_pointDelegate = newPointDelegate;
-    for (auto entry : qAsConst(m_pointDelegates)) {
+    for (auto entry : std::as_const(m_pointDelegates)) {
         qDeleteAll(entry);
     }
     m_pointDelegates.clear();

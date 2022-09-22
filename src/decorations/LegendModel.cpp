@@ -68,7 +68,7 @@ void LegendModel::setChart(Chart *newChart)
     }
 
     if (m_chart) {
-        for (const auto &connection : qAsConst(m_connections)) {
+        for (const auto &connection : std::as_const(m_connections)) {
             disconnect(connection);
         }
         m_connections.clear();

@@ -229,7 +229,7 @@ void LineSegmentNode::update()
         points << QVector2D(-0.5, m_values[0].y() * m_yAspect);
     }
 
-    for (auto value : qAsConst(m_values)) {
+    for (auto value : std::as_const(m_values)) {
         auto x = ((value.x() - m_rect.left()) / m_rect.width()) * m_xAspect;
         points << QVector2D(x, value.y() * m_yAspect);
         min = std::min(value.y() * m_yAspect, min);

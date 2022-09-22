@@ -73,7 +73,7 @@ QVariantList ColorGradientSource::colors() const
 {
     QVariantList colorsVariant;
     colorsVariant.reserve(m_colors.count());
-    for (const QColor &color : qAsConst(m_colors)) {
+    for (const QColor &color : std::as_const(m_colors)) {
         colorsVariant.append(color);
     }
     return colorsVariant;
