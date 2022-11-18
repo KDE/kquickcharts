@@ -1,4 +1,6 @@
-
+# SPDX-FileCopyrightText: 2019,2020 Arjen Hiemstra <ahiemstra@heimr.nl>
+# SPDX-FileCopyrightText: 2022 Alexander Lohnau <alexander.lohnau@gmx.de>
+# SPDX-License-Identifier: BSD-2-Clause
 find_package(Qt${QT_MAJOR_VERSION} COMPONENTS QuickTest)
 
 include(ECMAddTests)
