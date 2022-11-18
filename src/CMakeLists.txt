@@ -102,7 +102,7 @@ target_link_libraries(QuickChartsStatic PUBLIC
     Qt${QT_MAJOR_VERSION}::Quick
 )
 
-ecm_add_qml_module(QuickCharts URI "org.kde.quickcharts")
+ecm_add_qml_module(QuickCharts URI "org.kde.quickcharts" CLASSNAME QuickChartsPlugin)
 
 target_sources(QuickCharts PRIVATE ChartsPlugin.cpp ChartsPlugin.h)
 target_link_libraries(QuickCharts PRIVATE QuickChartsStatic)
