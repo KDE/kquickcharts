@@ -15,6 +15,10 @@ ecm_add_tests(
 
 add_executable(qmltest qmltest.cpp)
 target_link_libraries(qmltest Qt${QT_MAJOR_VERSION}::QuickTest)
+if (NOT BUILD_SHARED_LIBS)
+    target_link_libraries(qmltest QuickCharts)
+    target_compile_definitions(qmltest PRIVATE -DIMPORT_KQUICKCHARTS_QML_PLUGIN)
+endif()
 
 macro(add_qml_tests)
     if (WIN32)

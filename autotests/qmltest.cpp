@@ -6,4 +6,10 @@
  */
 
 #include <QtQuickTest>
+
+#ifdef IMPORT_KQUICKCHARTS_QML_PLUGIN
+#include <QPluginLoader>
+Q_IMPORT_PLUGIN(QuickChartsPlugin)
+#endif
+
 QUICK_TEST_MAIN(Charts)
