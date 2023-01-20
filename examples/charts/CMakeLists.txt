@@ -1,10 +1,10 @@
 
 find_package(Qt${QT_MAJOR_VERSION}Widgets REQUIRED)
 set_package_properties(Qt${QT_MAJOR_VERSION}Widgets PROPERTIES TYPE REQUIRED PURPOSE "The charts example needs Qt Widgets so the Plasma desktop style works properly.")
-find_package(KF5Kirigami2 REQUIRED)
-set_package_properties(KF5Kirigami2 PROPERTIES TYPE REQUIRED PURPOSE "The charts example uses Kirigami for its UI.")
-find_package(KF5Declarative REQUIRED)
-set_package_properties(KF5Declarative PROPERTIES TYPE REQUIRED PURPOSE "The charts example uses items from KF5Declarative for its UI.")
+find_package(KF6Kirigami2 REQUIRED)
+set_package_properties(KF6Kirigami2 PROPERTIES TYPE REQUIRED PURPOSE "The charts example uses Kirigami for its UI.")
+find_package(KF6Declarative REQUIRED)
+set_package_properties(KF6Declarative PROPERTIES TYPE REQUIRED PURPOSE "The charts example uses items from KF6Declarative for its UI.")
 
 set(quickcharts_example_SRCS
     main.cpp

@@ -47,22 +47,22 @@ endif()
 
 ecm_setup_version(
     PROJECT
-    VARIABLE_PREFIX KF5QuickCharts
+    VARIABLE_PREFIX KF6QuickCharts
     VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/quickcharts_version.h"
-    PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5QuickChartsConfigVersion.cmake"
+    PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF6QuickChartsConfigVersion.cmake"
     SOVERSION 1
 )
 
 configure_package_config_file(
-    "KF5QuickChartsConfig.cmake.in"
-    "KF5QuickChartsConfig.cmake"
-    INSTALL_DESTINATION ${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5QuickCharts
+    "KF6QuickChartsConfig.cmake.in"
+    "KF6QuickChartsConfig.cmake"
+    INSTALL_DESTINATION ${KDE_INSTALL_CMAKEPACKAGEDIR}/KF6QuickCharts
 )
 
 install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/KF5QuickChartsConfig.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/KF5QuickChartsConfigVersion.cmake"
-    DESTINATION ${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5QuickCharts
+    "${CMAKE_CURRENT_BINARY_DIR}/KF6QuickChartsConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/KF6QuickChartsConfigVersion.cmake"
+    DESTINATION ${KDE_INSTALL_CMAKEPACKAGEDIR}/KF6QuickCharts
     COMPONENT Devel
 )
 
