@@ -19,14 +19,10 @@ target_sources(QuickChartsStatic PRIVATE
     datasource/HistoryProxySource.h
     datasource/MapProxySource.cpp
     datasource/MapProxySource.h
-    datasource/ModelHistorySource.cpp
-    datasource/ModelHistorySource.h
     datasource/ModelSource.cpp
     datasource/ModelSource.h
     datasource/SingleValueSource.cpp
     datasource/SingleValueSource.h
-    datasource/ValueHistorySource.cpp
-    datasource/ValueHistorySource.h
     decorations/AxisLabels.cpp
     decorations/AxisLabels.h
     decorations/GridLines.cpp
@@ -41,7 +37,6 @@ target_sources(QuickChartsStatic PRIVATE
     LineChart.h
     PieChart.cpp
     PieChart.h
-    QmlDeprecated.h
     RangeGroup.cpp
     RangeGroup.h
     scenegraph/BarChartMaterial.cpp
@@ -115,7 +110,7 @@ ecm_generate_export_header(QuickCharts
     GROUP_BASE_NAME KF
     VERSION ${KF_VERSION}
     DEPRECATED_BASE_VERSION 0
-    DEPRECATION_VERSIONS 5.78
+    DEPRECATION_VERSIONS
     EXCLUDE_DEPRECATED_BEFORE_AND_AT ${EXCLUDE_DEPRECATED_BEFORE_AND_AT}
 )
 
