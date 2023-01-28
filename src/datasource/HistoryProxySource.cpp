@@ -34,13 +34,13 @@ QVariant HistoryProxySource::item(int index) const
     }
 
     if (m_fillMode == FillFromStart && index >= m_history.count()) {
-        return QVariant{m_dataSource->item(0).type()};
+        return QVariant{QMetaType(m_dataSource->item(0).userType())};
     }
 
     if (m_fillMode == FillFromEnd && m_history.count() != m_maximumHistory) {
         auto actualIndex = index - (m_maximumHistory - m_history.count());
         if (actualIndex < 0 || actualIndex >= m_history.size()) {
-            return QVariant{m_dataSource->item(0).type()};
+            return QVariant{QMetaType(m_dataSource->item(0).userType())};
         } else {
             return m_history.at(actualIndex);
         }

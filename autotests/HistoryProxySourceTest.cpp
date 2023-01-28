@@ -149,9 +149,9 @@ private Q_SLOTS:
 
         historySource->setFillMode(HistoryProxySource::FillFromStart);
 
-        QCOMPARE(historySource->item(0), QVariant{QVariant::Int});
+        QCOMPARE(historySource->item(0), QVariant{QMetaType(QMetaType::Int)});
         QCOMPARE(historySource->itemCount(), 20);
-        QCOMPARE(historySource->item(19), QVariant{QVariant::Int});
+        QCOMPARE(historySource->item(19), QVariant{QMetaType(QMetaType::Int)});
 
         // Using the FillFromEnd fill mode adds items to the end while itemCount
         // is less than maximumHistory.
@@ -161,10 +161,10 @@ private Q_SLOTS:
 
         for (int i = 0; i < 19; ++i) {
             valueSource->setValue(i);
-            QCOMPARE(historySource->item(0), QVariant{QVariant::Int});
+            QCOMPARE(historySource->item(0), QVariant{QMetaType(QMetaType::Int)});
             for (int item = 19; item > 1; --item) {
                 if ((item - 19) + i < 0) {
-                    QCOMPARE(historySource->item(item), QVariant{QVariant::Int});
+                    QCOMPARE(historySource->item(item), QVariant{QMetaType(QMetaType::Int)});
                 } else {
                     QCOMPARE(historySource->item(item), 19 - item);
                 }
