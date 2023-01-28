@@ -10,9 +10,9 @@ set(quickcharts_example_SRCS
     main.cpp
 )
 
-qt5_add_resources(quickcharts_example_QRC charts.qrc)
+qt_add_resources(quickcharts_example_QRC charts.qrc)
 
 add_executable(kquickcharts_example ${quickcharts_example_SRCS} ${quickcharts_example_QRC})
-target_link_libraries(kquickcharts_example Qt5::Quick Qt5::Widgets)
+target_link_libraries(kquickcharts_example Qt6::Quick Qt6::Widgets)
 
 install(TARGETS kquickcharts_example DESTINATION ${KDE_INSTALL_BINDIR})
