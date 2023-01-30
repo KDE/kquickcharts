@@ -59,8 +59,6 @@ target_sources(QuickChartsStatic PRIVATE
     scenegraph/SDFShader.h
     XYChart.cpp
     XYChart.h
-
-    shaders/shaders.qrc
 )
 
 ecm_qt_declare_logging_category(QuickChartsStatic
@@ -91,19 +89,17 @@ ecm_qt_declare_logging_category(QuickChartsStatic
 )
 
 target_link_libraries(QuickChartsStatic PUBLIC
-    Qt${QT_MAJOR_VERSION}::Core
-    Qt${QT_MAJOR_VERSION}::Quick
-    Qt${QT_MAJOR_VERSION}::Qml
-    Qt${QT_MAJOR_VERSION}::Quick
+    Qt6::Core
+    Qt6::Quick
+    Qt6::Qml
+    Qt6::Quick
 )
 
 ecm_add_qml_module(QuickCharts URI "org.kde.quickcharts" CLASSNAME QuickChartsPlugin)
 
 target_sources(QuickCharts PRIVATE ChartsPlugin.cpp ChartsPlugin.h)
 target_link_libraries(QuickCharts PRIVATE QuickChartsStatic)
-if (QT_MAJOR_VERSION EQUAL "6")
-    add_subdirectory(shaders6)
-endif()
+add_subdirectory(shaders6)
 
 ecm_generate_export_header(QuickCharts
     BASE_NAME QuickCharts

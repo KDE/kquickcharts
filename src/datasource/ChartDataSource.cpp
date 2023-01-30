@@ -22,9 +22,5 @@ QVariant ChartDataSource::first() const
 
 bool ChartDataSource::variantCompare(const QVariant &lhs, const QVariant &rhs)
 {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    return lhs < rhs;
-#else
     return QVariant::compare(lhs, rhs) == QPartialOrdering::Less;
-#endif
 }

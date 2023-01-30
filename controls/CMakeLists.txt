@@ -17,11 +17,11 @@ ecm_target_qml_sources(QuickChartsControls PRIVATE PATH styles/org.kde.desktop S
 )
 
 target_link_libraries(QuickChartsControls
-    Qt${QT_MAJOR_VERSION}::Core
-    Qt${QT_MAJOR_VERSION}::Quick
-    Qt${QT_MAJOR_VERSION}::Qml
-    Qt${QT_MAJOR_VERSION}::Gui
-    Qt${QT_MAJOR_VERSION}::QuickControls2
+    Qt6::Core
+    Qt6::Quick
+    Qt6::Qml
+    Qt6::Gui
+    Qt6::QuickControls2
 )
 
 ecm_finalize_qml_module(QuickChartsControls DESTINATION ${KDE_INSTALL_QMLDIR})

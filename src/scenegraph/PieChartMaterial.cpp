@@ -22,11 +22,7 @@ QSGMaterialType *PieChartMaterial::type() const
     return &type;
 }
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-QSGMaterialShader *PieChartMaterial::createShader() const
-#else
 QSGMaterialShader *PieChartMaterial::createShader(QSGRendererInterface::RenderMode) const
-#endif
 {
     return new PieChartShader();
 }
@@ -130,54 +126,6 @@ PieChartShader::~PieChartShader()
 {
 }
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-const char *const *PieChartShader::attributeNames() const
-{
-    static char const *const names[] = {"in_vertex", "in_uv", nullptr};
-    return names;
-}
-
-void PieChartShader::initialize()
-{
-    QSGMaterialShader::initialize();
-    m_matrixLocation = program()->uniformLocation("matrix");
-    m_opacityLocation = program()->uniformLocation("opacity");
-    m_innerRadiusLocation = program()->uniformLocation("innerRadius");
-    m_outerRadiusLocation = program()->uniformLocation("outerRadius");
-    m_aspectLocation = program()->uniformLocation("aspect");
-    m_backgroundColorLocation = program()->uniformLocation("backgroundColor");
-    m_colorsLocation = program()->uniformLocation("colors");
-    m_segmentsLocation = program()->uniformLocation("segments");
-    m_segmentCountLocation = program()->uniformLocation("segmentCount");
-    m_smoothEndsLocation = program()->uniformLocation("smoothEnds");
-    m_fromAngleLocation = program()->uniformLocation("fromAngle");
-    m_toAngleLocation = program()->uniformLocation("toAngle");
-}
-
-void PieChartShader::updateState(const QSGMaterialShader::RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial)
-{
-    if (state.isMatrixDirty()) {
-        program()->setUniformValue(m_matrixLocation, state.combinedMatrix());
-    }
-    if (state.isOpacityDirty()) {
-        program()->setUniformValue(m_opacityLocation, state.opacity());
-    }
-
-    if (!oldMaterial || newMaterial->compare(oldMaterial) != 0) {
-        PieChartMaterial *material = static_cast<PieChartMaterial *>(newMaterial);
-        program()->setUniformValue(m_innerRadiusLocation, material->innerRadius());
-        program()->setUniformValue(m_outerRadiusLocation, material->outerRadius());
-        program()->setUniformValue(m_aspectLocation, material->aspectRatio());
-        program()->setUniformValue(m_backgroundColorLocation, material->backgroundColor());
-        program()->setUniformValueArray(m_colorsLocation, material->colors().constData(), material->colors().size());
-        program()->setUniformValueArray(m_segmentsLocation, material->segments().constData(), material->segments().size());
-        program()->setUniformValue(m_segmentCountLocation, material->segments().size());
-        program()->setUniformValue(m_smoothEndsLocation, material->smoothEnds());
-        program()->setUniformValue(m_fromAngleLocation, material->fromAngle());
-        program()->setUniformValue(m_toAngleLocation, material->toAngle());
-    }
-}
-#else
 bool PieChartShader::updateUniformData(QSGMaterialShader::RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial)
 {
     bool changed = false;
@@ -225,4 +173,3 @@ bool PieChartShader::updateUniformData(QSGMaterialShader::RenderState &state, QS
 
     return changed;
 }
-#endif

@@ -93,13 +93,8 @@ protected:
 
 private:
     static void appendSource(DataSourcesProperty *list, ChartDataSource *source);
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    static int sourceCount(DataSourcesProperty *list);
-    static ChartDataSource *source(DataSourcesProperty *list, int index);
-#else
     static qsizetype sourceCount(DataSourcesProperty *list);
     static ChartDataSource *source(DataSourcesProperty *list, qsizetype index);
-#endif
     static void clearSources(DataSourcesProperty *list);
 
     ChartDataSource *m_nameSource = nullptr;

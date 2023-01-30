@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2019,2020 Arjen Hiemstra <ahiemstra@heimr.nl>
 # SPDX-FileCopyrightText: 2022 Alexander Lohnau <alexander.lohnau@gmx.de>
 # SPDX-License-Identifier: BSD-2-Clause
-find_package(Qt${QT_MAJOR_VERSION} COMPONENTS QuickTest)
+find_package(Qt6 COMPONENTS QuickTest)
 
 include(ECMAddTests)
 
@@ -12,11 +12,11 @@ ecm_add_tests(
     MapProxySourceTest.cpp
     HistoryProxySourceTest.cpp
     ItemBuilderTest.cpp
-    LINK_LIBRARIES QuickChartsStatic Qt${QT_MAJOR_VERSION}::Test
+    LINK_LIBRARIES QuickChartsStatic Qt6::Test
 )
 
 add_executable(qmltest qmltest.cpp)
-target_link_libraries(qmltest Qt${QT_MAJOR_VERSION}::QuickTest)
+target_link_libraries(qmltest Qt6::QuickTest)
 if (NOT BUILD_SHARED_LIBS)
     target_link_libraries(qmltest QuickCharts)
     target_compile_definitions(qmltest PRIVATE -DIMPORT_KQUICKCHARTS_QML_PLUGIN)
@@ -43,13 +43,3 @@ add_qml_tests(
     tst_LineChart.qml
     tst_PieChart.qml
 )
-
-find_program(GLSL_VALIDATOR NAMES glslangValidator)
-if (GLSL_VALIDATOR)
-    add_test(
-        NAME ShaderValidation
-        COMMAND ${CMAKE_SOURCE_DIR}/scripts/validate_shaders.sh ${CMAKE_SOURCE_DIR}/src/shaders
-    )
-else()
-    message(WARNING "glslangValidator not found, cannot validate shaders")
-endif()

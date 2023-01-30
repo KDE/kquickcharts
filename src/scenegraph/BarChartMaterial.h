@@ -20,11 +20,7 @@ public:
     ~BarChartMaterial();
 
     QSGMaterialType *type() const override;
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    QSGMaterialShader *createShader() const override;
-#else
     QSGMaterialShader *createShader(QSGRendererInterface::RenderMode) const override;
-#endif
     int compare(const QSGMaterial *other) const override;
 
     QVector2D aspect = QVector2D{1.0, 1.0};
@@ -38,21 +34,7 @@ public:
     BarChartShader();
     ~BarChartShader();
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    char const *const *attributeNames() const override;
-
-    void initialize() override;
-    void updateState(const RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial) override;
-
-private:
-    int m_matrixLocation = 0;
-    int m_opacityLocation = 0;
-    int m_aspectLocation = 0;
-    int m_backgroundColorLocation = 0;
-    int m_radiusLocation = 0;
-#else
     bool updateUniformData(QSGMaterialShader::RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial) override;
-#endif
 };
 
 #endif // PIECHARTMATERIAL_H

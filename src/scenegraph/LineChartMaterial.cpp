@@ -22,11 +22,7 @@ QSGMaterialType *LineChartMaterial::type() const
     return &type;
 }
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-QSGMaterialShader *LineChartMaterial::createShader() const
-#else
 QSGMaterialShader *LineChartMaterial::createShader(QSGRendererInterface::RenderMode) const
-#endif
 {
     return new LineChartShader();
 }
@@ -54,58 +50,6 @@ LineChartShader::~LineChartShader()
 {
 }
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-const char *const *LineChartShader::attributeNames() const
-{
-    /* clang-format off */
-    static char const *const names[] = {
-        "in_vertex",
-        "in_uv",
-        "in_lineColor",
-        "in_fillColor",
-        "in_bounds",
-        "in_count",
-        "in_points_0",
-        "in_points_1",
-        "in_points_2",
-        "in_points_3",
-        "in_points_4",
-        "in_points_5",
-        "in_points_6",
-        "in_points_7",
-        "in_points_8",
-        nullptr
-    }; /* clang-format on */
-    return names;
-}
-
-void LineChartShader::initialize()
-{
-    QSGMaterialShader::initialize();
-    m_matrixLocation = program()->uniformLocation("matrix");
-    m_opacityLocation = program()->uniformLocation("opacity");
-    m_lineWidthLocation = program()->uniformLocation("lineWidth");
-    m_aspectLocation = program()->uniformLocation("aspect");
-    m_smoothingLocation = program()->uniformLocation("smoothing");
-}
-
-void LineChartShader::updateState(const QSGMaterialShader::RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial)
-{
-    if (state.isMatrixDirty()) {
-        program()->setUniformValue(m_matrixLocation, state.combinedMatrix());
-    }
-    if (state.isOpacityDirty()) {
-        program()->setUniformValue(m_opacityLocation, state.opacity());
-    }
-
-    if (!oldMaterial || newMaterial->compare(oldMaterial) != 0) {
-        LineChartMaterial *material = static_cast<LineChartMaterial *>(newMaterial);
-        program()->setUniformValue(m_lineWidthLocation, material->lineWidth);
-        program()->setUniformValue(m_aspectLocation, material->aspect);
-        program()->setUniformValue(m_smoothingLocation, material->smoothing);
-    }
-}
-#else
 bool LineChartShader::updateUniformData(QSGMaterialShader::RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial)
 {
     bool changed = false;
@@ -134,4 +78,3 @@ bool LineChartShader::updateUniformData(QSGMaterialShader::RenderState &state, Q
 
     return changed;
 }
-#endif

@@ -23,16 +23,18 @@ include(ECMAddTests)
 include(ECMSetupVersion)
 include(ECMQtDeclareLoggingCategory)
 include(ECMQmlModule)
+include(ECMDeprecationSettings)
 
 option(BUILD_EXAMPLES "Build example applications" OFF)
 
 set(REQUIRED_QT_VERSION 6.4.0)
-find_package(Qt${QT_MAJOR_VERSION} ${REQUIRED_QT_VERSION} CONFIG REQUIRED Qml Quick QuickControls2)
-if (QT_MAJOR_VERSION EQUAL "6")
-    find_package(Qt6 ${REQUIRED_QT_VERSION} CONFIG REQUIRED ShaderTools)
-endif()
+find_package(Qt6 ${REQUIRED_QT_VERSION} CONFIG REQUIRED Qml Quick QuickControls2 ShaderTools)
 
 set(EXCLUDE_DEPRECATED_BEFORE_AND_AT 0 CACHE STRING "Control the range of deprecated API excluded from the build [default=0].")
+
+ecm_set_disabled_deprecation_versions(
+    QT 6.2.0
+)
 
 add_subdirectory(controls)
 add_subdirectory(src)
