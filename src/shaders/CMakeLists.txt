@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2022 Volker Krause <vkrause@kde.org>
 # SPDX-License-Identifier: BSD-2-Clause
 
-qt6_add_shaders(QuickCharts "shaders6"
+qt6_add_shaders(QuickCharts "shaders"
     BATCHABLE
     PRECOMPILE
     OPTIMIZED

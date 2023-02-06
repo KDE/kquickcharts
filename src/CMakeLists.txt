@@ -99,7 +99,7 @@ ecm_add_qml_module(QuickCharts URI "org.kde.quickcharts" CLASSNAME QuickChartsPl
 
 target_sources(QuickCharts PRIVATE ChartsPlugin.cpp ChartsPlugin.h)
 target_link_libraries(QuickCharts PRIVATE QuickChartsStatic)
-add_subdirectory(shaders6)
+add_subdirectory(shaders)
 
 ecm_generate_export_header(QuickCharts
     BASE_NAME QuickCharts
