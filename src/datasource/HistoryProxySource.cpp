@@ -225,3 +225,5 @@ void HistoryProxySource::update()
 
     Q_EMIT dataChanged();
 }
+
+#include "moc_HistoryProxySource.cpp"

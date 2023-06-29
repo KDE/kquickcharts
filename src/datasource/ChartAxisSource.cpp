@@ -111,3 +111,5 @@ void ChartAxisSource::setItemCount(int newItemCount)
     m_itemCount = newItemCount;
     Q_EMIT itemCountChanged();
 }
+
+#include "moc_ChartAxisSource.cpp"

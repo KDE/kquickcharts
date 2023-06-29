@@ -136,3 +136,5 @@ RangeGroup::RangeResult RangeGroup::calculateRange(const QVector<ChartDataSource
 
     return result;
 }
+
+#include "moc_RangeGroup.cpp"

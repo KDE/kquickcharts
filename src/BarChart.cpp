@@ -268,3 +268,5 @@ QVector<Bar> BarChart::calculateBars()
 
     return result;
 }
+
+#include "moc_BarChart.cpp"

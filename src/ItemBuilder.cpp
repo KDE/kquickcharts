@@ -219,3 +219,5 @@ void ItemBuilder::clear()
 
     m_completed = 0;
 }
+
+#include "moc_ItemBuilder.cpp"

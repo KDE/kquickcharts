@@ -276,3 +276,5 @@ void AxisLabels::onBeginCreate(int index, QQuickItem *item)
     attached->setIndex(index);
     attached->setLabel(m_source->item(index).toString());
 }
+
+#include "moc_AxisLabels.cpp"

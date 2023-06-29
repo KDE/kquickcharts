@@ -24,3 +24,5 @@ bool ChartDataSource::variantCompare(const QVariant &lhs, const QVariant &rhs)
 {
     return QVariant::compare(lhs, rhs) == QPartialOrdering::Less;
 }
+
+#include "moc_ChartDataSource.cpp"

@@ -136,3 +136,5 @@ QDebug operator<<(QDebug debug, const ComputedRange &range)
           << "distance" << range.distanceY;
     return debug;
 }
+
+#include "moc_XYChart.cpp"

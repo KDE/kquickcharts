@@ -45,3 +45,5 @@ QUrl ChartsControlsPlugin::componentUrl(const QString &fileName)
 
     return url.resolved(QUrl{fileName});
 }
+
+#include "moc_ChartsControlsPlugin.cpp"

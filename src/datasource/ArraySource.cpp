@@ -73,3 +73,5 @@ void ArraySource::setWrap(bool wrap)
     m_wrap = wrap;
     Q_EMIT dataChanged();
 }
+
+#include "moc_ArraySource.cpp"

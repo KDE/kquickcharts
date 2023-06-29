@@ -497,3 +497,5 @@ QVector2D cubicHermite(const QVector2D &first, const QVector2D &second, float st
     auto result = QVector2D{step, first.y() * h00 + delta * mFirst * h10 + second.y() * h01 + delta * mSecond * h11};
     return result;
 }
+
+#include "moc_LineChart.cpp"

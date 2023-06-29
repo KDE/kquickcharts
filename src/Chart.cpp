@@ -170,3 +170,5 @@ void Chart::clearSources(Chart::DataSourcesProperty *list)
     chart->m_valueSources.clear();
     Q_EMIT chart->dataChanged();
 }
+
+#include "moc_Chart.cpp"
