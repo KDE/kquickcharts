@@ -205,3 +205,5 @@ void GridLines::updateLines(LineGridNode *node, LinePropertiesGroup *properties)
     }
     node->update();
 }
+
+#include "moc_GridLines.cpp"

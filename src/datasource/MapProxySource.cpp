@@ -91,3 +91,5 @@ void MapProxySource::setMap(const QVariantMap &newMap)
 
     Q_EMIT mapChanged();
 }
+
+#include "moc_MapProxySource.cpp"

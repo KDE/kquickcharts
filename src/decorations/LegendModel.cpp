@@ -271,3 +271,5 @@ QVariant LegendModel::getValueForItem(int item)
 
     return value;
 }
+
+#include "moc_LegendModel.cpp"

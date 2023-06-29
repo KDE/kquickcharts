@@ -179,4 +179,6 @@ void ModelHistorySource::onDataChanged(const QModelIndex &topLeft, const QModelI
     Q_EMIT dataChanged();
 }
 
+#include "moc_ModelHistorySource.cpp"
+
 #endif // QUICKCHARTS_BUILD_DEPRECATED_SINCE

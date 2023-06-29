@@ -260,3 +260,5 @@ void PieChart::onDataChanged()
 
     update();
 }
+
+#include "moc_PieChart.cpp"

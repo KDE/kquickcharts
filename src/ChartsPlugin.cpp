@@ -76,3 +76,5 @@ void QuickChartsPlugin::registerTypes(const char *uri)
     qmlRegisterType<LegendModel>(uri, 1, 0, "LegendModel");
     qmlRegisterType<LegendLayout>(uri, 1, 0, "LegendLayout");
 }
+
+#include "moc_ChartsPlugin.cpp"

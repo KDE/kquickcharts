@@ -256,3 +256,5 @@ void ModelSource::onMaximumChanged()
         m_maximum = newMaximum;
     }
 }
+
+#include "moc_ModelSource.cpp"

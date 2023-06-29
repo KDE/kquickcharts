@@ -127,4 +127,6 @@ void ValueHistorySource::clear()
     Q_EMIT dataChanged();
 }
 
+#include "moc_ValueHistorySource.cpp"
+
 #endif // QUICKCHARTS_BUILD_DEPRECATED_SINCE

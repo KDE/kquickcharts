@@ -47,3 +47,5 @@ void SingleValueSource::setValue(const QVariant &value)
     m_value = value;
     Q_EMIT dataChanged();
 }
+
+#include "moc_SingleValueSource.cpp"

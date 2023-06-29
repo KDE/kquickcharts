@@ -95,3 +95,5 @@ void ColorGradientSource::regenerateColors()
 
     Q_EMIT dataChanged();
 }
+
+#include "moc_ColorGradientSource.cpp"

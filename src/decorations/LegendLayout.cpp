@@ -354,3 +354,5 @@ std::tuple<int, int, qreal, qreal> LegendLayout::determineColumns()
 
     return std::make_tuple(columns, rows, itemWidth, maxHeight);
 }
+
+#include "moc_LegendLayout.cpp"
