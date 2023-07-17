@@ -31,7 +31,7 @@ layout (location = 5) in highp float in_count;
 // attributes, we have to manually declare a number of attributes. We use
 // array of vec4 point tuples instead of vec2 to not cross the OpenGL limits
 // like e.g. GL_MAX_VERTEX_ATTRIBS for some drivers.
-layout (location = 6) in mediump vec4 in_points_0;
+layout (location = 7) in mediump vec4 in_points_0;
 layout (location = 8) in mediump vec4 in_points_1;
 layout (location = 9) in mediump vec4 in_points_2;
 layout (location = 10) in mediump vec4 in_points_3;

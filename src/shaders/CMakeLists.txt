@@ -3,6 +3,7 @@
 
 qt6_add_shaders(QuickCharts "shaders"
     BATCHABLE
+    ZORDER_LOC 6
     PRECOMPILE
     OPTIMIZED
     PREFIX "/org.kde.quickcharts/"
