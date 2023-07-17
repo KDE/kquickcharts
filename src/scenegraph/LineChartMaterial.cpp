@@ -53,26 +53,27 @@ LineChartShader::~LineChartShader()
 bool LineChartShader::updateUniformData(QSGMaterialShader::RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial)
 {
     bool changed = false;
-    QByteArray *buf = state.uniformData();
-    Q_ASSERT(buf->size() >= 80);
+    UniformDataStream uniformData(state);
 
     if (state.isMatrixDirty()) {
-        const QMatrix4x4 m = state.combinedMatrix();
-        memcpy(buf->data(), m.constData(), 64);
+        uniformData << state.combinedMatrix();
         changed = true;
+    } else {
+        uniformData.skip<QMatrix4x4>();
     }
 
     if (state.isOpacityDirty()) {
-        const float opacity = state.opacity();
-        memcpy(buf->data() + 72, &opacity, 4);
+        uniformData << state.opacity();
         changed = true;
+    } else {
+        uniformData.skip<float>();
     }
 
     if (!oldMaterial || newMaterial->compare(oldMaterial) != 0) {
         const auto material = static_cast<LineChartMaterial *>(newMaterial);
-        memcpy(buf->data() + 64, &material->lineWidth, 4);
-        memcpy(buf->data() + 68, &material->aspect, 4);
-        memcpy(buf->data() + 76, &material->smoothing, 4);
+        uniformData << material->lineWidth;
+        uniformData << material->aspect;
+        uniformData << material->smoothing;
         changed = true;
     }
 
