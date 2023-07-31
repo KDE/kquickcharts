@@ -19,7 +19,7 @@ layout(std140, binding = 0) uniform buf {
     lowp float smoothing; // offset 76
 } ubuf; // size 80
 
-#define MAXIMUM_POINT_COUNT 18
+#define MAXIMUM_POINT_COUNT 14
 
 layout (location = 0) in mediump vec2 uv;
 layout (location = 1) in mediump vec4 pointTuples[MAXIMUM_POINT_COUNT / 2];
@@ -50,10 +50,6 @@ lowp float sdf_polygon(in lowp vec2 point, in int count)
     points[11] = pointTuples[5].zw;
     points[12] = pointTuples[6].xy;
     points[13] = pointTuples[6].zw;
-    points[14] = pointTuples[7].xy;
-    points[15] = pointTuples[7].zw;
-    points[16] = pointTuples[8].xy;
-    points[17] = pointTuples[8].zw;
 
     lowp float d = dot(point - points[0], point - points[0]);
     lowp float s = 1.0;
