@@ -3,13 +3,14 @@
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(_extra_args DEBUGINFO)
+else()
+    set(_extra_args OPTIMIZED)
 endif()
 
 qt6_add_shaders(QuickCharts "shaders"
     BATCHABLE
     ZORDER_LOC 6
     PRECOMPILE
-    OPTIMIZED
     PREFIX "/org.kde.quickcharts/"
     GLSL "300es,130"
     FILES
