@@ -78,7 +78,8 @@ void main()
     // bounds.y contains the line segment's maximum value. If we are a bit above
     // that, we will never render anything, so just discard the pixel.
     if (point.y > bounds.y + bounds_range) {
-        discard;
+        out_color = vec4(0.0);
+        return;
     }
 
     // bounds.x contains the line segment's minimum value. If we are a bit below
