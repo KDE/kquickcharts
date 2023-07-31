@@ -10,9 +10,9 @@
 
 layout(std140, binding = 0) uniform buf {
     highp mat4 matrix;
+    lowp float opacity;
     lowp float lineWidth;
     lowp float aspect;
-    lowp float opacity;
     lowp float smoothing;
 } ubuf;
 

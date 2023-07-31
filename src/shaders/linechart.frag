@@ -13,9 +13,9 @@
 
 layout(std140, binding = 0) uniform buf {
     highp mat4 matrix;
-    lowp float lineWidth; // offset 64
-    lowp float aspect; // offset 68
-    lowp float opacity; // inherited opacity of this item - offset 72
+    lowp float opacity; // inherited opacity of this item - offset 64
+    lowp float lineWidth; // offset 68
+    lowp float aspect; // offset 72
     lowp float smoothing; // offset 76
 } ubuf; // size 80
 
