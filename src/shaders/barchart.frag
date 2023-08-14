@@ -11,11 +11,11 @@
 
 layout(std140, binding = 0) uniform buf {
     highp mat4 matrix;
-    lowp vec2 aspect; // offset 64
-    lowp float opacity; // offset 72
-    lowp float radius; // offset 76
-    lowp vec4 backgroundColor; // offset 80
-} ubuf; // size 96
+    lowp float opacity;
+    lowp vec2 aspect;
+    lowp float radius;
+    lowp vec4 backgroundColor;
+} ubuf;
 
 layout (location = 0) in lowp vec2 uv;
 layout (location = 1) in mediump vec4 foregroundColor;

@@ -52,28 +52,28 @@ BarChartShader::~BarChartShader()
 bool BarChartShader::updateUniformData(QSGMaterialShader::RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial)
 {
     bool changed = false;
-    QByteArray *buf = state.uniformData();
-    Q_ASSERT(buf->size() >= 96);
+
+    UniformDataStream uniformData(state);
 
     if (state.isMatrixDirty()) {
-        const QMatrix4x4 m = state.combinedMatrix();
-        memcpy(buf->data(), m.constData(), 64);
+        uniformData << state.combinedMatrix();
         changed = true;
+    } else {
+        uniformData.skip<QMatrix4x4>();
     }
 
     if (state.isOpacityDirty()) {
-        const float opacity = state.opacity();
-        memcpy(buf->data() + 72, &opacity, 4);
+        uniformData << state.opacity();
         changed = true;
+    } else {
+        uniformData.skip<float>();
     }
 
     if (!oldMaterial || newMaterial->compare(oldMaterial) != 0) {
         const auto material = static_cast<BarChartMaterial *>(newMaterial);
-        memcpy(buf->data() + 64, &material->aspect, 8);
-        memcpy(buf->data() + 76, &material->radius, 4);
-        float c[4];
-        material->backgroundColor.getRgbF(&c[0], &c[1], &c[2], &c[3]);
-        memcpy(buf->data() + 80, c, 16);
+        uniformData << material->aspect;
+        uniformData << material->radius;
+        uniformData << material->backgroundColor;
         changed = true;
     }
 
