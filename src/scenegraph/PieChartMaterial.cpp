@@ -151,16 +151,17 @@ bool PieChartShader::updateUniformData(QSGMaterialShader::RenderState &state, QS
     if (!oldMaterial || newMaterial->compare(oldMaterial) != 0) {
         const auto material = static_cast<PieChartMaterial *>(newMaterial);
 
-        uniformData << material->aspectRatio() << material->outerRadius() << material->backgroundColor() //
+        uniformData << material->aspectRatio() << material->innerRadius() << material->outerRadius() << material->backgroundColor() //
                     << material->smoothEnds() << material->fromAngle() << material->toAngle();
 
+        const auto segmentCount = uint(material->segments().size());
+        uniformData << segmentCount;
+
         uniformData << material->segments();
-        uniformData.skipComponents((MaximumSegmentCount - material->segments().size()) * 4);
+        uniformData.skipComponents((MaximumSegmentCount - segmentCount) * 4);
 
         uniformData << material->colors();
-        uniformData.skipComponents((MaximumSegmentCount - material->colors().size()) * 4);
-
-        uniformData << material->segments().size();
+        uniformData.skipComponents((MaximumSegmentCount - segmentCount) * 4);
 
         changed = true;
     }

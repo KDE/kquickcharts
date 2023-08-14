@@ -29,10 +29,10 @@ layout(std140, binding = 0) uniform buf {
     lowp float fromAngle;
     lowp float toAngle;
 
-    lowp vec2 segments[MAX_SEGMENTS]; // offset 128 with vec4 alignment!
-    lowp vec4 colors[MAX_SEGMENTS]; // offset 1728
-    int segmentCount; // offset 3328
-} ubuf; // size 3332
+    int segmentCount;
+    lowp vec2 segments[MAX_SEGMENTS];
+    lowp vec4 colors[MAX_SEGMENTS];
+} ubuf;
 
 layout (location = 0) in lowp vec2 uv;
 layout (location = 0) out lowp vec4 out_color;

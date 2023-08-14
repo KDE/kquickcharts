@@ -19,9 +19,9 @@ layout(std140, binding = 0) uniform buf {
     lowp float fromAngle;
     lowp float toAngle;
 
+    int segmentCount;
     lowp vec2 segments[MAX_SEGMENTS];
     lowp vec4 colors[MAX_SEGMENTS];
-    int segmentCount;
 } ubuf;
 
 layout (location = 0) in highp vec4 in_vertex;
