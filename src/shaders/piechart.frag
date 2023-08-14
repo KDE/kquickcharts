@@ -20,14 +20,14 @@
 
 layout(std140, binding = 0) uniform buf {
     highp mat4 matrix;
-    lowp vec2 aspect; // offset 64
-    lowp float opacity; // offset 72
-    lowp float innerRadius; // offset 76
-    lowp float outerRadius; // offset 80
-    lowp vec4 backgroundColor; // offset 96
-    bool smoothEnds; // offset 112
-    lowp float fromAngle; // offset 116
-    lowp float toAngle; // offset 120
+    lowp float opacity;
+    lowp vec2 aspect;
+    lowp float innerRadius;
+    lowp float outerRadius;
+    lowp vec4 backgroundColor;
+    bool smoothEnds;
+    lowp float fromAngle;
+    lowp float toAngle;
 
     lowp vec2 segments[MAX_SEGMENTS]; // offset 128 with vec4 alignment!
     lowp vec4 colors[MAX_SEGMENTS]; // offset 1728

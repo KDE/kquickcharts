@@ -10,8 +10,8 @@
 #define MAX_SEGMENTS 100
 layout(std140, binding = 0) uniform buf {
     highp mat4 matrix;
-    lowp vec2 aspect;
     lowp float opacity;
+    lowp vec2 aspect;
     lowp float innerRadius;
     lowp float outerRadius;
     lowp vec4 backgroundColor;
