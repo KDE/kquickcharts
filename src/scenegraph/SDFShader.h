@@ -23,36 +23,54 @@ struct UniformDataStream {
     template<typename Data>
     friend inline UniformDataStream &operator<<(UniformDataStream &stream, const Data &data)
     {
-        stream.applyPadding<Data>();
-        memcpy(stream.bytes, &data, sizeof(Data));
-        stream.bytes += sizeof(Data);
-        stream.updatePadding<Data>();
+        constexpr uint dataSize = sizeof(Data);
+        stream.align(dataSize);
+        memcpy(stream.bytes, &data, dataSize);
+        stream.bytes += dataSize;
+        stream.offset += dataSize;
         return stream;
     }
 
     template<typename Data>
     inline void skip(const Data &data = {})
     {
-        applyPadding<Data>();
+        constexpr uint dataSize = sizeof(Data);
+
+        align(dataSize);
         Q_UNUSED(data);
-        bytes += sizeof(Data);
-        updatePadding<Data>();
+        bytes += dataSize;
+        offset += dataSize;
     }
 
     inline void skipComponents(uint count)
     {
-        if (padding < 16) {
-            bytes += padding;
-            padding = 16;
-        }
-        bytes += (4 * count);
+        const uint skipCount = count * 4;
+        align(4);
+        bytes += skipCount;
+        offset += skipCount;
     }
 
     friend inline UniformDataStream &operator<<(UniformDataStream &stream, const QMatrix4x4 &m)
     {
-        stream.applyPadding<QMatrix4x4>();
-        memcpy(stream.bytes, m.constData(), 4 * 4 * 4);
-        stream.bytes += 4 * 4 * 4;
+        constexpr uint Matrix4x4Size = 4 * 4 * 4;
+
+        stream.align(Matrix4x4Size);
+        memcpy(stream.bytes, m.constData(), Matrix4x4Size);
+        stream.bytes += Matrix4x4Size;
+        stream.offset += Matrix4x4Size;
+        return stream;
+    }
+
+    friend inline UniformDataStream &operator<<(UniformDataStream &stream, const QColor &color)
+    {
+        constexpr uint ColorSize = 4 * 4;
+
+        stream.align(ColorSize);
+        std::array<float, 4> colorArray;
+        color.getRgbF(&colorArray[0], &colorArray[1], &colorArray[2], &colorArray[3]);
+        memcpy(stream.bytes, colorArray.data(), ColorSize);
+        stream.bytes += ColorSize;
+        stream.offset += ColorSize;
         return stream;
     }
 
@@ -60,30 +78,38 @@ struct UniformDataStream {
     friend inline UniformDataStream &operator<<(UniformDataStream &stream, const QVector<T> &v)
     {
         for (const auto &item : v) {
-            stream.applyPadding<T>();
-            memcpy(stream.bytes, &item, sizeof(T));
-            stream.bytes += sizeof(T);
+            stream << item;
+            // Using std140, array elements are padded to a size of 16 bytes per element.
+            stream.align(16);
         }
         return stream;
     }
 
     char *bytes;
     size_t padding = 16;
+    size_t offset = 0;
 
 private:
-    template<typename Data>
-    inline void applyPadding()
+    // Encode alignment rules for std140.
+    // Minimum alignment is 4 bytes.
+    // Vec2 alignment is 8 bytes.
+    // Vec3 and Vec4 alignment is 16 bytes.
+    inline void align(uint size)
     {
-        if (padding < sizeof(Data) && padding < 16) {
+        if (size <= 4) {
+            const auto padding = offset % 4 > 0 ? 4 - offset % 4 : 0;
+            offset += padding;
             bytes += padding;
-            padding = 16;
+        } else if (size <= 8) {
+            auto padding = offset % 8 > 0 ? 8 - offset % 8 : 0;
+            offset += padding;
+            bytes += padding;
+        } else {
+            auto padding = offset % 16 > 0 ? 16 - offset % 16 : 0;
+            qDebug() << offset << size << padding;
+            offset += padding;
+            bytes += padding;
         }
-    }
-    template<typename Data>
-    inline void updatePadding()
-    {
-        if constexpr (sizeof(Data) % 16 != 0)
-            padding -= sizeof(Data) % 16;
     }
 };
 
