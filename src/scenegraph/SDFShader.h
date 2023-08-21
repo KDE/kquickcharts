@@ -106,7 +106,6 @@ private:
             bytes += padding;
         } else {
             auto padding = offset % 16 > 0 ? 16 - offset % 16 : 0;
-            qDebug() << offset << size << padding;
             offset += padding;
             bytes += padding;
         }
