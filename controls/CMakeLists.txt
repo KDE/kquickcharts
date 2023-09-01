@@ -16,7 +16,7 @@ ecm_target_qml_sources(QuickChartsControls PRIVATE PATH styles/org.kde.desktop S
     styles/org.kde.desktop/Theme.qml
 )
 
-target_link_libraries(QuickChartsControls
+target_link_libraries(QuickChartsControls PRIVATE
     Qt6::Core
     Qt6::Quick
     Qt6::Qml
