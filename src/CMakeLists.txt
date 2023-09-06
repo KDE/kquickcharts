@@ -99,7 +99,35 @@ ecm_add_qml_module(QuickCharts URI "org.kde.quickcharts" CLASSNAME QuickChartsPl
 
 target_sources(QuickCharts PRIVATE ChartsPlugin.cpp ChartsPlugin.h)
 target_link_libraries(QuickCharts PRIVATE QuickChartsStatic)
-add_subdirectory(shaders)
+
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(_extra_args DEBUGINFO)
+else()
+    set(_extra_args OPTIMIZED)
+endif()
+
+qt6_add_shaders(QuickCharts "shaders"
+    BATCHABLE
+    ZORDER_LOC 6
+    PRECOMPILE
+    PREFIX "/org.kde.quickcharts/"
+    GLSL "300es,130"
+    FILES
+        shaders/barchart.vert
+        shaders/barchart.frag
+        shaders/linechart.vert
+        shaders/linechart.frag
+        shaders/piechart.vert
+        shaders/piechart.frag
+    OUTPUTS
+        barchart.vert.qsb
+        barchart.frag.qsb
+        linechart.vert.qsb
+        linechart.frag.qsb
+        piechart.vert.qsb
+        piechart.frag.qsb
+    ${_extra_args}
+)
 
 ecm_generate_export_header(QuickCharts
     BASE_NAME QuickCharts
