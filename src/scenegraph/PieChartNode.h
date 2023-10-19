@@ -35,8 +35,8 @@ public:
     void setRect(const QRectF &rect);
     void setInnerRadius(qreal radius);
     void setOuterRadius(qreal radius);
-    void setSections(const QVector<qreal> &sections);
-    void setColors(const QVector<QColor> &colors);
+    void setSections(const QList<qreal> &sections);
+    void setColors(const QList<QColor> &colors);
     void setBackgroundColor(const QColor &color);
     void setFromAngle(qreal angle);
     void setToAngle(qreal angle);
@@ -53,8 +53,8 @@ private:
     qreal m_toAngle = 360.0;
     bool m_smoothEnds = false;
 
-    QVector<qreal> m_sections;
-    QVector<QColor> m_colors;
+    QList<qreal> m_sections;
+    QList<QColor> m_colors;
 
     QSGGeometry *m_geometry = nullptr;
     PieChartMaterial *m_material = nullptr;

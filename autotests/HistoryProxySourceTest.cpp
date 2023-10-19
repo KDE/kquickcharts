@@ -72,7 +72,7 @@ public:
     Q_SIGNAL void maximumChanged();
 
 private:
-    QVector<int> m_items;
+    QList<int> m_items;
 };
 
 class HistoryProxySourceTest : public QObject

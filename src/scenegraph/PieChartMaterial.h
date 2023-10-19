@@ -31,8 +31,8 @@ public:
     float fromAngle() const;
     float toAngle() const;
 
-    QVector<QVector2D> segments() const;
-    QVector<QVector4D> colors() const;
+    QList<QVector2D> segments() const;
+    QList<QVector4D> colors() const;
 
     void setAspectRatio(const QVector2D &aspect);
     void setInnerRadius(float radius);
@@ -42,8 +42,8 @@ public:
     void setFromAngle(float angle);
     void setToAngle(float angle);
 
-    void setSegments(const QVector<QVector2D> &triangles);
-    void setColors(const QVector<QVector4D> &colors);
+    void setSegments(const QList<QVector2D> &triangles);
+    void setColors(const QList<QVector4D> &colors);
 
 private:
     QVector2D m_aspectRatio;
@@ -54,8 +54,8 @@ private:
     float m_fromAngle = 0.0;
     float m_toAngle = 6.28318; // 2 * pi
 
-    QVector<QVector2D> m_segments;
-    QVector<QVector4D> m_colors;
+    QList<QVector2D> m_segments;
+    QList<QVector4D> m_colors;
 };
 
 class PieChartShader : public SDFShader

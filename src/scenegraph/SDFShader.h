@@ -75,7 +75,7 @@ struct UniformDataStream {
     }
 
     template<typename T>
-    friend inline UniformDataStream &operator<<(UniformDataStream &stream, const QVector<T> &v)
+    friend inline UniformDataStream &operator<<(UniformDataStream &stream, const QList<T> &v)
     {
         for (const auto &item : v) {
             stream << item;

@@ -28,7 +28,7 @@ struct LineVertex {
 
     void set(const QPointF &newPosition,
              const QPointF &newUv,
-             const QVector<QVector2D> &newPoints,
+             const QList<QVector2D> &newPoints,
              const QColor &newLineColor,
              const QColor &newFillColor,
              const QVector2D &newBounds)
@@ -55,7 +55,7 @@ struct LineVertex {
         setPoints(newPoints);
     }
 
-    void setPoints(const QVector<QVector2D> &newPoints)
+    void setPoints(const QList<QVector2D> &newPoints)
     {
         memset(points, 0, MaxPointsSize * sizeof(float));
 
@@ -99,7 +99,7 @@ QSGGeometry::AttributeSet LineAttributeSet = {13, sizeof(LineVertex), LineAttrib
 void updateLineGeometry(QSGGeometry *geometry,
                         const QRectF &rect,
                         const QRectF &uvRect,
-                        const QVector<QVector2D> &points,
+                        const QList<QVector2D> &points,
                         const QColor &lineColor,
                         const QColor &fillColor,
                         const QVector2D &bounds)
@@ -186,7 +186,7 @@ void LineSegmentNode::setFillColor(const QColor &color)
     m_fillColor = color;
 }
 
-void LineSegmentNode::setValues(const QVector<QVector2D> &values)
+void LineSegmentNode::setValues(const QList<QVector2D> &values)
 {
     m_values = values;
 }
@@ -204,12 +204,12 @@ void LineSegmentNode::setFarRight(const QVector2D &value)
 void LineSegmentNode::update()
 {
     if (m_values.isEmpty() || !m_rect.isValid()) {
-        updateLineGeometry(m_geometry, QRectF{}, QRectF{}, QVector<QVector2D>{}, m_lineColor, m_fillColor, QVector2D{});
+        updateLineGeometry(m_geometry, QRectF{}, QRectF{}, QList<QVector2D>{}, m_lineColor, m_fillColor, QVector2D{});
         markDirty(QSGNode::DirtyGeometry);
         return;
     }
 
-    QVector<QVector2D> points;
+    QList<QVector2D> points;
     points.reserve(m_values.size() + 8);
 
     points << QVector2D{0.0, -0.5};

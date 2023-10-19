@@ -39,7 +39,7 @@ public:
     void setLineWidth(float width);
     void setLineColor(const QColor &color);
     void setFillColor(const QColor &color);
-    void setValues(const QVector<QVector2D> &values);
+    void setValues(const QList<QVector2D> &values);
     void setFarLeft(const QVector2D &value);
     void setFarRight(const QVector2D &value);
 
@@ -53,7 +53,7 @@ private:
     float m_smoothing = 0.1;
     QVector2D m_farLeft;
     QVector2D m_farRight;
-    QVector<QVector2D> m_values;
+    QList<QVector2D> m_values;
     QSGGeometry *m_geometry = nullptr;
     LineChartMaterial *m_material = nullptr;
     QColor m_lineColor;

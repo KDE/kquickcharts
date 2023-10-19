@@ -73,7 +73,7 @@ void LineChartNode::setFillColor(const QColor &color)
     m_fillColor = color;
 }
 
-void LineChartNode::setValues(const QVector<QVector2D> &values)
+void LineChartNode::setValues(const QList<QVector2D> &values)
 {
     m_values = values;
 }

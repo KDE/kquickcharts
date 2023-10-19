@@ -106,7 +106,7 @@ protected:
     void onDataChanged() override;
 
 private:
-    QVector<Bar> calculateBars();
+    QList<Bar> calculateBars();
 
     qreal m_spacing = 0.0;
     qreal m_barWidth = AutoWidth;
@@ -117,7 +117,7 @@ private:
         qreal value = 0;
         QColor color;
     };
-    QVector<QVector<BarData>> m_barDataItems;
+    QList<QList<BarData>> m_barDataItems;
     QColor m_backgroundColor = Qt::transparent;
 };
 

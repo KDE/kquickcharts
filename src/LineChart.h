@@ -150,7 +150,7 @@ protected:
 
 private:
     void updateLineNode(LineChartNode *node, const QColor &lineColor, const QColor &fillColor, ChartDataSource *valueSource);
-    void createPointDelegates(const QVector<QVector2D> &values, int sourceIndex);
+    void createPointDelegates(const QList<QVector2D> &values, int sourceIndex);
     void updatePointDelegate(QQuickItem *delegate, const QVector2D &position, const QVariant &value, int sourceIndex);
 
     bool m_smooth = false;
@@ -158,9 +158,9 @@ private:
     qreal m_fillOpacity = 0.0;
     bool m_rangeInvalid = true;
     ChartDataSource *m_fillColorSource = nullptr;
-    QHash<ChartDataSource *, QVector<QVector2D>> m_values;
+    QHash<ChartDataSource *, QList<QVector2D>> m_values;
     QQmlComponent *m_pointDelegate = nullptr;
-    QHash<ChartDataSource *, QVector<QQuickItem *>> m_pointDelegates;
+    QHash<ChartDataSource *, QList<QQuickItem *>> m_pointDelegates;
 };
 
 QML_DECLARE_TYPEINFO(LineChart, QML_HAS_ATTACHED_PROPERTIES)

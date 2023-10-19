@@ -49,12 +49,12 @@ QColor PieChartMaterial::backgroundColor() const
     return m_backgroundColor;
 }
 
-QVector<QVector2D> PieChartMaterial::segments() const
+QList<QVector2D> PieChartMaterial::segments() const
 {
     return m_segments;
 }
 
-QVector<QVector4D> PieChartMaterial::colors() const
+QList<QVector4D> PieChartMaterial::colors() const
 {
     return m_colors;
 }
@@ -94,12 +94,12 @@ void PieChartMaterial::setBackgroundColor(const QColor &color)
     m_backgroundColor = color;
 }
 
-void PieChartMaterial::setSegments(const QVector<QVector2D> &segments)
+void PieChartMaterial::setSegments(const QList<QVector2D> &segments)
 {
     m_segments = segments;
 }
 
-void PieChartMaterial::setColors(const QVector<QVector4D> &colors)
+void PieChartMaterial::setColors(const QList<QVector4D> &colors)
 {
     m_colors = colors;
 }

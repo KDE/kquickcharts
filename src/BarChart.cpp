@@ -164,10 +164,10 @@ void BarChart::onDataChanged()
     auto indexMode = indexingMode();
     auto colorIndex = 0;
 
-    m_barDataItems.fill(QVector<BarData>{}, range.distanceX);
+    m_barDataItems.fill(QList<BarData>{}, range.distanceX);
 
-    auto generator = [&, this, i = range.startX]() mutable -> QVector<BarData> {
-        QVector<BarData> colorInfos;
+    auto generator = [&, this, i = range.startX]() mutable -> QList<BarData> {
+        QList<BarData> colorInfos;
 
         for (int j = 0; j < sources.count(); ++j) {
             auto value = (sources.at(j)->item(i).toReal() - range.startY) / range.distanceY;
@@ -205,9 +205,9 @@ void BarChart::onDataChanged()
     update();
 }
 
-QVector<Bar> BarChart::calculateBars()
+QList<Bar> BarChart::calculateBars()
 {
-    QVector<Bar> result;
+    QList<Bar> result;
 
     // TODO: Find some way to clean this up and simplify it, since this is pretty ugly.
 

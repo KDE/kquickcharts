@@ -183,7 +183,7 @@ void LegendModel::updateData()
         return;
     }
 
-    QVector<QVector<int>> changedRows(itemCount);
+    QList<QList<int>> changedRows(itemCount);
 
     std::for_each(m_items.begin(), m_items.end(), [&, i = 0](LegendItem &item) mutable {
         auto name = nameSource ? nameSource->item(i).toString() : QString{};

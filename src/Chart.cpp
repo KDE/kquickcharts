@@ -77,7 +77,7 @@ Chart::DataSourcesProperty Chart::valueSourcesProperty()
     return DataSourcesProperty{this, this, &Chart::appendSource, &Chart::sourceCount, &Chart::source, &Chart::clearSources};
 }
 
-QVector<ChartDataSource *> Chart::valueSources() const
+QList<ChartDataSource *> Chart::valueSources() const
 {
     return m_valueSources;
 }

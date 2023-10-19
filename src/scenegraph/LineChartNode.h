@@ -32,7 +32,7 @@ public:
     void setLineWidth(float width);
     void setLineColor(const QColor &color);
     void setFillColor(const QColor &color);
-    void setValues(const QVector<QVector2D> &values);
+    void setValues(const QList<QVector2D> &values);
     void updatePoints();
 
 private:
@@ -42,7 +42,7 @@ private:
     float m_smoothing = 0.1;
     QColor m_lineColor;
     QColor m_fillColor;
-    QVector<QVector2D> m_values;
+    QList<QVector2D> m_values;
 };
 
 #endif // LINECHARTNODE_H

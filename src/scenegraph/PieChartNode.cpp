@@ -107,13 +107,13 @@ void PieChartNode::setOuterRadius(qreal radius)
     markDirty(QSGNode::DirtyMaterial);
 }
 
-void PieChartNode::setColors(const QVector<QColor> &colors)
+void PieChartNode::setColors(const QList<QColor> &colors)
 {
     m_colors = colors;
     updateTriangles();
 }
 
-void PieChartNode::setSections(const QVector<qreal> &sections)
+void PieChartNode::setSections(const QList<qreal> &sections)
 {
     m_sections = sections;
     updateTriangles();
@@ -172,8 +172,8 @@ void PieChartNode::updateTriangles()
     qreal startAngle = degToRad(m_fromAngle);
     qreal totalAngle = degToRad(m_toAngle - m_fromAngle);
 
-    QVector<QVector2D> segments;
-    QVector<QVector4D> colors;
+    QList<QVector2D> segments;
+    QList<QVector4D> colors;
 
     for (int i = 0; i < m_sections.size(); ++i) {
         QVector2D segment{float(startAngle), float(startAngle + m_sections.at(i) * totalAngle)};

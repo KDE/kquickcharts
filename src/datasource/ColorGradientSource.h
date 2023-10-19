@@ -11,7 +11,7 @@
 #define COLORGRADIENTSOURCE_H
 
 #include <QColor>
-#include <QVector>
+#include <QList>
 
 #include "ChartDataSource.h"
 
@@ -47,7 +47,7 @@ private:
 
     QColor m_baseColor = Qt::blue;
     int m_itemCount = 0;
-    QVector<QColor> m_colors;
+    QList<QColor> m_colors;
 };
 
 #endif // COLORGRADIENTSOURCE_H

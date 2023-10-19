@@ -20,8 +20,8 @@
 
 static const float PixelsPerStep = 2.0;
 
-QVector<QVector2D> interpolate(const QVector<QVector2D> &points, float height);
-QVector<float> calculateTangents(const QVector<QVector2D> &points, float height);
+QList<QVector2D> interpolate(const QList<QVector2D> &points, float height);
+QList<float> calculateTangents(const QList<QVector2D> &points, float height);
 QVector2D cubicHermite(const QVector2D &first, const QVector2D &second, float step, float mFirst, float mSecond);
 
 QColor colorWithAlpha(const QColor &color, qreal opacity)
@@ -199,7 +199,7 @@ void LineChart::updatePolish()
         m_rangeInvalid = false;
     }
 
-    QVector<QVector2D> previousValues;
+    QList<QVector2D> previousValues;
 
     const auto range = computedRange();
     const auto sources = valueSources();
@@ -207,7 +207,7 @@ void LineChart::updatePolish()
         auto valueSource = sources.at(i);
 
         float stepSize = width() / (range.distanceX - 1);
-        QVector<QVector2D> values(range.distanceX);
+        QList<QVector2D> values(range.distanceX);
         auto generator = [&, i = range.startX]() mutable -> QVector2D {
             float value = 0;
             if (range.distanceY != 0) {
@@ -330,11 +330,11 @@ void LineChart::updateLineNode(LineChartNode *node, const QColor &lineColor, con
     node->updatePoints();
 }
 
-void LineChart::createPointDelegates(const QVector<QVector2D> &values, int sourceIndex)
+void LineChart::createPointDelegates(const QList<QVector2D> &values, int sourceIndex)
 {
     auto valueSource = valueSources().at(sourceIndex);
 
-    QVector<QQuickItem *> delegates;
+    QList<QQuickItem *> delegates;
     for (int i = 0; i < values.size(); ++i) {
         auto delegate = qobject_cast<QQuickItem *>(m_pointDelegate->beginCreate(qmlContext(m_pointDelegate)));
         if (!delegate) {
@@ -368,7 +368,7 @@ void LineChart::updatePointDelegate(QQuickItem *delegate, const QVector2D &posit
 }
 
 // Smoothly interpolate between points, using monotonic cubic interpolation.
-QVector<QVector2D> interpolate(const QVector<QVector2D> &points, float height)
+QList<QVector2D> interpolate(const QList<QVector2D> &points, float height)
 {
     if (points.size() < 2) {
         return points;
@@ -376,7 +376,7 @@ QVector<QVector2D> interpolate(const QVector<QVector2D> &points, float height)
 
     auto tangents = calculateTangents(points, height);
 
-    QVector<QVector2D> result;
+    QList<QVector2D> result;
 
     auto current = QVector2D{0.0, points.first().y() * height};
     result.append(QVector2D{0.0, points.first().y()});
@@ -413,12 +413,12 @@ QVector<QVector2D> interpolate(const QVector<QVector2D> &points, float height)
 
 // This calculates the tangents for monotonic cubic spline interpolation.
 // See https://en.wikipedia.org/wiki/Monotone_cubic_interpolation for details.
-QVector<float> calculateTangents(const QVector<QVector2D> &points, float height)
+QList<float> calculateTangents(const QList<QVector2D> &points, float height)
 {
-    QVector<float> secantSlopes;
+    QList<float> secantSlopes;
     secantSlopes.reserve(points.size());
 
-    QVector<float> tangents;
+    QList<float> tangents;
     tangents.reserve(points.size());
 
     float previousSlope = 0.0;

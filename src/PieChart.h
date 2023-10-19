@@ -159,8 +159,8 @@ private:
     qreal m_toAngle = 360.0;
     bool m_smoothEnds = false;
 
-    QVector<QVector<qreal>> m_sections;
-    QVector<QVector<QColor>> m_colors;
+    QList<QList<qreal>> m_sections;
+    QList<QList<QColor>> m_colors;
 };
 
 #endif // PIECHART_H

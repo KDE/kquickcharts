@@ -103,7 +103,7 @@ void BarChartNode::setRect(const QRectF &rect)
     m_rect = rect;
 }
 
-void BarChartNode::setBars(const QVector<Bar> &bars)
+void BarChartNode::setBars(const QList<Bar> &bars)
 {
     m_bars = bars;
 }

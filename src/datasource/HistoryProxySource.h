@@ -8,9 +8,9 @@
 #ifndef HISTORYPROXYSOURCE_H
 #define HISTORYPROXYSOURCE_H
 
+#include <QList>
 #include <QTimer>
 #include <QVariant>
-#include <QVector>
 #include <memory>
 
 #include "ChartDataSource.h"
@@ -147,7 +147,7 @@ private:
     int m_maximumHistory = 10;
     FillMode m_fillMode = DoNotFill;
     std::unique_ptr<QTimer> m_updateTimer;
-    QVector<QVariant> m_history;
+    QList<QVariant> m_history;
 };
 
 #endif // HISTORYPROXYSOURCE_H

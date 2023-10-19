@@ -9,7 +9,7 @@
 
 #include <cmath>
 
-#include <QVector>
+#include <QList>
 
 RangeGroup::RangeGroup(QObject *parent)
     : QObject(parent)
@@ -106,7 +106,7 @@ bool RangeGroup::isValid() const
     return m_automatic || (m_to > m_from);
 }
 
-RangeGroup::RangeResult RangeGroup::calculateRange(const QVector<ChartDataSource *> &sources,
+RangeGroup::RangeResult RangeGroup::calculateRange(const QList<ChartDataSource *> &sources,
                                                    std::function<qreal(ChartDataSource *)> minimumCallback,
                                                    std::function<qreal(ChartDataSource *)> maximumCallback)
 {

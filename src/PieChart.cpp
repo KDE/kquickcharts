@@ -215,8 +215,8 @@ void PieChart::onDataChanged()
         qreal threshold = range.start;
         qreal total = 0.0;
 
-        QVector<qreal> sections;
-        QVector<QColor> sectionColors;
+        QList<qreal> sections;
+        QList<QColor> sectionColors;
 
         for (int i = 0; i < source->itemCount(); ++i) {
             auto value = source->item(i).toReal();
@@ -240,8 +240,8 @@ void PieChart::onDataChanged()
         }
 
         if (qFuzzyCompare(total, 0.0)) {
-            m_sections << QVector<qreal>{0.0};
-            m_colors << QVector<QColor>{colors->item(colorIndex).value<QColor>()};
+            m_sections << QList<qreal>{0.0};
+            m_colors << QList<QColor>{colors->item(colorIndex).value<QColor>()};
         }
 
         for (auto &value : sections) {

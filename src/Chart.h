@@ -67,7 +67,7 @@ public:
     Q_SIGNAL void colorSourceChanged();
 
     DataSourcesProperty valueSourcesProperty();
-    QVector<ChartDataSource *> valueSources() const;
+    QList<ChartDataSource *> valueSources() const;
     Q_SIGNAL void valueSourcesChanged();
     Q_INVOKABLE void insertValueSource(int index, ChartDataSource *source);
     Q_INVOKABLE void removeValueSource(int index);
@@ -100,7 +100,7 @@ private:
     ChartDataSource *m_nameSource = nullptr;
     ChartDataSource *m_shortNameSource = nullptr;
     ChartDataSource *m_colorSource = nullptr;
-    QVector<ChartDataSource *> m_valueSources;
+    QList<ChartDataSource *> m_valueSources;
     IndexingMode m_indexingMode = IndexEachSource;
 };
 
