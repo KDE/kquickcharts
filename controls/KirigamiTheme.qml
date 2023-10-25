@@ -14,6 +14,8 @@ QtObject {
     property real smallSpacing: Kirigami.Units.smallSpacing
     property real largeSpacing: Kirigami.Units.largeSpacing
 
+    property real smallIconSize: Kirigami.Units.iconSizes.small
+
     property color highlightColor: Kirigami.Theme.highlightColor
     property color backgroundColor: Kirigami.Theme.backgroundColor
 

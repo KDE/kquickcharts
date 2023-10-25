@@ -114,22 +114,19 @@ Control {
                 height: 1;
                 visible: parent.contentY > 0
 
-                ToolSeparator {
-                    anchors.left: parent.horizontalCenter
-                    anchors.top: parent.bottom
-                    width: 1
-                    height: Theme.smallSpacing
-                    transformOrigin: Item.Top
-                    rotation: 45
-                }
+                ToolButton {
+                    anchors {
+                        horizontalCenter: parent.horizontalCenter
+                        top: parent.top
+                    }
 
-                ToolSeparator {
-                    anchors.right: parent.horizontalCenter
-                    anchors.top: parent.bottom
-                    width: 1
-                    height: Theme.smallSpacing
-                    transformOrigin: Item.Top
-                    rotation: -45
+                    width: Theme.smallIconSize
+                    height: Theme.smallIconSize
+
+                    icon.name: "arrow-up-symbolic"
+                    icon.width: Theme.smallIconSize
+                    icon.height: Theme.smallIconSize
+                    enabled: false
                 }
             },
             Item {
@@ -138,22 +135,19 @@ Control {
                 height: 1;
                 visible: parent.contentY + parent.height < legend.height
 
-                ToolSeparator {
-                    anchors.left: parent.horizontalCenter
-                    anchors.bottom: parent.top
-                    width: 1
-                    height: Theme.smallSpacing
-                    transformOrigin: Item.Bottom
-                    rotation: 45
-                }
+                ToolButton {
+                    anchors {
+                        horizontalCenter: parent.horizontalCenter
+                        bottom: parent.bottom
+                    }
 
-                ToolSeparator {
-                    anchors.right: parent.horizontalCenter
-                    anchors.bottom: parent.top
-                    width: 1
-                    height: Theme.smallSpacing
-                    transformOrigin: Item.Bottom
-                    rotation: -45
+                    width: Theme.smallIconSize
+                    height: Theme.smallIconSize
+
+                    icon.name: "arrow-down-symbolic"
+                    icon.width: Theme.smallIconSize
+                    icon.height: Theme.smallIconSize
+                    enabled: false
                 }
             }
         ]

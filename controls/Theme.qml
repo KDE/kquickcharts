@@ -18,6 +18,8 @@ QtObject {
     property real smallSpacing: kirigamiThemeLoader.item?.smallSpacing ?? 5
     property real largeSpacing: kirigamiThemeLoader.item?.largeSpacing ?? 10
 
+    property real smallIconSize: kirigamiThemeLoader.item?.smallIconSize ?? 16
+
     property color highlightColor: kirigamiThemeLoader.item?.highlightColor ?? "blue"
     property color backgroundColor: kirigamiThemeLoader.item?.backgroundColor ?? "white"
 }
