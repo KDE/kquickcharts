@@ -84,10 +84,10 @@ Control {
                 delegate: LegendDelegate {
                     property var itemData: typeof modelData !== "undefined" ? modelData : model
 
-                    name: itemData[control.nameRole] !== undefined ? itemData[control.nameRole] : ""
-                    shortName: itemData[control.shortNameRole] !== undefined ? itemData[control.shortNameRole] : ""
-                    color: itemData[control.colorRole] !== undefined ? itemData[control.colorRole] : "white"
-                    value: itemData[control.valueRole] !== undefined ? control.formatValue(itemData[control.valueRole], index) : ""
+                    name: itemData[control.nameRole] ?? ""
+                    shortName: itemData[control.shortNameRole] ?? ""
+                    color: itemData[control.colorRole] ?? "white"
+                    value: control.formatValue(itemData[control.valueRole] ?? "", index)
 
                     maximumValueWidth: {
                         var result = control.maximumValueWidth(model.value, index)
