@@ -10,7 +10,7 @@
 #include <QOpenGLContext>
 #include <QSurfaceFormat>
 
-static const char shaderRoot[] = ":/org.kde.quickcharts/";
+static const char shaderRoot[] = ":/qt/qml/org/kde/quickcharts/shaders/";
 
 SDFShader::SDFShader()
 {
