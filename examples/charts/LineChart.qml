@@ -97,7 +97,11 @@ Kirigami.Page {
                 anchors.fill: parent
                 ListView {
                     model: lineModel;
-                    delegate: Kirigami.BasicListItem {
+
+                    Kirigami.Theme.inherit: false
+                    Kirigami.Theme.colorSet: Kirigami.Theme.View
+
+                    delegate: ItemDelegate {
                         width: ListView.view.width
                         height: Kirigami.Units.gridUnit * 2 + Kirigami.Units.smallSpacing
                         contentItem: RowLayout {

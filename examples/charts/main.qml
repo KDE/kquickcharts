@@ -28,9 +28,13 @@ Kirigami.ApplicationWindow {
                 ListElement { label: "Legend"; file: "qrc:/Legend.qml"; identifier: "legend" }
             }
 
-            delegate: Kirigami.BasicListItem {
-                label: model.label
+            delegate: ItemDelegate {
+                width: ListView.view.width
+
+                text: model.label
                 onClicked: applicationWindow().pageStack.push(model.file);
+
+                Kirigami.Separator { width: parent.width }
             }
         }
     }
