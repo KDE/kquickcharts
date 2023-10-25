@@ -5,15 +5,19 @@
  * SPDX-License-Identifier: LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
  */
 
-import QtQuick 2.9
+import QtQuick
 
 pragma Singleton;
 
 QtObject {
-    property real gridUnit: 20
-    property real smallSpacing: 5
-    property real largeSpacing: 10
+    property Loader kirigamiThemeLoader: Loader {
+        source: "KirigamiTheme.qml"
+    }
 
-    property color highlightColor: "blue"
-    property color backgroundColor: "white"
+    property real gridUnit: kirigamiThemeLoader.item?.gridUnit ?? 20
+    property real smallSpacing: kirigamiThemeLoader.item?.smallSpacing ?? 5
+    property real largeSpacing: kirigamiThemeLoader.item?.largeSpacing ?? 10
+
+    property color highlightColor: kirigamiThemeLoader.item?.highlightColor ?? "blue"
+    property color backgroundColor: kirigamiThemeLoader.item?.backgroundColor ?? "white"
 }

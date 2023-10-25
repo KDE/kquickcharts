@@ -23,6 +23,7 @@ ecm_target_qml_sources(QuickChartsControls SOURCES
     LineChartControl.qml
     PieChartControl.qml
     Theme.qml
+    KirigamiTheme.qml
 )
 
 target_link_libraries(QuickChartsControls PRIVATE

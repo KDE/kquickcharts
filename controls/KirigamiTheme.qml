@@ -5,11 +5,9 @@
  * SPDX-License-Identifier: LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
  */
 
-import QtQuick 2.9
+import QtQuick
 
-import org.kde.kirigami 2.4 as Kirigami
-
-pragma Singleton;
+import org.kde.kirigami as Kirigami
 
 QtObject {
     property real gridUnit: Kirigami.Units.gridUnit
