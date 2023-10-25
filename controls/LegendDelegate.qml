@@ -33,19 +33,6 @@ Control {
     readonly property real minimumWidth: contentItem.minimumWidth
     readonly property real preferredWidth: contentItem.preferredWidth
 
-    property real valueWidth
-    onValueWidthChanged: Logging.deprecated("LegendDelegate", "valueWidth", "5.82", "Use maximumValueWidth instead")
-    property real colorWidth
-    onColorWidthChanged: Logging.deprecated("LegendDelegate", "colorWidth", "5.82", "Customize the indicator instead")
-    property color valueColor
-    onValueColorChanged: Logging.deprecated("LegendDelegate", "valueColor", "5.82", "Customize the delegate instead")
-    property bool colorVisible: true
-    onColorVisibleChanged: Logging.deprecated("LegendDelegate", "colorVisible", "5.82", "Use an empty indicator instead")
-    property bool valueVisible: true
-    onValueVisibleChanged: Logging.deprecated("LegendDelegate", "valueVisible", "5.82", "Customize the delegate instead")
-    property real layoutWidth
-    onLayoutWidthChanged: Logging.deprecated("LegendDelegate", "layoutWidth", "5.82", "Unused")
-
     implicitHeight: Math.max(implicitContentHeight, implicitBackgroundHeight) + topPadding + bottomPadding
 
     // Note: Do not use implicitContentWidth here as it indirectly depends on the item width and will lead to a
@@ -77,7 +64,7 @@ Control {
             Layout.preferredWidth: item ? item.implicitWidth : 0
             Layout.fillHeight: true
 
-            sourceComponent: control.colorVisible ? control.indicator : null
+            sourceComponent: control.indicator
         }
 
         Item {

@@ -48,20 +48,6 @@ Control {
     property string colorRole: "color"
     property string valueRole: "value"
 
-    property int flow
-    onFlowChanged: Logging.deprecated("Legend", "flow", "5.82", "Legend uses a dynamic column layout now")
-    property int sourceIndex
-    onSourceIndexChanged: Logging.deprecated("Legend", "sourceIndex", "5.82", "Use Chart's indexingMode property")
-
-    property bool valueVisible: false
-    onValueVisibleChanged: Logging.deprecated("Legend", "valueVisible", "5.82", "Customise the delegate instead")
-    property real valueWidth: -1
-    onValueWidthChanged: Logging.deprecated("Legend", "valueWidth", "5.82", "Customise the delegate instead")
-    property bool colorVisible: true
-    onColorVisibleChanged: Logging.deprecated("Legend", "colorVisible", "5.82", "Customise the delegate instead")
-    property real colorWidth: 0
-    onColorWidthChanged: Logging.deprecated("Legend", "colorWidth", "5.82", "Customise the delegate instead")
-
     default property alias _children: legend.children
 
     leftPadding: 0
@@ -107,13 +93,6 @@ Control {
                         var result = control.maximumValueWidth(model.value, index)
                         if (result > 0) {
                             return result
-                        }
-
-                        // Backward compatibility: While valueWidth is deprecated, it may still end up
-                        // being set as a size hint, so we should use that rather than nothing if it is
-                        // set.
-                        if (control.valueWidth > 0) {
-                            return control.valueWidth
                         }
 
                         return -1
