@@ -267,10 +267,18 @@ void AxisLabels::layout()
 
 void AxisLabels::onBeginCreate(int index, QQuickItem *item)
 {
-    QObject::connect(item, &QQuickItem::xChanged, this, [this]() { scheduleLayout(); });
-    QObject::connect(item, &QQuickItem::yChanged, this, [this]() { scheduleLayout(); });
-    QObject::connect(item, &QQuickItem::widthChanged, this, [this]() { scheduleLayout(); });
-    QObject::connect(item, &QQuickItem::heightChanged, this, [this]() { scheduleLayout(); });
+    QObject::connect(item, &QQuickItem::xChanged, this, [this]() {
+        scheduleLayout();
+    });
+    QObject::connect(item, &QQuickItem::yChanged, this, [this]() {
+        scheduleLayout();
+    });
+    QObject::connect(item, &QQuickItem::widthChanged, this, [this]() {
+        scheduleLayout();
+    });
+    QObject::connect(item, &QQuickItem::heightChanged, this, [this]() {
+        scheduleLayout();
+    });
 
     auto attached = static_cast<AxisLabelsAttached *>(qmlAttachedPropertiesObject<AxisLabels>(item, true));
     attached->setIndex(index);

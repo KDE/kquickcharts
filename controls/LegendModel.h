@@ -12,6 +12,7 @@
 
 #include <QAbstractListModel>
 #include <QColor>
+#include <qqmlregistration.h>
 
 class Chart;
 class ChartDataSource;
@@ -29,8 +30,7 @@ struct LegendItem {
 class LegendModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(Chart *chart READ chart WRITE setChart NOTIFY chartChanged)
-    Q_PROPERTY(int sourceIndex READ sourceIndex WRITE setSourceIndex NOTIFY sourceIndexChanged)
+    QML_ELEMENT
 
 public:
     enum Roles { NameRole = Qt::UserRole, ShortNameRole, ColorRole, ValueRole };
@@ -40,17 +40,19 @@ public:
 
     explicit LegendModel(QObject *parent = nullptr);
 
-    QHash<int, QByteArray> roleNames() const override;
-    int rowCount(const QModelIndex &parent) const override;
-    QVariant data(const QModelIndex &index, int role) const override;
-
+    Q_PROPERTY(Chart *chart READ chart WRITE setChart NOTIFY chartChanged)
     Chart *chart() const;
     void setChart(Chart *newChart);
     Q_SIGNAL void chartChanged();
 
+    Q_PROPERTY(int sourceIndex READ sourceIndex WRITE setSourceIndex NOTIFY sourceIndexChanged)
     int sourceIndex() const;
     void setSourceIndex(int index);
     Q_SIGNAL void sourceIndexChanged();
+
+    QHash<int, QByteArray> roleNames() const override;
+    int rowCount(const QModelIndex &parent) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
 
 private:
     void queueUpdate();

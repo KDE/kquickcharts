@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2020 Arjen Hiemstra <ahiemstra@heimr.nl>
- * 
+ *
  * SPDX-License-Identifier: LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
  */
 
@@ -17,14 +17,14 @@ qreal sizeWithSpacing(int count, qreal size, qreal spacing)
     return size * count + spacing * (count - 1);
 }
 
-LegendLayoutAttached::LegendLayoutAttached(QObject* parent)
+LegendLayoutAttached::LegendLayoutAttached(QObject *parent)
     : QObject(parent)
 {
 }
 
 qreal LegendLayoutAttached::minimumWidth() const
 {
-    return m_minimumWidth;
+    return m_minimumWidth.value_or(0.0);
 }
 
 void LegendLayoutAttached::setMinimumWidth(qreal newMinimumWidth)
@@ -37,9 +37,14 @@ void LegendLayoutAttached::setMinimumWidth(qreal newMinimumWidth)
     Q_EMIT minimumWidthChanged();
 }
 
+bool LegendLayoutAttached::isMinimumWidthValid() const
+{
+    return m_minimumWidth.has_value();
+}
+
 qreal LegendLayoutAttached::preferredWidth() const
 {
-    return m_preferredWidth;
+    return m_preferredWidth.value_or(0.0);
 }
 
 void LegendLayoutAttached::setPreferredWidth(qreal newPreferredWidth)
@@ -52,9 +57,14 @@ void LegendLayoutAttached::setPreferredWidth(qreal newPreferredWidth)
     Q_EMIT preferredWidthChanged();
 }
 
+bool LegendLayoutAttached::isPreferredWidthValid() const
+{
+    return m_preferredWidth.has_value();
+}
+
 qreal LegendLayoutAttached::maximumWidth() const
 {
-    return m_maximumWidth;
+    return m_maximumWidth.value_or(0.0);
 }
 
 void LegendLayoutAttached::setMaximumWidth(qreal newMaximumWidth)
@@ -65,6 +75,11 @@ void LegendLayoutAttached::setMaximumWidth(qreal newMaximumWidth)
 
     m_maximumWidth = newMaximumWidth;
     Q_EMIT maximumWidthChanged();
+}
+
+bool LegendLayoutAttached::isMaximumWidthValid() const
+{
+    return m_maximumWidth.has_value();
 }
 
 LegendLayout::LegendLayout(QQuickItem *parent)
@@ -141,7 +156,7 @@ void LegendLayout::updatePolish()
             continue;
         }
 
-        auto attached = static_cast<LegendLayoutAttached*>(qmlAttachedPropertiesObject<LegendLayout>(item, true));
+        auto attached = static_cast<LegendLayoutAttached *>(qmlAttachedPropertiesObject<LegendLayout>(item, true));
 
         auto x = (itemWidth + m_horizontalSpacing) * column;
         auto y = (itemHeight + m_verticalSpacing) * row;
@@ -163,8 +178,7 @@ void LegendLayout::updatePolish()
         }
     }
 
-    setImplicitSize(sizeWithSpacing(columns, itemWidth, m_horizontalSpacing),
-                    sizeWithSpacing(rows, itemHeight, m_verticalSpacing));
+    setImplicitSize(sizeWithSpacing(columns, itemWidth, m_horizontalSpacing), sizeWithSpacing(rows, itemHeight, m_verticalSpacing));
 }
 
 void LegendLayout::geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry)
@@ -175,7 +189,7 @@ void LegendLayout::geometryChange(const QRectF &newGeometry, const QRectF &oldGe
     QQuickItem::geometryChange(newGeometry, oldGeometry);
 }
 
-void LegendLayout::itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData& data)
+void LegendLayout::itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData &data)
 {
     if (change == QQuickItem::ItemVisibleHasChanged || change == QQuickItem::ItemSceneChange) {
         polish();
@@ -237,19 +251,19 @@ std::tuple<int, int, qreal, qreal> LegendLayout::determineColumns()
             continue;
         }
 
-        auto attached = static_cast<LegendLayoutAttached*>(qmlAttachedPropertiesObject<LegendLayout>(item, true));
+        auto attached = static_cast<LegendLayoutAttached *>(qmlAttachedPropertiesObject<LegendLayout>(item, true));
 
-        if (attached->minimumWidth() > 0.0) {
+        if (attached->isMinimumWidthValid()) {
             minWidth = std::max(minWidth, attached->minimumWidth());
         } else {
             minWidth = std::max(minWidth, item->implicitWidth());
         }
 
-        if (attached->preferredWidth() > 0.0) {
+        if (attached->isPreferredWidthValid()) {
             preferredWidth = std::max(preferredWidth, attached->preferredWidth());
         }
 
-        if (attached->maximumWidth() > 0.0) {
+        if (attached->isMaximumWidthValid()) {
             maxWidth = std::min(maxWidth, attached->maximumWidth());
         }
 

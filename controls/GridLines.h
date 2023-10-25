@@ -19,27 +19,29 @@ class XYChart;
 class LinePropertiesGroup : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(bool visible READ visible WRITE setVisible NOTIFY propertiesChanged)
-    Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY propertiesChanged)
-    Q_PROPERTY(float lineWidth READ lineWidth WRITE setLineWidth NOTIFY propertiesChanged)
-    Q_PROPERTY(int frequency READ frequency WRITE setFrequency NOTIFY propertiesChanged)
-    Q_PROPERTY(int count READ count WRITE setCount NOTIFY propertiesChanged)
+    QML_ELEMENT
+    QML_UNCREATABLE("Grouped Property")
 
 public:
     explicit LinePropertiesGroup(GridLines *parent);
 
+    Q_PROPERTY(bool visible READ visible WRITE setVisible NOTIFY propertiesChanged)
     bool visible() const;
     void setVisible(bool newVisible);
 
+    Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY propertiesChanged)
     QColor color() const;
     void setColor(const QColor &newColor);
 
+    Q_PROPERTY(float lineWidth READ lineWidth WRITE setLineWidth NOTIFY propertiesChanged)
     float lineWidth() const;
     void setLineWidth(float newLineWidth);
 
+    Q_PROPERTY(int frequency READ frequency WRITE setFrequency NOTIFY propertiesChanged)
     int frequency() const;
     void setFrequency(int newFrequency);
 
+    Q_PROPERTY(int count READ count WRITE setCount NOTIFY propertiesChanged)
     int count() const;
     void setCount(int newCount);
 
@@ -60,12 +62,7 @@ private:
 class GridLines : public QQuickItem
 {
     Q_OBJECT
-
-    Q_PROPERTY(GridLines::Direction direction READ direction WRITE setDirection NOTIFY directionChanged)
-    Q_PROPERTY(XYChart *chart READ chart WRITE setChart NOTIFY chartChanged)
-    Q_PROPERTY(float spacing READ spacing WRITE setSpacing NOTIFY spacingChanged)
-    Q_PROPERTY(LinePropertiesGroup *major READ majorGroup CONSTANT)
-    Q_PROPERTY(LinePropertiesGroup *minor READ minorGroup CONSTANT)
+    QML_ELEMENT
 
 public:
     enum class Direction { Horizontal, Vertical };
@@ -75,19 +72,25 @@ public:
      */
     explicit GridLines(QQuickItem *parent = nullptr);
 
+    Q_PROPERTY(GridLines::Direction direction READ direction WRITE setDirection NOTIFY directionChanged)
     Direction direction() const;
     void setDirection(GridLines::Direction newDirection);
     Q_SIGNAL void directionChanged();
 
+    Q_PROPERTY(XYChart *chart READ chart WRITE setChart NOTIFY chartChanged)
     XYChart *chart() const;
     void setChart(XYChart *newChart);
     Q_SIGNAL void chartChanged();
 
+    Q_PROPERTY(float spacing READ spacing WRITE setSpacing NOTIFY spacingChanged)
     float spacing() const;
     void setSpacing(float newSpacing);
     Q_SIGNAL void spacingChanged();
 
+    Q_PROPERTY(LinePropertiesGroup *major READ majorGroup CONSTANT)
     LinePropertiesGroup *majorGroup() const;
+
+    Q_PROPERTY(LinePropertiesGroup *minor READ minorGroup CONSTANT)
     LinePropertiesGroup *minorGroup() const;
 
 private:

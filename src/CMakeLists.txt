@@ -33,14 +33,6 @@ target_sources(QuickCharts PRIVATE
     datasource/ModelSource.h
     datasource/SingleValueSource.cpp
     datasource/SingleValueSource.h
-    decorations/AxisLabels.cpp
-    decorations/AxisLabels.h
-    decorations/GridLines.cpp
-    decorations/GridLines.h
-    decorations/LegendLayout.cpp
-    decorations/LegendLayout.h
-    decorations/LegendModel.cpp
-    decorations/LegendModel.h
     scenegraph/BarChartMaterial.cpp
     scenegraph/BarChartMaterial.h
     scenegraph/BarChartNode.cpp
@@ -49,8 +41,6 @@ target_sources(QuickCharts PRIVATE
     scenegraph/LineChartMaterial.h
     scenegraph/LineChartNode.cpp
     scenegraph/LineChartNode.h
-    scenegraph/LineGridNode.cpp
-    scenegraph/LineGridNode.h
     scenegraph/LineSegmentNode.cpp
     scenegraph/LineSegmentNode.h
     scenegraph/PieChartMaterial.cpp

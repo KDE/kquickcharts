@@ -1,7 +1,21 @@
 
-ecm_add_qml_module(QuickChartsControls URI "org.kde.quickcharts.controls")
+add_library(QuickChartsControls)
+ecm_add_qml_module(QuickChartsControls URI "org.kde.quickcharts.controls" VERSION 1.0 GENERATE_PLUGIN_SOURCE)
 
-target_sources(QuickChartsControls PRIVATE ChartsControlsPlugin.cpp)
+target_sources(QuickChartsControls PRIVATE
+    AxisLabels.cpp
+    AxisLabels.h
+    GridLines.cpp
+    GridLines.h
+    LegendLayout.cpp
+    LegendLayout.h
+    LegendModel.cpp
+    LegendModel.h
+    LineGridNode.cpp
+    LineGridNode.h
+)
+
+set_source_files_properties(Theme.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 
 ecm_target_qml_sources(QuickChartsControls SOURCES
     Legend.qml
@@ -9,11 +23,6 @@ ecm_target_qml_sources(QuickChartsControls SOURCES
     LineChartControl.qml
     PieChartControl.qml
     Theme.qml
-    Logging.qml
-)
-
-ecm_target_qml_sources(QuickChartsControls PRIVATE PATH styles/org.kde.desktop SOURCES
-    styles/org.kde.desktop/Theme.qml
 )
 
 target_link_libraries(QuickChartsControls PRIVATE
@@ -22,6 +31,9 @@ target_link_libraries(QuickChartsControls PRIVATE
     Qt6::Qml
     Qt6::Gui
     Qt6::QuickControls2
+    QuickCharts
 )
 
 ecm_finalize_qml_module(QuickChartsControls DESTINATION ${KDE_INSTALL_QMLDIR})
+
+install(TARGETS QuickChartsControls ${KDE_INSTALL_DEFAULT_ARGUMENTS})

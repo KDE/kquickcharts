@@ -7,8 +7,8 @@
 
 #include "GridLines.h"
 
+#include "LineGridNode.h"
 #include "XYChart.h"
-#include "scenegraph/LineGridNode.h"
 
 LinePropertiesGroup::LinePropertiesGroup(GridLines *parent)
     : QObject(parent)
