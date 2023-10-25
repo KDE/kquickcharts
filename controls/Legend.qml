@@ -71,7 +71,7 @@ Control {
         // Limit maximum flick velocity to ensure we can scroll one line per
         // mouse wheel "tick" when the legend's height is very constrained.
         maximumFlickVelocity: Theme.gridUnit * 50
-        Charts.LegendLayout {
+        LegendLayout {
             id: legend
 
             width: parent.width
@@ -79,7 +79,7 @@ Control {
             Repeater {
                 id: legendRepeater
 
-                model: Charts.LegendModel { chart: control.chart }
+                model: LegendModel { chart: control.chart }
 
                 delegate: LegendDelegate {
                     property var itemData: typeof modelData !== "undefined" ? modelData : model
@@ -98,9 +98,9 @@ Control {
                         return -1
                     }
 
-                    Charts.LegendLayout.minimumWidth: minimumWidth
-                    Charts.LegendLayout.preferredWidth: preferredWidth
-                    Charts.LegendLayout.maximumWidth: Math.max(control.maximumDelegateWidth, preferredWidth)
+                    LegendLayout.minimumWidth: minimumWidth
+                    LegendLayout.preferredWidth: preferredWidth
+                    LegendLayout.maximumWidth: Math.max(control.maximumDelegateWidth, preferredWidth)
                 }
             }
 
