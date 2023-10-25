@@ -10,6 +10,8 @@
 
 #include <memory>
 
+#include <qqmlregistration.h>
+
 #include "XYChart.h"
 
 class LineChartNode;
@@ -22,6 +24,8 @@ class LineChartNode;
 class LineChartAttached : public QObject
 {
     Q_OBJECT
+    QML_ANONYMOUS
+
     /**
      * The value at the current point.
      */
@@ -74,9 +78,12 @@ private:
  *
  * \image html linechart.png "The resulting line chart."
  */
-class LineChart : public XYChart
+class QUICKCHARTS_EXPORT LineChart : public XYChart
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_ATTACHED(LineChartAttached)
+
 
     /**
      * Smooth the lines in the chart instead of making hard corners.
@@ -162,7 +169,5 @@ private:
     QQmlComponent *m_pointDelegate = nullptr;
     QHash<ChartDataSource *, QList<QQuickItem *>> m_pointDelegates;
 };
-
-QML_DECLARE_TYPEINFO(LineChart, QML_HAS_ATTACHED_PROPERTIES)
 
 #endif // LINECHART_H

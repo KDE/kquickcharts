@@ -15,6 +15,8 @@
 #include <QQmlIncubator>
 #include <QQuickItem>
 
+#include "quickcharts_export.h"
+
 class ItemIncubator;
 
 /**
@@ -22,7 +24,7 @@ class ItemIncubator;
  *
  * Effectively this is a C++ version of Repeater.
  */
-class ItemBuilder : public QObject
+class QUICKCHARTS_EXPORT ItemBuilder : public QObject
 {
     Q_OBJECT
 

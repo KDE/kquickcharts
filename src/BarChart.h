@@ -7,6 +7,8 @@
 #ifndef BARCHART_H
 #define BARCHART_H
 
+#include <qqmlregistration.h>
+
 #include "XYChart.h"
 
 struct Bar;
@@ -22,9 +24,10 @@ struct Bar;
  *
  * \image html barchart.png "The resulting bar chart."
  */
-class BarChart : public XYChart
+class QUICKCHARTS_EXPORT BarChart : public XYChart
 {
     Q_OBJECT
+    QML_ELEMENT
 
 public:
     /**

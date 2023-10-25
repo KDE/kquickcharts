@@ -21,7 +21,7 @@
  * This data source will monitor a single item of another data source for changes
  * and record them, exposing historical values as
  */
-class HistoryProxySource : public ChartDataSource
+class QUICKCHARTS_EXPORT HistoryProxySource : public ChartDataSource
 {
     Q_OBJECT
 
@@ -73,6 +73,7 @@ class HistoryProxySource : public ChartDataSource
      * \note Changing this property will clear the existing history.
      */
     Q_PROPERTY(FillMode fillMode READ fillMode WRITE setFillMode NOTIFY fillModeChanged)
+    QML_ELEMENT
 
 public:
     /**

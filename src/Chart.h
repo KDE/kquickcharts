@@ -8,13 +8,17 @@
 #ifndef CHART_H
 #define CHART_H
 
-#include "datasource/ChartDataSource.h"
 #include <QQuickItem>
+#include <qqmlregistration.h>
+
+#include "datasource/ChartDataSource.h"
+
+#include "quickcharts_export.h"
 
 /**
  * Abstract base class for all charts.
  */
-class Chart : public QQuickItem
+class QUICKCHARTS_EXPORT Chart : public QQuickItem
 {
     Q_OBJECT
     /**
@@ -37,6 +41,8 @@ class Chart : public QQuickItem
      * The indexing mode used for indexing colors and names.
      */
     Q_PROPERTY(IndexingMode indexingMode READ indexingMode WRITE setIndexingMode NOTIFY indexingModeChanged)
+    QML_ELEMENT
+    QML_UNCREATABLE("Base class")
 
 public:
     using DataSourcesProperty = QQmlListProperty<ChartDataSource>;

@@ -18,7 +18,7 @@
  *
  *
  */
-class ModelSource : public ChartDataSource
+class QUICKCHARTS_EXPORT ModelSource : public ChartDataSource
 {
     Q_OBJECT
     Q_PROPERTY(int role READ role WRITE setRole NOTIFY roleChanged)
@@ -26,6 +26,7 @@ class ModelSource : public ChartDataSource
     Q_PROPERTY(int column READ column WRITE setColumn NOTIFY columnChanged)
     Q_PROPERTY(QAbstractItemModel *model READ model WRITE setModel NOTIFY modelChanged)
     Q_PROPERTY(bool indexColumns READ indexColumns WRITE setIndexColumns NOTIFY indexColumnsChanged)
+    QML_ELEMENT
 
 public:
     explicit ModelSource(QObject *parent = nullptr);

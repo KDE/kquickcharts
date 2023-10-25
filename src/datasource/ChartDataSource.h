@@ -9,13 +9,18 @@
 #define DATASOURCE_H
 
 #include <QObject>
+#include <qqmlregistration.h>
+
+#include "quickcharts_export.h"
 
 /**
  * Abstract base class for data sources.
  */
-class ChartDataSource : public QObject
+class QUICKCHARTS_EXPORT ChartDataSource : public QObject
 {
     Q_OBJECT
+    QML_NAMED_ELEMENT(DataSource)
+    QML_UNCREATABLE("Abstract Base Class")
 
 public:
     explicit ChartDataSource(QObject *parent = nullptr);

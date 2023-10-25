@@ -1,12 +1,22 @@
 
-add_library(QuickChartsStatic STATIC)
-set_target_properties(QuickChartsStatic PROPERTIES POSITION_INDEPENDENT_CODE ON)
+add_library(QuickCharts)
+ecm_add_qml_module(QuickCharts URI "org.kde.quickcharts" VERSION 1.0 GENERATE_PLUGIN_SOURCE)
 
-target_sources(QuickChartsStatic PRIVATE
+target_sources(QuickCharts PRIVATE
     BarChart.cpp
     BarChart.h
     Chart.cpp
     Chart.h
+    ItemBuilder.cpp
+    ItemBuilder.h
+    LineChart.cpp
+    LineChart.h
+    PieChart.cpp
+    PieChart.h
+    RangeGroup.cpp
+    RangeGroup.h
+    XYChart.cpp
+    XYChart.h
     datasource/ArraySource.cpp
     datasource/ArraySource.h
     datasource/ChartAxisSource.cpp
@@ -31,14 +41,6 @@ target_sources(QuickChartsStatic PRIVATE
     decorations/LegendLayout.h
     decorations/LegendModel.cpp
     decorations/LegendModel.h
-    ItemBuilder.cpp
-    ItemBuilder.h
-    LineChart.cpp
-    LineChart.h
-    PieChart.cpp
-    PieChart.h
-    RangeGroup.cpp
-    RangeGroup.h
     scenegraph/BarChartMaterial.cpp
     scenegraph/BarChartMaterial.h
     scenegraph/BarChartNode.cpp
@@ -57,11 +59,9 @@ target_sources(QuickChartsStatic PRIVATE
     scenegraph/PieChartNode.h
     scenegraph/SDFShader.cpp
     scenegraph/SDFShader.h
-    XYChart.cpp
-    XYChart.h
 )
 
-ecm_qt_declare_logging_category(QuickChartsStatic
+ecm_qt_declare_logging_category(QuickCharts
     HEADER charts_general_logging.h
     IDENTIFIER GENERAL
     CATEGORY_NAME kf.quickcharts.general
@@ -70,7 +70,7 @@ ecm_qt_declare_logging_category(QuickChartsStatic
     EXPORT KQuickCharts
 )
 
-ecm_qt_declare_logging_category(QuickChartsStatic
+ecm_qt_declare_logging_category(QuickCharts
     HEADER charts_datasource_logging.h
     IDENTIFIER DATASOURCE
     CATEGORY_NAME kf.quickcharts.datasource
@@ -79,7 +79,7 @@ ecm_qt_declare_logging_category(QuickChartsStatic
     EXPORT KQuickCharts
 )
 
-ecm_qt_declare_logging_category(QuickChartsStatic
+ecm_qt_declare_logging_category(QuickCharts
     HEADER charts_deprecated_logging.h
     IDENTIFIER DEPRECATED
     CATEGORY_NAME kf.quickcharts.deprecated
@@ -88,17 +88,15 @@ ecm_qt_declare_logging_category(QuickChartsStatic
     EXPORT KQuickCharts
 )
 
-target_link_libraries(QuickChartsStatic PUBLIC
+target_link_libraries(QuickCharts PUBLIC
     Qt6::Core
-    Qt6::Quick
     Qt6::Qml
     Qt6::Quick
 )
 
-ecm_add_qml_module(QuickCharts URI "org.kde.quickcharts" CLASSNAME QuickChartsPlugin)
-
-target_sources(QuickCharts PRIVATE ChartsPlugin.cpp ChartsPlugin.h)
-target_link_libraries(QuickCharts PRIVATE QuickChartsStatic)
+target_include_directories(QuickCharts PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/datasource
+)
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(_extra_args DEBUGINFO)
@@ -110,7 +108,7 @@ qt6_add_shaders(QuickCharts "shaders"
     BATCHABLE
     ZORDER_LOC 6
     PRECOMPILE
-    PREFIX "/org.kde.quickcharts/"
+    PREFIX "/qt/qml/org/kde/quickcharts/shaders/"
     GLSL "300es,130"
     FILES
         shaders/barchart.vert
@@ -141,3 +139,5 @@ ecm_generate_export_header(QuickCharts
 ecm_finalize_qml_module(QuickCharts DESTINATION ${KDE_INSTALL_QMLDIR})
 
 ecm_qt_install_logging_categories(EXPORT KQuickCharts DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
+
+install(TARGETS QuickCharts ${KDE_INSTALL_DEFAULT_ARGUMENTS})

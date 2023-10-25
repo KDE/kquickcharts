@@ -15,11 +15,12 @@
 /**
  * A data source that provides entries of an array as data.
  */
-class ArraySource : public ChartDataSource
+class QUICKCHARTS_EXPORT ArraySource : public ChartDataSource
 {
     Q_OBJECT
     Q_PROPERTY(QVariantList array READ array WRITE setArray NOTIFY dataChanged)
     Q_PROPERTY(bool wrap READ wrap WRITE setWrap NOTIFY dataChanged)
+    QML_ELEMENT
 
 public:
     /**

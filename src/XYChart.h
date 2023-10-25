@@ -29,7 +29,7 @@ bool operator==(const ComputedRange &first, const ComputedRange &second);
 /**
  * A base class for Charts that are based on an X/Y grid.
  */
-class XYChart : public Chart
+class QUICKCHARTS_EXPORT XYChart : public Chart
 {
     Q_OBJECT
     /**
@@ -52,6 +52,8 @@ class XYChart : public Chart
      * false.
      */
     Q_PROPERTY(bool stacked READ stacked WRITE setStacked NOTIFY stackedChanged)
+    QML_ELEMENT
+    QML_UNCREATABLE("Base Class")
 
 public:
     /**

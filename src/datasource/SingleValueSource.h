@@ -15,10 +15,11 @@
 /**
  * A data source that provides a single value as data.
  */
-class SingleValueSource : public ChartDataSource
+class QUICKCHARTS_EXPORT SingleValueSource : public ChartDataSource
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY dataChanged)
+    QML_ELEMENT
 
 public:
     explicit SingleValueSource(QObject *parent = nullptr);

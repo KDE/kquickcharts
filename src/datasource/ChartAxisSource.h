@@ -15,12 +15,13 @@ class XYChart;
 /**
  * A data source that provides values from a chart's axis as data.
  */
-class ChartAxisSource : public ChartDataSource
+class QUICKCHARTS_EXPORT ChartAxisSource : public ChartDataSource
 {
     Q_OBJECT
     Q_PROPERTY(XYChart *chart READ chart WRITE setChart NOTIFY chartChanged)
     Q_PROPERTY(ChartAxisSource::Axis axis READ axis WRITE setAxis NOTIFY axisChanged)
     Q_PROPERTY(int itemCount READ itemCount WRITE setItemCount NOTIFY itemCountChanged)
+    QML_ELEMENT
 
 public:
     enum class Axis { XAxis, YAxis };

@@ -45,9 +45,10 @@
  * [spacing]: \ref PieChart::spacing
  *
  */
-class PieChart : public Chart
+class QUICKCHARTS_EXPORT PieChart : public Chart
 {
     Q_OBJECT
+    QML_ELEMENT
 
     /**
      * The range of values to display in this PieChart.

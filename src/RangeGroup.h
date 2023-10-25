@@ -11,6 +11,9 @@
 #include <functional>
 
 #include <QObject>
+#include <qqmlregistration.h>
+
+#include "quickcharts_export.h"
 
 class ChartDataSource;
 
@@ -18,9 +21,12 @@ class ChartDataSource;
  * An object that can be used as a grouped property to provide a value range for charts.
  *
  */
-class RangeGroup : public QObject
+class QUICKCHARTS_EXPORT RangeGroup : public QObject
 {
     Q_OBJECT
+    QML_NAMED_ELEMENT(Range)
+    QML_UNCREATABLE("Grouped Property")
+
     /**
      * The start of this range.
      *

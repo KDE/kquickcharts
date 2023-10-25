@@ -19,7 +19,7 @@
  *
  * @since 5.71
  */
-class MapProxySource : public ChartDataSource
+class QUICKCHARTS_EXPORT MapProxySource : public ChartDataSource
 {
     Q_OBJECT
     /**
@@ -30,6 +30,7 @@ class MapProxySource : public ChartDataSource
      * The map to index for values.
      */
     Q_PROPERTY(QVariantMap map READ map WRITE setMap NOTIFY mapChanged)
+    QML_ELEMENT
 
 public:
     MapProxySource(QObject *parent = nullptr);

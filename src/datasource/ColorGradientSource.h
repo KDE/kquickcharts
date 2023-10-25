@@ -18,12 +18,13 @@
 /**
  * A data source that provides a hue-shifted color as data.
  */
-class ColorGradientSource : public ChartDataSource
+class QUICKCHARTS_EXPORT ColorGradientSource : public ChartDataSource
 {
     Q_OBJECT
     Q_PROPERTY(QColor baseColor READ baseColor WRITE setBaseColor NOTIFY baseColorChanged)
     Q_PROPERTY(int itemCount READ itemCount WRITE setItemCount NOTIFY itemCountChanged)
     Q_PROPERTY(QVariantList colors READ colors NOTIFY dataChanged)
+    QML_ELEMENT
 
 public:
     explicit ColorGradientSource(QObject *parent = nullptr);
