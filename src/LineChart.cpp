@@ -16,11 +16,11 @@
 #include "RangeGroup.h"
 #include "datasource/ChartDataSource.h"
 #include "scenegraph/LineChartNode.h"
-#include "scenegraph/LineGridNode.h"
 
 static const float PixelsPerStep = 2.0;
 
-QList<QVector2D> interpolate(const QList<QVector2D> &points, float height);
+
+QList<QVector2D> interpolatePoints(const QList<QVector2D> &points, float height);
 QList<float> calculateTangents(const QList<QVector2D> &points, float height);
 QVector2D cubicHermite(const QVector2D &first, const QVector2D &second, float step, float mFirst, float mSecond);
 
@@ -108,9 +108,9 @@ LineChart::LineChart(QQuickItem *parent)
 {
 }
 
-bool LineChart::smooth() const
+bool LineChart::interpolate() const
 {
-    return m_smooth;
+    return m_interpolate;
 }
 
 qreal LineChart::lineWidth() const
@@ -123,15 +123,15 @@ qreal LineChart::fillOpacity() const
     return m_fillOpacity;
 }
 
-void LineChart::setSmooth(bool smooth)
+void LineChart::setInterpolate(bool newInterpolate)
 {
-    if (smooth == m_smooth) {
+    if (newInterpolate == m_interpolate) {
         return;
     }
 
-    m_smooth = smooth;
+    m_interpolate = newInterpolate;
     polish();
-    Q_EMIT smoothChanged();
+    Q_EMIT interpolateChanged();
 }
 
 void LineChart::setLineWidth(qreal width)
@@ -250,8 +250,8 @@ void LineChart::updatePolish()
             }
         }
 
-        if (m_smooth) {
-            m_values[valueSource] = interpolate(values, height());
+        if (m_interpolate) {
+            m_values[valueSource] = interpolatePoints(values, height());
         } else {
             m_values[valueSource] = values;
         }
@@ -368,7 +368,7 @@ void LineChart::updatePointDelegate(QQuickItem *delegate, const QVector2D &posit
 }
 
 // Smoothly interpolate between points, using monotonic cubic interpolation.
-QList<QVector2D> interpolate(const QList<QVector2D> &points, float height)
+QList<QVector2D> interpolatePoints(const QList<QVector2D> &points, float height)
 {
     if (points.size() < 2) {
         return points;

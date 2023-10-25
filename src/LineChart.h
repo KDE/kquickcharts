@@ -87,12 +87,12 @@ public:
     explicit LineChart(QQuickItem *parent = nullptr);
 
     /**
-     * Smooth the lines in the chart instead of making hard corners.
+     * Interpolate the values in the chart so that the lines become smoothed.
      */
-    Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
-    bool smooth() const;
-    void setSmooth(bool newSmooth);
-    Q_SIGNAL void smoothChanged();
+    Q_PROPERTY(bool interpolate READ interpolate WRITE setInterpolate NOTIFY interpolateChanged)
+    bool interpolate() const;
+    void setInterpolate(bool newInterpolate);
+    Q_SIGNAL void interpolateChanged();
     /**
      * The width of a line in the chart.
      */
@@ -153,7 +153,7 @@ private:
     void createPointDelegates(const QList<QVector2D> &values, int sourceIndex);
     void updatePointDelegate(QQuickItem *delegate, const QVector2D &position, const QVariant &value, int sourceIndex);
 
-    bool m_smooth = false;
+    bool m_interpolate = false;
     qreal m_lineWidth = 1.0;
     qreal m_fillOpacity = 0.0;
     bool m_rangeInvalid = true;
