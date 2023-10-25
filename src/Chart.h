@@ -102,6 +102,8 @@ private:
     static qsizetype sourceCount(DataSourcesProperty *list);
     static ChartDataSource *source(DataSourcesProperty *list, qsizetype index);
     static void clearSources(DataSourcesProperty *list);
+    static void replaceSource(DataSourcesProperty *list, qsizetype index, ChartDataSource *source);
+    static void removeLastSource(DataSourcesProperty *list);
 
     ChartDataSource *m_nameSource = nullptr;
     ChartDataSource *m_shortNameSource = nullptr;

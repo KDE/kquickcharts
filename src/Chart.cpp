@@ -74,7 +74,16 @@ void Chart::setColorSource(ChartDataSource *colorSource)
 
 Chart::DataSourcesProperty Chart::valueSourcesProperty()
 {
-    return DataSourcesProperty{this, this, &Chart::appendSource, &Chart::sourceCount, &Chart::source, &Chart::clearSources};
+    return DataSourcesProperty{
+        this,
+        this,
+        &Chart::appendSource,
+        &Chart::sourceCount,
+        &Chart::source,
+        &Chart::clearSources,
+        &Chart::replaceSource,
+        &Chart::removeLastSource,
+    };
 }
 
 QList<ChartDataSource *> Chart::valueSources() const
@@ -169,6 +178,23 @@ void Chart::clearSources(Chart::DataSourcesProperty *list)
     });
     chart->m_valueSources.clear();
     Q_EMIT chart->dataChanged();
+}
+
+void Chart::replaceSource(DataSourcesProperty *list, qsizetype index, ChartDataSource *source)
+{
+    auto chart = reinterpret_cast<Chart *>(list->data);
+    Q_ASSERT(index > 0 && index < chart->m_valueSources.size());
+    chart->m_valueSources.at(index)->disconnect(chart);
+    chart->m_valueSources.replace(index, source);
+    connect(source, &QObject::destroyed, chart, qOverload<QObject *>(&Chart::removeValueSource));
+    connect(source, &ChartDataSource::dataChanged, chart, &Chart::dataChanged);
+    Q_EMIT chart->dataChanged();
+}
+
+void Chart::removeLastSource(DataSourcesProperty *list)
+{
+    auto chart = reinterpret_cast<Chart *>(list->data);
+    chart->removeValueSource(chart->m_valueSources.size() - 1);
 }
 
 #include "moc_Chart.cpp"
