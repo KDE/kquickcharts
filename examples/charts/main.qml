@@ -5,10 +5,10 @@
  * SPDX-License-Identifier: LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
  */
 
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
 
-import org.kde.kirigami 2.2 as Kirigami
+import org.kde.kirigami as Kirigami
 
 Kirigami.ApplicationWindow {
     id: window

@@ -5,11 +5,11 @@
  * SPDX-License-Identifier: LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
  */
 
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
 
-import org.kde.quickcharts 1.0 as Charts
-import org.kde.quickcharts.controls 1.0
+import org.kde.quickcharts as Charts
+import org.kde.quickcharts.controls
 
 /**
  * A line chart with legend, grid and axis labels.

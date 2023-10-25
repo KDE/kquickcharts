@@ -5,15 +5,15 @@
  * SPDX-License-Identifier: LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
  */
 
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import QtQuick.Layouts 1.2
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
-import org.kde.kirigami 2.4 as Kirigami
-import org.kde.kquickcontrols 2.0
+import org.kde.kirigami as Kirigami
+import org.kde.kquickcontrols
 
-import org.kde.quickcharts 1.0 as Charts
-import org.kde.quickcharts.controls 1.0 as ChartsControls
+import org.kde.quickcharts as Charts
+import org.kde.quickcharts.controls as ChartsControls
 
 Kirigami.Page {
     title: "Bar Chart"

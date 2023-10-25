@@ -6,10 +6,10 @@
  */
 
 //! [example]
-import QtQuick 2.11
-import QtQuick.Controls 2.11
+import QtQuick
+import QtQuick.Controls
 
-import org.kde.quickcharts 1.0 as Charts
+import org.kde.quickcharts as Charts
 
 ApplicationWindow {
     width: 500

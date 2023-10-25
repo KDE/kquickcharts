@@ -5,12 +5,12 @@
  * SPDX-License-Identifier: LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
  */
 
-import QtQuick 2.12
-import QtQuick.Layouts 1.12
-import QtQuick.Controls 2.12
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
 
-import org.kde.quickcharts 1.0 as Charts
-import org.kde.quickcharts.controls 1.0
+import org.kde.quickcharts as Charts
+import org.kde.quickcharts.controls
 
 /**
  * A delegate that can be used as part of a Legend.
