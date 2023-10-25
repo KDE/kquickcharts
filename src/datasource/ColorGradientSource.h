@@ -21,27 +21,27 @@
 class QUICKCHARTS_EXPORT ColorGradientSource : public ChartDataSource
 {
     Q_OBJECT
-    Q_PROPERTY(QColor baseColor READ baseColor WRITE setBaseColor NOTIFY baseColorChanged)
-    Q_PROPERTY(int itemCount READ itemCount WRITE setItemCount NOTIFY itemCountChanged)
-    Q_PROPERTY(QVariantList colors READ colors NOTIFY dataChanged)
     QML_ELEMENT
 
 public:
     explicit ColorGradientSource(QObject *parent = nullptr);
 
-    int itemCount() const override;
-    QVariant item(int index) const override;
-    QVariant minimum() const override;
-    QVariant maximum() const override;
-
+    Q_PROPERTY(QColor baseColor READ baseColor WRITE setBaseColor NOTIFY baseColorChanged)
     QColor baseColor() const;
     void setBaseColor(const QColor &newBaseColor);
     Q_SIGNAL void baseColorChanged();
 
+    Q_PROPERTY(int itemCount READ itemCount WRITE setItemCount NOTIFY itemCountChanged)
     void setItemCount(int newItemCount);
     Q_SIGNAL void itemCountChanged();
 
+    Q_PROPERTY(QVariantList colors READ colors NOTIFY dataChanged)
     QVariantList colors() const;
+
+    int itemCount() const override;
+    QVariant item(int index) const override;
+    QVariant minimum() const override;
+    QVariant maximum() const override;
 
 private:
     void regenerateColors();

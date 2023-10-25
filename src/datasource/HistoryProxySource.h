@@ -24,55 +24,6 @@
 class QUICKCHARTS_EXPORT HistoryProxySource : public ChartDataSource
 {
     Q_OBJECT
-
-    /**
-     * The data source to read data from.
-     *
-     * This will use the item at \ref item from the provided source and use that
-     * to fill the history of this source.
-     *
-     * \note Changing this property will clear the existing history.
-     */
-    Q_PROPERTY(ChartDataSource *source READ source WRITE setSource NOTIFY sourceChanged)
-    /**
-     * The item of the data source to read data from.
-     *
-     * This item will be read either when the source's dataChanged has been
-     * emitted or on an interval if \ref interval has been set.
-     *
-     * The default is 0.
-     *
-     * \note Changing this property will clear the existing history.
-     */
-    Q_PROPERTY(int item READ item WRITE setItem NOTIFY itemChanged)
-    /**
-     * The maximum amount of history to keep.
-     *
-     * The default is 10.
-     */
-    Q_PROPERTY(int maximumHistory READ maximumHistory WRITE setMaximumHistory NOTIFY maximumHistoryChanged)
-    /**
-     * The interval, in milliseconds, with which to query the data source.
-     *
-     * If set to a value <= 0, a new item will be added whenever \ref source
-     * changes. Otherwise, source will be sampled every interval milliseconds
-     * and a new item will be added with whatever value it has at that point,
-     * even if it did not change.
-     *
-     * The default is 0.
-     */
-    Q_PROPERTY(int interval READ interval WRITE setInterval NOTIFY intervalChanged)
-    /**
-     * The fill mode.
-     *
-     * This determines what happens when there is not enough history yet. See
-     * \ref FillMode for which modes are available.
-     *
-     * The default is DoNotFill.
-     *
-     * \note Changing this property will clear the existing history.
-     */
-    Q_PROPERTY(FillMode fillMode READ fillMode WRITE setFillMode NOTIFY fillModeChanged)
     QML_ELEMENT
 
 public:
@@ -108,29 +59,66 @@ public:
 
     explicit HistoryProxySource(QObject *parent = nullptr);
 
-    int itemCount() const override;
-    QVariant item(int index) const override;
-    QVariant minimum() const override;
-    QVariant maximum() const override;
-
-    QVariant first() const override;
-
+    /**
+     * The data source to read data from.
+     *
+     * This will use the item at \ref item from the provided source and use that
+     * to fill the history of this source.
+     *
+     * \note Changing this property will clear the existing history.
+     */
+    Q_PROPERTY(ChartDataSource *source READ source WRITE setSource NOTIFY sourceChanged)
     ChartDataSource *source() const;
     void setSource(ChartDataSource *newSource);
     Q_SIGNAL void sourceChanged();
-
+    /**
+     * The item of the data source to read data from.
+     *
+     * This item will be read either when the source's dataChanged has been
+     * emitted or on an interval if \ref interval has been set.
+     *
+     * The default is 0.
+     *
+     * \note Changing this property will clear the existing history.
+     */
+    Q_PROPERTY(int item READ item WRITE setItem NOTIFY itemChanged)
     int item() const;
     void setItem(int newItem);
     Q_SIGNAL void itemChanged();
-
+    /**
+     * The maximum amount of history to keep.
+     *
+     * The default is 10.
+     */
+    Q_PROPERTY(int maximumHistory READ maximumHistory WRITE setMaximumHistory NOTIFY maximumHistoryChanged)
     int maximumHistory() const;
     void setMaximumHistory(int maximumHistory);
     Q_SIGNAL void maximumHistoryChanged();
-
+    /**
+     * The interval, in milliseconds, with which to query the data source.
+     *
+     * If set to a value <= 0, a new item will be added whenever \ref source
+     * changes. Otherwise, source will be sampled every interval milliseconds
+     * and a new item will be added with whatever value it has at that point,
+     * even if it did not change.
+     *
+     * The default is 0.
+     */
+    Q_PROPERTY(int interval READ interval WRITE setInterval NOTIFY intervalChanged)
     int interval() const;
     void setInterval(int newInterval);
     Q_SIGNAL void intervalChanged();
-
+    /**
+     * The fill mode.
+     *
+     * This determines what happens when there is not enough history yet. See
+     * \ref FillMode for which modes are available.
+     *
+     * The default is DoNotFill.
+     *
+     * \note Changing this property will clear the existing history.
+     */
+    Q_PROPERTY(FillMode fillMode READ fillMode WRITE setFillMode NOTIFY fillModeChanged)
     FillMode fillMode() const;
     void setFillMode(FillMode newFillMode);
     Q_SIGNAL void fillModeChanged();
@@ -139,6 +127,12 @@ public:
      * Clear the entire history of this source.
      */
     Q_INVOKABLE void clear();
+
+    int itemCount() const override;
+    QVariant item(int index) const override;
+    QVariant minimum() const override;
+    QVariant maximum() const override;
+    QVariant first() const override;
 
 private:
     void update();

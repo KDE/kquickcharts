@@ -32,26 +32,6 @@ bool operator==(const ComputedRange &first, const ComputedRange &second);
 class QUICKCHARTS_EXPORT XYChart : public Chart
 {
     Q_OBJECT
-    /**
-     * The range of values on the X axis.
-     */
-    Q_PROPERTY(RangeGroup *xRange READ xRange CONSTANT)
-    /**
-     * The range of values on the Y axis.
-     */
-    Q_PROPERTY(RangeGroup *yRange READ yRange CONSTANT)
-    /**
-     * Which direction this chart's X axis runs.
-     */
-    Q_PROPERTY(Direction direction READ direction WRITE setDirection NOTIFY directionChanged)
-    /**
-     * Whether the values of each value source should be stacked.
-     *
-     * When true, Y values will be added on top of each other. The precise
-     * meaning of this property depends on the specific chart. The default is
-     * false.
-     */
-    Q_PROPERTY(bool stacked READ stacked WRITE setStacked NOTIFY stackedChanged)
     QML_ELEMENT
     QML_UNCREATABLE("Base Class")
 
@@ -81,13 +61,31 @@ public:
      */
     ~XYChart() override = default;
 
+    /**
+     * The range of values on the X axis.
+     */
+    Q_PROPERTY(RangeGroup *xRange READ xRange CONSTANT)
     virtual RangeGroup *xRange() const;
+    /**
+     * The range of values on the Y axis.
+     */
+    Q_PROPERTY(RangeGroup *yRange READ yRange CONSTANT)
     virtual RangeGroup *yRange() const;
-
+    /**
+     * Which direction this chart's X axis runs.
+     */
+    Q_PROPERTY(Direction direction READ direction WRITE setDirection NOTIFY directionChanged)
     virtual XYChart::Direction direction() const;
     virtual void setDirection(XYChart::Direction newDirection);
     Q_SIGNAL void directionChanged();
-
+    /**
+     * Whether the values of each value source should be stacked.
+     *
+     * When true, Y values will be added on top of each other. The precise
+     * meaning of this property depends on the specific chart. The default is
+     * false.
+     */
+    Q_PROPERTY(bool stacked READ stacked WRITE setStacked NOTIFY stackedChanged)
     bool stacked() const;
     void setStacked(bool newStacked);
     Q_SIGNAL void stackedChanged();

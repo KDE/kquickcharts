@@ -22,32 +22,31 @@
 class QUICKCHARTS_EXPORT MapProxySource : public ChartDataSource
 {
     Q_OBJECT
-    /**
-     * A ChartDataSource that is used as map indexes.
-     */
-    Q_PROPERTY(ChartDataSource *source READ source WRITE setSource NOTIFY sourceChanged)
-    /**
-     * The map to index for values.
-     */
-    Q_PROPERTY(QVariantMap map READ map WRITE setMap NOTIFY mapChanged)
     QML_ELEMENT
 
 public:
     MapProxySource(QObject *parent = nullptr);
 
-    virtual int itemCount() const override;
-    virtual QVariant item(int index) const override;
-
-    virtual QVariant minimum() const override;
-    virtual QVariant maximum() const override;
-
+    /**
+     * A ChartDataSource that is used as map indexes.
+     */
+    Q_PROPERTY(ChartDataSource *source READ source WRITE setSource NOTIFY sourceChanged)
     ChartDataSource *source() const;
     void setSource(ChartDataSource *newSource);
     Q_SIGNAL void sourceChanged();
 
+    /**
+     * The map to index for values.
+     */
+    Q_PROPERTY(QVariantMap map READ map WRITE setMap NOTIFY mapChanged)
     QVariantMap map() const;
     void setMap(const QVariantMap &newMap);
     Q_SIGNAL void mapChanged();
+
+    virtual int itemCount() const override;
+    virtual QVariant item(int index) const override;
+    virtual QVariant minimum() const override;
+    virtual QVariant maximum() const override;
 
 private:
     ChartDataSource *m_source = nullptr;

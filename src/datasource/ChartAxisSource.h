@@ -18,9 +18,6 @@ class XYChart;
 class QUICKCHARTS_EXPORT ChartAxisSource : public ChartDataSource
 {
     Q_OBJECT
-    Q_PROPERTY(XYChart *chart READ chart WRITE setChart NOTIFY chartChanged)
-    Q_PROPERTY(ChartAxisSource::Axis axis READ axis WRITE setAxis NOTIFY axisChanged)
-    Q_PROPERTY(int itemCount READ itemCount WRITE setItemCount NOTIFY itemCountChanged)
     QML_ELEMENT
 
 public:
@@ -34,21 +31,24 @@ public:
      */
     ChartAxisSource(QObject *parent = nullptr);
 
-    virtual QVariant item(int index) const override;
-    QVariant minimum() const override;
-    QVariant maximum() const override;
-
+    Q_PROPERTY(XYChart *chart READ chart WRITE setChart NOTIFY chartChanged)
     XYChart *chart() const;
     Q_SLOT void setChart(XYChart *newChart);
     Q_SIGNAL void chartChanged();
 
+    Q_PROPERTY(ChartAxisSource::Axis axis READ axis WRITE setAxis NOTIFY axisChanged)
     ChartAxisSource::Axis axis() const;
     Q_SLOT void setAxis(ChartAxisSource::Axis newAxis);
     Q_SIGNAL void axisChanged();
 
+    Q_PROPERTY(int itemCount READ itemCount WRITE setItemCount NOTIFY itemCountChanged)
     virtual int itemCount() const override;
     Q_SLOT void setItemCount(int newItemCount);
     Q_SIGNAL void itemCountChanged();
+
+    virtual QVariant item(int index) const override;
+    QVariant minimum() const override;
+    QVariant maximum() const override;
 
 private:
     XYChart *m_chart = nullptr;
@@ -56,4 +56,4 @@ private:
     int m_itemCount = 2;
 };
 
-#endif // ARRAYSOURCE_H
+#endif // CHARTAXISSOURCE_H

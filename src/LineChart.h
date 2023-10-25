@@ -26,38 +26,37 @@ class LineChartAttached : public QObject
     Q_OBJECT
     QML_ANONYMOUS
 
+public:
+    LineChartAttached(QObject *parent = nullptr);
+
     /**
      * The value at the current point.
      */
     Q_PROPERTY(QVariant value READ value NOTIFY valueChanged)
-    /**
-     * The color at the current point.
-     */
-    Q_PROPERTY(QColor color READ color NOTIFY colorChanged)
-    /**
-     * The name at the current point.
-     */
-    Q_PROPERTY(QString name READ name NOTIFY nameChanged)
-    /**
-     * The short name at the current point.
-     */
-    Q_PROPERTY(QString shortName READ shortName NOTIFY shortNameChanged)
-
-public:
-    LineChartAttached(QObject *parent = nullptr);
-
     QVariant value() const;
     void setValue(const QVariant &value);
     Q_SIGNAL void valueChanged();
 
+    /**
+     * The color at the current point.
+     */
+    Q_PROPERTY(QColor color READ color NOTIFY colorChanged)
     QColor color() const;
     void setColor(const QColor &color);
     Q_SIGNAL void colorChanged();
 
+    /**
+     * The name at the current point.
+     */
+    Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     QString name() const;
     void setName(const QString &newName);
     Q_SIGNAL void nameChanged();
 
+    /**
+     * The short name at the current point.
+     */
+    Q_PROPERTY(QString shortName READ shortName NOTIFY shortNameChanged)
     QString shortName() const;
     void setShortName(const QString &newShortName);
     Q_SIGNAL void shortNameChanged();
@@ -84,15 +83,23 @@ class QUICKCHARTS_EXPORT LineChart : public XYChart
     QML_ELEMENT
     QML_ATTACHED(LineChartAttached)
 
+public:
+    explicit LineChart(QQuickItem *parent = nullptr);
 
     /**
      * Smooth the lines in the chart instead of making hard corners.
      */
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
+    bool smooth() const;
+    void setSmooth(bool newSmooth);
+    Q_SIGNAL void smoothChanged();
     /**
      * The width of a line in the chart.
      */
     Q_PROPERTY(qreal lineWidth READ lineWidth WRITE setLineWidth NOTIFY lineWidthChanged)
+    qreal lineWidth() const;
+    void setLineWidth(qreal width);
+    Q_SIGNAL void lineWidthChanged();
     /**
      * The opacity of the area below a line.
      *
@@ -100,6 +107,9 @@ class QUICKCHARTS_EXPORT LineChart : public XYChart
      * ignored.
      */
     Q_PROPERTY(qreal fillOpacity READ fillOpacity WRITE setFillOpacity NOTIFY fillOpacityChanged)
+    qreal fillOpacity() const;
+    void setFillOpacity(qreal opacity);
+    Q_SIGNAL void fillOpacityChanged();
     /**
      * A data source that supplies color values for the line charts' fill area.
      *
@@ -107,6 +117,9 @@ class QUICKCHARTS_EXPORT LineChart : public XYChart
      * with the fillOpacity used as its opacity.
      */
     Q_PROPERTY(ChartDataSource *fillColorSource READ fillColorSource WRITE setFillColorSource NOTIFY fillColorSourceChanged)
+    ChartDataSource *fillColorSource() const;
+    void setFillColorSource(ChartDataSource *newFillColorSource);
+    Q_SIGNAL void fillColorSourceChanged();
     /**
      * A delegate that will be placed at each line chart point.
      *
@@ -120,26 +133,6 @@ class QUICKCHARTS_EXPORT LineChart : public XYChart
      *       QQuickItem, since the created object needs to be positioned.
      */
     Q_PROPERTY(QQmlComponent *pointDelegate READ pointDelegate WRITE setPointDelegate NOTIFY pointDelegateChanged)
-
-public:
-    explicit LineChart(QQuickItem *parent = nullptr);
-
-    bool smooth() const;
-    void setSmooth(bool smooth);
-    Q_SIGNAL void smoothChanged();
-
-    qreal lineWidth() const;
-    void setLineWidth(qreal width);
-    Q_SIGNAL void lineWidthChanged();
-
-    qreal fillOpacity() const;
-    void setFillOpacity(qreal opacity);
-    Q_SIGNAL void fillOpacityChanged();
-
-    ChartDataSource *fillColorSource() const;
-    void setFillColorSource(ChartDataSource *newFillColorSource);
-    Q_SIGNAL void fillColorSourceChanged();
-
     QQmlComponent *pointDelegate() const;
     void setPointDelegate(QQmlComponent *newPointDelegate);
     Q_SIGNAL void pointDelegateChanged();

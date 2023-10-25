@@ -18,8 +18,6 @@
 class QUICKCHARTS_EXPORT ArraySource : public ChartDataSource
 {
     Q_OBJECT
-    Q_PROPERTY(QVariantList array READ array WRITE setArray NOTIFY dataChanged)
-    Q_PROPERTY(bool wrap READ wrap WRITE setWrap NOTIFY dataChanged)
     QML_ELEMENT
 
 public:
@@ -35,9 +33,11 @@ public:
     QVariant minimum() const override;
     QVariant maximum() const override;
 
+    Q_PROPERTY(QVariantList array READ array WRITE setArray NOTIFY dataChanged)
     QVariantList array() const;
     void setArray(const QVariantList &array);
 
+    Q_PROPERTY(bool wrap READ wrap WRITE setWrap NOTIFY dataChanged)
     bool wrap() const;
     void setWrap(bool wrap);
 

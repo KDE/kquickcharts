@@ -18,7 +18,6 @@
 class QUICKCHARTS_EXPORT SingleValueSource : public ChartDataSource
 {
     Q_OBJECT
-    Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY dataChanged)
     QML_ELEMENT
 
 public:
@@ -29,6 +28,7 @@ public:
     QVariant minimum() const override;
     QVariant maximum() const override;
 
+    Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY dataChanged)
     QVariant value() const;
     void setValue(const QVariant &value);
 

@@ -50,6 +50,9 @@ class QUICKCHARTS_EXPORT PieChart : public Chart
     Q_OBJECT
     QML_ELEMENT
 
+public:
+    explicit PieChart(QQuickItem *parent = nullptr);
+
     /**
      * The range of values to display in this PieChart.
      *
@@ -59,6 +62,7 @@ class QUICKCHARTS_EXPORT PieChart : public Chart
      * \sa RangeGroup
      */
     Q_PROPERTY(RangeGroup *range READ range CONSTANT)
+    RangeGroup *range() const;
     /**
      * Whether to use a filled pie or not.
      *
@@ -66,24 +70,36 @@ class QUICKCHARTS_EXPORT PieChart : public Chart
      * The default is false.
      */
     Q_PROPERTY(bool filled READ filled WRITE setFilled NOTIFY filledChanged)
+    bool filled() const;
+    void setFilled(bool newFilled);
+    Q_SIGNAL void filledChanged();
     /**
      * The thickness of an individual pie, in pixels.
      *
      * If filled is set, this is ignored for the last pie. The default is 10px.
      */
     Q_PROPERTY(qreal thickness READ thickness WRITE setThickness NOTIFY thicknessChanged)
+    qreal thickness() const;
+    void setThickness(qreal newThickness);
+    Q_SIGNAL void thicknessChanged();
     /**
      * The amount of spacing between pies when rendering multiple value sources.
      *
      * The default is 0.
      */
     Q_PROPERTY(qreal spacing READ spacing WRITE setSpacing NOTIFY spacingChanged)
+    qreal spacing() const;
+    void setSpacing(qreal newSpacing);
+    Q_SIGNAL void spacingChanged();
     /**
      * Sets a colour to use to fill remaining space on the pie.
      *
      * The default is transparent.
      */
     Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
+    QColor backgroundColor() const;
+    void setBackgroundColor(const QColor &color);
+    Q_SIGNAL void backgroundColorChanged();
     /**
      * The starting angle of the arc used for the entire pie.
      *
@@ -91,12 +107,18 @@ class QUICKCHARTS_EXPORT PieChart : public Chart
      * an arc. The default is 0.
      */
     Q_PROPERTY(qreal fromAngle READ fromAngle WRITE setFromAngle NOTIFY fromAngleChanged)
+    qreal fromAngle() const;
+    void setFromAngle(qreal newFromAngle);
+    Q_SIGNAL void fromAngleChanged();
     /**
      * The end angle of the arc used for the entire pie. When set, instead of
      * rendering a full circle, the pie will be rendered as an arc. The default
      * is 360.
      */
     Q_PROPERTY(qreal toAngle READ toAngle WRITE setToAngle NOTIFY toAngleChanged)
+    qreal toAngle() const;
+    void setToAngle(qreal newToAngle);
+    Q_SIGNAL void toAngleChanged();
     /**
      * Smooth the ends of pie sections.
      *
@@ -106,36 +128,6 @@ class QUICKCHARTS_EXPORT PieChart : public Chart
      * [filled]: \ref PieChart::filled
      */
     Q_PROPERTY(bool smoothEnds READ smoothEnds WRITE setSmoothEnds NOTIFY smoothEndsChanged)
-
-public:
-    explicit PieChart(QQuickItem *parent = nullptr);
-
-    RangeGroup *range() const;
-
-    bool filled() const;
-    void setFilled(bool newFilled);
-    Q_SIGNAL void filledChanged();
-
-    qreal thickness() const;
-    void setThickness(qreal newThickness);
-    Q_SIGNAL void thicknessChanged();
-
-    qreal spacing() const;
-    void setSpacing(qreal newSpacing);
-    Q_SIGNAL void spacingChanged();
-
-    QColor backgroundColor() const;
-    void setBackgroundColor(const QColor &color);
-    Q_SIGNAL void backgroundColorChanged();
-
-    qreal fromAngle() const;
-    void setFromAngle(qreal newFromAngle);
-    Q_SIGNAL void fromAngleChanged();
-
-    qreal toAngle() const;
-    void setToAngle(qreal newToAngle);
-    Q_SIGNAL void toAngleChanged();
-
     bool smoothEnds() const;
     void setSmoothEnds(bool newSmoothEnds);
     Q_SIGNAL void smoothEndsChanged();

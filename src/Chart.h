@@ -21,26 +21,6 @@
 class QUICKCHARTS_EXPORT Chart : public QQuickItem
 {
     Q_OBJECT
-    /**
-     * The data source to use for names of chart items.
-     */
-    Q_PROPERTY(ChartDataSource *nameSource READ nameSource WRITE setNameSource NOTIFY nameSourceChanged)
-    /**
-     * The data source to use for short names of chart items.
-     */
-    Q_PROPERTY(ChartDataSource *shortNameSource READ shortNameSource WRITE setShortNameSource NOTIFY shortNameSourceChanged)
-    /**
-     * The data source to use for colors of chart items.
-     */
-    Q_PROPERTY(ChartDataSource *colorSource READ colorSource WRITE setColorSource NOTIFY colorSourceChanged)
-    /**
-     * The data sources providing the data this chart needs to render.
-     */
-    Q_PROPERTY(QQmlListProperty<ChartDataSource> valueSources READ valueSourcesProperty NOTIFY valueSourcesChanged)
-    /**
-     * The indexing mode used for indexing colors and names.
-     */
-    Q_PROPERTY(IndexingMode indexingMode READ indexingMode WRITE setIndexingMode NOTIFY indexingModeChanged)
     QML_ELEMENT
     QML_UNCREATABLE("Base class")
 
@@ -60,18 +40,34 @@ public:
     explicit Chart(QQuickItem *parent = nullptr);
     ~Chart() override = default;
 
+    /**
+     * The data source to use for names of chart items.
+     */
+    Q_PROPERTY(ChartDataSource *nameSource READ nameSource WRITE setNameSource NOTIFY nameSourceChanged)
     ChartDataSource *nameSource() const;
     void setNameSource(ChartDataSource *nameSource);
     Q_SIGNAL void nameSourceChanged();
 
+    /**
+     * The data source to use for short names of chart items.
+     */
+    Q_PROPERTY(ChartDataSource *shortNameSource READ shortNameSource WRITE setShortNameSource NOTIFY shortNameSourceChanged)
     ChartDataSource *shortNameSource() const;
     void setShortNameSource(ChartDataSource *shortNameSource);
     Q_SIGNAL void shortNameSourceChanged();
 
+    /**
+     * The data source to use for colors of chart items.
+     */
+    Q_PROPERTY(ChartDataSource *colorSource READ colorSource WRITE setColorSource NOTIFY colorSourceChanged)
     ChartDataSource *colorSource() const;
     void setColorSource(ChartDataSource *colorSource);
     Q_SIGNAL void colorSourceChanged();
 
+    /**
+     * The data sources providing the data this chart needs to render.
+     */
+    Q_PROPERTY(QQmlListProperty<ChartDataSource> valueSources READ valueSourcesProperty NOTIFY valueSourcesChanged)
     DataSourcesProperty valueSourcesProperty();
     QList<ChartDataSource *> valueSources() const;
     Q_SIGNAL void valueSourcesChanged();
@@ -79,6 +75,10 @@ public:
     Q_INVOKABLE void removeValueSource(int index);
     Q_INVOKABLE void removeValueSource(QObject *source);
 
+    /**
+     * The indexing mode used for indexing colors and names.
+     */
+    Q_PROPERTY(IndexingMode indexingMode READ indexingMode WRITE setIndexingMode NOTIFY indexingModeChanged)
     IndexingMode indexingMode() const;
     void setIndexingMode(IndexingMode newIndexingMode);
     Q_SIGNAL void indexingModeChanged();
