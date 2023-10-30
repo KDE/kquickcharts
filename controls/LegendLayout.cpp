@@ -152,7 +152,7 @@ void LegendLayout::updatePolish()
 
     const auto items = childItems();
     for (auto item : items) {
-        if (!item->isVisible() || item->width() <= 0 || item->height() <= 0) {
+        if (!item->isVisible() || item->implicitWidth() <= 0 || item->implicitHeight() <= 0) {
             continue;
         }
 
@@ -162,7 +162,7 @@ void LegendLayout::updatePolish()
         auto y = (itemHeight + m_verticalSpacing) * row;
 
         item->setPosition(QPointF{x, y});
-        item->setWidth(std::max(attached->minimumWidth(), std::min(itemWidth, attached->maximumWidth())));
+        item->setWidth(std::clamp(itemWidth, attached->minimumWidth(), attached->maximumWidth()));
 
         // If we are in single column mode, we are most likely width constrained.
         // In that case, we should make sure items do not exceed our own width,
@@ -247,7 +247,7 @@ std::tuple<int, int, qreal, qreal> LegendLayout::determineColumns()
     // We also determine the maximum height of items so we do not need to do
     // that later.
     for (auto item : items) {
-        if (!item->isVisible() || item->width() <= 0 || item->height() <= 0) {
+        if (!item->isVisible() || item->implicitWidth() <= 0 || item->implicitHeight() <= 0) {
             continue;
         }
 
@@ -267,7 +267,7 @@ std::tuple<int, int, qreal, qreal> LegendLayout::determineColumns()
             maxWidth = std::min(maxWidth, attached->maximumWidth());
         }
 
-        maxHeight = std::max(maxHeight, item->height());
+        maxHeight = std::max(maxHeight, item->implicitHeight());
 
         itemCount++;
     }
@@ -293,7 +293,7 @@ std::tuple<int, int, qreal, qreal> LegendLayout::determineColumns()
 
     // If none of the items have a maximum width set, default to filling all
     // available space.
-    if (maxWidth <= 0.0) {
+    if (maxWidth <= 0.0 || maxWidth >= std::numeric_limits<qreal>::max()) {
         maxWidth = availableWidth;
     }
 
