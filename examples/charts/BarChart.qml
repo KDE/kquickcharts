@@ -41,7 +41,7 @@ Kirigami.Page {
             Layout.preferredHeight: 400
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
-            Charts.GridLines {
+            ChartsControls.GridLines {
                 anchors.fill: barChart
 
                 chart: barChart
@@ -53,12 +53,12 @@ Kirigami.Page {
                 minor.color: Qt.rgba(0.8, 0.8, 0.8, 1.0)
             }
 
-            Charts.GridLines {
+            ChartsControls.GridLines {
                 anchors.fill: barChart
 
                 chart: barChart
 
-                direction: Charts.GridLines.Vertical;
+                direction: ChartsControls.GridLines.Vertical;
 
                 major.count: 1
                 major.lineWidth: 2
@@ -69,7 +69,7 @@ Kirigami.Page {
                 minor.color: Qt.rgba(0.8, 0.8, 0.8, 1.0)
             }
 
-            Charts.AxisLabels {
+            ChartsControls.AxisLabels {
                 id: yAxisLabels
 
                 anchors {
@@ -78,12 +78,12 @@ Kirigami.Page {
                     bottom: xAxisLabels.top
                 }
 
-                direction: Charts.AxisLabels.VerticalBottomTop
-                delegate: Label { text: Charts.AxisLabels.label }
+                direction: ChartsControls.AxisLabels.VerticalBottomTop
+                delegate: Label { text: ChartsControls.AxisLabels.label }
                 source: Charts.ChartAxisSource { chart: barChart; axis: Charts.ChartAxisSource.YAxis; itemCount: 5 }
             }
 
-            Charts.AxisLabels {
+            ChartsControls.AxisLabels {
                 id: xAxisLabels
 
                 anchors {
@@ -92,7 +92,7 @@ Kirigami.Page {
                     bottom: legend.top
                 }
 
-                delegate: Label { text: Charts.AxisLabels.label }
+                delegate: Label { text: ChartsControls.AxisLabels.label }
                 source: Charts.ModelSource { model: barModel; roleName: "label" }
             }
 
