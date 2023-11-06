@@ -45,7 +45,7 @@ Control {
     contentItem: Item {
         anchors.fill: parent;
 
-        Charts.GridLines {
+        GridLines {
             id: horizontalLines
 
             anchors.fill: lineChart
@@ -61,14 +61,14 @@ Control {
             minor.color: Qt.rgba(0.8, 0.8, 0.8, 1.0)
         }
 
-        Charts.GridLines {
+        GridLines {
             id: verticalLines
 
             anchors.fill: lineChart
 
             chart: lineChart
 
-            direction: Charts.GridLines.Vertical;
+            direction: GridLines.Vertical;
 
             major.count: 1
             major.lineWidth: 2
@@ -79,7 +79,7 @@ Control {
             minor.color: Qt.rgba(0.8, 0.8, 0.8, 1.0)
         }
 
-        Charts.AxisLabels {
+        AxisLabels {
             id: yAxisLabels
 
             anchors {
@@ -88,12 +88,12 @@ Control {
                 bottom: xAxisLabels.top
             }
 
-            direction: Charts.AxisLabels.VerticalBottomTop
-            delegate: Label { text: Charts.AxisLabels.label }
+            direction: AxisLabels.VerticalBottomTop
+            delegate: Label { text: AxisLabels.label }
             source: Charts.ChartAxisSource { chart: lineChart; axis: Charts.ChartAxisSource.YAxis; itemCount: 5 }
         }
 
-        Charts.AxisLabels {
+        AxisLabels {
             id: xAxisLabels
 
             anchors {
@@ -102,7 +102,7 @@ Control {
                 bottom: legend.top
             }
 
-            delegate: Label { text: Charts.AxisLabels.label }
+            delegate: Label { text: AxisLabels.label }
             source: Charts.ChartAxisSource { chart: lineChart; axis: Charts.ChartAxisSource.XAxis; itemCount: 5 }
         }
 
