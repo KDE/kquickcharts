@@ -82,7 +82,7 @@ Kirigami.Page {
                 anchors.fill: parent
                 ListView {
                     model: pieModel;
-                    delegate: Kirigami.BasicListItem {
+                    delegate: ItemDelegate {
                         width: ListView.view.width
                         height: Kirigami.Units.gridUnit * 2 + Kirigami.Units.smallSpacing
                         contentItem: RowLayout {

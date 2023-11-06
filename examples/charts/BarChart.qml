@@ -182,7 +182,7 @@ Kirigami.Page {
                 anchors.fill: parent
                 ListView {
                     model: barModel;
-                    delegate: Kirigami.BasicListItem {
+                    delegate: ItemDelegate {
                         width: ListView.view.width
                         height: Kirigami.Units.gridUnit * 2 + Kirigami.Units.smallSpacing
                         contentItem: RowLayout {
