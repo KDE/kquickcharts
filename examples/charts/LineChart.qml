@@ -93,14 +93,18 @@ Kirigami.Page {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
+            leftPadding: 1
+            rightPadding: 1
+            topPadding: 1
+            bottomPadding: 1
+
+            Kirigami.Theme.inherit: false
+            Kirigami.Theme.colorSet: Kirigami.Theme.View
+
             ScrollView {
                 anchors.fill: parent
                 ListView {
                     model: lineModel;
-
-                    Kirigami.Theme.inherit: false
-                    Kirigami.Theme.colorSet: Kirigami.Theme.View
-
                     delegate: ItemDelegate {
                         width: ListView.view.width
                         height: Kirigami.Units.gridUnit * 2 + Kirigami.Units.smallSpacing
