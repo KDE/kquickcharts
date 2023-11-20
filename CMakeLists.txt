@@ -36,6 +36,14 @@ ecm_set_disabled_deprecation_versions(
     QT 6.2.0
 )
 
+ecm_setup_version(
+    PROJECT
+    VARIABLE_PREFIX KF6QuickCharts
+    VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/quickcharts_version.h"
+    PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF6QuickChartsConfigVersion.cmake"
+    SOVERSION 1
+)
+
 add_subdirectory(controls)
 add_subdirectory(src)
 
@@ -46,14 +54,6 @@ endif()
 if(BUILD_TESTING)
     add_subdirectory(autotests)
 endif()
-
-ecm_setup_version(
-    PROJECT
-    VARIABLE_PREFIX KF6QuickCharts
-    VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/quickcharts_version.h"
-    PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF6QuickChartsConfigVersion.cmake"
-    SOVERSION 1
-)
 
 configure_package_config_file(
     "KF6QuickChartsConfig.cmake.in"

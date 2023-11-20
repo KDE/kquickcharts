@@ -1,5 +1,10 @@
 
 add_library(QuickChartsControls)
+set_target_properties(QuickChartsControls PROPERTIES
+    SOVERSION ${KF6QuickCharts_SOVERSION}
+    VERSION ${KF6QuickCharts_VERSION}
+)
+
 ecm_add_qml_module(QuickChartsControls URI "org.kde.quickcharts.controls" VERSION 1.0 GENERATE_PLUGIN_SOURCE)
 
 target_sources(QuickChartsControls PRIVATE
