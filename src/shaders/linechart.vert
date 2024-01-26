@@ -10,20 +10,20 @@
 
 layout(std140, binding = 0) uniform buf {
     highp mat4 matrix;
-    lowp float opacity;
-    lowp float lineWidth;
-    lowp float aspect;
-    lowp float smoothing;
+    highp float opacity;
+    highp float lineWidth;
+    highp float aspect;
+    highp float smoothing;
 } ubuf;
 
 #define MAXIMUM_POINT_COUNT 14
 
 layout (location = 0) in highp vec4 in_vertex;
-layout (location = 1) in mediump vec2 in_uv;
+layout (location = 1) in highp vec2 in_uv;
 
-layout (location = 2) in mediump vec4 in_lineColor;
-layout (location = 3) in mediump vec4 in_fillColor;
-layout (location = 4) in mediump vec2 in_bounds;
+layout (location = 2) in lowp vec4 in_lineColor;
+layout (location = 3) in lowp vec4 in_fillColor;
+layout (location = 4) in highp vec2 in_bounds;
 
 layout (location = 5) in highp float in_count;
 
@@ -31,20 +31,20 @@ layout (location = 5) in highp float in_count;
 // attributes, we have to manually declare a number of attributes. We use
 // array of vec4 point tuples instead of vec2 to not cross the OpenGL limits
 // like e.g. GL_MAX_VERTEX_ATTRIBS for some drivers.
-layout (location = 8) in mediump vec4 in_points_0;
-layout (location = 9) in mediump vec4 in_points_1;
-layout (location = 10) in mediump vec4 in_points_2;
-layout (location = 11) in mediump vec4 in_points_3;
-layout (location = 12) in mediump vec4 in_points_4;
-layout (location = 13) in mediump vec4 in_points_5;
-layout (location = 14) in mediump vec4 in_points_6;
+layout (location = 8) in highp vec4 in_points_0;
+layout (location = 9) in highp vec4 in_points_1;
+layout (location = 10) in highp vec4 in_points_2;
+layout (location = 11) in highp vec4 in_points_3;
+layout (location = 12) in highp vec4 in_points_4;
+layout (location = 13) in highp vec4 in_points_5;
+layout (location = 14) in highp vec4 in_points_6;
 
-layout (location = 0) out mediump vec2 uv;
-layout (location = 1) out mediump vec4 pointTuples[MAXIMUM_POINT_COUNT / 2];
+layout (location = 0) out highp vec2 uv;
+layout (location = 1) out highp vec4 pointTuples[MAXIMUM_POINT_COUNT / 2];
 layout (location = 19) out highp float pointCount;
-layout (location = 20) out mediump vec2 bounds;
-layout (location = 21) out mediump vec4 lineColor;
-layout (location = 22) out mediump vec4 fillColor;
+layout (location = 20) out highp vec2 bounds;
+layout (location = 21) out lowp vec4 lineColor;
+layout (location = 22) out lowp vec4 fillColor;
 
 void main() {
     uv = in_uv;

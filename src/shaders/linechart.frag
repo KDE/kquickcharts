@@ -13,27 +13,27 @@
 
 layout(std140, binding = 0) uniform buf {
     highp mat4 matrix;
-    lowp float opacity; // inherited opacity of this item - offset 64
-    lowp float lineWidth; // offset 68
-    lowp float aspect; // offset 72
-    lowp float smoothing; // offset 76
+    highp float opacity; // inherited opacity of this item - offset 64
+    highp float lineWidth; // offset 68
+    highp float aspect; // offset 72
+    highp float smoothing; // offset 76
 } ubuf; // size 80
 
 #define MAXIMUM_POINT_COUNT 14
 
-layout (location = 0) in mediump vec2 uv;
-layout (location = 1) in mediump vec4 pointTuples[MAXIMUM_POINT_COUNT / 2];
+layout (location = 0) in highp vec2 uv;
+layout (location = 1) in highp vec4 pointTuples[MAXIMUM_POINT_COUNT / 2];
 layout (location = 19) in highp float pointCount;
-layout (location = 20) in mediump vec2 bounds;
-layout (location = 21) in mediump vec4 lineColor;
-layout (location = 22) in mediump vec4 fillColor;
+layout (location = 20) in highp vec2 bounds;
+layout (location = 21) in lowp vec4 lineColor;
+layout (location = 22) in lowp vec4 fillColor;
 layout (location = 0) out lowp vec4 out_color;
 
 // ES2 does not support array function arguments. So instead we need to
 // reference the uniform array directly. So this copies the implementation of
 // sdf_polygon from sdf.glsl, changing it to refer to the points array directly.
 // For simplicity, we use the same function also for other APIs.
-lowp float sdf_polygon(in lowp vec2 point, in int count)
+highp float sdf_polygon(in highp vec2 point, in int count)
 {
     mediump vec2 points[MAXIMUM_POINT_COUNT];
     points[0] = pointTuples[0].xy;
@@ -51,14 +51,14 @@ lowp float sdf_polygon(in lowp vec2 point, in int count)
     points[12] = pointTuples[6].xy;
     points[13] = pointTuples[6].zw;
 
-    lowp float d = dot(point - points[0], point - points[0]);
-    lowp float s = 1.0;
+    highp float d = dot(point - points[0], point - points[0]);
+    highp float s = 1.0;
     for (int i = 0, j = count - 1; i < count && i < MAXIMUM_POINT_COUNT; j = i, i++)
     {
-        lowp vec2 e = points[j] - points[i];
-        lowp vec2 w = point - points[i];
-        lowp float h = clamp( dot(w, e) / dot(e, e), 0.0, 1.0 );
-        lowp vec2 b = w - e * h;
+        highp vec2 e = points[j] - points[i];
+        highp vec2 w = point - points[i];
+        highp float h = clamp( dot(w, e) / dot(e, e), 0.0, 1.0 );
+        highp vec2 b = w - e * h;
         d = min(d, dot(b, b));
 
         bvec3 c = bvec3(point.y >= points[i].y, point.y < points[j].y, e.x * w.y > e.y * w.x);
@@ -69,11 +69,11 @@ lowp float sdf_polygon(in lowp vec2 point, in int count)
 
 void main()
 {
-    lowp vec2 point = uv;
+    highp vec2 point = uv;
 
     lowp vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
 
-    lowp float bounds_range = max(0.01, ubuf.lineWidth);
+    highp float bounds_range = max(0.01, ubuf.lineWidth);
 
     // bounds.y contains the line segment's maximum value. If we are a bit above
     // that, we will never render anything, so just discard the pixel.
@@ -90,7 +90,7 @@ void main()
         return;
     }
 
-    lowp float polygon = sdf_polygon(point, int(pointCount));
+    highp float polygon = sdf_polygon(point, int(pointCount));
 
     color = sdf_render(polygon, color, fillColor);
 
