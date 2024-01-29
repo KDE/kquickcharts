@@ -23,9 +23,8 @@ layout (location = 1) in mediump vec2 in_uv;
 
 layout (location = 2) in mediump vec4 in_lineColor;
 layout (location = 3) in mediump vec4 in_fillColor;
-layout (location = 4) in mediump vec2 in_bounds;
 
-layout (location = 5) in highp float in_count;
+layout (location = 4) in highp float in_count;
 
 // Input points. Since OpenGL 2.1/GLSL 1.10 does not support array vertex
 // attributes, we have to manually declare a number of attributes. We use
@@ -42,9 +41,8 @@ layout (location = 14) in mediump vec4 in_points_6;
 layout (location = 0) out mediump vec2 uv;
 layout (location = 1) out mediump vec4 pointTuples[MAXIMUM_POINT_COUNT / 2];
 layout (location = 19) out highp float pointCount;
-layout (location = 20) out mediump vec2 bounds;
-layout (location = 21) out mediump vec4 lineColor;
-layout (location = 22) out mediump vec4 fillColor;
+layout (location = 20) out mediump vec4 lineColor;
+layout (location = 21) out mediump vec4 fillColor;
 
 void main() {
     uv = in_uv;
@@ -59,7 +57,6 @@ void main() {
     pointTuples[6] = in_points_6;
 
     pointCount = in_count;
-    bounds = in_bounds;
 
     lineColor = in_lineColor;
     fillColor = in_fillColor;

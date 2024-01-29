@@ -10,10 +10,12 @@
 
 #include <QColor>
 #include <QSGGeometryNode>
+#include <QSGSimpleRectNode>
 #include <QVector2D>
 
 class QRectF;
 class LineChartMaterial;
+class FillNode;
 
 /**
  * @todo write docs
@@ -58,6 +60,8 @@ private:
     LineChartMaterial *m_material = nullptr;
     QColor m_lineColor;
     QColor m_fillColor;
+
+    FillNode *m_fillNode = nullptr;
 };
 
 #endif // LINESEGMENTNODE_H

@@ -24,9 +24,8 @@ layout(std140, binding = 0) uniform buf {
 layout (location = 0) in mediump vec2 uv;
 layout (location = 1) in mediump vec4 pointTuples[MAXIMUM_POINT_COUNT / 2];
 layout (location = 19) in highp float pointCount;
-layout (location = 20) in mediump vec2 bounds;
-layout (location = 21) in mediump vec4 lineColor;
-layout (location = 22) in mediump vec4 fillColor;
+layout (location = 20) in mediump vec4 lineColor;
+layout (location = 21) in mediump vec4 fillColor;
 layout (location = 0) out lowp vec4 out_color;
 
 // ES2 does not support array function arguments. So instead we need to
@@ -72,23 +71,6 @@ void main()
     lowp vec2 point = uv;
 
     lowp vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
-
-    lowp float bounds_range = max(0.01, ubuf.lineWidth);
-
-    // bounds.y contains the line segment's maximum value. If we are a bit above
-    // that, we will never render anything, so just discard the pixel.
-    if (point.y > bounds.y + bounds_range) {
-        out_color = vec4(0.0);
-        return;
-    }
-
-    // bounds.x contains the line segment's minimum value. If we are a bit below
-    // that, we know we will always be inside the polygon described by points.
-    // So just return a pixel with fillColor.
-    if (point.y < bounds.x - bounds_range) {
-        out_color = fillColor * ubuf.opacity;
-        return;
-    }
 
     lowp float polygon = sdf_polygon(point, int(pointCount));
 

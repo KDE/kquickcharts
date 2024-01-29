@@ -84,7 +84,7 @@ void LineChartNode::updatePoints()
         return;
     }
 
-    auto segmentCount = qCeil(qreal(m_values.count()) / MaxPointsInSegment);
+    auto segmentCount = qCeil(qreal(m_values.count()) / (MaxPointsInSegment - 1));
 
     auto currentX = m_rect.left();
     auto pointStart = 0;
@@ -98,7 +98,7 @@ void LineChartNode::updatePoints()
         auto segment = static_cast<LineSegmentNode *>(childAtIndex(i));
 
         auto segmentPoints = m_values.mid(pointStart, pointsPerSegment);
-        pointStart += pointsPerSegment;
+        pointStart += pointsPerSegment - 1;
 
         auto segmentWidth = segmentPoints.last().x() - currentX;
         auto rect = QRectF(currentX, m_rect.top(), segmentWidth, m_rect.height());
@@ -110,8 +110,9 @@ void LineChartNode::updatePoints()
         segment->setLineColor(m_lineColor);
         segment->setFillColor(m_fillColor);
         segment->setValues(segmentPoints);
-        segment->setFarLeft(m_values.at(std::max(0, pointStart - pointsPerSegment - 1)));
+        segment->setFarLeft(m_values.at(std::max(0, pointStart - pointsPerSegment)));
         segment->setFarRight(m_values.at(std::min<int>(m_values.count() - 1, pointStart + 1)));
+
         segment->update();
 
         currentX += segmentWidth;
