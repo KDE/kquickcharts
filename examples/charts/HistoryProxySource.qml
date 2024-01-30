@@ -83,9 +83,9 @@ Kirigami.Page {
                     onValueModified: historySource.maximumHistory = value
                 }
                 CheckBox {
-                    text: "Smooth"
-                    checked: chart.smooth
-                    onToggled: chart.smooth = checked
+                    text: "Interpolate"
+                    checked: chart.interpolate
+                    onToggled: chart.interpolate = checked
                 }
                 Label { text : "Interval" }
                 SpinBox {
