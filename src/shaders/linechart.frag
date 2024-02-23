@@ -10,6 +10,7 @@
 
 #extension GL_GOOGLE_include_directive: enable
 #include "sdf.glsl"
+#line 13
 
 layout(std140, binding = 0) uniform buf {
     highp mat4 matrix;
@@ -70,6 +71,7 @@ lowp float sdf_polygon(in lowp vec2 point, in int count)
 void main()
 {
     lowp vec2 point = uv;
+    lowp float fwidthPoint = fwidth(point.x + point.y);
 
     lowp vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
 
@@ -78,8 +80,7 @@ void main()
     // bounds.y contains the line segment's maximum value. If we are a bit above
     // that, we will never render anything, so just discard the pixel.
     if (point.y > bounds.y + bounds_range) {
-        out_color = vec4(0.0);
-        return;
+        discard;
     }
 
     // bounds.x contains the line segment's minimum value. If we are a bit below
@@ -92,7 +93,7 @@ void main()
 
     lowp float polygon = sdf_polygon(point, int(pointCount));
 
-    color = sdf_render(polygon, color, fillColor);
+    color = sdf_render(polygon, fwidthPoint, color, fillColor, 1.0, ubuf.smoothing);
 
     if (ubuf.lineWidth > 0.0) {
         color = mix(color, lineColor, 1.0 - smoothstep(-ubuf.smoothing, ubuf.smoothing, sdf_annular(polygon, ubuf.lineWidth)));
