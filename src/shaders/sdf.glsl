@@ -238,45 +238,43 @@ const lowp float sdf_null = 99999.0;
 // A constant for a default level of smoothing when rendering an sdf.
 const lowp float sdf_default_smoothing = 0.625;
 
-// Render an sdf shape.
-//
-// This will render the sdf shape on top of whatever source color is input,
-// making sure to apply smoothing if desired.
-//
-// \param sdf The sdf shape to render.
-// \param sourceColor The source color to render on top of.
-// \param sdfColor The color to use for rendering the sdf shape.
-//
-// \return sourceColor with the sdf shape rendered on top.
+/**
+ * Render an sdf shape alpha-blended onto an existing color.
+ *
+ * \param sdf The sdf shape to render.
+ * \param fwidthSdf fwidth() of the sdf. This is a separte argument because
+ *        fwidth() cannot be used in conditional contexts.
+ * \param sourceColor The source color to render on top of.
+ * \param sdfColor The color to use for rendering the sdf shape.
+ * \param alpha The alpha to use for blending.
+ * \param smoothing The amount of smoothing to apply to the sdf.
+ *
+ * \return sourceColor with the sdf shape rendered on top.
+ */
+lowp vec4 sdf_render(in lowp float sdf, in lowp float fwidthSdf, in lowp vec4 sourceColor, in lowp vec4 sdfColor, in lowp float alpha, in lowp float smoothing)
+{
+    lowp float g = smoothing * fwidthSdf;
+    return mix(sourceColor, sdfColor, alpha * (1.0 - smoothstep(-g, g, sdf)));
+}
+
+/**
+ * Render an sdf shape.
+ *
+ * This is an overload of sdf_render(float, vec4, vec4, float, float) that uses
+ * 1.0 for blending value and sdf_default_smoothing for smoothing.
+ */
 lowp vec4 sdf_render(in lowp float sdf, in lowp vec4 sourceColor, in lowp vec4 sdfColor)
 {
-    lowp float g = fwidth(sdf);
-    return mix(sourceColor, sdfColor, 1.0 - smoothstep(-sdf_default_smoothing * g, sdf_default_smoothing * g, sdf));
+    return sdf_render(sdf, fwidth(sdf), sourceColor, sdfColor, 1.0, sdf_default_smoothing);
 }
 
-// Render an sdf shape.
-//
-// This is an overload of sdf_render(float, vec4, vec4) that allows specifying a
-// smoothing amount.
-//
-// \param smoothing The amount of smoothing to apply to the sdf.
-//
+/**
+ * Render an sdf shape.
+ *
+ * This is an overload of sdf_render(float, vec4, vec4, float, float) that uses
+ * 1.0 for blending value but allows specifying a smoothing amount.
+ */
 lowp vec4 sdf_render(in lowp float sdf, in lowp vec4 sourceColor, in lowp vec4 sdfColor, in lowp float smoothing)
 {
-    lowp float g = fwidth(sdf);
-    return mix(sourceColor, sdfColor, 1.0 - smoothstep(-smoothing * g, smoothing * g, sdf));
-}
-
-// Render an sdf shape alpha-blended onto an existing color.
-//
-// This is an overload of sdf_render(float, vec4, vec4) that allows specifying a
-// blending amount and a smoothing amount.
-//
-// \param alpha The alpha to use for blending.
-// \param smoothing The amount of smoothing to apply to the sdf.
-//
-lowp vec4 sdf_render(in lowp float sdf, in lowp vec4 sourceColor, in lowp vec4 sdfColor, in lowp float alpha, in lowp float smoothing)
-{
-    lowp float g = fwidth(sdf);
-    return mix(sourceColor, sdfColor, alpha * (1.0 - smoothstep(-smoothing * g, smoothing * g, sdf)));
+    return sdf_render(sdf, fwidth(sdf), sourceColor, sdfColor, 1.0, smoothing);
 }
