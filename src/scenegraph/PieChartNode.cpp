@@ -102,13 +102,13 @@ void PieChartNode::setOuterRadius(qreal radius)
 void PieChartNode::setColors(const QList<QColor> &colors)
 {
     m_colors = colors;
-    updateTriangles();
+    updateSegments();
 }
 
 void PieChartNode::setSections(const QList<qreal> &sections)
 {
     m_sections = sections;
-    updateTriangles();
+    updateSegments();
 }
 
 void PieChartNode::setBackgroundColor(const QColor &color)
@@ -130,7 +130,7 @@ void PieChartNode::setFromAngle(qreal angle)
 
     m_fromAngle = angle;
     m_material->setFromAngle(degToRad(angle));
-    updateTriangles();
+    updateSegments();
 }
 
 void PieChartNode::setToAngle(qreal angle)
@@ -141,7 +141,7 @@ void PieChartNode::setToAngle(qreal angle)
 
     m_toAngle = angle;
     m_material->setToAngle(degToRad(angle));
-    updateTriangles();
+    updateSegments();
 }
 
 void PieChartNode::setSmoothEnds(bool smooth)
@@ -155,7 +155,7 @@ void PieChartNode::setSmoothEnds(bool smooth)
     markDirty(QSGNode::DirtyMaterial);
 }
 
-void PieChartNode::updateTriangles()
+void PieChartNode::updateSegments()
 {
     if (m_sections.isEmpty() || m_sections.size() != m_colors.size()) {
         return;

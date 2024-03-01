@@ -43,7 +43,7 @@ public:
     void setSmoothEnds(bool smooth);
 
 private:
-    void updateTriangles();
+    void updateSegments();
 
     QRectF m_rect;
     qreal m_innerRadius = 0.0;
