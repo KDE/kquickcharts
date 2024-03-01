@@ -33,8 +33,6 @@ Kirigami.ApplicationWindow {
 
                 text: model.label
                 onClicked: applicationWindow().pageStack.push(model.file);
-
-                Kirigami.Separator { width: parent.width }
             }
         }
     }
