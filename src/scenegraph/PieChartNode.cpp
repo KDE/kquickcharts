@@ -16,7 +16,6 @@
 #include "PieChartMaterial.h"
 
 static const qreal pi = std::acos(-1.0);
-static const qreal sectionSize = pi * 0.5;
 
 inline QVector4D colorToVec4(const QColor &color)
 {
@@ -26,13 +25,6 @@ inline QVector4D colorToVec4(const QColor &color)
 inline qreal degToRad(qreal deg)
 {
     return (deg / 180.0) * pi;
-}
-
-inline QVector2D rotated(const QVector2D vector, qreal angle)
-{
-    auto newX = vector.x() * std::cos(angle) - vector.y() * std::sin(angle);
-    auto newY = vector.x() * std::sin(angle) + vector.y() * std::cos(angle);
-    return QVector2D(newX, newY);
 }
 
 PieChartNode::PieChartNode()
