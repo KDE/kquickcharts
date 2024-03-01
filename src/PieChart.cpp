@@ -155,7 +155,7 @@ QSGNode *PieChart::updatePaintNode(QSGNode *node, UpdatePaintNodeData *data)
 
     float outerRadius = minDimension;
     for (int i = 0; i < sourceCount; ++i) {
-        float innerRadius = i == sourceCount - 1 && m_filled ? 0.0 : outerRadius - m_thickness;
+        float innerRadius = i == sourceCount - 1 && m_filled ? 0.0 : outerRadius - m_thickness * 2.0;
 
         if (node->childCount() <= i) {
             node->appendChildNode(new PieChartNode{});
@@ -172,7 +172,7 @@ QSGNode *PieChart::updatePaintNode(QSGNode *node, UpdatePaintNodeData *data)
         pieNode->setToAngle(m_toAngle);
         pieNode->setSmoothEnds(m_smoothEnds);
 
-        outerRadius = outerRadius - m_thickness - m_spacing;
+        outerRadius = innerRadius - m_spacing * 2.0;
     }
 
     while (node->childCount() > sourceCount) {
