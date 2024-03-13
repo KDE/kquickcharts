@@ -15,7 +15,7 @@ layout(std140, binding = 0) uniform buf {
     lowp float innerRadius;
     lowp float outerRadius;
     lowp vec4 backgroundColor;
-    bool smoothEnds;
+    int smoothEnds;
     lowp float fromAngle;
     lowp float toAngle;
 

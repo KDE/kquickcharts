@@ -104,7 +104,6 @@ qt6_add_shaders(QuickCharts "shaders"
     ZORDER_LOC 6
     PRECOMPILE
     PREFIX "/qt/qml/org/kde/quickcharts/shaders/"
-    GLSL "300es,130"
     FILES
         shaders/barchart.vert
         shaders/barchart.frag

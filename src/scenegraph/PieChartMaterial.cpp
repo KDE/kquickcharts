@@ -152,7 +152,7 @@ bool PieChartShader::updateUniformData(QSGMaterialShader::RenderState &state, QS
         const auto material = static_cast<PieChartMaterial *>(newMaterial);
 
         uniformData << material->aspectRatio() << material->innerRadius() << material->outerRadius() << material->backgroundColor() //
-                    << material->smoothEnds() << material->fromAngle() << material->toAngle();
+                    << int(material->smoothEnds()) << material->fromAngle() << material->toAngle();
 
         const auto segmentCount = uint(material->segments().size());
         uniformData << segmentCount;
