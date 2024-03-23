@@ -5,7 +5,7 @@ set_target_properties(QuickChartsControls PROPERTIES
     VERSION ${KF6QuickCharts_VERSION}
 )
 
-ecm_add_qml_module(QuickChartsControls URI "org.kde.quickcharts.controls" VERSION 1.0 GENERATE_PLUGIN_SOURCE)
+ecm_add_qml_module(QuickChartsControls URI "org.kde.quickcharts.controls" VERSION 1.0 DEPENDENCIES QtCore QtQuick GENERATE_PLUGIN_SOURCE)
 
 target_sources(QuickChartsControls PRIVATE
     AxisLabels.cpp
