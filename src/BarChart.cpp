@@ -166,12 +166,20 @@ void BarChart::onDataChanged()
 
     m_barDataItems.fill(QList<BarData>{}, range.distanceX);
 
+    const auto highlightIndex = highlight();
+
     auto generator = [&, this, i = range.startX]() mutable -> QList<BarData> {
         QList<BarData> colorInfos;
 
         for (int j = 0; j < sources.count(); ++j) {
             auto value = (sources.at(j)->item(i).toReal() - range.startY) / range.distanceY;
-            colorInfos << BarData{value, colors->item(colorIndex).value<QColor>()};
+            auto color = colors->item(colorIndex).value<QColor>();
+
+            if (highlightIndex >= 0 && highlightIndex != colorIndex) {
+                color = desaturate(color);
+            }
+
+            colorInfos << BarData{value, color};
 
             if (indexMode != Chart::IndexSourceValues) {
                 colorIndex++;
