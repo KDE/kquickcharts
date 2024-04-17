@@ -20,6 +20,7 @@ Control {
     property alias color: colorSource.baseColor
     property alias range: pie.range
     property alias chart: pie
+    property alias highlight: pie.highlight
 
     property alias text: centerText.text
 
