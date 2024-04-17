@@ -19,6 +19,10 @@ int ArraySource::itemCount() const
 
 QVariant ArraySource::item(int index) const
 {
+    if (m_array.isEmpty()) {
+        return {};
+    }
+
     if (!m_wrap && (index < 0 || index > m_array.count() - 1)) {
         return {};
     }
