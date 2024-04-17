@@ -20,8 +20,10 @@ qreal calculateNormalizedLineWidth(qreal pixelWidth, const QRectF &rect)
         return 0.0;
     }
 
-    qreal min = 0.6 / std::max(rect.width(), rect.height());
-    return std::max(min, (pixelWidth - 1.0) / (std::min(rect.width(), rect.height()) * 4.0));
+    // This needs to account for both height and vertical aspect, resulting in
+    // a formula similar to `height / (height / width)` which funnily enough
+    // simplifies to just width.
+    return pixelWidth * 0.5 / rect.width();
 }
 
 LineChartNode::LineChartNode()
