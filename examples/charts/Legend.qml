@@ -14,79 +14,127 @@ import org.kde.kquickcontrols
 import org.kde.quickcharts as Charts
 import org.kde.quickcharts.controls as ChartsControls
 
-Kirigami.Page {
+ChartPage {
     title: "Legend"
 
-    ListModel {
-        id: lineModel;
-        dynamicRoles: true;
+    chart: Kirigami.AbstractCard {
+        anchors.centerIn: parent
+        width: parent.width
+        height: 400
 
-        Component.onCompleted: {
-            append({value1: 10, value2:  9, value3:  3})
-            append({value1: 10, value2:  5, value3: 17})
-            append({value1: 10, value2: 16, value3:  8})
-            append({value1: 10, value2: 12, value3: 11})
-            append({value1: 10, value2:  8, value3: 11})
-        }
-    }
-
-    ColumnLayout {
-        anchors.fill: parent
-        anchors.margins: Kirigami.Units.largeSpacing
-        spacing: Kirigami.Units.largeSpacing
-
-        Kirigami.AbstractCard {
-            Layout.fillHeight: false
-            Layout.fillWidth: true
-            Layout.preferredHeight: 400
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-            contentItem: Item {
-                Charts.PieChart {
-                    id: chart
-                    anchors {
-                        left: parent.left
-                        right: parent.right
-                        top: parent.top
-                        bottom: legend.top
-                        bottomMargin: Kirigami.Units.largeSpacing
-                    }
-
-                    valueSources: [
-                        Charts.ModelSource { roleName: "value1"; model: lineModel },
-                        Charts.ModelSource { roleName: "value2"; model: lineModel },
-                        Charts.ModelSource { roleName: "value3"; model: lineModel }
-                    ]
-
-                    colorSource: Charts.ColorGradientSource {
-                        baseColor: Kirigami.Theme.highlightColor
-                        itemCount: lineModel.count * 3
-                    }
-                    nameSource: Charts.ArraySource {
-                        array: ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5"]
-                        wrap: true
-                    }
-                    shortNameSource: Charts.ArraySource {
-                        array: ["I1", "I2", "I3", "I4", "I5"]
-                        wrap: true
-                    }
-
-                    indexingMode: Charts.Chart.IndexAllValues
+        contentItem: Item {
+            Charts.PieChart {
+                id: chart
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    top: parent.top
+                    bottom: legend.top
+                    bottomMargin: Kirigami.Units.largeSpacing
                 }
 
-                ChartsControls.Legend {
-                    id: legend
+                valueSources: [
+                    Charts.ModelSource { roleName: "value1"; model: itemModel },
+                    Charts.ModelSource { roleName: "value2"; model: itemModel },
+                    Charts.ModelSource { roleName: "value3"; model: itemModel }
+                ]
 
-                    anchors {
-                        left: parent.left
-                        right: parent.right
-                        bottom: parent.bottom
-                    }
-                    height: Math.min(implicitHeight, parent.height * 0.3);
-
-                    chart: chart
+                colorSource: Charts.ColorGradientSource {
+                    baseColor: Kirigami.Theme.highlightColor
+                    itemCount: itemModel.count * 3
                 }
+                nameSource: Charts.ArraySource {
+                    array: {
+                        let result = Array()
+                        for (let i = 0; i < itemModel.count * 3; ++i) {
+                            if (i < itemModel.count) {
+                                result.push(itemModel.get(i).label + " Value 1")
+                            } else if (i < itemModel.count * 2) {
+                                result.push(itemModel.get(i % itemModel.count).label + " Value 2")
+                            } else {
+                                result.push(itemModel.get(i % itemModel.count).label + " Value 3")
+                            }
+                        }
+                        return result
+                    }
+                }
+
+                indexingMode: Charts.Chart.IndexAllValues
+            }
+
+            ChartsControls.Legend {
+                id: legend
+
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    bottom: parent.bottom
+                }
+                height: Math.min(implicitHeight, parent.height * 0.3);
+
+                chart: chart
             }
         }
     }
+
+    itemModel: ListModel {
+        id: itemModel
+        dynamicRoles: true
+
+        Component.onCompleted: {
+            append({label: "Item 1", value1: 10, value2:  9, value3:  3})
+            append({label: "Item 2", value1: 10, value2:  5, value3: 17})
+            append({label: "Item 3", value1: 10, value2: 16, value3:  8})
+            append({label: "Item 4", value1: 10, value2: 12, value3: 11})
+            append({label: "Item 5", value1: 10, value2:  8, value3: 11})
+        }
+    }
+
+    itemDelegate: ItemDelegate {
+        width: ListView.view.width
+        contentItem: RowLayout {
+            Label { text: "Label" }
+            TextField {
+                Layout.preferredWidth: 75
+                text: model.label;
+                onEditingFinished: itemModel.setProperty(index, "label", text)
+            }
+            Label { text: "Value 1" }
+            SpinBox {
+                Layout.preferredWidth: 75
+                from: -10000; to: 10000;
+                stepSize: 1;
+                value: model.value1;
+                onValueModified: itemModel.setProperty(index, "value1", value)
+            }
+            Label { text: "Value 2" }
+            SpinBox {
+                Layout.preferredWidth: 75
+                from: -10000; to: 10000;
+                stepSize: 1;
+                value: model.value2;
+                onValueModified: itemModel.setProperty(index, "value2", value)
+            }
+            Label { text: "Value 3" }
+            SpinBox {
+                Layout.preferredWidth: 75
+                from: -10000; to: 10000;
+                stepSize: 1;
+                value: model.value3;
+                onValueModified: itemModel.setProperty(index, "value3", value)
+            }
+        }
+    }
+
+    itemEditorActions: [
+        Kirigami.Action {
+            text: "Add Item"
+            onTriggered: itemModel.append({label: "Item " + (itemModel.count + 1), value1: 10, value2: 10, value3: 10})
+        },
+
+        Kirigami.Action {
+            text: "Remove Last"
+            onTriggered: itemModel.remove(itemModel.count - 1)
+        }
+    ]
 }
