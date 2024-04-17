@@ -40,6 +40,8 @@ Control {
 
     property alias pointDelegate: lineChart.pointDelegate
 
+    property alias highlightEnabled: legend.highlightEnabled
+
     background: Rectangle { color: Theme.backgroundColor }
 
     contentItem: Item {
@@ -133,6 +135,8 @@ Control {
 
             colorSource: Charts.ColorGradientSource { id: colorSource; baseColor: Theme.highlightColor; itemCount: lineChart.valueSources.length }
             nameSource: Charts.ArraySource { id: nameSource; array: ["1", "2", "3", "4", "5"] }
+
+            highlight: legend.highlightedIndex
         }
     }
 }
