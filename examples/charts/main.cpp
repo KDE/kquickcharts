@@ -51,7 +51,7 @@ int main(int argc, char **argv)
         engine.rootContext()->setContextProperty(QStringLiteral("__commandLinePage"), nullptr);
     }
 
-    engine.load(QStringLiteral("qrc:/main.qml"));
+    engine.loadFromModule("org.kde.quickcharts.example", "Main");
 
     return app.exec();
 }

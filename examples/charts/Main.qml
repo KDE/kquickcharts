@@ -21,18 +21,21 @@ Kirigami.ApplicationWindow {
 
             model: ListModel {
                 id: pagesModel
-                ListElement { label: "Pie Chart"; file: "qrc:/PieChart.qml"; identifier: "pie" }
-                ListElement { label: "Line Chart"; file: "qrc:/LineChart.qml"; identifier: "line" }
-                ListElement { label: "Bar Chart"; file: "qrc:/BarChart.qml"; identifier: "bar" }
-                ListElement { label: "History Proxy Source"; file: "qrc:/HistoryProxySource.qml"; identifier: "history" }
-                ListElement { label: "Legend"; file: "qrc:/Legend.qml"; identifier: "legend" }
+                ListElement { label: "Pie Chart"; file: "PieChart"; identifier: "pie" }
+                ListElement { label: "Line Chart"; file: "LineChart"; identifier: "line" }
+                ListElement { label: "Bar Chart"; file: "BarChart"; identifier: "bar" }
+                ListElement { label: "History Proxy Source"; file: "HistoryProxySource"; identifier: "history" }
+                ListElement { label: "Legend"; file: "Legend"; identifier: "legend" }
             }
 
             delegate: ItemDelegate {
                 width: ListView.view.width
 
                 text: model.label
-                onClicked: applicationWindow().pageStack.push(model.file);
+                onClicked: {
+                    let component = Qt.createComponent("org.kde.quickcharts.example", model.file)
+                    applicationWindow().pageStack.push(component);
+                }
             }
         }
     }
