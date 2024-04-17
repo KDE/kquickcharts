@@ -13,6 +13,7 @@ QtObject {
     property real gridUnit: Kirigami.Units.gridUnit
     property real smallSpacing: Kirigami.Units.smallSpacing
     property real largeSpacing: Kirigami.Units.largeSpacing
+    property real cornerRadius: Kirigami.Units.cornerRadius
 
     property real smallIconSize: Kirigami.Units.iconSizes.small
 

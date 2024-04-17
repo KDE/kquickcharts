@@ -48,6 +48,9 @@ Control {
     property string colorRole: "color"
     property string valueRole: "value"
 
+    property bool highlightEnabled: false
+    property int highlightedIndex: -1
+
     default property alias _children: legend.children
 
     leftPadding: 0
@@ -89,6 +92,8 @@ Control {
                     color: itemData[control.colorRole] ?? "white"
                     value: control.formatValue(itemData[control.valueRole] ?? "", index)
 
+                    highlighted: control.highlightEnabled && hovered
+
                     maximumValueWidth: {
                         var result = control.maximumValueWidth(model.value, index)
                         if (result > 0) {
@@ -101,10 +106,20 @@ Control {
                     LegendLayout.minimumWidth: minimumWidth
                     LegendLayout.preferredWidth: preferredWidth
                     LegendLayout.maximumWidth: Math.max(control.maximumDelegateWidth, preferredWidth)
+
+                    onHoveredChanged: {
+                        if (control.highlightEnabled) {
+                            if (hovered) {
+                                control.highlightedIndex = index
+                            } else if (control.highlightedIndex == index) {
+                                control.highlightedIndex = -1
+                            }
+                        }
+                    }
                 }
             }
 
-            horizontalSpacing: Theme.largeSpacing
+            horizontalSpacing: Theme.smallSpacing
             verticalSpacing: Theme.smallSpacing
         }
 

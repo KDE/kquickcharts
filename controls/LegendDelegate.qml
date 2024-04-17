@@ -26,9 +26,11 @@ Control {
     property real maximumValueWidth
 
     property Component indicator: Rectangle {
-        implicitWidth: Theme.smallSpacing
+        implicitWidth: Theme.cornerRadius
         color: control.color
     }
+
+    property bool highlighted: false
 
     readonly property real minimumWidth: contentItem.minimumWidth
     readonly property real preferredWidth: contentItem.preferredWidth
@@ -43,7 +45,7 @@ Control {
     hoverEnabled: true
 
     leftPadding: 0
-    rightPadding: 0
+    rightPadding: Theme.cornerRadius
     topPadding: 0
     bottomPadding: 0
 
@@ -94,6 +96,14 @@ Control {
             verticalAlignment: Qt.AlignVCenter
             horizontalAlignment: Qt.AlignRight
         }
+    }
+
+    background: Rectangle {
+        color: Qt.alpha(control.color, 0.25)
+        border.color: control.color
+        border.width: 1
+        radius: Theme.cornerRadius
+        visible: control.highlighted
     }
 
     ToolTip.visible: control.hovered && (name.truncated || value.truncated)
