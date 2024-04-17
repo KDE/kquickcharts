@@ -89,6 +89,7 @@ ChartPage {
             }
 
             chart: barChart
+            highlightEnabled: true
         }
 
         Charts.BarChart {
@@ -128,6 +129,8 @@ ChartPage {
             nameSource: Charts.ArraySource { array: ["Example 1", "Example 2", "Example 3"] }
 
             backgroundColor: Qt.rgba(0.0, 0.0, 0.0, 0.1)
+
+            highlight: legend.highlightedIndex
         }
     }
 

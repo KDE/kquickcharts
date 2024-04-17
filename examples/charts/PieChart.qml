@@ -69,6 +69,11 @@ ChartPage {
 
     itemDelegate: ItemDelegate {
         width: ListView.view.width
+        onHoveredChanged: {
+            if (hovered) {
+                chart.highlight = index
+            }
+        }
         contentItem: RowLayout {
             Label {
                 text: "Label"
@@ -88,6 +93,12 @@ ChartPage {
                 value: model.data;
                 onValueModified: pieModel.setProperty(index, "data", value)
             }
+        }
+    }
+
+    onItemEditorHoveredChanged: {
+        if (!itemEditorHovered) {
+            chart.highlight = undefined
         }
     }
 

@@ -36,6 +36,8 @@ ChartPage {
 
             names: ["Example 1", "Example 2", "Example 3"]
 
+            highlightEnabled: true
+
             pointDelegate: Item {
                 Rectangle {
                     anchors.centerIn: parent

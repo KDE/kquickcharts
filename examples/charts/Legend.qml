@@ -60,6 +60,8 @@ ChartPage {
                 }
 
                 indexingMode: Charts.Chart.IndexAllValues
+
+                highlight: legend.highlightedIndex
             }
 
             ChartsControls.Legend {
@@ -73,6 +75,7 @@ ChartPage {
                 height: Math.min(implicitHeight, parent.height * 0.3);
 
                 chart: chart
+                highlightEnabled: true
             }
         }
     }
