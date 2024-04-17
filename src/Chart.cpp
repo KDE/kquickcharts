@@ -149,6 +149,27 @@ void Chart::setIndexingMode(IndexingMode newIndexingMode)
     Q_EMIT indexingModeChanged();
 }
 
+int Chart::highlight() const
+{
+    return m_highlight;
+}
+
+void Chart::setHighlight(int newHighlight)
+{
+    if (newHighlight == m_highlight) {
+        return;
+    }
+
+    m_highlight = newHighlight;
+    Q_EMIT dataChanged();
+    Q_EMIT highlightChanged();
+}
+
+void Chart::resetHighlight()
+{
+    setHighlight(-1);
+}
+
 void Chart::componentComplete()
 {
     QQuickItem::componentComplete();

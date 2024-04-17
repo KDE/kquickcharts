@@ -83,6 +83,20 @@ public:
     void setIndexingMode(IndexingMode newIndexingMode);
     Q_SIGNAL void indexingModeChanged();
 
+    /**
+     * The index of a value source to highlight.
+     *
+     * Highlighting is dependant on Chart type, but will generally mean that
+     * other value sources are rendered with lower opacity.
+     *
+     * By default, this is -1 which means nothing is highlighted.
+     */
+    Q_PROPERTY(int highlight READ highlight WRITE setHighlight NOTIFY highlightChanged RESET resetHighlight)
+    int highlight() const;
+    void setHighlight(int highlight);
+    void resetHighlight();
+    Q_SIGNAL void highlightChanged();
+
     Q_SIGNAL void dataChanged();
 
 protected:
@@ -110,6 +124,7 @@ private:
     ChartDataSource *m_colorSource = nullptr;
     QList<ChartDataSource *> m_valueSources;
     IndexingMode m_indexingMode = IndexEachSource;
+    int m_highlight = -1;
 };
 
 #endif // CHART_H
