@@ -206,6 +206,7 @@ void PieChart::onDataChanged()
 
     auto indexMode = indexingMode();
     auto colorIndex = 0;
+    const auto highlightIndex = highlight();
     auto calculateZeroRange = [](ChartDataSource *) {
         return 0.0;
     };
@@ -230,6 +231,11 @@ void PieChart::onDataChanged()
                 total += limited;
 
                 auto color = colors->item(colorIndex).value<QColor>();
+
+                if (highlightIndex >= 0 && highlightIndex != colorIndex) {
+                    color = desaturate(color);
+                }
+
                 sectionColors << color;
             }
             threshold = std::max(0.0, threshold - value);
