@@ -13,6 +13,7 @@ target_sources(kquickcharts_example PRIVATE main.cpp)
 
 ecm_target_qml_sources(kquickcharts_example SOURCES
     BarChart.qml
+    ChartPage.qml
     HistoryProxySource.qml
     Legend.qml
     LineChart.qml
