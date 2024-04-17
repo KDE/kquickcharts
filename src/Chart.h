@@ -111,6 +111,14 @@ protected:
     virtual void onDataChanged() = 0;
     void componentComplete() override;
 
+    /**
+     * Desaturate and de-emphasise a color.
+     *
+     * Mainly intended as a standard for ensuring everything but the highlighted
+     * item is desaturated.
+     */
+    QColor desaturate(const QColor &input);
+
 private:
     static void appendSource(DataSourcesProperty *list, ChartDataSource *source);
     static qsizetype sourceCount(DataSourcesProperty *list);

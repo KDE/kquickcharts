@@ -176,6 +176,13 @@ void Chart::componentComplete()
     Q_EMIT dataChanged();
 }
 
+QColor Chart::desaturate(const QColor &input)
+{
+    auto color = input.convertTo(QColor::Hsl);
+    color.setHslF(color.hueF(), color.saturationF() * 0.5, color.lightnessF() * 0.5, color.alphaF() * 0.5);
+    return color.convertTo(QColor::Rgb);
+}
+
 void Chart::appendSource(Chart::DataSourcesProperty *list, ChartDataSource *source)
 {
     auto chart = reinterpret_cast<Chart *>(list->data);
