@@ -149,7 +149,7 @@ protected:
     void geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry) override;
 
 private:
-    void updateLineNode(LineChartNode *node, const QColor &lineColor, const QColor &fillColor, ChartDataSource *valueSource);
+    void updateLineNode(LineChartNode *node, ChartDataSource *valueSource, const QColor &lineColor, const QColor &fillColor, qreal lineWidth);
     void createPointDelegates(const QList<QVector2D> &values, int sourceIndex);
     void updatePointDelegate(QQuickItem *delegate, const QVector2D &position, const QVariant &value, int sourceIndex);
 

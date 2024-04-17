@@ -276,6 +276,7 @@ QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
         node = new QSGNode();
     }
 
+    const auto highlightIndex = highlight();
     const auto sources = valueSources();
     for (int i = 0; i < sources.size(); ++i) {
         int childIndex = sources.size() - 1 - i;
@@ -285,7 +286,14 @@ QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
         auto lineNode = static_cast<LineChartNode *>(node->childAtIndex(childIndex));
         auto color = colorSource() ? colorSource()->item(i).value<QColor>() : Qt::black;
         auto fillColor = m_fillColorSource ? m_fillColorSource->item(i).value<QColor>() : colorWithAlpha(color, m_fillOpacity);
-        updateLineNode(lineNode, color, fillColor, sources.at(i));
+        auto lineWidth = i == highlightIndex ? std::max(m_lineWidth, 3.0) : m_lineWidth;
+
+        if (highlightIndex >= 0 && i != highlightIndex) {
+            color = desaturate(color);
+            fillColor = desaturate(fillColor);
+        }
+
+        updateLineNode(lineNode, sources.at(i), color, fillColor, lineWidth);
     }
 
     while (node->childCount() > sources.size()) {
@@ -294,6 +302,15 @@ QSGNode *LineChart::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
         auto lastNode = node->childAtIndex(node->childCount() - 1);
         node->removeChildNode(lastNode);
         delete lastNode;
+    }
+
+    if (highlightIndex >= 0) {
+        // Move highlighted node to the end to ensure we always show the
+        // highlighted chart on top. This is done after the above removal to
+        // ensure we don't suddenly remove the highlighted node.
+        auto highlightNode = node->childAtIndex(node->childCount() - 1 - highlightIndex);
+        node->removeChildNode(highlightNode);
+        node->appendChildNode(highlightNode);
     }
 
     return node;
@@ -313,7 +330,7 @@ void LineChart::geometryChange(const QRectF &newGeometry, const QRectF &oldGeome
     }
 }
 
-void LineChart::updateLineNode(LineChartNode *node, const QColor &lineColor, const QColor &fillColor, ChartDataSource *valueSource)
+void LineChart::updateLineNode(LineChartNode *node, ChartDataSource *valueSource, const QColor &lineColor, const QColor &fillColor, qreal lineWidth)
 {
     if (window()) {
         node->setRect(boundingRect(), window()->devicePixelRatio());
@@ -322,7 +339,7 @@ void LineChart::updateLineNode(LineChartNode *node, const QColor &lineColor, con
     }
     node->setLineColor(lineColor);
     node->setFillColor(fillColor);
-    node->setLineWidth(m_lineWidth);
+    node->setLineWidth(lineWidth);
 
     auto values = m_values.value(valueSource);
     node->setValues(values);
@@ -360,9 +377,21 @@ void LineChart::updatePointDelegate(QQuickItem *delegate, const QVector2D &posit
     auto pos = QPointF{position.x() - delegate->width() / 2, (1.0 - position.y()) * height() - delegate->height() / 2};
     delegate->setPosition(pos);
 
+    auto color = colorSource() ? colorSource()->item(sourceIndex).value<QColor>() : QColor();
+    auto highlightIndex = highlight();
+    if (highlightIndex >= 0) {
+        if (sourceIndex == highlightIndex) {
+            delegate->setZ(1.0);
+        } else {
+            color = desaturate(color);
+        }
+    } else {
+        delegate->setZ(0.0);
+    }
+
     auto attached = static_cast<LineChartAttached *>(qmlAttachedPropertiesObject<LineChart>(delegate, true));
     attached->setValue(value);
-    attached->setColor(colorSource() ? colorSource()->item(sourceIndex).value<QColor>() : Qt::black);
+    attached->setColor(color);
     attached->setName(nameSource() ? nameSource()->item(sourceIndex).toString() : QString{});
     attached->setShortName(shortNameSource() ? shortNameSource()->item(sourceIndex).toString() : QString{});
 }
