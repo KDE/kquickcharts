@@ -14,6 +14,9 @@ Kirigami.ApplicationWindow {
     id: window
     title: "Charts Example"
 
+    width: Kirigami.Units.gridUnit * 60
+    height: Kirigami.Units.gridUnit * 40
+
     pageStack.initialPage: Kirigami.ScrollablePage {
         title: "Charts"
 
