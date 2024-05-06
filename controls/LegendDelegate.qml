@@ -54,7 +54,7 @@ Control {
         property real minimumValueWidth: control.width - indicator.width - control.spacing
 
         property real minimumWidth: indicator.width + actualValueWidth + control.spacing
-        property real preferredWidth: indicator.width + labelContainer.implicitWidth + actualValueWidth + control.spacing * 2
+        property real preferredWidth: Math.ceil(indicator.width) + Math.ceil(name.implicitWidth) + Math.ceil(actualValueWidth) + Math.ceil(control.spacing * 2) + control.leftPadding + control.rightPadding
 
         spacing: control.spacing
 
@@ -67,27 +67,16 @@ Control {
             sourceComponent: control.indicator
         }
 
-        Item {
-            id: labelContainer
+        Label {
+            id: name
 
-            Layout.fillHeight: true
             Layout.fillWidth: true
+            Layout.fillHeight: true
 
-            implicitWidth: metrics.advanceWidth(control.name)
-
-            Label {
-                id: name
-                anchors.fill: parent
-                text: control.name + (control.shortName.length > 0 ? "\x9C" + control.shortName : "")
-                elide: Text.ElideRight
-                font: control.font
-                verticalAlignment: Qt.AlignVCenter
-            }
-
-            FontMetrics {
-                id: metrics
-                font: control.font
-            }
+            text: control.name + (control.shortName.length > 0 ? "\x9C" + control.shortName : "")
+            elide: Text.ElideRight
+            font: control.font
+            verticalAlignment: Qt.AlignVCenter
         }
 
         Label {
