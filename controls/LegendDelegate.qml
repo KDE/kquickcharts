@@ -79,6 +79,11 @@ Control {
             elide: Text.ElideRight
             font: control.font
             verticalAlignment: Qt.AlignVCenter
+
+            // In some cases we can trigger a behaviour where the full text is
+            // displayed while we have a size of 0. In that case, explicitly
+            // hide it.
+            visible: width > 0
         }
 
         Label {
