@@ -82,8 +82,9 @@ Control {
 
             // In some cases we can trigger a behaviour where the full text is
             // displayed while we have a size of 0. In that case, explicitly
-            // hide it.
-            visible: width > 0
+            // hide it. This uses opacity to ensure the item is still begin laid
+            // out.
+            opacity: width > 0 ? 1 : 0
         }
 
         Label {
