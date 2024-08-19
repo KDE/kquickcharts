@@ -43,10 +43,10 @@ public:
     void setMap(const QVariantMap &newMap);
     Q_SIGNAL void mapChanged();
 
-    virtual int itemCount() const override;
-    virtual QVariant item(int index) const override;
-    virtual QVariant minimum() const override;
-    virtual QVariant maximum() const override;
+    int itemCount() const override;
+    QVariant item(int index) const override;
+    QVariant minimum() const override;
+    QVariant maximum() const override;
 
 private:
     ChartDataSource *m_source = nullptr;

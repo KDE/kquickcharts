@@ -42,11 +42,11 @@ public:
     Q_SIGNAL void axisChanged();
 
     Q_PROPERTY(int itemCount READ itemCount WRITE setItemCount NOTIFY itemCountChanged)
-    virtual int itemCount() const override;
+    int itemCount() const override;
     Q_SLOT void setItemCount(int newItemCount);
     Q_SIGNAL void itemCountChanged();
 
-    virtual QVariant item(int index) const override;
+    QVariant item(int index) const override;
     QVariant minimum() const override;
     QVariant maximum() const override;
 

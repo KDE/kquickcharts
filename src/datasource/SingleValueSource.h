@@ -23,8 +23,8 @@ class QUICKCHARTS_EXPORT SingleValueSource : public ChartDataSource
 public:
     explicit SingleValueSource(QObject *parent = nullptr);
 
-    virtual int itemCount() const override;
-    virtual QVariant item(int index) const override;
+    int itemCount() const override;
+    QVariant item(int index) const override;
     QVariant minimum() const override;
     QVariant maximum() const override;
 
