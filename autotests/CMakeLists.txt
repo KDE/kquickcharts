@@ -12,11 +12,20 @@ ecm_add_tests(
     MapProxySourceTest.cpp
     HistoryProxySourceTest.cpp
     ItemBuilderTest.cpp
-    LINK_LIBRARIES Qt6::Test QuickCharts
+    LINK_LIBRARIES PRIVATE Qt6::Test QuickCharts
 )
+if (NOT BUILD_SHARED_LIBS)
+    target_link_libraries(ItemBuilderTest PRIVATE QuickChartsplugin)
+    qt6_import_qml_plugins(ItemBuilderTest)
+endif()
 
 add_executable(qmltest qmltest.cpp)
-target_link_libraries(qmltest Qt6::QuickTest QuickCharts)
+
+target_link_libraries(qmltest PRIVATE Qt6::QuickTest QuickCharts)
+if (NOT BUILD_SHARED_LIBS)
+    target_link_libraries(qmltest PRIVATE QuickChartsplugin)
+    qt6_import_qml_plugins(qmltest)
+endif()
 
 macro(add_qml_tests)
     if (WIN32)

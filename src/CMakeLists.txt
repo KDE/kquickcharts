@@ -5,7 +5,13 @@ set_target_properties(QuickCharts PROPERTIES
     VERSION ${KF6QuickCharts_VERSION}
 )
 
-ecm_add_qml_module(QuickCharts URI "org.kde.quickcharts" VERSION 1.0 DEPENDENCIES QtQuick GENERATE_PLUGIN_SOURCE)
+ecm_add_qml_module(QuickCharts
+    URI "org.kde.quickcharts"
+    VERSION 1.0
+    DEPENDENCIES QtQuick
+    GENERATE_PLUGIN_SOURCE
+    INSTALLED_PLUGIN_TARGET KF6::QuickChartsplugin
+)
 
 target_sources(QuickCharts PRIVATE
     BarChart.cpp
@@ -119,6 +125,7 @@ qt6_add_shaders(QuickCharts "shaders"
         piechart.vert.qsb
         piechart.frag.qsb
     ${_extra_args}
+    OUTPUT_TARGETS _out_targets
 )
 
 ecm_generate_export_header(QuickCharts
@@ -130,8 +137,8 @@ ecm_generate_export_header(QuickCharts
     EXCLUDE_DEPRECATED_BEFORE_AND_AT ${EXCLUDE_DEPRECATED_BEFORE_AND_AT}
 )
 
-ecm_finalize_qml_module(QuickCharts DESTINATION ${KDE_INSTALL_QMLDIR})
+ecm_finalize_qml_module(QuickCharts DESTINATION ${KDE_INSTALL_QMLDIR} EXPORT KF6QuickChartsTargets)
 
 ecm_qt_install_logging_categories(EXPORT KQuickCharts DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
 
-install(TARGETS QuickCharts ${KDE_INSTALL_DEFAULT_ARGUMENTS})
+install(TARGETS QuickCharts ${_out_targets} EXPORT KF6QuickChartsTargets ${KF_INSTALL_TARGETS_DEFAULT_ARGS})

@@ -8,4 +8,5 @@ include(${ECM_MODULE_DIR}/ECMFindQmlModule.cmake)
 
 ecm_find_qmlmodule(org.kde.quickcharts 1.0)
 
+include("${CMAKE_CURRENT_LIST_DIR}/KF6QuickChartsTargets.cmake")
 @PACKAGE_INCLUDE_QCHTARGETS@

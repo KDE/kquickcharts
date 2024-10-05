@@ -68,6 +68,9 @@ install(FILES
     COMPONENT Devel
 )
 
+install(EXPORT KF6QuickChartsTargets DESTINATION "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF6QuickCharts"
+        FILE KF6QuickChartsTargets.cmake NAMESPACE KF6:: COMPONENT Devel)
+
 include(ECMFeatureSummary)
 ecm_feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
