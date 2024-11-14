@@ -12,8 +12,12 @@
 
 #include "ChartDataSource.h"
 
-/**
- * A data source that provides a single value as data.
+/*!
+ * \qmltype SingleValueSource
+ * \inherits ChartDataSource
+ * \inqmlmodule org.kde.quickcharts
+ *
+ * \brief A data source that provides a single value as data.
  */
 class QUICKCHARTS_EXPORT SingleValueSource : public ChartDataSource
 {
@@ -28,6 +32,9 @@ public:
     QVariant minimum() const override;
     QVariant maximum() const override;
 
+    /*!
+     * \qmlproperty var SingleValueSource::value
+     */
     Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY dataChanged)
     QVariant value() const;
     void setValue(const QVariant &value);

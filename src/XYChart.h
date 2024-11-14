@@ -26,8 +26,12 @@ struct ComputedRange {
 
 bool operator==(const ComputedRange &first, const ComputedRange &second);
 
-/**
- * A base class for Charts that are based on an X/Y grid.
+/*!
+ * \qmltype XYChart
+ * \inherits Chart
+ * \inqmlmodule org.kde.quickcharts
+ *
+ * \brief A base class for Charts that are based on an X/Y grid.
  */
 class QUICKCHARTS_EXPORT XYChart : public Chart
 {
@@ -36,50 +40,53 @@ class QUICKCHARTS_EXPORT XYChart : public Chart
     QML_UNCREATABLE("Base Class")
 
 public:
-    /**
+    /*!
+     * \enum XYChart::Direction
+     *
      * The direction of values on the X axis.
      *
      * "Start" is defined as the starting direction of the chart, when using a
      * left-to-right language it will be the left side, with a right-to-left
      * language it will be right.
+     *
+     * \value ZeroAtStart
+     *        Zero is at the beginning of the chart, values run from begin to end.
+     * \value ZeroAtEnd
+     *        Zero is at the end of the chart, values run from end to begin.
      */
     enum class Direction {
-        ZeroAtStart, ///< Zero is at the beginning of the chart, values run from begin to end.
-        ZeroAtEnd ///< Zero is at the end of the chart, values run from end to begin.
+        ZeroAtStart,
+        ZeroAtEnd
     };
     Q_ENUM(Direction)
 
-    /**
-     * Constructor
-     *
-     * @param parent The QObject parent.
-     */
     explicit XYChart(QQuickItem *parent = nullptr);
-
-    /**
-     * Destructor
-     */
     ~XYChart() override = default;
 
-    /**
-     * The range of values on the X axis.
+    /*!
+     * \qmlproperty RangeGroup XYChart::xRange
+     * \brief The range of values on the X axis.
      */
     Q_PROPERTY(RangeGroup *xRange READ xRange CONSTANT)
     virtual RangeGroup *xRange() const;
-    /**
-     * The range of values on the Y axis.
+    /*!
+     * \qmlproperty RangeGroup XYChart::yRange
+     * \brief The range of values on the Y axis.
      */
     Q_PROPERTY(RangeGroup *yRange READ yRange CONSTANT)
     virtual RangeGroup *yRange() const;
-    /**
-     * Which direction this chart's X axis runs.
+    /*!
+     * \qmlproperty enumeration XYChart::direction
+     * \qmlenumeratorsfrom XYChart::Direction
+     * \brief Which direction this chart's X axis runs.
      */
     Q_PROPERTY(Direction direction READ direction WRITE setDirection NOTIFY directionChanged)
     virtual XYChart::Direction direction() const;
     virtual void setDirection(XYChart::Direction newDirection);
     Q_SIGNAL void directionChanged();
-    /**
-     * Whether the values of each value source should be stacked.
+    /*!
+     * \qmlproperty bool XYChart::stacked
+     * \brief Whether the values of each value source should be stacked.
      *
      * When true, Y values will be added on top of each other. The precise
      * meaning of this property depends on the specific chart. The default is
@@ -90,11 +97,11 @@ public:
     void setStacked(bool newStacked);
     Q_SIGNAL void stackedChanged();
 
-    /**
+    /*
      * Get the complete, calculated range for this chart.
      */
     ComputedRange computedRange() const;
-    /**
+    /*
      * Emitted whenever the complete range is recalculated.
      */
     Q_SIGNAL void computedRangeChanged();

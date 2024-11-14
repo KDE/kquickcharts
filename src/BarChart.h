@@ -13,16 +13,20 @@
 
 struct Bar;
 
-/**
- * An item to render a bar chart.
+/*!
+ * \qmltype BarChart
+ * \inherits XYChart
+ * \inqmlmodule org.kde.quickcharts
+ *
+ * \brief An item to render a bar chart.
  *
  * This chart renders
  *
- * ## Usage example
+ * \section1 Usage example
  *
- * \snippet snippets/barchart.qml example
+ * \snippet barchart.qml example
  *
- * \image html barchart.png "The resulting bar chart."
+ * \image barchart.png The resulting bar chart.
  */
 class QUICKCHARTS_EXPORT BarChart : public XYChart
 {
@@ -30,22 +34,38 @@ class QUICKCHARTS_EXPORT BarChart : public XYChart
     QML_ELEMENT
 
 public:
-    /**
+    /*!
+     * \enum BarChart::WidthMode
+     *
      * Helper enum to provide an easy way to set barWidth to auto.
+     *
+     * \value AutoWidth
+     *        Automatically calculate the width of bars.
      */
     enum WidthMode { AutoWidth = -2 };
     Q_ENUM(WidthMode)
 
+    /*!
+     * \enum BarChart::Orientation
+     *
+     * Bar direction.
+     *
+     * \value HorizontalOrientation
+     *        Bars are oriented horizontally, with low values left and high values right.
+     * \value VerticalOrientation
+     *        Bars are oriented vertically, with low values at the bottom and high values at the top.
+     */
     enum Orientation {
-        HorizontalOrientation = Qt::Horizontal, ///< Bars are oriented horizontally, with low values left and high values right.
-        VerticalOrientation = Qt::Vertical ///< Bars are oriented vertically, with low values at the bottom and high values at the top.
+        HorizontalOrientation = Qt::Horizontal,
+        VerticalOrientation = Qt::Vertical
     };
     Q_ENUM(Orientation)
 
     explicit BarChart(QQuickItem *parent = nullptr);
 
-    /**
-     * The spacing between bars for each value source.
+    /*!
+     * \qmlproperty real BarChart::spacing
+     * \brief The spacing between bars for each value source.
      *
      * Note that spacing between each X axis value is determined automatically
      * based on barWidth, spacing and total chart width. The default is 0.
@@ -55,10 +75,11 @@ public:
     void setSpacing(qreal newSpacing);
     Q_SIGNAL void spacingChanged();
 
-    /**
-     * The width of individual bars in the chart.
+    /*!
+     * \qmlproperty real BarChart::barWidth
+     * \brief The width of individual bars in the chart.
      *
-     * If set to WidthMode::AutoWidth (also the default), the width will be
+     * If set to BarChart.AutoWidth (also the default), the width will be
      * calculated automatically based on total chart width and item count.
      */
     Q_PROPERTY(qreal barWidth READ barWidth WRITE setBarWidth NOTIFY barWidthChanged)
@@ -66,8 +87,9 @@ public:
     void setBarWidth(qreal newBarWidth);
     Q_SIGNAL void barWidthChanged();
 
-    /**
-     * The radius of the ends of bars in the chart in pixels.
+    /*!
+     * \qmlproperty real BarChart::radius
+     * \brief The radius of the ends of bars in the chart in pixels.
      *
      * By default this is 0, which means no rounding will be done.
      */
@@ -76,18 +98,21 @@ public:
     void setRadius(qreal newRadius);
     Q_SIGNAL void radiusChanged();
 
-    /**
-     * The orientation of bars in the chart.
+    /*!
+     * \qmlproperty enumeration BarChart::orientation
+     * \qmlenumeratorsfrom BarChart::Orientation
+     * \brief The orientation of bars in the chart.
      *
-     * By default this is Vertical.
+     * By default this is BarChart.VerticalOrientation.
      */
     Q_PROPERTY(Orientation orientation READ orientation WRITE setOrientation NOTIFY orientationChanged)
     Orientation orientation() const;
     void setOrientation(Orientation newOrientation);
     Q_SIGNAL void orientationChanged();
 
-    /**
-     * The background color of bars in the chart.
+    /*!
+     * \qmlproperty color BarChart::backgroundColor
+     * \brief The background color of bars in the chart.
      *
      * By default this is Qt::transparent. If set to something non-transparent,
      * the chart will render backgrounds for the bars. These backgrounds will
@@ -99,13 +124,7 @@ public:
     Q_SIGNAL void backgroundColorChanged();
 
 protected:
-    /**
-     * Reimplemented from QQuickItem.
-     */
     QSGNode *updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *) override;
-    /**
-     * Reimplemented from Chart.
-     */
     void onDataChanged() override;
 
 private:

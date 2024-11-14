@@ -17,7 +17,7 @@
 
 class ChartDataSource;
 
-/**
+/*
  * An object that can be used as a grouped property to provide a value range for charts.
  *
  */

@@ -10,14 +10,16 @@
 
 #include <QVariant>
 
-/**
- * A source that uses the values of another source to produce values from a map.
+/*!
+ * \qmltype MapProxySource
+ * \inherits ChartDataSource
+ * \inqmlmodule org.kde.quickcharts
+ *
+ * \brief A source that uses the values of another source to produce values from a map.
  *
  * This source reads values from another source, then uses those as an index to
  * a map of different values and returns the appropriate value from that map.
  * This source's itemCount matches that of the other source.
- *
- * @since 5.71
  */
 class QUICKCHARTS_EXPORT MapProxySource : public ChartDataSource
 {
@@ -27,16 +29,18 @@ class QUICKCHARTS_EXPORT MapProxySource : public ChartDataSource
 public:
     MapProxySource(QObject *parent = nullptr);
 
-    /**
-     * A ChartDataSource that is used as map indexes.
+    /*!
+     * \qmlproperty ChartDataSource MapProxySource::source
+     * \brief A ChartDataSource that is used as map indexes.
      */
     Q_PROPERTY(ChartDataSource *source READ source WRITE setSource NOTIFY sourceChanged)
     ChartDataSource *source() const;
     void setSource(ChartDataSource *newSource);
     Q_SIGNAL void sourceChanged();
 
-    /**
-     * The map to index for values.
+    /*!
+     * \qmlproperty QVariantMap MapProxySource::map
+     * \brief The map to index for values.
      */
     Q_PROPERTY(QVariantMap map READ map WRITE setMap NOTIFY mapChanged)
     QVariantMap map() const;
