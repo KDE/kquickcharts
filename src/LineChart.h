@@ -16,10 +16,8 @@
 
 class LineChartNode;
 
-/**
+/*!
  * An attached property that is exposed to point delegates created in line charts.
- *
- * \sa LineChart::pointDelegate
  */
 class LineChartAttached : public QObject
 {
@@ -29,7 +27,8 @@ class LineChartAttached : public QObject
 public:
     LineChartAttached(QObject *parent = nullptr);
 
-    /**
+    /*!
+     * \qmlattachedproperty var LineChart::value
      * The value at the current point.
      */
     Q_PROPERTY(QVariant value READ value NOTIFY valueChanged)
@@ -37,7 +36,8 @@ public:
     void setValue(const QVariant &value);
     Q_SIGNAL void valueChanged();
 
-    /**
+    /*!
+     * \qmlattachedproperty color LineChart::color
      * The color at the current point.
      */
     Q_PROPERTY(QColor color READ color NOTIFY colorChanged)
@@ -45,7 +45,8 @@ public:
     void setColor(const QColor &color);
     Q_SIGNAL void colorChanged();
 
-    /**
+    /*!
+     * \qmlattachedproperty string LineChart::name
      * The name at the current point.
      */
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
@@ -53,7 +54,8 @@ public:
     void setName(const QString &newName);
     Q_SIGNAL void nameChanged();
 
-    /**
+    /*!
+     * \qmlattachedproperty string LineChart::shortName
      * The short name at the current point.
      */
     Q_PROPERTY(QString shortName READ shortName NOTIFY shortNameChanged)
@@ -68,14 +70,18 @@ private:
     QString m_shortName;
 };
 
-/**
- * A line chart.
+/*!
+ * \qmltype LineChart
+ * \inherits XYChart
+ * \inqmlmodule org.kde.quickcharts
  *
- * ## Usage example
+ * \brief A line chart.
  *
- * \snippet snippets/linechart.qml example
+ * \section1 Usage example
  *
- * \image html linechart.png "The resulting line chart."
+ * \snippet linechart.qml example
+ *
+ * \image linechart.png The resulting line chart.
  */
 class QUICKCHARTS_EXPORT LineChart : public XYChart
 {
@@ -86,22 +92,25 @@ class QUICKCHARTS_EXPORT LineChart : public XYChart
 public:
     explicit LineChart(QQuickItem *parent = nullptr);
 
-    /**
+    /*!
+     * \qmlproperty bool LineChart::interpolate
      * Interpolate the values in the chart so that the lines become smoothed.
      */
     Q_PROPERTY(bool interpolate READ interpolate WRITE setInterpolate NOTIFY interpolateChanged)
     bool interpolate() const;
     void setInterpolate(bool newInterpolate);
     Q_SIGNAL void interpolateChanged();
-    /**
+    /*!
+     * \qmlproperty real LineChart::lineWidth
      * The width of a line in the chart.
      */
     Q_PROPERTY(qreal lineWidth READ lineWidth WRITE setLineWidth NOTIFY lineWidthChanged)
     qreal lineWidth() const;
     void setLineWidth(qreal width);
     Q_SIGNAL void lineWidthChanged();
-    /**
-     * The opacity of the area below a line.
+    /*!
+     * \qmlproperty real LineChart::fillOpacity
+     * \brief The opacity of the area below a line.
      *
      * The default is 0.0. Note that if fillColorSource is set, this value is
      * ignored.
@@ -110,8 +119,9 @@ public:
     qreal fillOpacity() const;
     void setFillOpacity(qreal opacity);
     Q_SIGNAL void fillOpacityChanged();
-    /**
-     * A data source that supplies color values for the line charts' fill area.
+    /*!
+     * \qmlproperty ChartDataSource LineChart::fillColorSource
+     * \brief A data source that supplies color values for the line charts' fill area.
      *
      * If this is not set (the default), the normal color source will be used,
      * with the fillOpacity used as its opacity.
@@ -120,8 +130,9 @@ public:
     ChartDataSource *fillColorSource() const;
     void setFillColorSource(ChartDataSource *newFillColorSource);
     Q_SIGNAL void fillColorSourceChanged();
-    /**
-     * A delegate that will be placed at each line chart point.
+    /*!
+     * \qmlproperty Component LineChart::pointDelegate
+     * \brief A delegate that will be placed at each line chart point.
      *
      * When this is not null, the specified component will be used to
      * instantiate an object for each point in the chart. These objects will

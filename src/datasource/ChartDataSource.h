@@ -13,8 +13,14 @@
 
 #include "quickcharts_export.h"
 
-/**
- * Abstract base class for data sources.
+/*!
+ * \qmltype ChartDataSource
+ * \inqmlmodule org.kde.quickcharts
+ *
+ * \brief Abstract base class for data sources.
+ *
+ * This is a common base class for all data sources. It cannot be created from
+ * QML.
  */
 class QUICKCHARTS_EXPORT ChartDataSource : public QObject
 {

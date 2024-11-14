@@ -15,8 +15,12 @@
 
 #include "ChartDataSource.h"
 
-/**
- * A data source that provides a hue-shifted color as data.
+/*!
+ * \qmltype ColorGradientSource
+ * \inherits ChartDataSource
+ * \inqmlmodule org.kde.quickcharts
+ *
+ * \brief A data source that provides a hue-shifted color as data.
  */
 class QUICKCHARTS_EXPORT ColorGradientSource : public ChartDataSource
 {
@@ -26,15 +30,24 @@ class QUICKCHARTS_EXPORT ColorGradientSource : public ChartDataSource
 public:
     explicit ColorGradientSource(QObject *parent = nullptr);
 
+    /*!
+     * \qmlproperty color ColorGradientSource::baseColor
+     */
     Q_PROPERTY(QColor baseColor READ baseColor WRITE setBaseColor NOTIFY baseColorChanged)
     QColor baseColor() const;
     void setBaseColor(const QColor &newBaseColor);
     Q_SIGNAL void baseColorChanged();
 
+    /*!
+     * \qmlproperty int ColorGradientSource::itemCount
+     */
     Q_PROPERTY(int itemCount READ itemCount WRITE setItemCount NOTIFY itemCountChanged)
     void setItemCount(int newItemCount);
     Q_SIGNAL void itemCountChanged();
 
+    /*!
+     * \qmlproperty QVariantList ColorGradientSource::colors
+     */
     Q_PROPERTY(QVariantList colors READ colors NOTIFY dataChanged)
     QVariantList colors() const;
 

@@ -1,0 +1,17 @@
+include($KDE_DOCS/global/qt-module-defaults.qdocconf)
+
+project = KQuickCharts
+language = QML
+
+description = Charts
+
+documentationinheaders = true
+
+headerdirs = .
+sourcedirs = .
+
+depends = kde qtcore qtquick qtquickcontrols
+
+imagedirs = ../docs/pics \
+            ../examples/snippets
+

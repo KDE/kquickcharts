@@ -12,8 +12,12 @@
 
 #include "ChartDataSource.h"
 
-/**
- * A data source that provides entries of an array as data.
+/*!
+ * \qmltype ArraySource
+ * \inherits ChartDataSource
+ * \inqmlmodule org.kde.quickcharts
+ *
+ * \brief A data source that provides entries of an array as data.
  */
 class QUICKCHARTS_EXPORT ArraySource : public ChartDataSource
 {
@@ -21,25 +25,37 @@ class QUICKCHARTS_EXPORT ArraySource : public ChartDataSource
     QML_ELEMENT
 
 public:
-    /**
-     * Constructor
-     *
-     * @param parent TODO
-     */
     explicit ArraySource(QObject *parent = nullptr);
+
+    /*!
+     * \qmlproperty QVariantList ArraySource::array
+     *
+     * \brief The array to use to provide entries from.
+     */
+    Q_PROPERTY(QVariantList array READ array WRITE setArray NOTIFY dataChanged)
+    QVariantList array() const;
+    void setArray(const QVariantList &array);
+
+    /*!
+     * \qmlproperty bool ArraySource::wrap
+     *
+     * \brief Wraparound when indexing past the array's bounds.
+     *
+     * If true, when an item is requested at an index outside of the array's
+     * bounds, wrap around to the start or end of the array and continue from
+     * there. This ensures we always return an entry from the array.
+     *
+     * If false (the default), requesting an item at an index outside of the
+     * array's'bounds, we return an empty item instead.
+     */
+    Q_PROPERTY(bool wrap READ wrap WRITE setWrap NOTIFY dataChanged)
+    bool wrap() const;
+    void setWrap(bool wrap);
 
     int itemCount() const override;
     QVariant item(int index) const override;
     QVariant minimum() const override;
     QVariant maximum() const override;
-
-    Q_PROPERTY(QVariantList array READ array WRITE setArray NOTIFY dataChanged)
-    QVariantList array() const;
-    void setArray(const QVariantList &array);
-
-    Q_PROPERTY(bool wrap READ wrap WRITE setWrap NOTIFY dataChanged)
-    bool wrap() const;
-    void setWrap(bool wrap);
 
 private:
     QVariantList m_array;

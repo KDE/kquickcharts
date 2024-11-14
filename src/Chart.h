@@ -15,8 +15,11 @@
 
 #include "quickcharts_export.h"
 
-/**
- * Abstract base class for all charts.
+/*!
+ * \qmltype Chart
+ * \inqmlmodule org.kde.quickcharts
+ *
+ * \brief Abstract base class for all charts.
  */
 class QUICKCHARTS_EXPORT Chart : public QQuickItem
 {
@@ -27,45 +30,58 @@ class QUICKCHARTS_EXPORT Chart : public QQuickItem
 public:
     using DataSourcesProperty = QQmlListProperty<ChartDataSource>;
 
-    /**
+    /*!
+     * \enum Chart::IndexingMode
+     *
      * How to index color and name sources relative to the different value sources.
+     *
+     * \value IndexSourceValues
+     *        Index each value, restart indexing for each value source.
+     * \value IndexEachSource
+     *        Index each value source, never index individual values.
+     * \value IndexAllValues
+     *        Index each value, continuing with the index for each value source.
      */
     enum IndexingMode {
-        IndexSourceValues = 1, ///< Index each value, restart indexing for each value source.
-        IndexEachSource, ///< Index each value source, never index individual values.
-        IndexAllValues ///< Index each value, continuing with the index for each value source.
+        IndexSourceValues = 1,
+        IndexEachSource,
+        IndexAllValues
     };
     Q_ENUM(IndexingMode)
 
     explicit Chart(QQuickItem *parent = nullptr);
     ~Chart() override = default;
 
-    /**
-     * The data source to use for names of chart items.
+    /*!
+     * \qmlproperty ChartDataSource Chart::nameSource
+     * \brief The data source to use for names of chart items.
      */
     Q_PROPERTY(ChartDataSource *nameSource READ nameSource WRITE setNameSource NOTIFY nameSourceChanged)
     ChartDataSource *nameSource() const;
     void setNameSource(ChartDataSource *nameSource);
     Q_SIGNAL void nameSourceChanged();
 
-    /**
-     * The data source to use for short names of chart items.
+    /*!
+     * \qmlproperty ChartDataSource Chart::shortNameSource
+     * \brief The data source to use for short names of chart items.
      */
     Q_PROPERTY(ChartDataSource *shortNameSource READ shortNameSource WRITE setShortNameSource NOTIFY shortNameSourceChanged)
     ChartDataSource *shortNameSource() const;
     void setShortNameSource(ChartDataSource *shortNameSource);
     Q_SIGNAL void shortNameSourceChanged();
 
-    /**
-     * The data source to use for colors of chart items.
+    /*!
+     * \qmlproperty ChartDataSource Chart::colorSource
+     * \brief The data source to use for colors of chart items.
      */
     Q_PROPERTY(ChartDataSource *colorSource READ colorSource WRITE setColorSource NOTIFY colorSourceChanged)
     ChartDataSource *colorSource() const;
     void setColorSource(ChartDataSource *colorSource);
     Q_SIGNAL void colorSourceChanged();
 
-    /**
-     * The data sources providing the data this chart needs to render.
+    /*!
+     * \qmlproperty list<ChartDataSource> Chart::valueSources
+     * \brief The data sources providing the data this chart needs to render.
      */
     Q_PROPERTY(QQmlListProperty<ChartDataSource> valueSources READ valueSourcesProperty NOTIFY valueSourcesChanged)
     DataSourcesProperty valueSourcesProperty();
@@ -75,16 +91,21 @@ public:
     Q_INVOKABLE void removeValueSource(int index);
     Q_INVOKABLE void removeValueSource(QObject *source);
 
-    /**
-     * The indexing mode used for indexing colors and names.
+    /*!
+     * \qmlproperty enumeration Chart::indexingMode
+     * \qmlenumeratorsfrom Chart::IndexingMode
+     * \brief The indexing mode used for indexing colors and names.
+     *
+     * The default value is \c{Chart.IndexEachSource}.
      */
     Q_PROPERTY(IndexingMode indexingMode READ indexingMode WRITE setIndexingMode NOTIFY indexingModeChanged)
     IndexingMode indexingMode() const;
     void setIndexingMode(IndexingMode newIndexingMode);
     Q_SIGNAL void indexingModeChanged();
 
-    /**
-     * The index of a value source to highlight.
+    /*!
+     * \qmlproperty int Chart::highlight
+     * \brief The index of a value source to highlight.
      *
      * Highlighting is dependant on Chart type, but will generally mean that
      * other value sources are rendered with lower opacity.
@@ -100,8 +121,8 @@ public:
     Q_SIGNAL void dataChanged();
 
 protected:
-    /**
-     * Called when the data of a value source changes.
+    /*!
+     * \brief Called when the data of a value source changes.
      *
      * This method should be reimplemented by subclasses. It is called whenever
      * the data of one of the value sources changes. Subclasses should use this
@@ -109,10 +130,11 @@ protected:
      * rendering, then call update() to schedule rendering the item.
      */
     virtual void onDataChanged() = 0;
+
     void componentComplete() override;
 
-    /**
-     * Desaturate and de-emphasise a color.
+    /*!
+     * \brief Desaturate and de-emphasise a color.
      *
      * Mainly intended as a standard for ensuring everything but the highlighted
      * item is desaturated.

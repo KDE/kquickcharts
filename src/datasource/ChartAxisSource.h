@@ -12,8 +12,12 @@
 
 class XYChart;
 
-/**
- * A data source that provides values from a chart's axis as data.
+/*!
+ * \qmltype ChartAxisSource
+ * \inherits ChartDataSource
+ * \inqmlmodule org.kde.quickcharts
+ *
+ * \brief A data source that provides values from a chart's axis as data.
  */
 class QUICKCHARTS_EXPORT ChartAxisSource : public ChartDataSource
 {
@@ -24,23 +28,25 @@ public:
     enum class Axis { XAxis, YAxis };
     Q_ENUM(Axis)
 
-    /**
-     * Constructor
-     *
-     * @param parent TODO
-     */
     ChartAxisSource(QObject *parent = nullptr);
 
+    /*!
+     * \qmlproperty XYChart ChartAxisSource::chart
+     */
     Q_PROPERTY(XYChart *chart READ chart WRITE setChart NOTIFY chartChanged)
     XYChart *chart() const;
     Q_SLOT void setChart(XYChart *newChart);
     Q_SIGNAL void chartChanged();
-
+    /*!
+     * \qmlproperty enumeration ChartAxisSource::axis
+     */
     Q_PROPERTY(ChartAxisSource::Axis axis READ axis WRITE setAxis NOTIFY axisChanged)
     ChartAxisSource::Axis axis() const;
     Q_SLOT void setAxis(ChartAxisSource::Axis newAxis);
     Q_SIGNAL void axisChanged();
-
+    /*!
+     * \qmlproperty int ChartAxisSource::itemCount
+     */
     Q_PROPERTY(int itemCount READ itemCount WRITE setItemCount NOTIFY itemCountChanged)
     int itemCount() const override;
     Q_SLOT void setItemCount(int newItemCount);

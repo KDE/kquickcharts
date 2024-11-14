@@ -24,6 +24,7 @@ include(ECMSetupVersion)
 include(ECMQtDeclareLoggingCategory)
 include(ECMQmlModule)
 include(ECMDeprecationSettings)
+include(ECMGenerateQDoc)
 
 option(BUILD_EXAMPLES "Build example applications" OFF)
 
