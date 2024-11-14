@@ -1,0 +1,92 @@
+/*!
+    \page kquickcharts-index.html
+    \title KQuickCharts
+
+    A QtQuick module providing high-performance charts.
+
+    \section1 Introduction
+
+    The Quick Charts module provides a set of charts that can be used from QtQuick
+    applications. They are intended to be used for both simple display of data as
+    well as continuous display of high-volume data (often referred to as plotters).
+    The charts use a system called distance fields for their accelerated rendering,
+    which provides ways of using the GPU for rendering 2D shapes without loss of
+    quality.
+
+    \section2 Usage Example
+
+    The following piece of code will render a simple line chart containing three
+    lines:
+
+    \snippet minimal.qml example
+
+    \section1 Concepts
+
+    There are three main concepts to consider when using this module: charts, data
+    sources and decorations.
+
+    \section2 Charts
+
+    These are the main items of the module. They process data and render it in a
+    certain way. Currently there are three main types of charts: pie charts, line
+    charts and bar charts. All charts inherit the Chart class, which provides the
+    most basic chart interface. On top of that is the XYChart base class, which
+    provides an interface for charts that are based on an X/Y grid.
+    \list
+    \li PieChart
+    \li LineChart
+    \li BarChart
+    \endlist
+
+    \section2 Data Sources
+
+    Data sources are objects that provide data to charts. These objects act as
+    adapters to other objects, like Qt's models. All data source objects inherit
+    ChartDataSource, which represents the basic data source interface.
+    \list
+    \li SingleValueSource
+    \li ArraySource
+    \li ModelSource
+    \li ValueHistorySource
+    \li ModelHistorySource
+    \li ColorGradientSource
+    \li ChartAxisSource
+    \endlist
+
+    \section2 Decorations
+
+    Decorations are items that provide extra information about a chart. These are
+    things like a legend or axis labels. They usually work with multiple types of
+    charts, though some may be limited to X/Y charts.
+    \list
+    \li AxisLabels
+    \li GridLines
+    \li LegendModel
+    \endlist
+
+    \section1 Controls
+
+    A submodule is provided that contains pre-made controls that are provided as a
+    convenience layer. These controls may be more restrictive in their data sources
+    or how they display things. They are composed of Charts items along with some
+    QtQuick Controls items. Some of the controls may use style-specific theming.
+    \list
+    \li Legend
+    \li LegendDelegate
+    \li LineChartControl
+    \li PieChartControl
+    \endlist
+
+    \section1 Supporting Code
+
+    There are a number of classes and other pieces of code that are not considered
+    public API and thus not part of the public API documentation. Primarily, these
+    are all the QtQuick Scene Graph related classes located in `src/scenegraph/`,
+    in addition to the shaders that are used for rendering charts.
+
+    \section1 API Reference
+
+    \list
+        \li \l{KQuickCharts QML Types}
+    \endlist
+*/

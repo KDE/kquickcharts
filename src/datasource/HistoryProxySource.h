@@ -15,8 +15,12 @@
 
 #include "ChartDataSource.h"
 
-/**
- * A data source that provides a history of a single item of a different data source.
+/*!
+ * \qmltype HistoryProxySource
+ * \inherits ChartDataSource
+ * \inqmlmodule org.kde.quickcharts
+ *
+ * \brief A data source that provides a history of a single item of a different data source.
  *
  * This data source will monitor a single item of another data source for changes
  * and record them, exposing historical values as
@@ -27,42 +31,43 @@ class QUICKCHARTS_EXPORT HistoryProxySource : public ChartDataSource
     QML_ELEMENT
 
 public:
-    /**
+    /*!
+     * \enum HistoryProxySource::FillMode
+     *
      * The different fill modes.
      *
-     * These determine the value returned by \ref itemCount and what happens
+     * These determine the value returned by itemCount and what happens
      * when requesting an item that does not have a value in the history.
+     *
+     * \value DoNotFill
+     *        Do not fill with any items. The source's itemCount will be
+     *        equal to the number of items in the history.
+     * \value FillFromStart
+     *        Fill with empty values, starting at 0. The source's itemCount
+     *        will be equal to \l maximumHistory. Items that do not have a value
+     *        in the history will return a default-constructed value based on
+     *        the first item of the source.
+     * \value FillFromEnd
+     *        Fill with empty values, placing partial history at the end. This
+     *        means that the first recorded history item will be shown at
+     *        position \c{maximumHistory - 1}, the second at
+     *        \c{maximumHistory - 2} and so on, until \l maximumHistory is
+     *        reached, after which items will be discarded normally.
      */
     enum FillMode {
-        /**
-         * Do not fill with any items. The source's \ref itemCount will be equal
-         * to the number of items in the history.
-         */
         DoNotFill,
-        /**
-         * Fill with empty values, starting at 0. The source's \ref itemCount
-         * will be equal to \ref maximumHistory. Items that do not have a value
-         * in the history will return a default-constructed value based on the
-         * first item of the source.
-         */
         FillFromStart,
-        /**
-         * Fill with empty values, placing partial history at the end. This
-         * means that the first recorded history item will be shown at position
-         * `maximumHistory - 1`, the second at `maximumHistory - 2` and so on,
-         * until \ref maximumHistory is reached, after which items will be
-         * discarded normally.
-         */
         FillFromEnd
     };
     Q_ENUM(FillMode)
 
     explicit HistoryProxySource(QObject *parent = nullptr);
 
-    /**
-     * The data source to read data from.
+    /*!
+     * \qmlproperty ChartDataSource HistoryProxySource::source
+     * \brief The data source to read data from.
      *
-     * This will use the item at \ref item from the provided source and use that
+     * This will use the item at \l item from the provided source and use that
      * to fill the history of this source.
      *
      * \note Changing this property will clear the existing history.
@@ -71,11 +76,12 @@ public:
     ChartDataSource *source() const;
     void setSource(ChartDataSource *newSource);
     Q_SIGNAL void sourceChanged();
-    /**
-     * The item of the data source to read data from.
+    /*!
+     * \qmlproperty int HistoryProxySource::item
+     * \brief The item of the data source to read data from.
      *
      * This item will be read either when the source's dataChanged has been
-     * emitted or on an interval if \ref interval has been set.
+     * emitted or on an interval if \l interval has been set.
      *
      * The default is 0.
      *
@@ -85,8 +91,9 @@ public:
     int item() const;
     void setItem(int newItem);
     Q_SIGNAL void itemChanged();
-    /**
-     * The maximum amount of history to keep.
+    /*!
+     * \qmlproperty int HistoryProxySource::maximumHistory
+     * \brief The maximum amount of history to keep.
      *
      * The default is 10.
      */
@@ -94,10 +101,11 @@ public:
     int maximumHistory() const;
     void setMaximumHistory(int maximumHistory);
     Q_SIGNAL void maximumHistoryChanged();
-    /**
-     * The interval, in milliseconds, with which to query the data source.
+    /*!
+     * \qmlproperty int HistoryProxySource::interval
+     * \brief The interval, in milliseconds, with which to query the data source.
      *
-     * If set to a value <= 0, a new item will be added whenever \ref source
+     * If set to a value <= 0, a new item will be added whenever \l source
      * changes. Otherwise, source will be sampled every interval milliseconds
      * and a new item will be added with whatever value it has at that point,
      * even if it did not change.
@@ -108,11 +116,12 @@ public:
     int interval() const;
     void setInterval(int newInterval);
     Q_SIGNAL void intervalChanged();
-    /**
-     * The fill mode.
+    /*!
+     * \qmlproperty enumeration HistoryProxySource::fillMode
+     * \qmlenumeratorsfrom HistoryProxySource::FillMode
+     * \brief The fill mode.
      *
-     * This determines what happens when there is not enough history yet. See
-     * \ref FillMode for which modes are available.
+     * This determines what happens when there is not enough history yet.
      *
      * The default is DoNotFill.
      *
@@ -124,7 +133,8 @@ public:
     Q_SIGNAL void fillModeChanged();
 
     /**
-     * Clear the entire history of this source.
+     * \qmlmethod HistoryProxySource::clear
+     * \brief Clear the entire history of this source.
      */
     Q_INVOKABLE void clear();
 
