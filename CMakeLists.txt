@@ -33,7 +33,7 @@ find_package(Qt6 ${REQUIRED_QT_VERSION} CONFIG REQUIRED Qml Quick QuickControls2
 set(EXCLUDE_DEPRECATED_BEFORE_AND_AT 0 CACHE STRING "Control the range of deprecated API excluded from the build [default=0].")
 
 ecm_set_disabled_deprecation_versions(
-    QT 6.2.0
+    QT 6.8.0
 )
 
 ecm_setup_version(
