@@ -77,7 +77,6 @@ protected:
     void itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData &data) override;
 
 private:
-    void updateItem(int index, QQuickItem *item);
     std::tuple<int, int, qreal, qreal> determineColumns();
 
     qreal m_horizontalSpacing = 0.0;
