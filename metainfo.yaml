@@ -5,16 +5,16 @@ subgroup: tier 1
 release: true
 type: functional
 platforms:
-- name: Linux
-- name: FreeBSD
-- name: Android
-- name: Windows
-- name: macOS
+    - name: Linux
+    - name: FreeBSD
+    - name: Android
+    - name: Windows
+    - name: macOS
 public_lib: true
 public_source_dirs:
-- controls
-- src
+    - controls
+    - src
 libraries:
- - cmake: KF6::QuickCharts
+    - cmake: KF6::QuickCharts
 cmakename: KF6QuickCharts
 irc: kde-devel
