@@ -52,7 +52,7 @@ AxisLabels::AxisLabels(QQuickItem *parent)
     : QQuickItem(parent)
 {
     m_itemBuilder = std::make_unique<ItemBuilder>();
-    connect(m_itemBuilder.get(), &ItemBuilder::finished, this, &AxisLabels::scheduleLayout);
+    connect(m_itemBuilder.get(), &ItemBuilder::finished, this, &AxisLabels::polish);
     connect(m_itemBuilder.get(), &ItemBuilder::beginCreate, this, &AxisLabels::onBeginCreate);
 }
 
@@ -70,7 +70,7 @@ void AxisLabels::setDirection(AxisLabels::Direction newDirection)
     }
 
     m_direction = newDirection;
-    scheduleLayout();
+    polish();
     Q_EMIT directionChanged();
 }
 
@@ -129,7 +129,7 @@ void AxisLabels::setAlignment(Qt::Alignment newAlignment)
     }
 
     m_alignment = newAlignment;
-    scheduleLayout();
+    polish();
     Q_EMIT alignmentChanged();
 }
 
@@ -145,51 +145,13 @@ void AxisLabels::setConstrainToBounds(bool newConstrainToBounds)
     }
 
     m_constrainToBounds = newConstrainToBounds;
-    scheduleLayout();
+    polish();
     Q_EMIT constrainToBoundsChanged();
 }
-void AxisLabels::geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry)
-{
-    QQuickItem::geometryChange(newGeometry, oldGeometry);
 
-    if (newGeometry != oldGeometry) {
-        scheduleLayout();
-    }
-}
-
-void AxisLabels::scheduleLayout()
-{
-    if (!m_layoutScheduled) {
-        auto scheduleLayoutLambda = [this]() {
-            layout();
-            m_layoutScheduled = false;
-        };
-        QMetaObject::invokeMethod(this, scheduleLayoutLambda, Qt::QueuedConnection);
-        m_layoutScheduled = true;
-    }
-}
-
-bool AxisLabels::isHorizontal()
-{
-    return m_direction == Direction::HorizontalLeftRight || m_direction == Direction::HorizontalRightLeft;
-}
-
-void AxisLabels::updateLabels()
-{
-    m_itemBuilder->clear();
-
-    if (!m_itemBuilder->component() || !m_source) {
-        return;
-    }
-
-    m_itemBuilder->setCount(m_source->itemCount());
-    m_itemBuilder->build(this);
-}
-
-void AxisLabels::layout()
+void AxisLabels::updatePolish()
 {
     if (!m_itemBuilder->isFinished()) {
-        scheduleLayout();
         return;
     }
 
@@ -265,20 +227,38 @@ void AxisLabels::layout()
     }
 }
 
+void AxisLabels::geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry)
+{
+    QQuickItem::geometryChange(newGeometry, oldGeometry);
+
+    if (newGeometry != oldGeometry) {
+        polish();
+    }
+}
+
+bool AxisLabels::isHorizontal()
+{
+    return m_direction == Direction::HorizontalLeftRight || m_direction == Direction::HorizontalRightLeft;
+}
+
+void AxisLabels::updateLabels()
+{
+    m_itemBuilder->clear();
+
+    if (!m_itemBuilder->component() || !m_source) {
+        return;
+    }
+
+    m_itemBuilder->setCount(m_source->itemCount());
+    m_itemBuilder->build(this);
+}
+
 void AxisLabels::onBeginCreate(int index, QQuickItem *item)
 {
-    QObject::connect(item, &QQuickItem::xChanged, this, [this]() {
-        scheduleLayout();
-    });
-    QObject::connect(item, &QQuickItem::yChanged, this, [this]() {
-        scheduleLayout();
-    });
-    QObject::connect(item, &QQuickItem::widthChanged, this, [this]() {
-        scheduleLayout();
-    });
-    QObject::connect(item, &QQuickItem::heightChanged, this, [this]() {
-        scheduleLayout();
-    });
+    QObject::connect(item, &QQuickItem::xChanged, this, &AxisLabels::polish);
+    QObject::connect(item, &QQuickItem::yChanged, this, &AxisLabels::polish);
+    QObject::connect(item, &QQuickItem::widthChanged, this, &AxisLabels::polish);
+    QObject::connect(item, &QQuickItem::heightChanged, this, &AxisLabels::polish);
 
     auto attached = static_cast<AxisLabelsAttached *>(qmlAttachedPropertiesObject<AxisLabels>(item, true));
     attached->setIndex(index);

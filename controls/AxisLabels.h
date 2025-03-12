@@ -89,13 +89,12 @@ public:
     }
 
 protected:
+    void updatePolish() override;
     void geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry) override;
 
 private:
-    void scheduleLayout();
     bool isHorizontal();
     void updateLabels();
-    void layout();
     void onBeginCreate(int index, QQuickItem *item);
 
     Direction m_direction = Direction::HorizontalLeftRight;
