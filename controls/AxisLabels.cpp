@@ -162,10 +162,10 @@ void AxisLabels::updatePolish()
 
     auto labels = m_itemBuilder->items();
     for (auto label : labels) {
-        maxWidth = std::max(maxWidth, label->width());
-        maxHeight = std::max(maxHeight, label->height());
-        totalWidth += label->width();
-        totalHeight += label->height();
+        maxWidth = std::max(maxWidth, label->implicitWidth());
+        maxHeight = std::max(maxHeight, label->implicitHeight());
+        totalWidth += label->implicitWidth();
+        totalHeight += label->implicitHeight();
     }
 
     auto impWidth = isHorizontal() ? totalWidth : maxWidth;
@@ -175,8 +175,7 @@ void AxisLabels::updatePolish()
         return;
     }
 
-    setImplicitWidth(impWidth);
-    setImplicitHeight(impHeight);
+    setImplicitSize(impWidth, impHeight);
 
     auto spacing = (isHorizontal() ? width() : height()) / (labels.size() - 1);
     auto i = 0;
@@ -203,26 +202,27 @@ void AxisLabels::updatePolish()
         }
 
         if (m_alignment & Qt::AlignHCenter) {
-            x += (layoutWidth - label->width()) / 2;
+            x += (layoutWidth - label->implicitWidth()) / 2;
         } else if (m_alignment & Qt::AlignRight) {
-            x += layoutWidth - label->width();
+            x += layoutWidth - label->implicitWidth();
         }
 
         if (m_alignment & Qt::AlignVCenter) {
-            y += (layoutHeight - label->height()) / 2;
+            y += (layoutHeight - label->implicitHeight()) / 2;
         } else if (m_alignment & Qt::AlignBottom) {
-            y += layoutHeight - label->height();
+            y += layoutHeight - label->implicitHeight();
         }
 
         if (m_constrainToBounds) {
             x = std::max(x, 0.0);
-            x = x + label->width() > width() ? width() - label->width() : x;
+            x = x + label->implicitWidth() > width() ? width() - label->implicitWidth() : x;
             y = std::max(y, 0.0);
-            y = y + label->height() > height() ? height() - label->height() : y;
+            y = y + label->implicitHeight() > height() ? height() - label->implicitHeight() : y;
         }
 
         label->setX(x);
         label->setY(y);
+
         i++;
     }
 }
@@ -255,10 +255,8 @@ void AxisLabels::updateLabels()
 
 void AxisLabels::onBeginCreate(int index, QQuickItem *item)
 {
-    QObject::connect(item, &QQuickItem::xChanged, this, &AxisLabels::polish);
-    QObject::connect(item, &QQuickItem::yChanged, this, &AxisLabels::polish);
-    QObject::connect(item, &QQuickItem::widthChanged, this, &AxisLabels::polish);
-    QObject::connect(item, &QQuickItem::heightChanged, this, &AxisLabels::polish);
+    QObject::connect(item, &QQuickItem::implicitWidthChanged, this, &AxisLabels::polish);
+    QObject::connect(item, &QQuickItem::implicitHeightChanged, this, &AxisLabels::polish);
 
     auto attached = static_cast<AxisLabelsAttached *>(qmlAttachedPropertiesObject<AxisLabels>(item, true));
     attached->setIndex(index);
