@@ -84,11 +84,18 @@ Control {
 
         spacing: control.spacing
 
+        // explicitly use the font size height instead of setting Layout.fillHeight: true
+        // because the later can cause the height to constantly change 1 pixel when the text changes...
+        FontMetrics {
+            id: fontMetric
+            font: control.font
+        }
+
         Loader {
             id: indicator
 
             Layout.preferredWidth: item ? item.implicitWidth : 0
-            Layout.fillHeight: true
+            Layout.preferredHeight: fontMetric.height
 
             sourceComponent: control.indicator
         }
@@ -97,7 +104,7 @@ Control {
             id: name
 
             Layout.fillWidth: true
-            Layout.fillHeight: true
+            Layout.preferredHeight: fontMetric.height
 
             text: control.name + (control.shortName.length > 0 ? "\x9C" + control.shortName : "")
             elide: Text.ElideRight
@@ -114,12 +121,12 @@ Control {
         Label {
             id: value
 
-            Layout.fillHeight: true
             Layout.fillWidth: true
+            Layout.preferredHeight: fontMetric.height
 
             Layout.minimumWidth: Math.min(parent.actualValueWidth, parent.minimumValueWidth)
 
-            text: control.value;
+            text: control.value
             elide: Text.ElideRight
             font: name.font
 
@@ -140,4 +147,3 @@ Control {
     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
     ToolTip.text: "%1: %2".arg(control.name).arg(control.value)
 }
-
