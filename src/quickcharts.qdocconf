@@ -10,6 +10,8 @@ headerdirs += .
 sourcedirs += .
 examples += ../examples/snippets
 
+navigation.landingpage = "KQuickCharts"
+
 depends = kde qtcore qtquick qtquickcontrols
 
 imagedirs = ../docs/pics \
