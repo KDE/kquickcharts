@@ -17,3 +17,16 @@ depends = kde qtcore qtquick qtquickcontrols
 imagedirs = ../docs/pics \
             ../examples/snippets
 
+qhp.projects            = KQuickCharts
+
+qhp.KQuickCharts.file                = kquickcharts.qhp
+qhp.KQuickCharts.namespace           = org.kde.kquickcharts.$QT_VERSION_TAG
+qhp.KQuickCharts.virtualFolder       = kquickcharts
+qhp.KQuickCharts.indexTitle          = KQuickCharts
+qhp.KQuickCharts.indexRoot           =
+
+qhp.KQuickCharts.subprojects         = qmltypes
+qhp.KQuickCharts.subprojects.qmltypes.title = QML Types
+qhp.KQuickCharts.subprojects.qmltypes.indexTitle = KQuickCharts QML Types
+qhp.KQuickCharts.subprojects.qmltypes.selectors = qmltype
+qhp.KQuickCharts.subprojects.qmltypes.sortPages = true
