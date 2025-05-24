@@ -30,3 +30,5 @@ qhp.KQuickCharts.subprojects.qmltypes.title = QML Types
 qhp.KQuickCharts.subprojects.qmltypes.indexTitle = KQuickCharts QML Types
 qhp.KQuickCharts.subprojects.qmltypes.selectors = qmltype
 qhp.KQuickCharts.subprojects.qmltypes.sortPages = true
+
+tagfile = kquickcharts.tags
