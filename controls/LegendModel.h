@@ -24,8 +24,10 @@ struct LegendItem {
     QVariant value;
 };
 
-/**
- * A model that extracts information from a chart that can be displayed as a legend.
+/*!
+ * \qmltype LegendModel
+ * \inqmlmodule org.kde.quickcharts.controls
+ * \brief A model that extracts information from a chart that can be displayed as a legend.
  */
 class LegendModel : public QAbstractListModel
 {
@@ -40,11 +42,17 @@ public:
 
     explicit LegendModel(QObject *parent = nullptr);
 
+    /*!
+     * \qmlproperty Chart LegendModel::chart
+     */
     Q_PROPERTY(Chart *chart READ chart WRITE setChart NOTIFY chartChanged)
     Chart *chart() const;
     void setChart(Chart *newChart);
     Q_SIGNAL void chartChanged();
 
+    /*!
+     * \qmlproperty int LegendModel::sourceIndex
+     */
     Q_PROPERTY(int sourceIndex READ sourceIndex WRITE setSourceIndex NOTIFY sourceIndexChanged)
     int sourceIndex() const;
     void setSourceIndex(int index);

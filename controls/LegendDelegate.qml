@@ -12,27 +12,51 @@ import QtQuick.Controls
 import org.kde.quickcharts as Charts
 import org.kde.quickcharts.controls
 
-/**
- * A delegate that can be used as part of a Legend.
+/*!
+  \qmltype LegendDelegate
+  \inqmlmodule org.kde.quickcharts.controls
+  \brief A delegate that can be used as part of a Legend.
  */
 Control {
     id: control
 
+    /*!
+     */
     property string name
+
+    /*!
+     */
     property string shortName
+
+    /*!
+     */
     property color color
+
+    /*!
+     */
     property string value
 
+    /*!
+     */
     property real maximumValueWidth
 
+    /*!
+     */
     property Component indicator: Rectangle {
         implicitWidth: Theme.cornerRadius
         color: control.color
     }
 
+    /*!
+     */
     property bool highlighted: false
 
+    /*!
+     */
     readonly property real minimumWidth: contentItem.minimumWidth
+
+    /*!
+     */
     readonly property real preferredWidth: contentItem.preferredWidth
 
     implicitHeight: Math.max(implicitContentHeight, implicitBackgroundHeight) + topPadding + bottomPadding

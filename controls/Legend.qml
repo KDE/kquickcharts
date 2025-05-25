@@ -12,43 +12,90 @@ import QtQuick.Controls
 import org.kde.quickcharts as Charts
 import org.kde.quickcharts.controls
 
-/**
- * A pre-made legend control that displays a legend for charts.
+/*!
+  \qmltype Legend
+  \inqmlmodule org.kde.quickcharts.controls
+
+  \brief A pre-made legend control that displays a legend for charts.
  */
 Control {
     id: control
 
-    /**
-     * The chart to display the legend for.
+    /*!
+      \qmlproperty Chart Legend::chart
+      The chart to display the legend for.
      */
     property Charts.Chart chart
-    /**
-     * The delegate to use to display legend information.
-     *
-     * \sa Legend::delegate
+
+    /*!
+      \qmlproperty Component Legend::delegate
+      The delegate to use to display legend information.
      */
     property alias delegate: legendRepeater.delegate
-    /**
-     *
+
+    /*!
+      \qmlproperty var Legend::model
      */
     property alias model: legendRepeater.model
 
+    /*!
+      \qmlproperty real Legend::horizontalSpacing
+     */
     property alias horizontalSpacing: legend.horizontalSpacing
+
+    /*!
+      \qmlproperty real Legend::verticalSpacing
+     */
     property alias verticalSpacing: legend.verticalSpacing
 
+    /*!
+
+     */
     property real maximumDelegateWidth: Theme.gridUnit * 10
 
+    /*!
+
+     */
     property var formatValue: function(input, index) { return input }
+
+    /*!
+
+     */
     property var maximumValueWidth: function(input, index) { return -1 }
 
+    /*!
+      \qmlproperty real Legend::preferredWidth
+     */
     property alias preferredWidth: legend.preferredWidth
 
+    /*!
+
+     */
     property string nameRole: "name"
+
+    /*!
+
+     */
     property string shortNameRole: "shortName"
+
+    /*!
+
+     */
     property string colorRole: "color"
+
+    /*!
+
+     */
     property string valueRole: "value"
 
+    /*!
+
+     */
     property bool highlightEnabled: false
+
+    /*!
+
+     */
     property int highlightedIndex: -1
 
     default property alias _children: legend.children

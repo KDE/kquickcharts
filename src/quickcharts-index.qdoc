@@ -70,7 +70,7 @@
     or how they display things. They are composed of Charts items along with some
     QtQuick Controls items. Some of the controls may use style-specific theming.
     \list
-    \li Legend
+    \li \l Legend
     \li LegendDelegate
     \li LineChartControl
     \li PieChartControl
@@ -87,5 +87,6 @@
 
     \list
         \li \l{KQuickCharts QML Types}
+        \li \l{KQuickCharts Controls QML Types}
     \endlist
 */

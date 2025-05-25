@@ -56,8 +56,10 @@ private:
     int m_count = -1;
 };
 
-/**
- * An item that renders a set of lines to make a grid for a chart.
+/*!
+ * \qmltype GridLines
+ * \inqmlmodule org.kde.quickcharts.controls
+ * \brief An item that renders a set of lines to make a grid for a chart.
  */
 class GridLines : public QQuickItem
 {
@@ -65,31 +67,57 @@ class GridLines : public QQuickItem
     QML_ELEMENT
 
 public:
+    /*!
+     * \value Horizontal
+     * \value Vertical
+     */
     enum class Direction { Horizontal, Vertical };
     Q_ENUM(Direction)
-    /**
-     * Default constructor
-     */
+
     explicit GridLines(QQuickItem *parent = nullptr);
 
+    /*!
+     * \qmlproperty enumeration GridLines::direction
+     * \qmlenumeratorsfrom GridLines::Direction
+     */
     Q_PROPERTY(GridLines::Direction direction READ direction WRITE setDirection NOTIFY directionChanged)
     Direction direction() const;
     void setDirection(GridLines::Direction newDirection);
     Q_SIGNAL void directionChanged();
 
+    /*!
+     * \qmlproperty XYChart GridLines::chart
+     */
     Q_PROPERTY(XYChart *chart READ chart WRITE setChart NOTIFY chartChanged)
     XYChart *chart() const;
     void setChart(XYChart *newChart);
     Q_SIGNAL void chartChanged();
 
+    /*!
+     * \qmlproperty real GridLines::spacing
+     */
     Q_PROPERTY(float spacing READ spacing WRITE setSpacing NOTIFY spacingChanged)
     float spacing() const;
     void setSpacing(float newSpacing);
     Q_SIGNAL void spacingChanged();
 
+    /*!
+     * \qmlproperty bool GridLines::major.visible
+     * \qmlproperty color GridLines::major.color
+     * \qmlproperty real GridLines::major.lineWidth
+     * \qmlproperty int GridLines::major.frequency
+     * \qmlproperty int GridLines::major.count
+     */
     Q_PROPERTY(LinePropertiesGroup *major READ majorGroup CONSTANT)
     LinePropertiesGroup *majorGroup() const;
 
+    /*!
+     * \qmlproperty bool GridLines::minor.visible
+     * \qmlproperty color GridLines::minor.color
+     * \qmlproperty real GridLines::minor.lineWidth
+     * \qmlproperty int GridLines::minor.frequency
+     * \qmlproperty int GridLines::minor.count
+     */
     Q_PROPERTY(LinePropertiesGroup *minor READ minorGroup CONSTANT)
     LinePropertiesGroup *minorGroup() const;
 

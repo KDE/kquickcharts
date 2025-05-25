@@ -1,0 +1,31 @@
+include($KDE_DOCS/global/qt-module-defaults.qdocconf)
+
+project = KQuickChartsControls
+
+description = Charts
+
+documentationinheaders = true
+
+headerdirs += .
+sourcedirs += .
+examples += ../examples/snippets
+
+navigation.landingpage = "KQuickCharts"
+
+depends = kde qtcore qtquick qtquickcontrols kquickcharts
+
+qhp.projects            = KQuickChartsControls
+
+qhp.KQuickChartsControls.file                = kquickchartscontrols.qhp
+qhp.KQuickChartsControls.namespace           = org.kde.kquickchartscontrols.$QT_VERSION_TAG
+qhp.KQuickChartsControls.virtualFolder       = kquickchartscontrols
+qhp.KQuickChartsControls.indexTitle          = KQuickCharts Controls
+qhp.KQuickChartsControls.indexRoot           =
+
+qhp.KQuickChartsControls.subprojects         = qmltypes
+qhp.KQuickChartsControls.subprojects.qmltypes.title = QML Types
+qhp.KQuickChartsControls.subprojects.qmltypes.indexTitle = KQuickCharts Controls QML Types
+qhp.KQuickChartsControls.subprojects.qmltypes.selectors = qmltype
+qhp.KQuickChartsControls.subprojects.qmltypes.sortPages = true
+
+tagfile = kquickchartscontrols.tags

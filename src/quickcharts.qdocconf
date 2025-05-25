@@ -12,7 +12,7 @@ examples += ../examples/snippets
 
 navigation.landingpage = "KQuickCharts"
 
-depends = kde qtcore qtquick qtquickcontrols
+depends = kde qtcore qtquick qtquickcontrols kquickchartscontrols
 
 imagedirs = ../docs/pics \
             ../examples/snippets
