@@ -47,8 +47,7 @@
     \li SingleValueSource
     \li ArraySource
     \li ModelSource
-    \li ValueHistorySource
-    \li ModelHistorySource
+    \li HistoryProxySource
     \li ColorGradientSource
     \li ChartAxisSource
     \endlist

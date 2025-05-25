@@ -47,8 +47,7 @@ adapters to other objects, like Qt's models. All data source objects inherit
 * [SingleValueSource](\ref SingleValueSource)
 * [ArraySource](\ref ArraySource)
 * [ModelSource](\ref ModelSource)
-* [ValueHistorySource](\ref ValueHistorySource)
-* [ModelHistorySource](\ref ModelHistorySource)
+* [HistoryProxySource](\ref HistoryProxySource)
 * [ColorGradientSource](\ref ColorGradientSource)
 * [ChartAxisSource](\ref ChartAxisSource)
 
