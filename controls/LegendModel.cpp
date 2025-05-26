@@ -128,6 +128,7 @@ void LegendModel::update()
 
     m_connections.push_back(connect(m_chart, &Chart::colorSourceChanged, this, &LegendModel::queueUpdate, Qt::UniqueConnection));
     m_connections.push_back(connect(m_chart, &Chart::nameSourceChanged, this, &LegendModel::queueUpdate, Qt::UniqueConnection));
+    m_connections.push_back(connect(m_chart, &Chart::destroyed, this, &LegendModel::onChartDestroyed, Qt::UniqueConnection));
 
     auto sources = m_chart->valueSources();
     int itemCount = countItems();
@@ -169,13 +170,17 @@ void LegendModel::update()
 
 void LegendModel::updateData()
 {
+    m_dataChangeQueued = false;
+
+    if (!m_chart) {
+        return;
+    }
+
     ChartDataSource *colorSource = m_chart->colorSource();
     ChartDataSource *nameSource = m_chart->nameSource();
     ChartDataSource *shortNameSource = m_chart->shortNameSource();
 
     auto itemCount = countItems();
-
-    m_dataChangeQueued = false;
 
     if (itemCount != int(m_items.size())) {
         // Number of items changed, so trigger a full update
@@ -270,6 +275,14 @@ QVariant LegendModel::getValueForItem(int item)
     }
 
     return value;
+}
+
+void LegendModel::onChartDestroyed()
+{
+    beginResetModel();
+    m_items.clear();
+    m_chart = nullptr;
+    endResetModel();
 }
 
 #include "moc_LegendModel.cpp"
