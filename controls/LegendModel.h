@@ -69,6 +69,7 @@ private:
     void updateData();
     int countItems();
     QVariant getValueForItem(int item);
+    void onChartDestroyed();
 
     Chart *m_chart = nullptr;
     int m_sourceIndex = UseSourceCount;
