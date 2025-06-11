@@ -137,7 +137,7 @@ ecm_generate_export_header(QuickCharts
     EXCLUDE_DEPRECATED_BEFORE_AND_AT ${EXCLUDE_DEPRECATED_BEFORE_AND_AT}
 )
 
-ecm_generate_qdoc(QuickCharts quickcharts.qdocconf)
+ecm_generate_qdoc(QuickCharts kquickcharts.qdocconf)
 
 ecm_finalize_qml_module(QuickCharts DESTINATION ${KDE_INSTALL_QMLDIR} EXPORT KF6QuickChartsTargets)
 
