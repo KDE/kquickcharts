@@ -42,6 +42,6 @@ target_link_libraries(QuickChartsControls PRIVATE
 
 ecm_finalize_qml_module(QuickChartsControls DESTINATION ${KDE_INSTALL_QMLDIR})
 
-ecm_generate_qdoc(QuickChartsControls quickchartscontrols.qdocconf)
+ecm_generate_qdoc(QuickChartsControls kquickchartscontrols.qdocconf)
 
 install(TARGETS QuickChartsControls ${KDE_INSTALL_DEFAULT_ARGUMENTS})
