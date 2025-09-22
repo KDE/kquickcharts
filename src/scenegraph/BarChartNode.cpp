@@ -6,7 +6,6 @@
 
 #include "BarChartNode.h"
 
-#include <QColor>
 #include <QDebug>
 
 #include "BarChartMaterial.h"

@@ -10,7 +10,6 @@
 #include <QAbstractItemModel>
 #include <QDebug>
 
-#include "RangeGroup.h"
 #include "datasource/ChartDataSource.h"
 #include "scenegraph/PieChartNode.h"
 

@@ -6,7 +6,6 @@
  */
 
 #include "Chart.h"
-#include "datasource/ChartDataSource.h"
 
 Chart::Chart(QQuickItem *parent)
     : QQuickItem(parent)
