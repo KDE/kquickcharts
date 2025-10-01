@@ -134,7 +134,7 @@ void LegendLayout::componentComplete()
 
 void LegendLayout::updatePolish()
 {
-    if (!m_completed) {
+    if (!m_completed || !isVisible()) {
         return;
     }
 
