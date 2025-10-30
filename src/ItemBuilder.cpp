@@ -6,6 +6,8 @@
 
 #include "ItemBuilder.h"
 
+#include "charts_general_logging.h"
+
 class ItemIncubator : public QQmlIncubator
 {
 public:
@@ -117,6 +119,12 @@ int ItemBuilder::count() const
 void ItemBuilder::setCount(int newCount)
 {
     if (newCount == m_count) {
+        return;
+    }
+
+    // Bound the count of items to build to a reasonable limit.
+    if (m_count < 0 || m_count > std::numeric_limits<int16_t>::max()) {
+        qCWarning(GENERAL) << "Request item count of" << newCount << "which is out of range";
         return;
     }
 
