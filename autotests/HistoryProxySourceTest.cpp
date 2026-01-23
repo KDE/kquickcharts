@@ -83,7 +83,7 @@ private Q_SLOTS:
     void testCreate()
     {
         // Basic creation should create an empty source.
-        auto source = new HistoryProxySource{};
+        auto source = std::make_unique<HistoryProxySource>();
 
         QCOMPARE(source->itemCount(), 0);
         QCOMPARE(source->item(0), QVariant{});

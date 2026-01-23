@@ -17,7 +17,7 @@ private Q_SLOTS:
     void testCreate()
     {
         // Basic creation should create an empty source.
-        auto source = new ArraySource{};
+        auto source = std::make_unique<ArraySource>();
 
         QCOMPARE(source->itemCount(), 0);
         QCOMPARE(source->item(0), QVariant{});
@@ -41,7 +41,7 @@ private Q_SLOTS:
 
     void testWithArray()
     {
-        auto source = new ArraySource{};
+        auto source = std::make_unique<ArraySource>();
         QFETCH(QVariantList, array);
         source->setArray(array);
 
@@ -77,7 +77,7 @@ private Q_SLOTS:
 
     void testWrap()
     {
-        auto source = new ArraySource{};
+        auto source = std::make_unique<ArraySource>();
         QFETCH(QVariantList, array);
         source->setArray(array);
         source->setWrap(true);

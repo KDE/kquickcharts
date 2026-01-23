@@ -116,7 +116,8 @@ private Q_SLOTS:
 
     void testAsync()
     {
-        m_engine->setIncubationController(new TestIncubationController);
+        m_incubationController = new TestIncubationController;
+        m_engine->setIncubationController(m_incubationController);
 
         ItemBuilder builder;
         builder.setComponent(m_component);
@@ -149,12 +150,14 @@ private Q_SLOTS:
         delete m_item;
         delete m_component;
         delete m_engine;
+        delete m_incubationController;
     }
 
 private:
     QQmlEngine *m_engine = nullptr;
     QQmlComponent *m_component = nullptr;
     QQuickItem *m_item = nullptr;
+    TestIncubationController *m_incubationController = nullptr;
 };
 
 QTEST_GUILESS_MAIN(ItemBuilderTest)

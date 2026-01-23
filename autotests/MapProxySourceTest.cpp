@@ -20,7 +20,7 @@ private Q_SLOTS:
     void testCreate()
     {
         // Basic creation should create an empty source.
-        auto source = new MapProxySource{};
+        auto source = std::make_unique<MapProxySource>();
 
         QCOMPARE(source->itemCount(), 0);
         QCOMPARE(source->item(0), QVariant{});
@@ -56,12 +56,12 @@ private Q_SLOTS:
 
     void testWithArray()
     {
-        auto arraySource = new ArraySource{};
+        auto arraySource = std::make_unique<ArraySource>();
         QFETCH(QVariantList, array);
         arraySource->setArray(array);
 
-        auto mapSource = new MapProxySource{};
-        mapSource->setSource(arraySource);
+        auto mapSource = std::make_unique<MapProxySource>();
+        mapSource->setSource(arraySource.get());
 
         QFETCH(QVariantMap, map);
         mapSource->setMap(map);
