@@ -15,6 +15,12 @@ ecm_add_tests(
     LINK_LIBRARIES PRIVATE Qt6::Test QuickCharts
 )
 if (NOT BUILD_SHARED_LIBS)
+    target_link_libraries(ArraySourceTest PRIVATE QuickChartsplugin)
+    qt6_import_qml_plugins(ArraySourceTest)
+    target_link_libraries(MapProxySourceTest PRIVATE QuickChartsplugin)
+    qt6_import_qml_plugins(MapProxySourceTest)
+    target_link_libraries(HistoryProxySourceTest PRIVATE QuickChartsplugin)
+    qt6_import_qml_plugins(HistoryProxySourceTest)
     target_link_libraries(ItemBuilderTest PRIVATE QuickChartsplugin)
     qt6_import_qml_plugins(ItemBuilderTest)
 endif()
