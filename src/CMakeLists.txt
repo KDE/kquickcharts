@@ -66,7 +66,6 @@ ecm_qt_declare_logging_category(QuickCharts
     HEADER charts_general_logging.h
     IDENTIFIER GENERAL
     CATEGORY_NAME kf.quickcharts.general
-    DEFAULT_SEVERITY Warning
     DESCRIPTION "KQuickCharts Library - General"
     EXPORT KQuickCharts
 )
@@ -75,7 +74,6 @@ ecm_qt_declare_logging_category(QuickCharts
     HEADER charts_datasource_logging.h
     IDENTIFIER DATASOURCE
     CATEGORY_NAME kf.quickcharts.datasource
-    DEFAULT_SEVERITY Warning
     DESCRIPTION "KQuickCharts Library - Data Sources"
     EXPORT KQuickCharts
 )
@@ -84,7 +82,6 @@ ecm_qt_declare_logging_category(QuickCharts
     HEADER charts_deprecated_logging.h
     IDENTIFIER DEPRECATED
     CATEGORY_NAME kf.quickcharts.deprecated
-    DEFAULT_SEVERITY Warning
     DESCRIPTION "KQuickCharts Library - Deprecated API"
     EXPORT KQuickCharts
 )
