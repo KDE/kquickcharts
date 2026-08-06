@@ -192,6 +192,21 @@ void LineChart::setPointDelegate(QQmlComponent *newPointDelegate)
     Q_EMIT pointDelegateChanged();
 }
 
+QList<qreal> LineChart::interpolatedValuesAtX(qreal x) const
+{
+    QList<qreal> ret;
+    qreal xRatio = x / width();
+
+    std::ranges::transform(std::as_const(m_values), std::back_inserter(ret), [xRatio](const QList<QVector2D> values) {
+        return values[std::round(values.length() * xRatio)].y();
+    });
+    /*for (auto values : std::as_const(m_values)) {
+        ret << values[std::round(values.length() * xRatio)].y();
+    }*/
+
+    return ret;
+}
+
 void LineChart::updatePolish()
 {
     if (m_rangeInvalid) {

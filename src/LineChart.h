@@ -148,6 +148,8 @@ public:
     void setPointDelegate(QQmlComponent *newPointDelegate);
     Q_SIGNAL void pointDelegateChanged();
 
+    Q_INVOKABLE QList<qreal> interpolatedValuesAtX(qreal x) const;
+
     static LineChartAttached *qmlAttachedProperties(QObject *object)
     {
         return new LineChartAttached(object);
