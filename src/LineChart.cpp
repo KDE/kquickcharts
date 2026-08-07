@@ -197,8 +197,20 @@ QList<qreal> LineChart::interpolatedValuesAtX(qreal x) const
     QList<qreal> ret;
     qreal xRatio = x / width();
 
-    std::ranges::transform(std::as_const(m_values), std::back_inserter(ret), [xRatio](const QList<QVector2D> values) {
-        return values[std::round(values.length() * xRatio)].y();
+    std::ranges::transform(std::as_const(m_values), std::back_inserter(ret), [this, x, xRatio](const QList<QVector2D> values) {
+        if (values.isEmpty()) {
+            return 0.0;
+        }
+        const int prevIdx = std::max(0, std::min(int(values.length() - 1), int(std::floor((values.length() - 1) * xRatio))));
+        const int nextIdx = std::max(0, std::min(int(values.length() - 1), int(std::ceil((values.length() - 1) * xRatio))));
+        const qreal prev = qreal(values[prevIdx].y());
+        const qreal next = qreal(values[nextIdx].y());
+
+        const qreal stepSize = width() / (values.length() - 1);
+        const qreal factor = (x / stepSize) - std::floor(x / stepSize);
+
+        // Lerp
+        return prev + (next - prev) * factor;
     });
     /*for (auto values : std::as_const(m_values)) {
         ret << values[std::round(values.length() * xRatio)].y();
