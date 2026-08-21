@@ -128,7 +128,11 @@ Control {
 
             text: control.value
             elide: Text.ElideRight
-            font: name.font
+            font: {
+                let tnumFont = Qt.font(name.font)
+                tnumFont.features= { "tnum": 1 }
+                return tnumFont
+            }
 
             verticalAlignment: Qt.AlignVCenter
             horizontalAlignment: Qt.AlignRight
