@@ -44,4 +44,4 @@ ecm_finalize_qml_module(QuickChartsControls DESTINATION ${KDE_INSTALL_QMLDIR})
 
 ecm_generate_qdoc(QuickChartsControls kquickchartscontrols.qdocconf)
 
-install(TARGETS QuickChartsControls ${KDE_INSTALL_DEFAULT_ARGUMENTS})
+install(TARGETS QuickChartsControls ${KF_INSTALL_TARGETS_DEFAULT_ARGS})
