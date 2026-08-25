@@ -34,6 +34,7 @@ if (NOT BUILD_SHARED_LIBS)
 endif()
 
 macro(add_qml_tests)
+    set(_extra_args)
     if (WIN32)
         set(_extra_args -platform offscreen)
     endif()
