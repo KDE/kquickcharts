@@ -107,6 +107,7 @@ Control {
             Layout.preferredHeight: fontMetric.height
 
             text: control.name + (control.shortName.length > 0 ? "\x9C" + control.shortName : "")
+            textFormat: Text.PlainText
             elide: Text.ElideRight
             font: control.font
             verticalAlignment: Qt.AlignVCenter
