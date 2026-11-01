@@ -131,7 +131,7 @@ Control {
             elide: Text.ElideRight
             font: {
                 let tnumFont = Qt.font(name.font)
-                tnumFont.features= { "tnum": 1 }
+                tnumFont.features = Object.assign({}, tnumFont.features, { "tnum": 1 })
                 return tnumFont
             }
 
